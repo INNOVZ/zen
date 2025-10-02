@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unread Message Notification Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .demo-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .demo-section h3 {
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+        }
+        
+        .control-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .status-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-list {
+            text-align: left;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .feature-list li {
+            margin: 0.8rem 0;
+            padding-left: 1rem;
+            position: relative;
+        }
+        
+        .feature-list li::before {
+            content: "🔔";
+            position: absolute;
+            left: -0.5rem;
+        }
+        
+        .test-scenario {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Unread Message Notifications</h1>
+        <p class="subtitle">Testing the chat widget's unread message notification system</p>
+        
+        <div class="demo-section">
+            <h3>🎮 Demo Controls</h3>
+            <div class="control-grid">
+                <button class="control-btn" onclick="simulateUnread()">➕ Add Unread Message</button>
+                <button class="control-btn" onclick="clearUnread()">🗑️ Clear Unread</button>
+                <button class="control-btn" onclick="openChat()">💬 Open Chat</button>
+                <button class="control-btn" onclick="closeChat()">❌ Close Chat</button>
+                <button class="control-btn" onclick="simulateMultiple()">📧 Add 5 Messages</button>
+                <button class="control-btn" onclick="resetDemo()">🔄 Reset Demo</button>
+            </div>
+        </div>
+        
+        <div class="status-panel">
+            <h3>📊 Current Status</h3>
+            <div class="status-item">
+                <span>Unread Count:</span>
+                <span id="unread-count">0</span>
+            </div>
+            <div class="status-item">
+                <span>Chat Window:</span>
+                <span id="chat-status">Closed</span>
+            </div>
+            <div class="status-item">
+                <span>Notification Badge:</span>
+                <span id="badge-status">Hidden</span>
+            </div>
+        </div>
+        
+        <div class="test-scenario">
+            <h3>🧪 Test Scenarios:</h3>
+            <ol>
+                <li><strong>Basic Notification:</strong> Click "Add Unread Message" - red badge should appear on chat button</li>
+                <li><strong>Multiple Messages:</strong> Click "Add 5 Messages" - badge should show count up to 99+</li>
+                <li><strong>Auto Clear:</strong> Add unread messages, then open chat - badge should disappear</li>
+                <li><strong>Chat Closed:</strong> With chat closed, add messages - notifications should accumulate</li>
+                <li><strong>Manual Clear:</strong> Use "Clear Unread" to remove notifications manually</li>
+            </ol>
+        </div>
+        
+        <div class="feature-list">
+            <h3>✨ Notification Features:</h3>
+            <li><strong>Red Badge:</strong> Shows unread message count</li>
+            <li><strong>Pulsing Animation:</strong> Button pulses to draw attention</li>
+            <li><strong>Bouncing Badge:</strong> Number badge bounces gently</li>
+            <li><strong>Auto Clear:</strong> Clears when chat window is opened</li>
+            <li><strong>Smart Counting:</strong> Only counts messages when chat is closed</li>
+            <li><strong>99+ Cap:</strong> Shows "99+" for large numbers</li>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; margin-top: 2rem;">
+            <h3>👀 What to Look For:</h3>
+            <ul style="text-align: left;">
+                <li><strong>Red Badge:</strong> Circular red notification with white number</li>
+                <li><strong>Button Animation:</strong> Chat button should pulse with red glow</li>
+                <li><strong>Badge Position:</strong> Top-right corner of chat button</li>
+                <li><strong>Smooth Transitions:</strong> Badge should appear/disappear smoothly</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <script src="chat-widget.js"></script>
+    
+    <script>
+        function updateStatus() {
+            const unreadCount = window.zentriaGetUnreadCount ? window.zentriaGetUnreadCount() : 0;
+            const chatWindow = document.getElementById('zentria-chat-window');
+            const chatButton = document.querySelector('.zentria-chat-button');
+            
+            document.getElementById('unread-count').textContent = unreadCount;
+            document.getElementById('chat-status').textContent = 
+                chatWindow && chatWindow.style.display === 'flex' ? 'Open' : 'Closed';
+            document.getElementById('badge-status').textContent = 
+                chatButton && chatButton.classList.contains('has-unread') ? 'Visible' : 'Hidden';
+        }
+        
+        function simulateUnread() {
+            if (window.zentriaAddUnreadMessage) {
+                window.zentriaAddUnreadMessage();
+                console.log('Added unread message');
+                updateStatus();
+            }
+        }
+        
+        function clearUnread() {
+            if (window.zentriaClearUnreadMessages) {
+                window.zentriaClearUnreadMessages();
+                console.log('Cleared unread messages');
+                updateStatus();
+            }
+        }
+        
+        function openChat() {
+            if (window.zentriaOpenChat) {
+                window.zentriaOpenChat();
+                console.log('Chat opened');
+                setTimeout(updateStatus, 100);
+            }
+        }
+        
+        function closeChat() {
+            if (window.zentriaCloseChat) {
+                window.zentriaCloseChat();
+                console.log('Chat closed');
+                setTimeout(updateStatus, 100);
+            }
+        }
+        
+        function simulateMultiple() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    simulateUnread();
+                }, i * 200);
+            }
+        }
+        
+        function resetDemo() {
+            clearUnread();
+            closeChat();
+            localStorage.clear();
+            console.log('Demo reset');
+            setTimeout(() => window.location.reload(), 500);
+        }
+        
+        // Update status every second
+        setInterval(updateStatus, 1000);
+        
+        // Initial status update
+        setTimeout(updateStatus, 1000);
+        
+        console.log('🔔 Unread Message Notification Test Loaded');
+        console.log('Look for the red badge on the chat button when you add unread messages!');
+    </script>
+</body>
+</html>

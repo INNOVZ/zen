@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ultimate Simple Test</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            background: #f5f5f5;
+        }
+        .debug {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: white;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            max-width: 300px;
+            z-index: 999999;
+        }
+        .debug h3 {
+            margin: 0 0 10px 0;
+            color: #333;
+        }
+        .debug button {
+            margin: 2px;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+        #log {
+            font-size: 11px;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 5px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug">
+        <h3>🔧 Debug Panel</h3>
+        <button onclick="clearAndReload()">Clear & Reload</button>
+        <button onclick="forceShow()">Force Show</button>
+        <button onclick="checkElements()">Check Elements</button>
+        <div id="status">Loading...</div>
+        <div id="log"></div>
+    </div>
+
+    <h1>🚀 Ultimate Simple Test</h1>
+    <p>The welcome popup should appear after 2 seconds if localStorage is clear.</p>
+    
+    <h2>What should happen:</h2>
+    <ol>
+        <li>Chat button appears in bottom-right corner</li>
+        <li>After 2 seconds, welcome popup appears above the button</li>
+        <li>Chat button should have a pulsing animation</li>
+        <li>Popup should have "Start Chat" and "Maybe Later" buttons</li>
+    </ol>
+
+    <script>
+        function log(msg) {
+            const logDiv = document.getElementById('log');
+            const time = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${time}] ${msg}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[DEBUG] ${msg}`);
+        }
+
+        function updateStatus(msg) {
+            document.getElementById('status').innerHTML = msg;
+            log(`STATUS: ${msg}`);
+        }
+
+        function clearAndReload() {
+            localStorage.clear();
+            sessionStorage.clear();
+            log('All storage cleared, reloading...');
+            setTimeout(() => window.location.reload(), 500);
+        }
+
+        function forceShow() {
+            if (window.zentriaShowWelcomePopup) {
+                log('Calling zentriaShowWelcomePopup()');
+                window.zentriaShowWelcomePopup();
+            } else {
+                log('ERROR: zentriaShowWelcomePopup not available');
+            }
+        }
+
+        function checkElements() {
+            const widget = document.getElementById('zentria-chat-widget');
+            const popup = document.getElementById('zentria-welcome-popup');
+            const button = document.querySelector('.zentria-chat-button');
+            
+            log(`Elements - Widget: ${!!widget}, Popup: ${!!popup}, Button: ${!!button}`);
+            
+            if (popup) {
+                log(`Popup visible: ${popup.classList.contains('show')}`);
+                log(`Popup opacity: ${window.getComputedStyle(popup).opacity}`);
+                log(`Popup transform: ${window.getComputedStyle(popup).transform}`);
+            }
+            
+            if (button) {
+                log(`Button has notification: ${button.classList.contains('has-notification')}`);
+            }
+        }
+
+        // Initial setup
+        updateStatus('Clearing localStorage...');
+        localStorage.removeItem('zentria-welcome-shown');
+        
+        // Monitor for popup appearance
+        let checkCount = 0;
+        const monitor = setInterval(() => {
+            checkCount++;
+            const popup = document.getElementById('zentria-welcome-popup');
+            const isVisible = popup && popup.classList.contains('show');
+            
+            if (isVisible) {
+                updateStatus(`✅ POPUP IS VISIBLE! (check #${checkCount})`);
+                clearInterval(monitor);
+            } else {
+                updateStatus(`⏳ Waiting... (check #${checkCount}/15)`);
+            }
+            
+            if (checkCount >= 15) {
+                updateStatus('❌ Popup did not appear in 15 seconds');
+                clearInterval(monitor);
+                log('Monitoring stopped. Check console for errors.');
+            }
+        }, 1000);
+
+        log('Test initialized, monitoring for popup...');
+    </script>
+
+    <!-- Load the chat widget -->
+    <script src="chat-widget.js" data-api-url="http://localhost:8001" data-chatbot-id="test-bot"></script>
+</body>
+</html>

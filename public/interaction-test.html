@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Popup & Chat Interaction Test</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        
+        .test-scenario {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: left;
+        }
+        
+        .test-scenario h3 {
+            color: #60a5fa;
+            margin-bottom: 1rem;
+        }
+        
+        .test-step {
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            border-left: 4px solid #60a5fa;
+        }
+        
+        .controls {
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .status {
+            background: rgba(0,0,0,0.5);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .expected-behavior {
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Popup & Chat Interaction Test</h1>
+        
+        <div class="expected-behavior">
+            <h3>✅ Expected Behavior:</h3>
+            <p><strong>When popup is visible and user clicks chat button:</strong></p>
+            <ul>
+                <li>Welcome popup should close smoothly</li>
+                <li>Chat window should open</li>
+                <li>No overlap between popup and chat window</li>
+                <li>Input field should get focus</li>
+            </ul>
+        </div>
+        
+        <div class="test-scenario">
+            <h3>📋 Test Scenarios:</h3>
+            
+            <div class="test-step">
+                <strong>Scenario 1: Direct Chat Button Click</strong>
+                <p>1. Wait for popup to appear<br>
+                2. Click the chat button (bottom-right)<br>
+                3. Popup should close and chat should open</p>
+            </div>
+            
+            <div class="test-step">
+                <strong>Scenario 2: "Start Chat" Button</strong>
+                <p>1. Wait for popup to appear<br>
+                2. Click "Start Chat" in the popup<br>
+                3. Popup should close and chat should open with focus</p>
+            </div>
+            
+            <div class="test-step">
+                <strong>Scenario 3: "Maybe Later" then Chat Button</strong>
+                <p>1. Wait for popup to appear<br>
+                2. Click "Maybe Later"<br>
+                3. Click chat button<br>
+                4. Only chat should open (no popup interference)</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <h3>🎮 Manual Controls</h3>
+            <button class="btn" onclick="showPopup()">👋 Show Popup</button>
+            <button class="btn" onclick="hidePopup()">❌ Hide Popup</button>
+            <button class="btn" onclick="openChat()">💬 Open Chat</button>
+            <button class="btn" onclick="closeChat()">🔒 Close Chat</button>
+            <button class="btn" onclick="resetDemo()">🔄 Reset Demo</button>
+            
+            <div class="status" id="status">
+                Initializing test...
+            </div>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 15px; margin-top: 2rem;">
+            <h3>🔍 What to Look For:</h3>
+            <ul style="text-align: left;">
+                <li><strong>Smooth Transitions:</strong> No jarring movements or overlaps</li>
+                <li><strong>Proper Z-Index:</strong> Elements appear in correct order</li>
+                <li><strong>Responsive Timing:</strong> Actions happen promptly</li>
+                <li><strong>Clean State:</strong> No leftover elements or animations</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <script src="chat-widget.js"></script>
+    
+    <script>
+        function updateStatus(msg) {
+            document.getElementById('status').innerHTML = msg;
+            console.log('[TEST]', msg);
+        }
+        
+        function showPopup() {
+            if (window.zentriaForceShowPopup) {
+                window.zentriaForceShowPopup();
+                updateStatus('✅ Popup shown manually');
+            } else {
+                updateStatus('❌ Popup function not available');
+            }
+        }
+        
+        function hidePopup() {
+            if (window.zentriaCloseWelcomePopup) {
+                window.zentriaCloseWelcomePopup();
+                updateStatus('✅ Popup closed manually');
+            } else {
+                updateStatus('❌ Close popup function not available');
+            }
+        }
+        
+        function openChat() {
+            if (window.zentriaOpenChat) {
+                window.zentriaOpenChat();
+                updateStatus('✅ Chat opened manually');
+            } else {
+                updateStatus('❌ Open chat function not available');
+            }
+        }
+        
+        function closeChat() {
+            if (window.zentriaCloseChat) {
+                window.zentriaCloseChat();
+                updateStatus('✅ Chat closed manually');
+            } else {
+                updateStatus('❌ Close chat function not available');
+            }
+        }
+        
+        function resetDemo() {
+            localStorage.clear();
+            updateStatus('🔄 Demo reset, reloading...');
+            setTimeout(() => window.location.reload(), 500);
+        }
+        
+        // Initialize
+        updateStatus('🚀 Test initialized. Popup should appear in 2 seconds...');
+        
+        // Monitor state changes
+        let lastPopupState = false;
+        let lastChatState = false;
+        
+        setInterval(() => {
+            const popup = document.getElementById('zentria-welcome-popup');
+            const chatWindow = document.getElementById('zentria-chat-window');
+            
+            const popupVisible = popup && popup.classList.contains('show');
+            const chatVisible = chatWindow && chatWindow.style.display === 'flex';
+            
+            if (popupVisible !== lastPopupState || chatVisible !== lastChatState) {
+                updateStatus(`📊 State: Popup ${popupVisible ? '✅' : '❌'} | Chat ${chatVisible ? '✅' : '❌'}`);
+                lastPopupState = popupVisible;
+                lastChatState = chatVisible;
+            }
+        }, 500);
+        
+        // Auto-test reminder
+        setTimeout(() => {
+            updateStatus('💡 Try clicking the chat button while popup is visible!');
+        }, 5000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Welcome Popup</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background: #f0f0f0;
+        }
+        .debug-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 4px;
+            background: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover { background: #0056b3; }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        .info { background: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <h1>🔧 Welcome Popup Debug Panel</h1>
+    
+    <div class="debug-panel">
+        <h3>Current Status</h3>
+        <div id="status" class="status info">
+            Checking localStorage status...
+        </div>
+        
+        <h3>Debug Actions</h3>
+        <button onclick="checkStatus()">🔍 Check Status</button>
+        <button onclick="clearStorage()">🗑️ Clear localStorage</button>
+        <button onclick="showPopup()">👋 Show Popup</button>
+        <button onclick="reloadPage()">🔄 Reload Page</button>
+    </div>
+    
+    <div class="debug-panel">
+        <h3>Console Output</h3>
+        <div id="console-output" style="background: #f8f9fa; padding: 10px; border-radius: 4px; font-family: monospace; min-height: 200px; overflow-y: auto;">
+            <div>Loading...</div>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <script src="chat-widget.js" data-api-url="http://localhost:8001" data-chatbot-id="debug-bot"></script>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        
+        // Override console.log to capture output
+        const originalLog = console.log;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToPanel('LOG', args.join(' '));
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToPanel('ERROR', args.join(' '));
+        };
+        
+        function logToPanel(type, message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span style="color: ${type === 'ERROR' ? 'red' : 'blue'};">${type}:</span> ${message}`;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function checkStatus() {
+            const hasSeenWelcome = localStorage.getItem('zentria-welcome-shown');
+            const statusDiv = document.getElementById('status');
+            
+            if (hasSeenWelcome) {
+                statusDiv.className = 'status error';
+                statusDiv.innerHTML = '❌ Welcome popup is DISABLED (localStorage flag set)';
+            } else {
+                statusDiv.className = 'status success';
+                statusDiv.innerHTML = '✅ Welcome popup is ENABLED (no localStorage flag)';
+            }
+            
+            console.log('localStorage check:', hasSeenWelcome);
+        }
+        
+        function clearStorage() {
+            localStorage.removeItem('zentria-welcome-shown');
+            console.log('Cleared zentria-welcome-shown from localStorage');
+            checkStatus();
+        }
+        
+        function showPopup() {
+            if (window.zentriaShowWelcomePopup) {
+                console.log('Manually showing welcome popup...');
+                window.zentriaShowWelcomePopup();
+            } else {
+                console.error('zentriaShowWelcomePopup function not available');
+            }
+        }
+        
+        function reloadPage() {
+            console.log('Reloading page...');
+            window.location.reload();
+        }
+        
+        // Initial status check
+        setTimeout(() => {
+            checkStatus();
+            logToPanel('INFO', 'Debug panel ready');
+        }, 1000);
+        
+        // Check if popup shows after 3 seconds
+        setTimeout(() => {
+            const popup = document.getElementById('zentria-welcome-popup');
+            if (popup && popup.classList.contains('show')) {
+                logToPanel('SUCCESS', 'Welcome popup is visible!');
+            } else {
+                logToPanel('WARNING', 'Welcome popup is not visible after 3 seconds');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

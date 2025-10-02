@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Debug Console</title>
+</head>
+<body>
+    <h1>Debug Console</h1>
+    <div id="console-log" style="background: black; color: green; padding: 20px; font-family: monospace; height: 400px; overflow-y: auto; border: 1px solid #ccc;"></div>
+    
+    <div style="margin: 20px 0;">
+        <button onclick="testPopup()">Test Popup</button>
+        <button onclick="clearLS()">Clear LocalStorage</button>
+        <button onclick="checkElements()">Check Elements</button>
+        <button onclick="showDebugInfo()">Show Debug Info</button>
+    </div>
+
+    <script>
+        const consoleDiv = document.getElementById('console-log');
+        
+        // Capture console.log
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function logToDiv(type, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.join(' ');
+            const div = document.createElement('div');
+            div.innerHTML = `<span style="color: #666;">[${timestamp}]</span> <span style="color: ${type === 'ERROR' ? 'red' : type === 'WARN' ? 'yellow' : 'green'};">${type}:</span> ${message}`;
+            consoleDiv.appendChild(div);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            logToDiv('LOG', ...args);
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            logToDiv('ERROR', ...args);
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            logToDiv('WARN', ...args);
+        };
+        
+        function testPopup() {
+            console.log('Testing popup manually...');
+            if (window.zentriaShowWelcomePopup) {
+                window.zentriaShowWelcomePopup();
+            } else {
+                console.error('zentriaShowWelcomePopup function not found');
+            }
+        }
+        
+        function clearLS() {
+            localStorage.clear();
+            console.log('LocalStorage cleared');
+        }
+        
+        function checkElements() {
+            const widget = document.getElementById('zentria-chat-widget');
+            const popup = document.getElementById('zentria-welcome-popup');
+            const button = document.querySelector('.zentria-chat-button');
+            
+            console.log('Elements check:');
+            console.log('- Widget container:', !!widget);
+            console.log('- Welcome popup:', !!popup);
+            console.log('- Chat button:', !!button);
+            
+            if (popup) {
+                console.log('- Popup classes:', popup.className);
+                console.log('- Popup innerHTML length:', popup.innerHTML.length);
+            }
+        }
+        
+        function showDebugInfo() {
+            console.log('=== DEBUG INFO ===');
+            console.log('Window functions:');
+            console.log('- zentriaShowWelcomePopup:', typeof window.zentriaShowWelcomePopup);
+            console.log('- zentriaCloseWelcomePopup:', typeof window.zentriaCloseWelcomePopup);
+            console.log('- zentriaToggleChat:', typeof window.zentriaToggleChat);
+            
+            console.log('LocalStorage:');
+            console.log('- zentria-welcome-shown:', localStorage.getItem('zentria-welcome-shown'));
+            
+            checkElements();
+        }
+        
+        // Clear localStorage and start monitoring
+        localStorage.removeItem('zentria-welcome-shown');
+        console.log('Debug console ready. LocalStorage cleared.');
+        
+        // Monitor for 10 seconds
+        let count = 0;
+        const monitor = setInterval(() => {
+            count++;
+            const popup = document.getElementById('zentria-welcome-popup');
+            if (popup) {
+                const isVisible = popup.classList.contains('show');
+                if (isVisible) {
+                    console.log(`SUCCESS: Popup is visible! (check #${count})`);
+                    clearInterval(monitor);
+                    return;
+                }
+            }
+            
+            if (count === 5) {
+                console.log('5 seconds passed, checking if elements exist...');
+                checkElements();
+            }
+            
+            if (count >= 10) {
+                console.log('Monitoring stopped after 10 seconds');
+                console.log('Final status check:');
+                showDebugInfo();
+                clearInterval(monitor);
+            }
+        }, 1000);
+    </script>
+    
+    <!-- Load chat widget -->
+    <script src="chat-widget.js"></script>
+</body>
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Minimal Welcome Popup Test</title>
+    <style>
+        body { 
+            font-family: Arial; 
+            padding: 20px; 
+            background: #f0f0f0;
+        }
+        #status {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: white;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            z-index: 999999;
+        }
+    </style>
+</head>
+<body>
+    <div id="status">Loading...</div>
+    
+    <h1>Minimal Test Page</h1>
+    <p>This page tests the welcome popup with minimal code.</p>
+    
+    <button onclick="manualTest()">Manual Test</button>
+    <button onclick="clearLS()">Clear LocalStorage</button>
+    <button onclick="checkElements()">Check Elements</button>
+
+    <script src="chat-widget.js"></script>
+    
+    <script>
+        function updateStatus(msg) {
+            document.getElementById('status').innerHTML = msg;
+            console.log('STATUS:', msg);
+        }
+        
+        function manualTest() {
+            updateStatus('Manual test triggered');
+            if (window.zentriaShowWelcomePopup) {
+                window.zentriaShowWelcomePopup();
+                updateStatus('Manual popup called');
+            } else {
+                updateStatus('ERROR: zentriaShowWelcomePopup not found');
+            }
+        }
+        
+        function clearLS() {
+            localStorage.clear();
+            updateStatus('LocalStorage cleared');
+        }
+        
+        function checkElements() {
+            const popup = document.getElementById('zentria-welcome-popup');
+            const button = document.querySelector('.zentria-chat-button');
+            const widget = document.getElementById('zentria-chat-widget');
+            
+            updateStatus(`Widget: ${!!widget}, Button: ${!!button}, Popup: ${!!popup}`);
+        }
+        
+        // Monitor for 10 seconds
+        let count = 0;
+        const monitor = setInterval(() => {
+            count++;
+            const popup = document.getElementById('zentria-welcome-popup');
+            const hasClass = popup ? popup.classList.contains('show') : false;
+            updateStatus(`${count}s: Popup exists: ${!!popup}, Visible: ${hasClass}`);
+            
+            if (count >= 10) {
+                clearInterval(monitor);
+                updateStatus('Monitoring complete');
+            }
+        }, 1000);
+        
+        updateStatus('Page loaded, monitoring...');
+    </script>
+</body>
+</html>

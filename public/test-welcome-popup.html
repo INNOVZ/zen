@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Widget with Welcome Popup - Demo</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+        
+        .feature-list {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .feature-list h3 {
+            color: #fff;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+        
+        .feature-list li::before {
+            content: "✨";
+            position: absolute;
+            left: 0;
+        }
+        
+        .demo-buttons {
+            margin: 3rem 0;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .demo-button {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+        
+        .demo-button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+        
+        .instructions {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.1rem;
+        }
+        
+        .code-snippet {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+            font-family: 'Courier New', monospace;
+            text-align: left;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Chat Widget Demo</h1>
+        <p class="subtitle">Experience the enhanced chat widget with welcome popup greeting!</p>
+        
+        <div class="feature-list">
+            <h3>✨ New Welcome Popup Features:</h3>
+            <ul>
+                <li>Automatic welcome greeting popup appears after 2 seconds</li>
+                <li>Beautiful animated appearance with smooth transitions</li>
+                <li>Customizable bot name and greeting message</li>
+                <li>Pulsing notification indicator on chat button</li>
+                <li>One-time display with localStorage memory</li>
+                <li>Mobile-responsive design</li>
+                <li>"Start Chat" button for instant engagement</li>
+                <li>"Maybe Later" option to dismiss politely</li>
+            </ul>
+        </div>
+        
+        <div class="instructions">
+            <strong>📖 How to test:</strong><br>
+            1. Wait 2 seconds for the welcome popup to appear<br>
+            2. Notice the pulsing animation on the chat button<br>
+            3. Try clicking "Start Chat" or "Maybe Later"<br>
+            4. Refresh the page - popup won't show again (stored in localStorage)<br>
+            5. Clear localStorage to reset the demo
+        </div>
+        
+        <div class="demo-buttons">
+            <button class="demo-button" onclick="resetWelcomeDemo()">🔄 Reset Demo</button>
+            <button class="demo-button" onclick="showWelcomeManually()">👋 Show Welcome</button>
+            <button class="demo-button" onclick="clearStorage()">🗑️ Clear Storage</button>
+        </div>
+        
+        <div class="code-snippet">
+            <strong>Embed Code:</strong><br>
+            &lt;script src="chat-widget.js" data-api-url="YOUR_API_URL" data-chatbot-id="YOUR_CHATBOT_ID"&gt;&lt;/script&gt;
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <script 
+        src="chat-widget.js" 
+        data-api-url="http://localhost:8001" 
+        data-chatbot-id="demo-bot">
+    </script>
+
+    <script>
+        function resetWelcomeDemo() {
+            // Clear the localStorage flag
+            localStorage.removeItem('zentria-welcome-shown');
+            console.log('Welcome popup reset! Reloading page...');
+            // Refresh the page to start fresh
+            window.location.reload();
+        }
+        
+        function showWelcomeManually() {
+            // Show the welcome popup manually
+            if (window.zentriaShowWelcomePopup) {
+                console.log('Showing welcome popup manually...');
+                window.zentriaShowWelcomePopup();
+            } else {
+                console.log('zentriaShowWelcomePopup function not available yet. Try again in a moment.');
+            }
+        }
+        
+        function clearStorage() {
+            localStorage.clear();
+            alert('LocalStorage cleared! Refresh the page to see the welcome popup again.');
+        }
+        
+        // Add some demo content
+        console.log('🎉 Welcome Popup Demo Page Loaded!');
+        console.log('The welcome popup should appear in 2 seconds if you haven\'t seen it before.');
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Force Visible Test</title>
+    <style>
+        /* Force popup to be visible */
+        .zentria-welcome-popup {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+            background: red !important;
+            border: 5px solid blue !important;
+            z-index: 999999 !important;
+        }
+        
+        #zentria-chat-widget {
+            border: 3px solid green !important;
+        }
+        
+        .zentria-chat-button {
+            border: 3px solid orange !important;
+        }
+    </style>
+</head>
+<body>
+    <h1>Force Visible Test</h1>
+    <p>This test forces the popup to be visible with red background and blue border.</p>
+    
+    <div id="status"></div>
+    
+    <button onclick="testManual()">Show Manual</button>
+    <button onclick="checkElements()">Check Elements</button>
+    
+    <script>
+        localStorage.clear();
+        
+        function updateStatus(msg) {
+            document.getElementById('status').innerHTML = msg;
+            console.log(msg);
+        }
+        
+        function testManual() {
+            if (window.zentriaShowWelcomePopup) {
+                window.zentriaShowWelcomePopup();
+                updateStatus('Manual show called');
+            } else {
+                updateStatus('Function not available');
+            }
+        }
+        
+        function checkElements() {
+            const elements = {
+                widget: document.getElementById('zentria-chat-widget'),
+                popup: document.getElementById('zentria-welcome-popup'),
+                button: document.querySelector('.zentria-chat-button')
+            };
+            
+            updateStatus(`Widget: ${!!elements.widget}, Popup: ${!!elements.popup}, Button: ${!!elements.button}`);
+            
+            if (elements.popup) {
+                updateStatus(`Popup classes: ${elements.popup.className}`);
+                updateStatus(`Popup computed style display: ${window.getComputedStyle(elements.popup).display}`);
+            }
+        }
+        
+        updateStatus('Loading widget...');
+    </script>
+    
+    <script src="chat-widget.js"></script>
+    
+    <script>
+        setTimeout(() => {
+            updateStatus('Widget should be loaded now');
+            checkElements();
+        }, 3000);
+    </script>
+</body>
+</html>

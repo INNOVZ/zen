@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Inline Test</title>
+</head>
+<body>
+    <h1>Testing Welcome Popup</h1>
+    <div id="log"></div>
+    
+    <script>
+        // Clear localStorage first
+        localStorage.removeItem('zentria-welcome-shown');
+        
+        function log(msg) {
+            document.getElementById('log').innerHTML += '<div>' + new Date().toLocaleTimeString() + ': ' + msg + '</div>';
+            console.log(msg);
+        }
+        
+        log('Starting test...');
+        
+        // Load the widget script
+        const script = document.createElement('script');
+        script.src = 'chat-widget.js';
+        script.onload = function() {
+            log('Chat widget script loaded');
+            
+            // Check every second for 10 seconds
+            let count = 0;
+            const checker = setInterval(() => {
+                count++;
+                const widget = document.getElementById('zentria-chat-widget');
+                const popup = document.getElementById('zentria-welcome-popup');
+                const button = document.querySelector('.zentria-chat-button');
+                
+                log(`Check ${count}: Widget=${!!widget}, Popup=${!!popup}, Button=${!!button}`);
+                
+                if (popup) {
+                    log('Popup classes: ' + popup.className);
+                    log('Popup style.display: ' + popup.style.display);
+                    log('Popup style.opacity: ' + popup.style.opacity);
+                }
+                
+                if (count >= 10) {
+                    clearInterval(checker);
+                    log('Test complete');
+                }
+            }, 1000);
+        };
+        
+        script.onerror = function() {
+            log('ERROR: Failed to load chat widget script');
+        };
+        
+        document.head.appendChild(script);
+    </script>
+</body>
+</html>

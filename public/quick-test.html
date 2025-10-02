@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Popup Test</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 40px; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .status {
+            background: rgba(0,0,0,0.5);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        .controls {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        button {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Quick Popup Test</h1>
+        <p>Testing the new bubble welcome popup</p>
+        
+        <div class="status" id="status">
+            Loading...
+        </div>
+        
+        <div class="controls">
+            <h3>Test Controls</h3>
+            <button onclick="forceShow()">🚀 Force Show Popup</button>
+            <button onclick="resetStorage()">🔄 Reset Storage</button>
+            <button onclick="checkStatus()">🔍 Check Status</button>
+            <button onclick="reloadPage()">↻ Reload Page</button>
+        </div>
+        
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 10px; text-align: left;">
+            <h3>📝 Instructions:</h3>
+            <ol>
+                <li><strong>Wait 2 seconds</strong> - popup should appear automatically</li>
+                <li><strong>Look for the chat button</strong> in bottom-right corner</li>
+                <li><strong>Check for gradient popup</strong> above the chat button</li>
+                <li><strong>Use controls above</strong> to test manually if needed</li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="chat-widget.js"></script>
+    
+    <script>
+        let statusEl = document.getElementById('status');
+        let countdown = 3;
+        
+        function updateStatus(msg) {
+            statusEl.innerHTML = msg;
+            console.log('STATUS:', msg);
+        }
+        
+        function forceShow() {
+            if (window.zentriaForceShowPopup) {
+                window.zentriaForceShowPopup();
+                updateStatus('✅ Force show popup called');
+            } else {
+                updateStatus('❌ Force show function not available');
+            }
+        }
+        
+        function resetStorage() {
+            localStorage.clear();
+            updateStatus('🗑️ Storage cleared');
+        }
+        
+        function checkStatus() {
+            const popup = document.getElementById('zentria-welcome-popup');
+            const button = document.querySelector('.zentria-chat-button');
+            const widget = document.getElementById('zentria-chat-widget');
+            
+            let status = `Widget: ${!!widget ? '✅' : '❌'} | Button: ${!!button ? '✅' : '❌'} | Popup: ${!!popup ? '✅' : '❌'}`;
+            
+            if (popup) {
+                const isVisible = popup.classList.contains('show');
+                status += ` | Visible: ${isVisible ? '✅' : '❌'}`;
+            }
+            
+            updateStatus(status);
+        }
+        
+        function reloadPage() {
+            window.location.reload();
+        }
+        
+        // Countdown timer
+        updateStatus(`⏳ Popup should appear in ${countdown} seconds...`);
+        
+        const timer = setInterval(() => {
+            countdown--;
+            if (countdown > 0) {
+                updateStatus(`⏳ Popup should appear in ${countdown} seconds...`);
+            } else {
+                updateStatus('🔍 Checking for popup...');
+                clearInterval(timer);
+                
+                // Check if popup appeared
+                setTimeout(() => {
+                    const popup = document.getElementById('zentria-welcome-popup');
+                    if (popup && popup.classList.contains('show')) {
+                        updateStatus('🎉 SUCCESS! Popup is visible!');
+                    } else {
+                        updateStatus('⚠️ Popup not visible. Use controls to test manually.');
+                    }
+                }, 1000);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

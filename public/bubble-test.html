@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Bubble Style Welcome Popup</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .hero {
+            margin-bottom: 3rem;
+        }
+        
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+        
+        .feature-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-desc {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+        
+        .demo-controls {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .demo-controls h3 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            background: rgba(255,255,255,0.2);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(255,255,255,0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+        
+        .status-panel {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            border-radius: 15px;
+            padding: 1rem;
+            min-width: 250px;
+            z-index: 999999;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .status-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #60a5fa;
+        }
+        
+        .status-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .highlight {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            padding: 2rem;
+            border-radius: 20px;
+            margin: 2rem 0;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="status-panel">
+        <div class="status-title">🔄 Status Monitor</div>
+        <div class="status-text" id="status">Initializing...</div>
+    </div>
+
+    <div class="container">
+        <div class="hero">
+            <h1>🎨 New Bubble Design</h1>
+            <p class="subtitle">Modern gradient chat bubble with floating animations</p>
+        </div>
+        
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-icon">🎨</div>
+                <div class="feature-title">Gradient Design</div>
+                <div class="feature-desc">Beautiful gradient background with glassmorphism effects</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">💫</div>
+                <div class="feature-title">Smooth Animations</div>
+                <div class="feature-desc">Bouncy entrance with floating hover effects</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">🗨️</div>
+                <div class="feature-title">Speech Bubble</div>
+                <div class="feature-desc">Classic chat bubble design with animated tail</div>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">✨</div>
+                <div class="feature-title">Shine Effect</div>
+                <div class="feature-desc">Subtle shine animation on appearance</div>
+            </div>
+        </div>
+
+        <div class="demo-controls">
+            <h3>🎮 Demo Controls</h3>
+            <div class="control-buttons">
+                <button class="control-btn" onclick="resetDemo()">🔄 Reset Demo</button>
+                <button class="control-btn" onclick="showPopup()">👋 Show Popup</button>
+                <button class="control-btn" onclick="checkStatus()">🔍 Check Status</button>
+                <button class="control-btn" onclick="clearStorage()">🗑️ Clear Storage</button>
+            </div>
+        </div>
+
+        <div class="highlight">
+            <h3>✨ What's New in This Design:</h3>
+            <ul style="text-align: left; max-width: 600px; margin: 0 auto;">
+                <li><strong>Modern Gradient:</strong> Purple-blue gradient background</li>
+                <li><strong>Chat Bubble Shape:</strong> Rounded corners with speech tail</li>
+                <li><strong>Glassmorphism:</strong> Semi-transparent elements with blur effects</li>
+                <li><strong>Bouncy Animation:</strong> Scale and bounce entrance effect</li>
+                <li><strong>Floating Effect:</strong> Gentle up-down floating animation</li>
+                <li><strong>Enhanced Button:</strong> Chat emoji notification indicator</li>
+                <li><strong>Shine Animation:</strong> Subtle light sweep on appearance</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Chat Widget -->
+    <script src="chat-widget.js" data-api-url="http://localhost:8001" data-chatbot-id="bubble-bot"></script>
+
+    <script>
+        function updateStatus(msg) {
+            document.getElementById('status').textContent = msg;
+            console.log('[STATUS]', msg);
+        }
+
+        function resetDemo() {
+            localStorage.removeItem('zentria-welcome-shown');
+            updateStatus('Demo reset! Reloading...');
+            setTimeout(() => window.location.reload(), 500);
+        }
+
+        function showPopup() {
+            if (window.zentriaShowWelcomePopup) {
+                window.zentriaShowWelcomePopup();
+                updateStatus('Popup triggered manually');
+            } else {
+                updateStatus('ERROR: Popup function not available');
+            }
+        }
+
+        function checkStatus() {
+            const popup = document.getElementById('zentria-welcome-popup');
+            const button = document.querySelector('.zentria-chat-button');
+            const widget = document.getElementById('zentria-chat-widget');
+            
+            updateStatus(`Widget: ${!!widget}, Button: ${!!button}, Popup: ${!!popup}`);
+            
+            if (popup) {
+                const isVisible = popup.classList.contains('show');
+                updateStatus(`Popup visible: ${isVisible}`);
+            }
+        }
+
+        function clearStorage() {
+            localStorage.clear();
+            updateStatus('Storage cleared');
+        }
+
+        // Monitor popup appearance
+        let monitorCount = 0;
+        const monitor = setInterval(() => {
+            monitorCount++;
+            const popup = document.getElementById('zentria-welcome-popup');
+            const isVisible = popup && popup.classList.contains('show');
+            
+            if (isVisible) {
+                updateStatus('✅ Bubble popup is visible!');
+                clearInterval(monitor);
+            } else if (monitorCount >= 5) {
+                updateStatus(`⏳ Waiting for popup... (${monitorCount}s)`);
+            }
+            
+            if (monitorCount >= 15) {
+                updateStatus('❌ Popup timeout after 15s');
+                clearInterval(monitor);
+            }
+        }, 1000);
+
+        // Initial setup
+        localStorage.removeItem('zentria-welcome-shown');
+        updateStatus('Demo initialized, waiting for popup...');
+    </script>
+</body>
+</html>
