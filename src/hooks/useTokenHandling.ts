@@ -17,13 +17,24 @@ export const useTokenHandling = () => {
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [tokenError, setTokenError] = useState<TokenError | null>(null);
 
-  const handleTokenError = (error: any) => {
+  const handleTokenError = (error: unknown) => {
     console.error('Token error:', error);
     
     // Check if it's a token limit error
-    if (error?.status === 402 || error?.detail?.error === 'Insufficient tokens') {
-      const tokenErrorData = error.detail || error;
-      setTokenError(tokenErrorData);
+    if (typeof error === 'object' && error !== null) {
+      const maybeStatus = (error as { status?: unknown }).status;
+      const maybeDetail = (error as { detail?: unknown }).detail;
+      const isStatus402 = typeof maybeStatus === 'number' && maybeStatus === 402;
+      const isInsufficientTokens =
+        typeof maybeDetail === 'object' && maybeDetail !== null &&
+        (maybeDetail as { error?: unknown }).error === 'Insufficient tokens';
+
+      if (!isStatus402 && !isInsufficientTokens) {
+        return false;
+      }
+
+      const tokenErrorData = (maybeDetail as TokenError | undefined) || (error as Partial<TokenError>);
+      setTokenError(tokenErrorData as TokenError);
       setShowUpgradeModal(true);
       return true; // Indicates error was handled
     }

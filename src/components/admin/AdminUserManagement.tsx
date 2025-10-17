@@ -424,4 +424,6 @@ export const AdminUserManagement = () => {
       </Card>
     </div>
   );
-}
+};
+
+export default AdminUserManagement;

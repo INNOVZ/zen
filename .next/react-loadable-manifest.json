@@ -14,7 +14,7 @@
   "../node_modules/@supabase/realtime-js/dist/module/RealtimeClient.js -> ws": {
     "id": 6793,
     "files": [
-      "static/chunks/6793.499f19c4ccaf2b6b.js"
+      "static/chunks/793.372094628bb6a8d3.js"
     ]
   },
   "../node_modules/@supabase/storage-js/dist/module/lib/helpers.js -> @supabase/node-fetch": {
@@ -24,25 +24,29 @@
   "app/dashboard/[userId]/page.tsx -> @/components/DevModeAlert": {
     "id": 1299,
     "files": [
-      "static/chunks/1299.7ece123f9b8e751a.js"
+      "static/chunks/299.6211bf52acd1c571.js"
     ]
   },
   "app/dashboard/[userId]/page.tsx -> @/components/PerformanceMonitor": {
     "id": 5781,
     "files": [
-      "static/chunks/5781.8bd2f219a1336fdd.js"
+      "static/chunks/781.d7085f869ac7d814.js"
     ]
   },
   "app/dashboard/[userId]/page.tsx -> @/components/dashboard/home/AnalyticsDashboard": {
     "id": 6241,
     "files": [
-      "static/chunks/6241.5b7ed4de49377dc2.js"
+      "static/chunks/241.fefeeffc479e2387.js"
     ]
   },
   "app/dashboard/[userId]/page.tsx -> @/components/dashboard/home/OfflineMode": {
     "id": 7083,
     "files": [
-      "static/chunks/7083.05367a2b13135931.js"
+      "static/chunks/83.61f830b3c0dad08f.js"
     ]
+  },
+  "components/dashboard/customize/ChatbotConfiguration.tsx -> @/app/api/routes": {
+    "id": 4739,
+    "files": []
   }
 }

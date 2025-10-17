@@ -7,6 +7,19 @@ import { apiCache, createCacheKey } from "@/utils/cache";
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
 
 // Enhanced Types for Context Engineering - Updated to match backend
+interface TokenHandler {
+  wrapApiCall<T>(
+    apiCall: () => Promise<T>,
+    operationType:
+      | "chat"
+      | "document_upload"
+      | "document_processing"
+      | "web_scraping"
+      | "embedding_generation",
+    messageLength?: number,
+    documentSize?: number
+  ): Promise<T | null>;
+}
 interface ChatResponse {
   response: string;
   sources: string[];
@@ -450,7 +463,7 @@ export const uploadsApi = {
   uploadFileWithTokenHandling: async (
     file: File,
     type: string,
-    tokenHandler?: any
+    tokenHandler?: TokenHandler
   ): Promise<UploadFile | null> => {
     if (!tokenHandler) {
       return uploadsApi.uploadFile(file, type);
@@ -554,7 +567,7 @@ export const conversationApi = {
     message: string,
     chatbotId?: string,
     conversationId?: string,
-    tokenHandler?: any
+    tokenHandler?: TokenHandler
   ): Promise<ChatResponse | null> => {
     if (!tokenHandler) {
       return conversationApi.sendMessage(message, chatbotId, conversationId);
