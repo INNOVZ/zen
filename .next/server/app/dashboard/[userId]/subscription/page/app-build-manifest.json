@@ -1,0 +1,32 @@
+{
+  "pages": {
+    "/dashboard/[userId]/subscription/page": [
+      "static/chunks/99bfb_next_dist_5dfd79d5._.js",
+      "static/chunks/Desktop_zaakiy_frontend_src_app_favicon_ico_mjs_8ff8574d._.js",
+      "static/chunks/[root-of-the-server]__7c36fa26._.css",
+      "static/chunks/Desktop_zaakiy_frontend_2797dd2a._.js",
+      "static/chunks/Desktop_zaakiy_frontend_src_app_layout_tsx_e981dad2._.js",
+      "static/chunks/99bfb_next_dist_client_components_builtin_global-error_4472a4ae.js",
+      "static/chunks/99bfb_59c66d48._.js",
+      "static/chunks/Desktop_zaakiy_frontend_src_3adde368._.js",
+      "static/chunks/99bfb_react-icons_ri_index_mjs_09ddb0b5._.js",
+      "static/chunks/99bfb_react-icons_lib_021e6abd._.js",
+      "static/chunks/99bfb_@supabase_auth-js_dist_module_b01ea55a._.js",
+      "static/chunks/99bfb_tailwind-merge_dist_bundle-mjs_mjs_4ec30a46._.js",
+      "static/chunks/99bfb_eb064561._.js",
+      "static/chunks/Desktop_zaakiy_frontend_src_app_dashboard_layout_tsx_4472a4ae._.js",
+      "static/chunks/Desktop_zaakiy_frontend_src_57ba7876._.js",
+      "static/chunks/99bfb_845ab8dc._.js",
+      "static/chunks/3d860_zaakiy_frontend_src_app_dashboard_[userId]_subscription_page_tsx_85d27e04._.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_1dbffa96._.js",
+      "static/chunks/99bfb_next_dist_compiled_react-dom_3cae662a._.js",
+      "static/chunks/99bfb_next_dist_compiled_next-devtools_index_048bc10d.js",
+      "static/chunks/99bfb_next_dist_compiled_45c608d8._.js",
+      "static/chunks/99bfb_next_dist_client_2e8c2732._.js",
+      "static/chunks/99bfb_next_dist_37e6bec6._.js",
+      "static/chunks/99bfb_@swc_helpers_cjs_c77a75b7._.js",
+      "static/chunks/Desktop_zaakiy_frontend_a0ff3932._.js",
+      "static/chunks/turbopack-Desktop_zaakiy_frontend_954629bc._.js"
+    ]
+  }
+}

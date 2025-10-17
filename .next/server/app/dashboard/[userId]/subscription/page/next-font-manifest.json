@@ -1,0 +1,14 @@
+{
+  "pages": {},
+  "app": {
+    "[project]/Desktop/zaakiy/frontend/src/app/dashboard/[userId]/subscription/page": [
+      "static/media/1544422a0ad719a7-s.p.5ebe1148.woff2",
+      "static/media/216579b50e548914-s.p.a1b609f7.woff2",
+      "static/media/3df2de83712245dd-s.p.b86f99c9.woff2",
+      "static/media/1bc7fc94203521e3-s.p.888a2ca8.woff2",
+      "static/media/0e54dc4a88da75bb-s.p.b44d99ab.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pagesUsingSizeAdjust": false
+}

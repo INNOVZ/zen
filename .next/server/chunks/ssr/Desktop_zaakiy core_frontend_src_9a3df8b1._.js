@@ -1,0 +1,3077 @@
+module.exports = [
+"[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Alert",
+    ()=>Alert,
+    "AlertDescription",
+    ()=>AlertDescription,
+    "AlertTitle",
+    ()=>AlertTitle
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/class-variance-authority/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/lib/utils.ts [app-ssr] (ecmascript)");
+;
+;
+;
+const alertVariants = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cva"])("relative w-full rounded-lg border px-4 py-3 text-sm grid has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] grid-cols-[0_1fr] has-[>svg]:gap-x-3 gap-y-0.5 items-start [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current", {
+    variants: {
+        variant: {
+            default: "bg-card text-card-foreground",
+            destructive: "text-destructive bg-card [&>svg]:text-current *:data-[slot=alert-description]:text-destructive/90"
+        }
+    },
+    defaultVariants: {
+        variant: "default"
+    }
+});
+function Alert({ className, variant, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "alert",
+        role: "alert",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])(alertVariants({
+            variant
+        }), className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx",
+        lineNumber: 28,
+        columnNumber: 5
+    }, this);
+}
+function AlertTitle({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "alert-title",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("col-start-2 line-clamp-1 min-h-4 font-medium tracking-tight", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx",
+        lineNumber: 39,
+        columnNumber: 5
+    }, this);
+}
+function AlertDescription({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "alert-description",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("text-muted-foreground col-start-2 grid justify-items-start gap-1 text-sm [&_p]:leading-relaxed", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx",
+        lineNumber: 55,
+        columnNumber: 5
+    }, this);
+}
+;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Card",
+    ()=>Card,
+    "CardAction",
+    ()=>CardAction,
+    "CardContent",
+    ()=>CardContent,
+    "CardDescription",
+    ()=>CardDescription,
+    "CardFooter",
+    ()=>CardFooter,
+    "CardHeader",
+    ()=>CardHeader,
+    "CardTitle",
+    ()=>CardTitle
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/lib/utils.ts [app-ssr] (ecmascript)");
+;
+;
+function Card({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 7,
+        columnNumber: 5
+    }, this);
+}
+function CardHeader({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-header",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-1.5 px-6 has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 20,
+        columnNumber: 5
+    }, this);
+}
+function CardTitle({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-title",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("leading-none font-semibold", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 33,
+        columnNumber: 5
+    }, this);
+}
+function CardDescription({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-description",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("text-muted-foreground text-sm", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 43,
+        columnNumber: 5
+    }, this);
+}
+function CardAction({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-action",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("col-start-2 row-span-2 row-start-1 self-start justify-self-end", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 53,
+        columnNumber: 5
+    }, this);
+}
+function CardContent({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-content",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("px-6", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 66,
+        columnNumber: 5
+    }, this);
+}
+function CardFooter({ className, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        "data-slot": "card-footer",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("flex items-center px-6 [.border-t]:pt-6", className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx",
+        lineNumber: 76,
+        columnNumber: 5
+    }, this);
+}
+;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "SimpleErrorFallback",
+    ()=>SimpleErrorFallback,
+    "default",
+    ()=>__TURBOPACK__default__export__
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/button.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/refresh-cw.js [app-ssr] (ecmascript) <export default as RefreshCw>");
+"use client";
+;
+;
+;
+;
+;
+class ErrorBoundary extends __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            hasError: false
+        };
+    }
+    static getDerivedStateFromError(error) {
+        return {
+            hasError: true,
+            error
+        };
+    }
+    componentDidCatch(error, errorInfo) {
+        console.error("ErrorBoundary caught an error:", error, errorInfo);
+        this.props.onError?.(error, errorInfo);
+    }
+    retry = ()=>{
+        this.setState({
+            hasError: false,
+            error: undefined
+        });
+    };
+    render() {
+        if (this.state.hasError) {
+            if (this.props.fallback) {
+                const FallbackComponent = this.props.fallback;
+                return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(FallbackComponent, {
+                    error: this.state.error,
+                    retry: this.retry
+                }, void 0, false, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                    lineNumber: 46,
+                    columnNumber: 11
+                }, this);
+            }
+            return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+                className: "border-red-200",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardHeader"], {
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardTitle"], {
+                            className: "flex items-center gap-2 text-red-600",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
+                                    className: "h-5 w-5"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                                    lineNumber: 54,
+                                    columnNumber: 15
+                                }, this),
+                                "Something went wrong"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                            lineNumber: 53,
+                            columnNumber: 13
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                        lineNumber: 52,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                        className: "space-y-4",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-gray-600",
+                                children: this.state.error?.message || "An unexpected error occurred"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                                lineNumber: 59,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                onClick: this.retry,
+                                variant: "outline",
+                                className: "flex items-center gap-2",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                                        className: "h-4 w-4"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                                        lineNumber: 67,
+                                        columnNumber: 15
+                                    }, this),
+                                    "Try again"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                                lineNumber: 62,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                        lineNumber: 58,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                lineNumber: 51,
+                columnNumber: 9
+            }, this);
+        }
+        return this.props.children;
+    }
+}
+const SimpleErrorFallback = ({ error, retry })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "p-4 border border-red-200 rounded-lg bg-red-50",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center gap-2 text-red-600 mb-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
+                        className: "h-4 w-4"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                        lineNumber: 86,
+                        columnNumber: 7
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        className: "font-medium",
+                        children: "Error loading component"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                        lineNumber: 87,
+                        columnNumber: 7
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                lineNumber: 85,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                className: "text-sm text-gray-600 mb-3",
+                children: error?.message || "Something went wrong"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                lineNumber: 89,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                size: "sm",
+                onClick: retry,
+                variant: "outline",
+                children: "Retry"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+                lineNumber: 92,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx",
+        lineNumber: 84,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0));
+const __TURBOPACK__default__export__ = ErrorBoundary;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/stores/customizeStore.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useCustomizeActions",
+    ()=>useCustomizeActions,
+    "useCustomizeActiveTab",
+    ()=>useCustomizeActiveTab,
+    "useCustomizeConfig",
+    ()=>useCustomizeConfig,
+    "useCustomizeConnectionStatus",
+    ()=>useCustomizeConnectionStatus,
+    "useCustomizeContextConfig",
+    ()=>useCustomizeContextConfig,
+    "useCustomizeCurrentUser",
+    ()=>useCustomizeCurrentUser,
+    "useCustomizeLoading",
+    ()=>useCustomizeLoading,
+    "useCustomizeOrgChatbots",
+    ()=>useCustomizeOrgChatbots,
+    "useCustomizePerformanceMetrics",
+    ()=>useCustomizePerformanceMetrics,
+    "useCustomizeSaving",
+    ()=>useCustomizeSaving,
+    "useCustomizeSelectedChatbot",
+    ()=>useCustomizeSelectedChatbot,
+    "useCustomizeStore",
+    ()=>useCustomizeStore,
+    "useCustomizeUIState",
+    ()=>useCustomizeUIState,
+    "useCustomizeUploads",
+    ()=>useCustomizeUploads
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/zustand/esm/react.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/zustand/esm/middleware.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/app/api/routes.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+;
+// Default context configuration
+const defaultContextConfig = {
+    org_id: "",
+    config_name: "default",
+    initial_retrieval_count: 20,
+    semantic_rerank_count: 10,
+    final_context_chunks: 5,
+    max_context_length: 4000,
+    enable_query_rewriting: true,
+    max_query_variants: 3,
+    conversation_context_turns: 3,
+    retrieval_strategy: "hybrid",
+    semantic_weight: 0.6,
+    keyword_weight: 0.4,
+    model_tier: "balanced",
+    embedding_model: "text-embedding-3-small",
+    rerank_model: "gpt-3.5-turbo",
+    enable_semantic_rerank: true,
+    enable_hallucination_check: true,
+    enable_source_verification: true,
+    confidence_threshold: 0.7,
+    max_response_time_ms: 5000,
+    enable_caching: true,
+    cache_ttl_minutes: 60,
+    domain_filters: {},
+    business_context: "",
+    specialized_instructions: "",
+    enable_detailed_logging: true,
+    log_user_queries: true,
+    collect_feedback: true,
+    created_at: "",
+    updated_at: ""
+};
+// Default chatbot configuration
+const defaultConfig = {
+    id: "",
+    name: "",
+    description: "",
+    color_hex: "#6a8fff",
+    tone: "helpful",
+    behavior: "Be helpful and informative while maintaining professionalism",
+    system_prompt: "",
+    greeting_message: "Hello! I'm your INNOVZ AI Assistant. How can I help you today?",
+    fallback_message: "I apologize, but I don't have enough information to answer that accurately. Could you please rephrase or provide more context?",
+    ai_model_config: {
+        model: "gpt-4",
+        temperature: 0.7,
+        max_tokens: 1000
+    },
+    is_active: true,
+    chain_status: "ready",
+    trainer_at: "",
+    created_at: "",
+    status: "active",
+    deployment_config: {
+        url: "",
+        headers: {},
+        method: "POST"
+    },
+    avatar_url: ""
+};
+const useCustomizeStore = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$zustand$2f$esm$2f$react$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["create"])()((0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$zustand$2f$esm$2f$middleware$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["devtools"])((set, get)=>({
+        // Initial state
+        loading: true,
+        saving: false,
+        activeTab: "basic",
+        showCreateForm: false,
+        showEmbedModal: false,
+        isEditMode: false,
+        analyticsLoading: false,
+        uploading: false,
+        currentUser: null,
+        error: null,
+        connectionStatus: "checking",
+        orgChatbots: [],
+        selectedChatbot: null,
+        uploads: [],
+        embedCode: "",
+        performanceMetrics: null,
+        conversations: [],
+        deletingChatbotId: null,
+        contextConfig: defaultContextConfig,
+        config: defaultConfig,
+        chatMessages: [],
+        currentConversationId: null,
+        // Basic Actions
+        setLoading: (loading)=>set({
+                loading
+            }, false, "setLoading"),
+        setSaving: (saving)=>set({
+                saving
+            }, false, "setSaving"),
+        setActiveTab: (activeTab)=>set({
+                activeTab
+            }, false, "setActiveTab"),
+        setShowCreateForm: (showCreateForm)=>set({
+                showCreateForm
+            }, false, "setShowCreateForm"),
+        setShowEmbedModal: (showEmbedModal)=>set({
+                showEmbedModal
+            }, false, "setShowEmbedModal"),
+        setIsEditMode: (isEditMode)=>set({
+                isEditMode
+            }, false, "setIsEditMode"),
+        setAnalyticsLoading: (analyticsLoading)=>set({
+                analyticsLoading
+            }, false, "setAnalyticsLoading"),
+        setUploading: (uploading)=>set({
+                uploading
+            }, false, "setUploading"),
+        setCurrentUser: (currentUser)=>set({
+                currentUser
+            }, false, "setCurrentUser"),
+        setError: (error)=>set({
+                error
+            }, false, "setError"),
+        setConnectionStatus: (connectionStatus)=>set({
+                connectionStatus
+            }, false, "setConnectionStatus"),
+        // Data Actions
+        setOrgChatbots: (orgChatbots)=>set({
+                orgChatbots
+            }, false, "setOrgChatbots"),
+        setSelectedChatbot: (selectedChatbot)=>set({
+                selectedChatbot
+            }, false, "setSelectedChatbot"),
+        setUploads: (uploads)=>set({
+                uploads
+            }, false, "setUploads"),
+        setEmbedCode: (embedCode)=>set({
+                embedCode
+            }, false, "setEmbedCode"),
+        setPerformanceMetrics: (performanceMetrics)=>set({
+                performanceMetrics
+            }, false, "setPerformanceMetrics"),
+        setDeletingChatbotId: (deletingChatbotId)=>set({
+                deletingChatbotId
+            }, false, "setDeletingChatbotId"),
+        setConversations: (conversations)=>set({
+                conversations
+            }, false, "setConversations"),
+        setChatMessages: (chatMessages)=>set({
+                chatMessages
+            }, false, "setChatMessages"),
+        setCurrentConversationId: (currentConversationId)=>set({
+                currentConversationId
+            }, false, "setCurrentConversationId"),
+        // Configuration Actions
+        setContextConfig: (contextConfig)=>set({
+                contextConfig
+            }, false, "setContextConfig"),
+        updateContextConfig: (updates)=>set((state)=>({
+                    contextConfig: {
+                        ...state.contextConfig,
+                        ...updates
+                    }
+                }), false, "updateContextConfig"),
+        setConfig: (config)=>set({
+                config
+            }, false, "setConfig"),
+        updateConfig: (updates)=>set((state)=>({
+                    config: {
+                        ...state.config,
+                        ...updates
+                    }
+                }), false, "updateConfig"),
+        // Enhanced Async Actions with better error handling
+        loadChatbots: async ()=>{
+            try {
+                set({
+                    loading: true,
+                    error: null
+                });
+                const chatbots = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chatbotApi"].getChatbots();
+                set({
+                    orgChatbots: chatbots,
+                    loading: false,
+                    connectionStatus: "connected"
+                });
+            } catch (error) {
+                const isDevelopment = ("TURBOPACK compile-time value", "development") === 'development';
+                const isConnectionError = error instanceof Error && (error.message.includes("Unable to connect") || error.message.includes("Backend server unavailable") || error.message.includes("ECONNREFUSED") || error.message.includes("Not authenticated"));
+                // Check if this is likely an initial load error (no chatbots loaded yet)
+                const currentState = get();
+                const isInitialLoad = !currentState.orgChatbots || currentState.orgChatbots.length === 0;
+                if (isDevelopment && isConnectionError && isInitialLoad) {
+                    // In development, suppress error messages during initial load
+                    console.debug("Initial load - chatbots loading failed (likely auth in progress)");
+                    set({
+                        loading: false,
+                        connectionStatus: "disconnected"
+                    });
+                    return; // Don't set error state for initial load failures
+                }
+                if (isDevelopment && isConnectionError) {
+                    // In development, just log a warning for connection errors
+                    console.warn("Chatbots loading failed - backend server not available");
+                } else {
+                    console.error("Error loading chatbots:", error);
+                }
+                set({
+                    error: isConnectionError ? "Backend server unavailable" : "Failed to load chatbots",
+                    loading: false,
+                    connectionStatus: "disconnected"
+                });
+                // Only show toast for unexpected errors, not connection issues in development
+                if (!isDevelopment || !isConnectionError) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to load chatbots. Please check your connection.");
+                }
+            }
+        },
+        loadUploads: async ()=>{
+            try {
+                const uploads = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["uploadsApi"].getUploads();
+                set({
+                    uploads,
+                    connectionStatus: "connected"
+                });
+            } catch (error) {
+                const isDevelopment = ("TURBOPACK compile-time value", "development") === 'development';
+                const isConnectionError = error instanceof Error && (error.message.includes("Unable to connect") || error.message.includes("Backend server unavailable") || error.message.includes("ECONNREFUSED"));
+                if (isDevelopment && isConnectionError) {
+                    console.warn("Uploads loading failed - backend server not available");
+                } else {
+                    console.error("Error loading uploads:", error);
+                }
+                set({
+                    error: isConnectionError ? "Backend server unavailable" : "Failed to load uploads",
+                    connectionStatus: "disconnected"
+                });
+                if (!isDevelopment || !isConnectionError) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to load knowledge base files.");
+                }
+            }
+        },
+        loadContextConfig: async ()=>{
+            try {
+                const response = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getContextConfig();
+                if (response && response.success) {
+                    set({
+                        contextConfig: response.config,
+                        connectionStatus: "connected"
+                    });
+                }
+            } catch (error) {
+                console.error("Error loading context config:", error);
+                set({
+                    error: "Failed to load context configuration",
+                    connectionStatus: "disconnected"
+                });
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to load AI configuration.");
+            }
+        },
+        loadPerformanceMetrics: async (days = 7)=>{
+            try {
+                set({
+                    analyticsLoading: true
+                });
+                const metrics = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getAnalyticsDashboard(days);
+                set({
+                    performanceMetrics: metrics,
+                    analyticsLoading: false,
+                    connectionStatus: "connected"
+                });
+            } catch (error) {
+                console.error("Error loading performance metrics:", error);
+                set({
+                    performanceMetrics: null,
+                    analyticsLoading: false,
+                    error: "Failed to load analytics",
+                    connectionStatus: "disconnected"
+                });
+            // Don't show error toast for analytics as it's not critical
+            }
+        },
+        createChatbot: async (config)=>{
+            try {
+                set({
+                    saving: true,
+                    error: null
+                });
+                const chatbot = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chatbotApi"].createChatbot(config);
+                set((state)=>({
+                        orgChatbots: [
+                            ...state.orgChatbots,
+                            chatbot
+                        ],
+                        selectedChatbot: chatbot,
+                        saving: false,
+                        showCreateForm: false,
+                        isEditMode: true,
+                        connectionStatus: "connected"
+                    }));
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Chatbot created successfully!");
+                return chatbot;
+            } catch (error) {
+                console.error("Error creating chatbot:", error);
+                set({
+                    saving: false,
+                    error: "Failed to create chatbot",
+                    connectionStatus: "disconnected"
+                });
+                const errorMessage = error instanceof Error ? error.message : "Failed to create chatbot. Please try again.";
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(errorMessage);
+                return null;
+            }
+        },
+        updateChatbot: async (chatbotId, config)=>{
+            try {
+                set({
+                    saving: true,
+                    error: null
+                });
+                const updatedChatbot = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chatbotApi"].updateChatbot(chatbotId, config);
+                set((state)=>({
+                        orgChatbots: state.orgChatbots.map((bot)=>bot.id === chatbotId ? updatedChatbot : bot),
+                        selectedChatbot: updatedChatbot,
+                        saving: false,
+                        connectionStatus: "connected"
+                    }));
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Chatbot updated successfully!");
+                return updatedChatbot;
+            } catch (error) {
+                console.error("Error updating chatbot:", error);
+                set({
+                    saving: false,
+                    error: "Failed to update chatbot",
+                    connectionStatus: "disconnected"
+                });
+                const errorMessage = error instanceof Error ? error.message : "Failed to update chatbot. Please try again.";
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(errorMessage);
+                return null;
+            }
+        },
+        deleteChatbot: async (chatbotId)=>{
+            try {
+                set({
+                    deletingChatbotId: chatbotId,
+                    error: null
+                });
+                await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chatbotApi"].deleteChatbot(chatbotId);
+                set((state)=>({
+                        orgChatbots: state.orgChatbots.filter((bot)=>bot.id !== chatbotId),
+                        selectedChatbot: state.selectedChatbot?.id === chatbotId ? null : state.selectedChatbot,
+                        deletingChatbotId: null,
+                        connectionStatus: "connected"
+                    }));
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Chatbot deleted successfully!");
+            } catch (error) {
+                console.error("Error deleting chatbot:", error);
+                set({
+                    deletingChatbotId: null,
+                    error: "Failed to delete chatbot",
+                    connectionStatus: "disconnected"
+                });
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to delete chatbot. Please try again.");
+            }
+        },
+        saveContextConfig: async (updates)=>{
+            try {
+                set({
+                    saving: true,
+                    error: null
+                });
+                const response = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].updateContextConfig(updates);
+                if (response && response.success) {
+                    set((state)=>({
+                            contextConfig: {
+                                ...state.contextConfig,
+                                ...updates
+                            },
+                            saving: false,
+                            connectionStatus: "connected"
+                        }));
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("Context configuration updated successfully!");
+                } else {
+                    throw new Error(response?.message || "Save failed");
+                }
+            } catch (error) {
+                console.error("Error saving context config:", error);
+                set({
+                    saving: false,
+                    error: "Failed to update context configuration",
+                    connectionStatus: "disconnected"
+                });
+                const errorMessage = error instanceof Error ? `Failed to save: ${error.message}` : "Failed to update context configuration. Please try again.";
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error(errorMessage);
+            }
+        },
+        uploadFile: async (file, type)=>{
+            try {
+                set({
+                    uploading: true,
+                    error: null
+                });
+                const uploadResult = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["uploadsApi"].uploadFile(file, type);
+                set((state)=>({
+                        uploads: [
+                            ...state.uploads,
+                            uploadResult
+                        ],
+                        uploading: false,
+                        connectionStatus: "connected"
+                    }));
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].success("File uploaded successfully!");
+                return uploadResult;
+            } catch (error) {
+                console.error("Error uploading file:", error);
+                set({
+                    uploading: false,
+                    error: "Failed to upload file",
+                    connectionStatus: "disconnected"
+                });
+                __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to upload file. Please try again.");
+                return null;
+            }
+        },
+        testConnection: async ()=>{
+            try {
+                set({
+                    connectionStatus: "checking"
+                });
+                // First try a simple health check without auth
+                try {
+                    const healthResponse = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getHealthCheck();
+                    if (healthResponse) {
+                        // If basic health check passes, try authenticated connection
+                        const result = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].testConnection();
+                        const isConnected = result.success;
+                        set({
+                            connectionStatus: isConnected ? "connected" : "disconnected"
+                        });
+                        return isConnected;
+                    }
+                } catch (healthError) {
+                    console.warn("Health check failed, trying direct connection test:", healthError);
+                }
+                // Fall back to direct authenticated test
+                const result = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].testConnection();
+                const isConnected = result.success;
+                set({
+                    connectionStatus: isConnected ? "connected" : "disconnected"
+                });
+                return isConnected;
+            } catch (error) {
+                console.error("Connection test failed:", error);
+                set({
+                    connectionStatus: "disconnected"
+                });
+                return false;
+            }
+        },
+        generateEmbedCode: (chatbotId)=>{
+            const API_BASE = ("TURBOPACK compile-time value", "http://localhost:8001") || "http://localhost:8001";
+            const embedScript = `<script>
+  (function() {
+    var script = document.createElement('script');
+    script.src = '${window.location.origin}/chatbot-widget.js';
+    script.setAttribute('data-chatbot-id', '${chatbotId}');
+    script.setAttribute('data-api-url', '${API_BASE}');
+    document.head.appendChild(script);
+  })();
+</script>`;
+            set({
+                embedCode: embedScript,
+                showEmbedModal: true
+            });
+            return embedScript;
+        },
+        initializeStore: async (retryCount = 0)=>{
+            const maxRetries = 3;
+            try {
+                set({
+                    loading: true,
+                    error: null,
+                    connectionStatus: "checking"
+                });
+                // Test connection first with timeout and retry logic
+                let connectionResult;
+                try {
+                    connectionResult = await get().testConnection();
+                } catch (connectionError) {
+                    console.warn("Initial connection test failed, attempting to continue:", connectionError);
+                    // Continue with initialization even if connection test fails
+                    connectionResult = false;
+                }
+                // Load all data in parallel with individual error handling
+                const results = await Promise.allSettled([
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["chatbotApi"].getChatbots(),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["uploadsApi"].getUploads(),
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getContextConfig()
+                ]);
+                let hasAnySuccess = false;
+                let criticalFailures = 0;
+                // Handle chatbots result (critical for basic functionality)
+                if (results[0].status === "fulfilled") {
+                    set({
+                        orgChatbots: results[0].value
+                    });
+                    hasAnySuccess = true;
+                } else {
+                    console.error("Failed to load chatbots:", results[0].reason);
+                    criticalFailures++;
+                }
+                // Handle uploads result (non-critical)
+                if (results[1].status === "fulfilled") {
+                    set({
+                        uploads: results[1].value
+                    });
+                    hasAnySuccess = true;
+                } else {
+                    console.warn("Failed to load uploads (non-critical):", results[1].reason);
+                }
+                // Handle context config result (non-critical, has defaults)
+                if (results[2].status === "fulfilled" && results[2].value && results[2].value.success) {
+                    // Ensure loaded config has proper org_id
+                    const loadedConfig = {
+                        ...results[2].value.config,
+                        org_id: results[2].value.config.org_id || `user_${Date.now()}_org`
+                    };
+                    set({
+                        contextConfig: loadedConfig
+                    });
+                    console.debug("✅ Context config loaded successfully");
+                    hasAnySuccess = true;
+                } else {
+                    // Context config failed to load - this is expected if backend is not available
+                    console.debug("🔧 Context config not available, using built-in defaults");
+                    // Ensure default config has proper org_id
+                    const defaultConfigWithOrgId = {
+                        ...defaultContextConfig,
+                        org_id: `user_${Date.now()}_org`
+                    };
+                    set({
+                        contextConfig: defaultConfigWithOrgId
+                    });
+                }
+                // Determine if initialization was successful enough
+                if (hasAnySuccess && criticalFailures === 0) {
+                    set({
+                        loading: false,
+                        connectionStatus: connectionResult ? "connected" : "partial",
+                        error: null
+                    });
+                    if (!connectionResult) {
+                        __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].warning("Some features may be limited due to connectivity issues");
+                    }
+                } else if (hasAnySuccess && criticalFailures > 0 && retryCount < maxRetries) {
+                    // Partial success but critical failures - retry
+                    console.log(`Retrying initialization (${retryCount + 1}/${maxRetries}) due to critical failures`);
+                    await new Promise((resolve)=>setTimeout(resolve, Math.pow(2, retryCount) * 1000));
+                    return get().initializeStore(retryCount + 1);
+                } else if (!hasAnySuccess && retryCount < maxRetries) {
+                    // Complete failure - retry
+                    console.log(`Retrying initialization (${retryCount + 1}/${maxRetries}) due to complete failure`);
+                    await new Promise((resolve)=>setTimeout(resolve, Math.pow(2, retryCount) * 1000));
+                    return get().initializeStore(retryCount + 1);
+                } else {
+                    // Final failure after retries
+                    throw new Error(`Failed to load critical application data after ${retryCount + 1} attempts`);
+                }
+            } catch (error) {
+                console.error("Error initializing store:", error);
+                const isRetryable = retryCount < maxRetries && error instanceof Error && (error.message.includes("network") || error.message.includes("timeout") || error.message.includes("fetch"));
+                if (isRetryable) {
+                    console.log(`Retrying initialization (${retryCount + 1}/${maxRetries}) after error:`, error.message);
+                    await new Promise((resolve)=>setTimeout(resolve, Math.pow(2, retryCount) * 1500));
+                    return get().initializeStore(retryCount + 1);
+                } else {
+                    set({
+                        loading: false,
+                        error: `Failed to initialize application${retryCount > 0 ? ` after ${retryCount + 1} attempts` : ""}`,
+                        connectionStatus: "disconnected"
+                    });
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Failed to initialize application. Please check your connection and try refreshing the page.");
+                }
+            }
+        },
+        resetState: ()=>set({
+                loading: true,
+                saving: false,
+                activeTab: "basic",
+                showCreateForm: false,
+                showEmbedModal: false,
+                isEditMode: false,
+                analyticsLoading: false,
+                uploading: false,
+                currentUser: null,
+                error: null,
+                connectionStatus: "checking",
+                orgChatbots: [],
+                selectedChatbot: null,
+                uploads: [],
+                embedCode: "",
+                performanceMetrics: null,
+                conversations: [],
+                deletingChatbotId: null,
+                contextConfig: defaultContextConfig,
+                config: defaultConfig,
+                chatMessages: [],
+                currentConversationId: null
+            }, false, "resetState")
+    }), {
+    name: "customize-store"
+}));
+const useCustomizeLoading = ()=>useCustomizeStore((state)=>state.loading);
+const useCustomizeSaving = ()=>useCustomizeStore((state)=>state.saving);
+const useCustomizeActiveTab = ()=>useCustomizeStore((state)=>state.activeTab);
+const useCustomizeCurrentUser = ()=>useCustomizeStore((state)=>state.currentUser);
+const useCustomizeOrgChatbots = ()=>useCustomizeStore((state)=>state.orgChatbots);
+const useCustomizeSelectedChatbot = ()=>useCustomizeStore((state)=>state.selectedChatbot);
+const useCustomizeUploads = ()=>useCustomizeStore((state)=>state.uploads);
+const useCustomizeContextConfig = ()=>useCustomizeStore((state)=>state.contextConfig);
+const useCustomizeConfig = ()=>useCustomizeStore((state)=>state.config);
+const useCustomizePerformanceMetrics = ()=>useCustomizeStore((state)=>state.performanceMetrics);
+const useCustomizeConnectionStatus = ()=>useCustomizeStore((state)=>state.connectionStatus);
+const useCustomizeActions = ()=>useCustomizeStore((state)=>({
+            setLoading: state.setLoading,
+            setSaving: state.setSaving,
+            setActiveTab: state.setActiveTab,
+            updateConfig: state.updateConfig,
+            updateContextConfig: state.updateContextConfig,
+            testConnection: state.testConnection
+        }));
+const useCustomizeUIState = ()=>useCustomizeStore((state)=>({
+            loading: state.loading,
+            saving: state.saving,
+            activeTab: state.activeTab,
+            showCreateForm: state.showCreateForm,
+            showEmbedModal: state.showEmbedModal,
+            isEditMode: state.isEditMode,
+            analyticsLoading: state.analyticsLoading,
+            connectionStatus: state.connectionStatus
+        }));
+}),
+"[project]/Desktop/zaakiy core/frontend/src/utils/errorHandling.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+/**
+ * Utility functions for consistent error handling across the application
+ */ __turbopack_context__.s([
+    "analyzeError",
+    ()=>analyzeError,
+    "getUserFriendlyErrorMessage",
+    ()=>getUserFriendlyErrorMessage,
+    "logError",
+    ()=>logError
+]);
+const analyzeError = (error)=>{
+    const isDevelopment = ("TURBOPACK compile-time value", "development") === 'development';
+    const isConnectionError = error instanceof Error && (error.message.includes("Unable to connect") || error.message.includes("Backend server unavailable") || error.message.includes("ECONNREFUSED") || error.message.includes("Failed to fetch") || error.message.includes("network") || error.message.includes("timeout"));
+    return {
+        isConnectionError,
+        shouldShowToast: !isDevelopment || !isConnectionError,
+        logLevel: isDevelopment && isConnectionError ? 'warn' : 'error',
+        message: isConnectionError ? "Backend server unavailable" : "An unexpected error occurred"
+    };
+};
+const logError = (error, context, info)=>{
+    if (info.logLevel === 'warn') {
+        console.warn(`${context} - backend server not available`);
+    } else {
+        console.error(`Error in ${context}:`, error);
+    }
+};
+const getUserFriendlyErrorMessage = (error)=>{
+    const info = analyzeError(error);
+    if (info.isConnectionError) {
+        return "Unable to connect to the server. Please check your connection and try again.";
+    }
+    if (error instanceof Error) {
+        return error.message;
+    }
+    return "An unexpected error occurred. Please try again.";
+};
+}),
+"[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardData.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useDashboardData",
+    ()=>useDashboardData
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$stores$2f$customizeStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/stores/customizeStore.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/app/api/routes.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$errorHandling$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/utils/errorHandling.ts [app-ssr] (ecmascript)");
+;
+;
+;
+;
+const useDashboardData = ()=>{
+    const { loading, analyticsLoading, orgChatbots: chatbots, uploads, conversations, performanceMetrics: analyticsMetrics, connectionStatus, loadChatbots, loadUploads, loadPerformanceMetrics, setConversations, testConnection } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$stores$2f$customizeStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCustomizeStore"])();
+    // Fast conversation count for immediate display
+    const [conversationCount, setConversationCount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(0);
+    const [conversationCountLoading, setConversationCountLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Fast conversation count loading
+    const loadConversationCount = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+        try {
+            setConversationCountLoading(true);
+            const count = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getConversationCount();
+            setConversationCount(count);
+        } catch (error) {
+            console.error("Error loading conversation count:", error);
+            setConversationCount(0);
+        } finally{
+            setConversationCountLoading(false);
+        }
+    }, []);
+    // Non-blocking data loading for better dashboard performance
+    const loadDashboardData = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+        try {
+            // Load critical data first (chatbots and uploads) for immediate UI display
+            await Promise.allSettled([
+                loadChatbots(),
+                loadUploads(),
+                loadConversationCount()
+            ]);
+            // Load conversation details in background (much smaller sample)
+            setTimeout(async ()=>{
+                try {
+                    const conversationPromise = __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$routes$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["conversationApi"].getConversations(10); // Only 10 for dashboard
+                    const timeoutPromise = new Promise((_, reject)=>setTimeout(()=>reject(new Error('Conversation loading timeout')), 1500));
+                    const userConversations = await Promise.race([
+                        conversationPromise,
+                        timeoutPromise
+                    ]);
+                    setConversations(userConversations);
+                } catch (error) {
+                    const errorInfo = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$errorHandling$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["analyzeError"])(error);
+                    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$errorHandling$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["logError"])(error, "loading conversations", errorInfo);
+                    setConversations([]);
+                }
+            }, 100);
+            // Load analytics data in background (use 30 days to capture more data)
+            setTimeout(()=>{
+                loadPerformanceMetrics(30);
+            }, 200);
+        } catch (error) {
+            const errorInfo = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$errorHandling$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["analyzeError"])(error);
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$errorHandling$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["logError"])(error, "loading dashboard data", errorInfo);
+        }
+    }, [
+        loadChatbots,
+        loadUploads,
+        loadConversationCount,
+        setConversations,
+        loadPerformanceMetrics
+    ]);
+    const handleRefreshAnalytics = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(async ()=>{
+        await loadPerformanceMetrics(30);
+    }, [
+        loadPerformanceMetrics
+    ]);
+    const refreshConnection = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        testConnection();
+        loadDashboardData();
+    }, [
+        testConnection,
+        loadDashboardData
+    ]);
+    return {
+        // Data
+        loading,
+        analyticsLoading,
+        chatbots,
+        uploads,
+        conversations,
+        analyticsMetrics,
+        isOffline: connectionStatus === 'disconnected',
+        // Fast conversation data
+        conversationCount,
+        conversationCountLoading,
+        // Actions
+        loadDashboardData,
+        handleRefreshAnalytics,
+        refreshConnection
+    };
+};
+}),
+"[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardNavigation.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useDashboardNavigation",
+    ()=>useDashboardNavigation
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/navigation.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bot$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/bot.js [app-ssr] (ecmascript) <export default as Bot>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/upload.js [app-ssr] (ecmascript) <export default as Upload>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/message-square.js [app-ssr] (ecmascript) <export default as MessageSquare>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/trending-up.js [app-ssr] (ecmascript) <export default as TrendingUp>");
+;
+;
+;
+const useDashboardNavigation = (userId)=>{
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
+    // Memoized navigation handlers
+    const handleTrainClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        router.push(`/dashboard/${userId}/train`);
+    }, [
+        router,
+        userId
+    ]);
+    const handleCustomizeClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        router.push(`/dashboard/${userId}/customize`);
+    }, [
+        router,
+        userId
+    ]);
+    const handleChatClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        router.push(`/dashboard/${userId}/chat`);
+    }, [
+        router,
+        userId
+    ]);
+    const handleSettingsClick = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCallback"])(()=>{
+        router.push(`/dashboard/${userId}/settings`);
+    }, [
+        router,
+        userId
+    ]);
+    // Configuration-driven quick actions
+    const quickActions = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>[
+            {
+                id: "create-chatbot",
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bot$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bot$3e$__["Bot"],
+                title: "Create Chatbot",
+                onClick: handleCustomizeClick
+            },
+            {
+                id: "upload-data",
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__["Upload"],
+                title: "Upload Data",
+                onClick: handleTrainClick
+            },
+            {
+                id: "test-chat",
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__["MessageSquare"],
+                title: "Test Chat",
+                onClick: handleChatClick
+            },
+            {
+                id: "view-analytics",
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$trending$2d$up$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__TrendingUp$3e$__["TrendingUp"],
+                title: "View Analytics",
+                onClick: handleSettingsClick
+            }
+        ], [
+        handleCustomizeClick,
+        handleTrainClick,
+        handleChatClick,
+        handleSettingsClick
+    ]);
+    return {
+        handleTrainClick,
+        handleCustomizeClick,
+        handleChatClick,
+        handleSettingsClick,
+        quickActions
+    };
+};
+}),
+"[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardStats.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useDashboardStats",
+    ()=>useDashboardStats
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+const useDashboardStats = (chatbots, uploads, conversations, conversationCount)=>{
+    return (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useMemo"])(()=>({
+            totalChatbots: chatbots.length,
+            totalUploads: uploads.length,
+            totalConversations: conversationCount || conversations.length,
+            activeUsers: 0
+        }), [
+        chatbots.length,
+        uploads.length,
+        conversations.length,
+        conversationCount
+    ]);
+};
+}),
+"[project]/Desktop/zaakiy core/frontend/src/hooks/useUserAuth.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "useUserAuth",
+    ()=>useUserAuth
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/navigation.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$supabase$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/lib/supabase.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/sonner/dist/index.mjs [app-ssr] (ecmascript)");
+;
+;
+;
+;
+const useUserAuth = (userId, setCurrentUser)=>{
+    const router = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useRouter"])();
+    const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [isAuthLoading, setIsAuthLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(true);
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        let mounted = true;
+        const checkUserAccess = async ()=>{
+            try {
+                setIsAuthLoading(true);
+                const { data: { session } } = await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$supabase$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["supabase"].auth.getSession();
+                if (!mounted) return;
+                if (!session?.user) {
+                    router.replace("/auth/login");
+                    return;
+                }
+                // Check if the userId in URL matches the logged-in user
+                if (session.user.id !== userId) {
+                    __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$sonner$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["toast"].error("Unauthorized access");
+                    router.replace(`/dashboard/${session.user.id}`);
+                    return;
+                }
+                const userData = {
+                    id: session.user.id,
+                    email: session.user.email || "",
+                    name: session.user.user_metadata?.name || session.user.email || "",
+                    display_name: session.user.user_metadata?.display_name || session.user.user_metadata?.name || session.user.email || ""
+                };
+                setUser(userData);
+                setCurrentUser(session.user);
+            } catch (error) {
+                console.error("Error checking user access:", error);
+                if (mounted) {
+                    router.replace("/auth/login");
+                }
+            } finally{
+                if (mounted) {
+                    setIsAuthLoading(false);
+                }
+            }
+        };
+        checkUserAccess();
+        return ()=>{
+            mounted = false;
+        };
+    }, [
+        userId,
+        router,
+        setCurrentUser
+    ]);
+    return {
+        user,
+        isAuthLoading
+    };
+};
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DashboardHeader",
+    ()=>DashboardHeader
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/button.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/upload.js [app-ssr] (ecmascript) <export default as Upload>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$userUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/utils/userUtils.ts [app-ssr] (ecmascript)");
+;
+;
+;
+;
+;
+const DashboardHeader = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ user, onTrainClick, onCustomizeClick })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("header", {
+        className: "flex justify-between items-center bg-color-gradient p-8 rounded-t-xl",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "text-3xl text-white font-bold",
+                        children: [
+                            "Welcome back, ",
+                            (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$utils$2f$userUtils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getUserFirstName"])(user),
+                            "!"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                        lineNumber: 11,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-white mt-1",
+                        children: "Manage your AI chatbots and training data"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                        lineNumber: 14,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                lineNumber: 10,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex gap-2",
+                role: "group",
+                "aria-label": "Primary actions",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                        onClick: onTrainClick,
+                        variant: "outline",
+                        className: "pointer flex items-center gap-2",
+                        "aria-label": "Add training data",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$upload$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Upload$3e$__["Upload"], {
+                                className: "h-4 w-4",
+                                "aria-hidden": "true"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                                lineNumber: 25,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            "Add Training Data"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                        lineNumber: 19,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                        onClick: onCustomizeClick,
+                        className: "pointer flex items-center gap-2",
+                        "aria-label": "Create new chatbot",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__["Plus"], {
+                                className: "h-4 w-4",
+                                "aria-hidden": "true"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                                lineNumber: 33,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            "Create Chatbot"
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                        lineNumber: 28,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+                lineNumber: 18,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx",
+        lineNumber: 9,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0)));
+DashboardHeader.displayName = "DashboardHeader";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "StatusCard",
+    ()=>StatusCard
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+;
+;
+const StatusCard = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ icon: Icon, title, value, className = "text-white", isLoading = false })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "px-4 py-3 bg-color border rounded-lg pointer border-0 hover:-translate-y-1 duration-500",
+        role: "article",
+        "aria-label": `${title} statistics`,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "flex items-center justify-between",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                            size: 22,
+                            className: className,
+                            "aria-hidden": "true"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                            lineNumber: 19,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "text-sm font-medium text-white",
+                            children: title
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                            lineNumber: 20,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                    lineNumber: 18,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "text-xl glass shadow-xl font-bold px-4 py-1 rounded-lg text-white",
+                    children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center space-x-1",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "animate-pulse bg-white/30 rounded-full w-4 h-4"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                                lineNumber: 25,
+                                columnNumber: 15
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "text-sm animate-pulse",
+                                children: "Loading"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                                lineNumber: 26,
+                                columnNumber: 15
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                        lineNumber: 24,
+                        columnNumber: 13
+                    }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                        "aria-label": `${value} ${title.toLowerCase()}`,
+                        children: value
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                        lineNumber: 29,
+                        columnNumber: 13
+                    }, ("TURBOPACK compile-time value", void 0))
+                }, void 0, false, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+                    lineNumber: 22,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+            lineNumber: 17,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0))
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx",
+        lineNumber: 12,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0)));
+StatusCard.displayName = "StatCard";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "ConversationsCard",
+    ()=>ConversationsCard
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/message-square.js [app-ssr] (ecmascript) <export default as MessageSquare>");
+;
+;
+;
+const ConversationsCard = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ conversations, totalConversations, loading, conversationCount, conversationCountLoading })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "px-4 py-3 bg-color border rounded-lg pointer border-0 hover:-translate-y-1 duration-500",
+        role: "article",
+        "aria-label": "Conversations statistics",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-between",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$message$2d$square$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__MessageSquare$3e$__["MessageSquare"], {
+                                size: 20,
+                                className: "text-white",
+                                "aria-hidden": "true"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                                lineNumber: 20,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm font-medium text-white",
+                                children: "Conversations"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                                lineNumber: 21,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                        lineNumber: 19,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "text-xl glass shadow-xl font-bold px-4 py-1 rounded-lg text-white",
+                        children: conversationCountLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-1",
+                            role: "status",
+                            "aria-label": "Loading conversation count",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "animate-pulse bg-white/30 rounded-full w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                                    lineNumber: 30,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-sm animate-pulse",
+                                    children: "0"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                                    lineNumber: 31,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                            lineNumber: 25,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)) : typeof conversationCount === "number" && conversationCount > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            "aria-label": `${conversationCount} conversations`,
+                            children: conversationCount
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                            lineNumber: 34,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)) : conversations.length > 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            "aria-label": `${totalConversations} conversations`,
+                            children: totalConversations
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                            lineNumber: 38,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-md",
+                            "aria-label": "No conversations",
+                            children: "0"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                            lineNumber: 42,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                        lineNumber: 23,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                lineNumber: 18,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            !loading && conversations.length === 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "mt-2 text-center"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+                lineNumber: 49,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx",
+        lineNumber: 13,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0)));
+ConversationsCard.displayName = "ConversationsCard";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/ui/progress.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Progress",
+    ()=>Progress
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/@radix-ui/react-progress/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/lib/utils.ts [app-ssr] (ecmascript)");
+"use client";
+;
+;
+;
+function Progress({ className, value, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Root"], {
+        "data-slot": "progress",
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])("bg-primary/20 relative h-2 w-full overflow-hidden rounded-full", className),
+        ...props,
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f40$radix$2d$ui$2f$react$2d$progress$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Indicator"], {
+            "data-slot": "progress-indicator",
+            className: "bg-primary h-full w-full flex-1 transition-all",
+            style: {
+                transform: `translateX(-${100 - (value || 0)}%)`
+            }
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/progress.tsx",
+            lineNumber: 22,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/progress.tsx",
+        lineNumber: 14,
+        columnNumber: 5
+    }, this);
+}
+;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "TokenUsageCard",
+    ()=>TokenUsageCard
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/zap.js [app-ssr] (ecmascript) <export default as Zap>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$contexts$2f$SubscriptionContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/contexts/SubscriptionContext.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/progress.tsx [app-ssr] (ecmascript)");
+;
+;
+;
+;
+;
+const TokenUsageCard = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ className })=>{
+    const { subscription, isLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$contexts$2f$SubscriptionContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSubscription"])();
+    const formatNumber = (num)=>{
+        return new Intl.NumberFormat().format(num);
+    };
+    const getUsagePercentage = ()=>{
+        if (!subscription) return 0;
+        return subscription.usage_percentage;
+    };
+    const getStatusColor = ()=>{
+        const percentage = getUsagePercentage();
+        if (percentage >= 95) return "text-red-400";
+        if (percentage >= 80) return "text-yellow-400";
+        return "text-green-400";
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: `px-4 py-3 bg-color border rounded-lg pointer border-0 hover:-translate-y-1 duration-500 ${className || ""}`,
+        role: "article",
+        "aria-label": "Token usage statistics",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "flex items-center justify-between mb-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                size: 20,
+                                className: "text-white",
+                                "aria-hidden": "true"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 39,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-sm font-medium text-white",
+                                children: "Token Usage"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 40,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                        lineNumber: 38,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "text-xl glass shadow-xl font-bold px-4 py-1 rounded-lg text-white",
+                        children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex items-center space-x-1",
+                            role: "status",
+                            "aria-label": "Loading token usage",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "animate-pulse bg-white/30 rounded-full w-4 h-4"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                    lineNumber: 49,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    className: "text-sm animate-pulse",
+                                    children: "0%"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                    lineNumber: 50,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                            lineNumber: 44,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)) : subscription ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: getStatusColor(),
+                            "aria-label": `${getUsagePercentage().toFixed(1)}% token usage`,
+                            children: [
+                                getUsagePercentage().toFixed(1),
+                                "%"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                            lineNumber: 53,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-md",
+                            "aria-label": "No subscription",
+                            children: "0%"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                            lineNumber: 60,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                        lineNumber: 42,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                lineNumber: 37,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            subscription && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "space-y-2",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between text-xs text-white/80",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    formatNumber(subscription.tokens_used_this_month),
+                                    " used"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 70,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    formatNumber(subscription.monthly_limit),
+                                    " limit"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 73,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                        lineNumber: 69,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Progress"], {
+                        value: getUsagePercentage(),
+                        className: "h-2 bg-white/20",
+                        style: {
+                            backgroundColor: "#ffffff20"
+                        }
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                        lineNumber: 75,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex justify-between text-xs text-white/60",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: [
+                                    formatNumber(subscription.tokens_remaining),
+                                    " remaining"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 81,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: getStatusColor(),
+                                children: getUsagePercentage() >= 95 ? "Critical" : getUsagePercentage() >= 80 ? "Warning" : "Healthy"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                                lineNumber: 82,
+                                columnNumber: 13
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                        lineNumber: 80,
+                        columnNumber: 11
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+                lineNumber: 68,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx",
+        lineNumber: 30,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0));
+});
+TokenUsageCard.displayName = "TokenUsageCard";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/types/dashboard.ts [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "DASHBOARD_CONFIG",
+    ()=>DASHBOARD_CONFIG,
+    "DashboardSection",
+    ()=>DashboardSection
+]);
+const DASHBOARD_CONFIG = {
+    SKELETON_ITEMS_COUNT: 4,
+    STATS_GRID_CLASSES: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6",
+    QUICK_ACTIONS_GRID_CLASSES: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
+    CONTAINER_CLASSES: "mx-auto ml-[4.5vw] bg-gradient-to-b from-[#dbeafe] to-white rounded-3xl space-y-6 shadow-lg"
+};
+var DashboardSection = /*#__PURE__*/ function(DashboardSection) {
+    DashboardSection["HEADER"] = "header";
+    DashboardSection["STATS"] = "stats";
+    DashboardSection["ANALYTICS"] = "analytics";
+    DashboardSection["QUICK_ACTIONS"] = "quickActions";
+    return DashboardSection;
+}({});
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "StatusGrid",
+    ()=>StatusGrid
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/brain.js [app-ssr] (ecmascript) <export default as Brain>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$react$2d$icons$2f$ri$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/react-icons/ri/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$StatusCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusCard.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$ConversationsCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/ConversationsCard.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$TokenUsageCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/TokenUsageCard.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/types/dashboard.ts [app-ssr] (ecmascript)");
+;
+;
+;
+;
+;
+;
+;
+;
+const StatusGrid = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ stats, conversationsLoaded, conversations, loading, conversationCount, conversationCountLoading, onCreateConversation })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
+        "aria-label": "Dashboard Statistics",
+        className: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].STATS_GRID_CLASSES,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$StatusCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StatusCard"], {
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$react$2d$icons$2f$ri$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["RiRobot3Line"],
+                title: "Total Chatbots",
+                value: stats.totalChatbots
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx",
+                lineNumber: 25,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$StatusCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StatusCard"], {
+                icon: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$brain$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Brain$3e$__["Brain"],
+                title: "Training Files",
+                value: stats.totalUploads,
+                className: "glass-b text-white"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx",
+                lineNumber: 31,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$ConversationsCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["ConversationsCard"], {
+                conversationsLoaded: conversationsLoaded,
+                conversations: conversations,
+                totalConversations: stats.totalConversations,
+                loading: loading,
+                conversationCount: conversationCount,
+                conversationCountLoading: conversationCountLoading,
+                onCreateClick: onCreateConversation
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx",
+                lineNumber: 38,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$TokenUsageCard$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["TokenUsageCard"], {}, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx",
+                lineNumber: 48,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx",
+        lineNumber: 19,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0)));
+StatusGrid.displayName = "StatusGrid";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "QuickActionsGrid",
+    ()=>QuickActionsGrid
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/button.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/types/dashboard.ts [app-ssr] (ecmascript)");
+;
+;
+;
+;
+;
+const QuickActionButton = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ icon: Icon, title, onClick })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+        variant: "outline",
+        className: "h-20 flex flex-col gap-2",
+        onClick: onClick,
+        "aria-label": title,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                className: "h-6 w-6",
+                "aria-hidden": "true"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                lineNumber: 17,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                children: title
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                lineNumber: 18,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+        lineNumber: 11,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0)));
+QuickActionButton.displayName = "QuickActionButton";
+const QuickActionsGrid = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(({ actions })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+        className: "mt-8",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardHeader"], {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardTitle"], {
+                    children: "Quick Actions"
+                }, void 0, false, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                    lineNumber: 26,
+                    columnNumber: 7
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                lineNumber: 25,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
+                    "aria-label": "Quick Actions",
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].QUICK_ACTIONS_GRID_CLASSES,
+                    children: actions.map(({ id, icon, title, onClick })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(QuickActionButton, {
+                            icon: icon,
+                            title: title,
+                            onClick: onClick
+                        }, id, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                            lineNumber: 34,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)))
+                }, void 0, false, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                    lineNumber: 29,
+                    columnNumber: 7
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+                lineNumber: 28,
+                columnNumber: 5
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx",
+        lineNumber: 24,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0)));
+QuickActionsGrid.displayName = "QuickActionsGrid";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "LoadingSkeleton",
+    ()=>LoadingSkeleton
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/types/dashboard.ts [app-ssr] (ecmascript)");
+;
+;
+;
+const LoadingSkeleton = /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["memo"])(()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].CONTAINER_CLASSES,
+        role: "status",
+        "aria-label": "Loading dashboard",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "animate-pulse space-y-6",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex justify-between items-center",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "space-y-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-8 bg-gray-200 rounded w-64"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                                    lineNumber: 14,
+                                    columnNumber: 11
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-4 bg-gray-200 rounded w-48"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                                    lineNumber: 15,
+                                    columnNumber: 11
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                            lineNumber: 13,
+                            columnNumber: 9
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "flex gap-2",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-10 bg-gray-200 rounded w-32"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                                    lineNumber: 18,
+                                    columnNumber: 11
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    className: "h-10 bg-gray-200 rounded w-32"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                                    lineNumber: 19,
+                                    columnNumber: 11
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                            lineNumber: 17,
+                            columnNumber: 9
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                    lineNumber: 12,
+                    columnNumber: 7
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].STATS_GRID_CLASSES,
+                    children: Array.from({
+                        length: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].SKELETON_ITEMS_COUNT
+                    }, (_, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "h-24 bg-gray-200 rounded-lg"
+                        }, i, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                            lineNumber: 28,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)))
+                }, void 0, false, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                    lineNumber: 24,
+                    columnNumber: 7
+                }, ("TURBOPACK compile-time value", void 0)),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "grid grid-cols-1 lg:grid-cols-2 gap-6",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "h-96 bg-gray-200 rounded-lg"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                            lineNumber: 35,
+                            columnNumber: 9
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "h-96 bg-gray-200 rounded-lg"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                            lineNumber: 36,
+                            columnNumber: 9
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+                    lineNumber: 34,
+                    columnNumber: 7
+                }, ("TURBOPACK compile-time value", void 0))
+            ]
+        }, void 0, true, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+            lineNumber: 10,
+            columnNumber: 5
+        }, ("TURBOPACK compile-time value", void 0))
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx",
+        lineNumber: 5,
+        columnNumber: 3
+    }, ("TURBOPACK compile-time value", void 0)));
+LoadingSkeleton.displayName = "LoadingSkeleton";
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/ui/badge.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "Badge",
+    ()=>Badge,
+    "badgeVariants",
+    ()=>badgeVariants
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/class-variance-authority/dist/index.mjs [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/lib/utils.ts [app-ssr] (ecmascript)");
+;
+;
+;
+const badgeVariants = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$class$2d$variance$2d$authority$2f$dist$2f$index$2e$mjs__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cva"])("inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2", {
+    variants: {
+        variant: {
+            default: "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
+            secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
+            destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
+            outline: "text-foreground"
+        }
+    },
+    defaultVariants: {
+        variant: "default"
+    }
+});
+function Badge({ className, variant, ...props }) {
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$lib$2f$utils$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["cn"])(badgeVariants({
+            variant
+        }), className),
+        ...props
+    }, void 0, false, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/ui/badge.tsx",
+        lineNumber: 32,
+        columnNumber: 5
+    }, this);
+}
+;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "SubscriptionAnalyticsWidget",
+    ()=>SubscriptionAnalyticsWidget,
+    "default",
+    ()=>__TURBOPACK__default__export__
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/card.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/progress.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/badge.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$contexts$2f$SubscriptionContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/contexts/SubscriptionContext.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$subscription$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/app/api/subscription.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/zap.js [app-ssr] (ecmascript) <export default as Zap>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/calendar.js [app-ssr] (ecmascript) <export default as Calendar>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/triangle-alert.js [app-ssr] (ecmascript) <export default as AlertTriangle>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/loader-circle.js [app-ssr] (ecmascript) <export default as Loader2>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/refresh-cw.js [app-ssr] (ecmascript) <export default as RefreshCw>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bug$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bug$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/bug.js [app-ssr] (ecmascript) <export default as Bug>");
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+const SubscriptionAnalyticsWidget = ({ className })=>{
+    const { subscription, isLoading, error, refreshSubscription } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$contexts$2f$SubscriptionContext$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useSubscription"])();
+    const formatNumber = (num)=>{
+        return new Intl.NumberFormat().format(num);
+    };
+    const formatPercentage = (num)=>{
+        return `${num.toFixed(1)}%`;
+    };
+    if (isLoading) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+            className: className,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                className: "p-6",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "flex items-center justify-center space-x-2",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$loader$2d$circle$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Loader2$3e$__["Loader2"], {
+                            className: "h-5 w-5 animate-spin"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 42,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "text-sm",
+                            children: "Loading subscription..."
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 43,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                    lineNumber: 41,
+                    columnNumber: 11
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                lineNumber: 40,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 39,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0));
+    }
+    if (error) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+            className: className,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                className: "p-6",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
+                    variant: "destructive",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$triangle$2d$alert$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__AlertTriangle$3e$__["AlertTriangle"], {
+                            className: "h-4 w-4"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 55,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
+                            className: "flex items-center justify-between",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                    children: error
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                    lineNumber: 57,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                                    className: "h-4 w-4 cursor-pointer hover:rotate-180 transition-transform",
+                                    onClick: refreshSubscription
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                    lineNumber: 58,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 56,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                    lineNumber: 54,
+                    columnNumber: 11
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                lineNumber: 53,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 52,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0));
+    }
+    if (!subscription) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+            className: className,
+            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                className: "p-6",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "text-center text-gray-500",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                            className: "h-12 w-12 mx-auto mb-4 opacity-50"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 74,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "text-sm",
+                            children: "No subscription found"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 75,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                            className: "text-xs mt-1",
+                            children: "Please contact admin to set up your subscription"
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 76,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                            className: "mt-3 flex gap-2 justify-center",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: async ()=>{
+                                        console.log("🔍 Debug: Testing subscription endpoints...");
+                                        await __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$app$2f$api$2f$subscription$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["subscriptionApi"].debugSubscriptionEndpoints();
+                                    },
+                                    className: "px-3 py-1 text-xs bg-gray-100 hover:bg-gray-200 rounded-md flex items-center gap-1",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$bug$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Bug$3e$__["Bug"], {
+                                            className: "h-3 w-3"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                            lineNumber: 87,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        "Debug Subscription"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                    lineNumber: 80,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                                    onClick: async ()=>{
+                                        console.log("🔍 Testing backend health...");
+                                        try {
+                                            const response = await fetch("http://localhost:8001/");
+                                            console.log("Backend health check:", response.ok, response.status);
+                                            if (response.ok) {
+                                                const data = await response.text();
+                                                console.log("Backend response:", data);
+                                            } else {
+                                                console.error("Backend not responding:", response.status);
+                                            }
+                                        } catch (error) {
+                                            console.error("Backend connection failed:", error);
+                                        }
+                                    },
+                                    className: "px-3 py-1 text-xs bg-blue-100 hover:bg-blue-200 rounded-md flex items-center gap-1",
+                                    children: [
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                                            className: "h-3 w-3"
+                                        }, void 0, false, {
+                                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                            lineNumber: 112,
+                                            columnNumber: 17
+                                        }, ("TURBOPACK compile-time value", void 0)),
+                                        "Test Backend"
+                                    ]
+                                }, void 0, true, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                    lineNumber: 90,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 79,
+                            columnNumber: 13
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                    lineNumber: 73,
+                    columnNumber: 11
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                lineNumber: 72,
+                columnNumber: 9
+            }, ("TURBOPACK compile-time value", void 0))
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 71,
+            columnNumber: 7
+        }, ("TURBOPACK compile-time value", void 0));
+    }
+    const usagePercentage = subscription.usage_percentage;
+    const isNearLimit = usagePercentage >= 80;
+    const isAtLimit = usagePercentage >= 95;
+    const getStatusBadge = ()=>{
+        if (isAtLimit) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
+            className: "bg-red-100 text-red-800",
+            children: "At Limit"
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 128,
+            columnNumber: 14
+        }, ("TURBOPACK compile-time value", void 0));
+        if (isNearLimit) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
+            className: "bg-yellow-100 text-yellow-800",
+            children: "Near Limit"
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 131,
+            columnNumber: 9
+        }, ("TURBOPACK compile-time value", void 0));
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$badge$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Badge"], {
+            className: "bg-green-100 text-green-800",
+            children: "Healthy"
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+            lineNumber: 133,
+            columnNumber: 12
+        }, ("TURBOPACK compile-time value", void 0));
+    };
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Card"], {
+        className: className,
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardHeader"], {
+                className: "pb-3",
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardTitle"], {
+                    className: "flex items-center justify-between text-lg",
+                    children: [
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                            className: "flex items-center",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$zap$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Zap$3e$__["Zap"], {
+                                    className: "h-5 w-5 mr-2 text-blue-500"
+                                }, void 0, false, {
+                                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                    lineNumber: 141,
+                                    columnNumber: 13
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                "Subscription Status"
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 140,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0)),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                            className: "h-4 w-4 cursor-pointer hover:rotate-180 transition-transform text-gray-400",
+                            onClick: refreshSubscription
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                            lineNumber: 144,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    ]
+                }, void 0, true, {
+                    fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                    lineNumber: 139,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                lineNumber: 138,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$card$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["CardContent"], {
+                className: "space-y-4",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-between",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-sm text-gray-600",
+                                        children: "Current Plan"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 154,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        className: "text-lg font-semibold",
+                                        children: subscription.plan_name || "Basic Plan"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 155,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 153,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            getStatusBadge()
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                        lineNumber: 152,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "space-y-2",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center justify-between text-sm",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "text-gray-600",
+                                        children: "Token Usage"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 165,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        className: "font-medium",
+                                        children: [
+                                            formatNumber(subscription.tokens_used_this_month),
+                                            " /",
+                                            " ",
+                                            formatNumber(subscription.monthly_limit)
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 166,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 164,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$progress$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Progress"], {
+                                value: usagePercentage,
+                                className: "h-2"
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 171,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center justify-between text-xs text-gray-500",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: [
+                                            formatPercentage(usagePercentage),
+                                            " used"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 173,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: [
+                                            formatNumber(subscription.tokens_remaining),
+                                            " remaining"
+                                        ]
+                                    }, void 0, true, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 174,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 172,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                        lineNumber: 163,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "flex items-center justify-between text-sm",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "flex items-center text-gray-600",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$calendar$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Calendar$3e$__["Calendar"], {
+                                        className: "h-4 w-4 mr-1"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 181,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0)),
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        children: "Resets"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                        lineNumber: 182,
+                                        columnNumber: 13
+                                    }, ("TURBOPACK compile-time value", void 0))
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 180,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0)),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                className: "font-medium",
+                                children: new Date(subscription.reset_date).toLocaleDateString()
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                                lineNumber: 184,
+                                columnNumber: 11
+                            }, ("TURBOPACK compile-time value", void 0))
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                        lineNumber: 179,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+                lineNumber: 150,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx",
+        lineNumber: 137,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0));
+};
+const __TURBOPACK__default__export__ = SubscriptionAnalyticsWidget;
+}),
+"[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__) => {
+"use strict";
+
+__turbopack_context__.s([
+    "default",
+    ()=>UserDashboard
+]);
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react-jsx-dev-runtime.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/server/route-modules/app-page/vendored/ssr/react.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/navigation.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/next/dist/shared/lib/app-dynamic.js [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/alert.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ui/button.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$wifi$2d$off$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__WifiOff$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/wifi-off.js [app-ssr] (ecmascript) <export default as WifiOff>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/node_modules/lucide-react/dist/esm/icons/refresh-cw.js [app-ssr] (ecmascript) <export default as RefreshCw>");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ErrorBoundary$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/ErrorBoundary.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$stores$2f$customizeStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/stores/customizeStore.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardData$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardData.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardNavigation$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardNavigation.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardStats$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/hooks/useDashboardStats.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useUserAuth$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/hooks/useUserAuth.ts [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$DashboardHeader$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/DashboardHeader.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$StatusGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/StatusGrid.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$QuickActionsGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/QuickActionsGrid.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/LoadingSkeleton.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$SubscriptionAnalyticsWidget$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/SubscriptionAnalyticsWidget.tsx [app-ssr] (ecmascript)");
+var __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Desktop/zaakiy core/frontend/src/types/dashboard.ts [app-ssr] (ecmascript)");
+;
+;
+;
+;
+"use client";
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+;
+const DevModeAlert = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(async ()=>{}, {
+    loadableGenerated: {
+        modules: [
+            "[project]/Desktop/zaakiy core/frontend/src/components/DevModeAlert.tsx [app-client] (ecmascript, next/dynamic entry)"
+        ]
+    },
+    ssr: false
+});
+// Lazy load components with optimized loading states
+const AnalyticsDashboard = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(async ()=>{}, {
+    loadableGenerated: {
+        modules: [
+            "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/AnalyticsDashboard.tsx [app-client] (ecmascript, next/dynamic entry)"
+        ]
+    },
+    loading: ()=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {}, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+            lineNumber: 30,
+            columnNumber: 20
+        }, ("TURBOPACK compile-time value", void 0)),
+    ssr: false
+});
+const PerformanceMonitor = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(async ()=>{}, {
+    loadableGenerated: {
+        modules: [
+            "[project]/Desktop/zaakiy core/frontend/src/components/PerformanceMonitor.tsx [app-client] (ecmascript, next/dynamic entry)"
+        ]
+    },
+    ssr: false
+});
+const OfflineMode = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$shared$2f$lib$2f$app$2d$dynamic$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"])(async ()=>{}, {
+    loadableGenerated: {
+        modules: [
+            "[project]/Desktop/zaakiy core/frontend/src/components/dashboard/home/OfflineMode.tsx [app-client] (ecmascript, next/dynamic entry)"
+        ]
+    },
+    ssr: false
+});
+function UserDashboard() {
+    const { userId } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$navigation$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useParams"])();
+    const userIdString = userId;
+    // Custom hooks for separation of concerns
+    const { setCurrentUser } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$stores$2f$customizeStore$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useCustomizeStore"])();
+    const { user, isAuthLoading } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useUserAuth$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useUserAuth"])(userIdString, setCurrentUser);
+    const { quickActions, handleCustomizeClick, handleTrainClick } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardNavigation$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDashboardNavigation"])(userIdString);
+    const { loading, analyticsLoading, chatbots, uploads, conversations, analyticsMetrics, isOffline, conversationCount, conversationCountLoading, loadDashboardData, handleRefreshAnalytics, refreshConnection } = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardData$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDashboardData"])();
+    const stats = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$hooks$2f$useDashboardStats$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useDashboardStats"])(chatbots, uploads, conversations, conversationCount);
+    const [conversationsLoaded, setConversationsLoaded] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(false);
+    // Load dashboard data after user authentication with a small delay
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (user && !isAuthLoading) {
+            // Add a small delay to ensure authentication is fully complete
+            const timer = setTimeout(()=>{
+                loadDashboardData();
+            }, 100);
+            return ()=>clearTimeout(timer);
+        }
+    }, [
+        user,
+        isAuthLoading,
+        loadDashboardData
+    ]);
+    // Track conversation loading state for better UX
+    (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
+        if (conversations.length > 0) {
+            setConversationsLoaded(true);
+        }
+    }, [
+        conversations.length
+    ]);
+    // Early returns for loading and authentication states
+    if (isAuthLoading || loading) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {}, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+            lineNumber: 103,
+            columnNumber: 12
+        }, this);
+    }
+    // Show offline mode if we can't connect to the server
+    if (isOffline) {
+        return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(OfflineMode, {
+            onRetry: refreshConnection,
+            isRetrying: loading
+        }, void 0, false, {
+            fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+            lineNumber: 108,
+            columnNumber: 12
+        }, this);
+    }
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$types$2f$dashboard$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DASHBOARD_CONFIG"].CONTAINER_CLASSES,
+        role: "main",
+        "aria-label": "User Dashboard",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(PerformanceMonitor, {
+                name: "Dashboard Render"
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                lineNumber: 117,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(DevModeAlert, {
+                show: isOffline
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                lineNumber: 120,
+                columnNumber: 7
+            }, this),
+            isOffline && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Alert"], {
+                variant: "destructive",
+                role: "alert",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$wifi$2d$off$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__WifiOff$3e$__["WifiOff"], {
+                        className: "h-4 w-4",
+                        "aria-hidden": "true"
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 125,
+                        columnNumber: 11
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$alert$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["AlertDescription"], {
+                        className: "flex items-center justify-between",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                children: "Unable to connect to server. Some features may not work properly."
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 127,
+                                columnNumber: 13
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ui$2f$button$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Button"], {
+                                size: "sm",
+                                variant: "outline",
+                                onClick: refreshConnection,
+                                className: "ml-4",
+                                "aria-label": "Retry connection",
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$refresh$2d$cw$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__RefreshCw$3e$__["RefreshCw"], {
+                                        className: "h-4 w-4 mr-1",
+                                        "aria-hidden": "true"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                        lineNumber: 137,
+                                        columnNumber: 15
+                                    }, this),
+                                    "Retry"
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 130,
+                                columnNumber: 13
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 126,
+                        columnNumber: 11
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                lineNumber: 124,
+                columnNumber: 9
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$DashboardHeader$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["DashboardHeader"], {
+                user: user,
+                userId: userIdString,
+                onTrainClick: handleTrainClick,
+                onCustomizeClick: handleCustomizeClick
+            }, void 0, false, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                lineNumber: 145,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: "p-8",
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$StatusGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["StatusGrid"], {
+                        stats: stats,
+                        conversationsLoaded: conversationsLoaded,
+                        conversations: conversations,
+                        loading: loading,
+                        conversationCount: conversationCount,
+                        conversationCountLoading: conversationCountLoading,
+                        onCreateConversation: handleCustomizeClick
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 153,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ErrorBoundary$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        fallback: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ErrorBoundary$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SimpleErrorFallback"],
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Suspense"], {
+                            fallback: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {}, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 165,
+                                columnNumber: 31
+                            }, void 0),
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AnalyticsDashboard, {
+                                metrics: analyticsMetrics,
+                                onRefresh: handleRefreshAnalytics,
+                                loading: analyticsLoading
+                            }, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 166,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                            lineNumber: 165,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 164,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ErrorBoundary$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"], {
+                        fallback: __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$ErrorBoundary$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SimpleErrorFallback"],
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["Suspense"], {
+                            fallback: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$LoadingSkeleton$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["LoadingSkeleton"], {}, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 176,
+                                columnNumber: 31
+                            }, void 0),
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$SubscriptionAnalyticsWidget$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["SubscriptionAnalyticsWidget"], {}, void 0, false, {
+                                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                                lineNumber: 177,
+                                columnNumber: 13
+                            }, this)
+                        }, void 0, false, {
+                            fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                            lineNumber: 176,
+                            columnNumber: 11
+                        }, this)
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 175,
+                        columnNumber: 9
+                    }, this),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$Desktop$2f$zaakiy__core$2f$frontend$2f$src$2f$components$2f$dashboard$2f$home$2f$QuickActionsGrid$2e$tsx__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["QuickActionsGrid"], {
+                        actions: quickActions
+                    }, void 0, false, {
+                        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                        lineNumber: 182,
+                        columnNumber: 9
+                    }, this)
+                ]
+            }, void 0, true, {
+                fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+                lineNumber: 151,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
+        fileName: "[project]/Desktop/zaakiy core/frontend/src/app/dashboard/[userId]/page.tsx",
+        lineNumber: 112,
+        columnNumber: 5
+    }, this);
+}
+}),
+];
+
+//# sourceMappingURL=Desktop_zaakiy%20core_frontend_src_9a3df8b1._.js.map

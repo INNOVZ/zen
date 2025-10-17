@@ -1,0 +1,14 @@
+(globalThis.TURBOPACK_CHUNK_LISTS || (globalThis.TURBOPACK_CHUNK_LISTS = [])).push({
+    script: typeof document === "object" ? document.currentScript : undefined,
+    chunks: [
+  "static/chunks/Desktop_zaakiy core_frontend_src_app_globals_08e71374.css",
+  "static/chunks/c4767_39afbf80._.js",
+  "static/chunks/Desktop_zaakiy core_frontend_src_65ea0968._.js",
+  "static/chunks/c4767_react-icons_ri_index_mjs_8478a1f3._.js",
+  "static/chunks/c4767_react-icons_lib_00849697._.js",
+  "static/chunks/c4767_@supabase_auth-js_dist_module_21720288._.js",
+  "static/chunks/c4767_tailwind-merge_dist_bundle-mjs_mjs_3d95d4f5._.js",
+  "static/chunks/c4767_c97c2ddf._.js"
+],
+    source: "dynamic"
+});
