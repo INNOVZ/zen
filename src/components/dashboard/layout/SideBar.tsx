@@ -91,7 +91,7 @@ const Sidebar = () => {
   return (
     <div
       className={`${
-        isCollapsed ? "w-[4vw]" : "sm:w-60 w-60 z-[999]"
+        isCollapsed ? "w-[3.8vw]" : "sm:w-60 w-60 z-[999]"
       } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
     >
       {/* Header */}

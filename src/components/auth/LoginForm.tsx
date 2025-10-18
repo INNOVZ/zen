@@ -14,8 +14,10 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/app/api/SupabaseClient";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import Zaakiy from "../../../public/zaakiybot.svg";
+import Image from "next/image";
 
-export const LoginForm =  ({
+export const LoginForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
@@ -100,10 +102,13 @@ export const LoginForm =  ({
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
+      <Card className="w-[25vw] py-15">
+        <CardHeader className="flex flex-col items-center">
+          <CardTitle className="text-2xl text-center">
+            <Image src={Zaakiy} alt="Login" width={75} height={75} />
+            <h1 className="text-2xl mt-5">Login</h1>
+          </CardTitle>
+          <CardDescription className="mt-5 text-center">
             Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
@@ -142,7 +147,7 @@ export const LoginForm =  ({
                   }
                 />
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full pointer">
                 Login
               </Button>
             </div>
@@ -151,4 +156,4 @@ export const LoginForm =  ({
       </Card>
     </div>
   );
-}
+};
