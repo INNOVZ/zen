@@ -7,7 +7,7 @@ import { getApiBaseUrl } from "@/config/api";
 
 export const uploadsApi = {
   getUploads: async (): Promise<UploadFile[]> => {
-    const cacheKey = createCacheKey("/api/uploads");
+    const cacheKey = createCacheKey("/api/uploads/");
 
     // Check cache first
     const cached = apiCache.get<UploadFile[]>(cacheKey);
