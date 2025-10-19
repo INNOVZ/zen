@@ -2,6 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import axios, { AxiosError } from "axios";
+import { API_BASE_URL } from "@/config/api";
 import {
   Upload,
   RefreshCw,
@@ -36,15 +37,11 @@ export default function IngestPage() {
   const [isLoadingUploads, setIsLoadingUploads] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("Loading uploads...");
 
-  const API_BASE =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "https://zaakiy-production.up.railway.app";
-
   // Debug: Log environment variables
   console.log("Environment variables:", {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NODE_ENV: process.env.NODE_ENV,
-    API_BASE: API_BASE
+    API_BASE_URL: API_BASE_URL,
   });
 
   const getAuthHeaders = async () => {
@@ -109,7 +106,7 @@ export default function IngestPage() {
         formData.append("file", file);
 
         const response = await axios.post(
-          `${API_BASE}/api/uploads/${tab}`,
+          `${API_BASE_URL}/api/uploads/${tab}`,
           formData,
           {
             headers: {
@@ -149,7 +146,7 @@ export default function IngestPage() {
         console.log("Submitting URL:", url);
 
         const response = await axios.post(
-          `${API_BASE}/api/uploads/url`,
+          `${API_BASE_URL}/api/uploads/url`,
           { url: url.trim() },
           {
             headers,
@@ -235,7 +232,7 @@ export default function IngestPage() {
       console.log("Deleting upload:", uploadId);
 
       const response = await axios.delete(
-        `${API_BASE}/api/uploads/${uploadId}`,
+        `${API_BASE_URL}/api/uploads/${uploadId}`,
         {
           headers,
           timeout: 30000,
@@ -332,7 +329,7 @@ export default function IngestPage() {
             `Loading uploads... (attempt ${attempt + 1}/${maxRetries})`
           );
 
-          const response = await axios.get(`${API_BASE}/api/uploads`, {
+          const response = await axios.get(`${API_BASE_URL}/api/uploads`, {
             headers,
             timeout: timeout,
           });
@@ -416,7 +413,7 @@ export default function IngestPage() {
     } finally {
       setIsLoadingUploads(false);
     }
-  }, [API_BASE]);
+  }, [API_BASE_URL]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {

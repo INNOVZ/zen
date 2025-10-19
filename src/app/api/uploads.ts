@@ -3,8 +3,7 @@ import { UploadFile } from "@/types/schemaTypes";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { TokenHandler, RetrainResponse } from "./types";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+import { API_BASE_URL } from "@/config/api";
 
 export const uploadsApi = {
   getUploads: async (): Promise<UploadFile[]> => {
@@ -72,7 +71,7 @@ export const uploadsApi = {
       `📤 Uploading file: ${file.name} (${file.size} bytes) as ${type}`
     );
 
-    const response = await fetch(`${BASE_URL}/api/uploads/${type}`, {
+    const response = await fetch(`${API_BASE_URL}/api/uploads/${type}`, {
       method: "POST",
       headers,
       body: formData,
