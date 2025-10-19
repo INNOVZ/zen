@@ -4,7 +4,7 @@ import { useSearchParams, useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import type { ChatbotInfo } from "@/types/schemaTypes";
 import { useCustomizeStore } from "@/stores/customizeStore";
-import { API_BASE_URL } from "@/config/api";
+import { getApiBaseUrl } from "@/config/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -353,7 +353,7 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
 
         if (result && result.url) {
           // Convert relative URL to absolute URL
-          const baseUrl = API_BASE_URL;
+          const baseUrl = getApiBaseUrl();
           const fullUrl = result.url.startsWith("http")
             ? result.url
             : `${baseUrl}${result.url}`;
@@ -381,8 +381,7 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
       const pathParts = url.split("storage/v1/object/uploads/");
       if (pathParts.length > 1) {
         const filePath = pathParts[1];
-        const baseUrl =
-          process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8001";
+        const baseUrl = getApiBaseUrl();
         return `${baseUrl}/api/uploads/avatar/legacy/${filePath}`;
       }
     }

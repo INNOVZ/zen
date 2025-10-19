@@ -1,6 +1,6 @@
 // utils/auth.ts
 import { supabase } from './SupabaseClient'
-import { API_BASE_URL } from '@/config/api';
+import { getApiBaseUrl } from '@/config/api';
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
@@ -66,7 +66,8 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   };
 
   const requestId = headers["X-Request-ID"];
-  console.log(`🔍 [${requestId}] API Call:`, `${API_BASE_URL}${url}`, { 
+  const apiBaseUrl = getApiBaseUrl();
+  console.log(`🔍 [${requestId}] API Call:`, `${apiBaseUrl}${url}`, { 
     userId: userId.substring(0, 8) + "...", 
     orgId: orgId?.substring(0, 8) + "..." || "none",
     method: options.method || "GET"
@@ -75,7 +76,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const startTime = Date.now();
   
   try {
-    const response = await fetch(`${API_BASE_URL}${url}`, {
+    const response = await fetch(`${apiBaseUrl}${url}`, {
       ...options,
       headers,
     });
@@ -109,7 +110,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
       const errorInfo = {
         requestId,
-        url: `${API_BASE_URL}${url}`,
+        url: `${apiBaseUrl}${url}`,
         method: options.method || "GET",
         status: response.status,
         statusText: response.statusText,
@@ -172,7 +173,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       // Add additional context to the error
       enhancedError.status = response.status;
       enhancedError.statusText = response.statusText;
-      enhancedError.url = `${API_BASE_URL}${url}`;
+      enhancedError.url = `${apiBaseUrl}${url}`;
       enhancedError.errorData = errorData;
       enhancedError.errorText = errorText;
       throw enhancedError;
@@ -215,7 +216,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         console.debug(`🔌 [${requestId}] Backend server unavailable (development mode) - likely auth in progress`);
       } else {
         console.error(`💥 [${requestId}] Network error:`, {
-          url: `${API_BASE_URL}${url}`,
+          url: `${apiBaseUrl}${url}`,
           method: options.method || "GET",
           responseTime: `${responseTime}ms`
         });
@@ -234,7 +235,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       } else {
         console.error(`💥 [${requestId}] Connection error:`, {
           error: error.message,
-          url: `${API_BASE_URL}${url}`,
+          url: `${apiBaseUrl}${url}`,
           method: options.method || "GET",
           responseTime: `${responseTime}ms`
         });
@@ -247,7 +248,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       error: error,
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
       errorType: typeof error,
-      url: `${API_BASE_URL}${url}`,
+      url: `${apiBaseUrl}${url}`,
       method: options.method || "GET",
       responseTime: `${responseTime}ms`
     };

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/lib/supabase";
 import axios, { AxiosError } from "axios";
-import { API_BASE_URL } from "@/config/api";
+import { getApiBaseUrl } from "@/config/api";
 import {
   Upload,
   RefreshCw,
@@ -41,7 +41,7 @@ export default function IngestPage() {
   console.log("Environment variables:", {
     NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
     NODE_ENV: process.env.NODE_ENV,
-    API_BASE_URL: API_BASE_URL,
+    API_BASE_URL: getApiBaseUrl(),
   });
 
   const getAuthHeaders = async () => {
@@ -106,7 +106,7 @@ export default function IngestPage() {
         formData.append("file", file);
 
         const response = await axios.post(
-          `${API_BASE_URL}/api/uploads/${tab}`,
+          `${getApiBaseUrl()}/api/uploads/${tab}`,
           formData,
           {
             headers: {
@@ -146,7 +146,7 @@ export default function IngestPage() {
         console.log("Submitting URL:", url);
 
         const response = await axios.post(
-          `${API_BASE_URL}/api/uploads/url`,
+          `${getApiBaseUrl()}/api/uploads/url`,
           { url: url.trim() },
           {
             headers,
@@ -232,7 +232,7 @@ export default function IngestPage() {
       console.log("Deleting upload:", uploadId);
 
       const response = await axios.delete(
-        `${API_BASE_URL}/api/uploads/${uploadId}`,
+        `${getApiBaseUrl()}/api/uploads/${uploadId}`,
         {
           headers,
           timeout: 30000,
@@ -329,7 +329,7 @@ export default function IngestPage() {
             `Loading uploads... (attempt ${attempt + 1}/${maxRetries})`
           );
 
-          const response = await axios.get(`${API_BASE_URL}/api/uploads/`, {
+          const response = await axios.get(`${getApiBaseUrl()}/api/uploads/`, {
             headers,
             timeout: timeout,
           });
@@ -413,7 +413,7 @@ export default function IngestPage() {
     } finally {
       setIsLoadingUploads(false);
     }
-  }, [API_BASE_URL]);
+  }, []);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
