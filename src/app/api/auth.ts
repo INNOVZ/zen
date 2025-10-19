@@ -66,7 +66,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   };
 
   const requestId = headers["X-Request-ID"];
-  console.log(`🔍 [${requestId}] API Call:`, `${BASE_URL}${url}`, { 
+  console.log(`🔍 [${requestId}] API Call:`, `${API_BASE_URL}${url}`, { 
     userId: userId.substring(0, 8) + "...", 
     orgId: orgId?.substring(0, 8) + "..." || "none",
     method: options.method || "GET"
@@ -109,7 +109,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
       const errorInfo = {
         requestId,
-        url: `${BASE_URL}${url}`,
+        url: `${API_BASE_URL}${url}`,
         method: options.method || "GET",
         status: response.status,
         statusText: response.statusText,
@@ -215,7 +215,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         console.debug(`🔌 [${requestId}] Backend server unavailable (development mode) - likely auth in progress`);
       } else {
         console.error(`💥 [${requestId}] Network error:`, {
-          url: `${BASE_URL}${url}`,
+          url: `${API_BASE_URL}${url}`,
           method: options.method || "GET",
           responseTime: `${responseTime}ms`
         });
@@ -234,7 +234,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       } else {
         console.error(`💥 [${requestId}] Connection error:`, {
           error: error.message,
-          url: `${BASE_URL}${url}`,
+          url: `${API_BASE_URL}${url}`,
           method: options.method || "GET",
           responseTime: `${responseTime}ms`
         });
@@ -247,7 +247,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       error: error,
       errorMessage: error instanceof Error ? error.message : 'Unknown error',
       errorType: typeof error,
-      url: `${BASE_URL}${url}`,
+      url: `${API_BASE_URL}${url}`,
       method: options.method || "GET",
       responseTime: `${responseTime}ms`
     };
