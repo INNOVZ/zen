@@ -2,18 +2,14 @@
 // This ensures consistent API URL across all components
 
 export const getApiBaseUrl = (): string => {
-  // Check for environment variable first
-  if (typeof window !== 'undefined' && process.env.NEXT_PUBLIC_API_URL) {
-    return process.env.NEXT_PUBLIC_API_URL;
-  }
-  
-  // Check if we're in production (Vercel deployment)
-  if (typeof window !== 'undefined' && (process.env.VERCEL || process.env.NODE_ENV === 'production')) {
+  // Force HTTPS for production - always return HTTPS
+  if (typeof window !== 'undefined') {
+    // We're in the browser - always use HTTPS for production
     return 'https://zaakiy-production.up.railway.app';
   }
   
-  // Development fallback
-  return 'http://localhost:8001';
+  // Server-side rendering fallback
+  return 'https://zaakiy-production.up.railway.app';
 };
 
 // For backward compatibility, export a constant that calls the function
@@ -26,5 +22,7 @@ if (typeof window !== 'undefined') {
     NODE_ENV: process.env.NODE_ENV,
     VERCEL: process.env.VERCEL,
     API_BASE_URL: API_BASE_URL,
+    getApiBaseUrl_result: getApiBaseUrl(),
+    timestamp: new Date().toISOString(),
   });
 }
