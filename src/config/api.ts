@@ -5,6 +5,7 @@ export const getApiBaseUrl = (): string => {
   // Force HTTPS for production - always return HTTPS
   if (typeof window !== 'undefined') {
     // We're in the browser - always use HTTPS for production
+    console.log('🔧 getApiBaseUrl called - forcing HTTPS');
     return 'https://zaakiy-production.up.railway.app';
   }
   
