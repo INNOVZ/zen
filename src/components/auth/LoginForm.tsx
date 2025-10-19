@@ -27,6 +27,7 @@ export const LoginForm = ({
   const [password, setPassword] = useState("");
 
   useEffect(() => {
+    if (!supabase) return;
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user?.id) {
         router.replace(`/dashboard/${session.user.id}`);
@@ -34,6 +35,7 @@ export const LoginForm = ({
     });
 
     const checkAuth = async () => {
+      if (!supabase) return;
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -42,6 +44,7 @@ export const LoginForm = ({
     };
 
     const callBackend = async () => {
+      if (!supabase) return;
       const {
         data: { session },
       } = await supabase.auth.getSession();
@@ -75,6 +78,9 @@ export const LoginForm = ({
     }
 
     try {
+      if (!supabase) {
+        throw new Error("Supabase client is not initialized.");
+      }
       const { data, error } = await supabase.auth.signInWithPassword({
         email: email,
         password: password,
