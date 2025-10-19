@@ -4,41 +4,61 @@ import { getApiBaseUrl } from '@/config/api';
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
-  const { data, error } = await supabase.auth.getSession();
-  
-  if (error) {
-    console.debug("Auth session error:", error);
-    throw new Error("Authentication error. Please log in again.");
-  }
-  
-  const token = data.session?.access_token;
-  const userId = data.session?.user?.id;
-  
-  if (!token || !userId) {
-    console.debug("No valid session found - user not authenticated");
-    throw new Error("Not authenticated. Please log in again.");
-  }
-  
-  // Fetch org_id from database instead of metadata
-  let orgId = null;
   try {
-    const { data: userData, error: userError } = await supabase
-      .from('users')
-      .select('org_id')
-      .eq('id', userId)
-      .single();
-    
-    if (userError) {
-      console.debug("Error fetching user org_id:", userError);
-    } else if (userData?.org_id) {
-      orgId = userData.org_id;
-      console.debug("Fetched org_id from database:", orgId);
+    if (!supabase) {
+      console.error("Supabase client not initialized - missing environment variables");
+      throw new Error("Authentication service not available. Please check configuration.");
     }
+    
+    const { data, error } = await supabase.auth.getSession();
+    
+    if (error) {
+      console.warn("Auth session error:", error);
+      throw new Error("Authentication error. Please log in again.");
+    }
+    
+    const token = data.session?.access_token;
+    const userId = data.session?.user?.id;
+    
+    if (!token || !userId) {
+      console.warn("No valid session found - user not authenticated", {
+        hasToken: !!token,
+        hasUserId: !!userId,
+        sessionData: data.session ? {
+          user: data.session.user ? {
+            id: data.session.user.id,
+            email: data.session.user.email
+          } : null,
+          access_token: data.session.access_token ? "present" : "missing"
+        } : null
+      });
+      throw new Error("Not authenticated. Please log in again.");
+    }
+    
+    // Fetch org_id from database instead of metadata
+    let orgId = null;
+    try {
+      const { data: userData, error: userError } = await supabase
+        .from('users')
+        .select('org_id')
+        .eq('id', userId)
+        .single();
+      
+      if (userError) {
+        console.debug("Error fetching user org_id:", userError);
+      } else if (userData?.org_id) {
+        orgId = userData.org_id;
+        console.debug("Fetched org_id from database:", orgId);
+      }
+    } catch (error) {
+      console.debug("Failed to fetch org_id from database:", error);
+    }
+    
+    return { token, userId, orgId };
   } catch (error) {
-    console.debug("Failed to fetch org_id from database:", error);
+    console.error("getAuthInfo failed:", error);
+    throw error;
   }
-  
-  return { token, userId, orgId };
 };
 
 

@@ -79,6 +79,11 @@ ChatWidgetProps) {
 
         if (!authCheck.isAuthenticated) {
           if (!mounted) return;
+          console.warn("ChatWidget: User not authenticated", {
+            userId: authCheck.userId,
+            orgId: authCheck.orgId,
+            isAuthenticated: authCheck.isAuthenticated,
+          });
           setMessages([
             {
               id: "greeting",
@@ -152,15 +157,21 @@ ChatWidgetProps) {
         // Check if it's an authentication error
         if (
           error instanceof Error &&
-          error.message.includes("Not authenticated")
+          (error.message.includes("Not authenticated") ||
+            error.message.includes("Authentication service not available"))
         ) {
           setIsAuthenticated(false);
+          const authErrorMessage = error.message.includes(
+            "Authentication service not available"
+          )
+            ? "Authentication service is not properly configured. Please contact support."
+            : "Hello! To use the chat feature, please log in to your account first.";
+
           setMessages([
             {
               id: "greeting",
               type: "bot",
-              content:
-                "Hello! To use the chat feature, please log in to your account first.",
+              content: authErrorMessage,
               timestamp: new Date(),
             },
           ]);
