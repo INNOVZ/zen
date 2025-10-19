@@ -25,12 +25,27 @@ export const conversationApi = {
         has_conversation_id: !!conversationId,
       });
 
-      return await fetchWithAuth("/api/chat/conversation", {
+      const response = await fetchWithAuth("/api/chat/conversation", {
         method: "POST",
         body: JSON.stringify(body),
       });
+
+      console.log("✅ Received response from API:", {
+        hasResponse: !!response,
+        responseType: typeof response,
+        responseKeys: response ? Object.keys(response) : [],
+        hasResponseField: response && 'response' in response,
+        hasConversationId: response && 'conversation_id' in response,
+      });
+
+      return response;
     } catch (error) {
-      console.error("Error sending message:", error);
+      console.error("❌ Error sending message:", error);
+      console.error("❌ Error details:", {
+        name: error instanceof Error ? error.name : 'Unknown',
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack?.split('\n').slice(0, 3) : undefined,
+      });
       throw error;
     }
   },

@@ -27,17 +27,18 @@ export interface ChatResponse {
   message_id?: string;
   processing_time_ms: number;
   context_quality: {
-    context_length: number;
-    has_context: boolean;
-    coverage_score: number;
-    quality_tier: string;
-    timestamp: string;
+    context_length?: number;
+    has_context?: boolean;
+    coverage_score?: number;
+    quality_tier?: string;
+    timestamp?: string;
+    [key: string]: unknown;
   };
   chatbot_config: {
     name: string;
     avatar_url?: string;
     color_hex: string;
-    tone: string;
+    tone?: string;
     id?: string;
   };
 }
