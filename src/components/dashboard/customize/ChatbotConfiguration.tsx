@@ -4,6 +4,7 @@ import { useSearchParams, useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import type { ChatbotInfo } from "@/types/schemaTypes";
 import { useCustomizeStore } from "@/stores/customizeStore";
+import { API_BASE_URL } from "@/config/api";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -352,8 +353,7 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
 
         if (result && result.url) {
           // Convert relative URL to absolute URL
-          const baseUrl =
-            process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:8001";
+          const baseUrl = API_BASE_URL;
           const fullUrl = result.url.startsWith("http")
             ? result.url
             : `${baseUrl}${result.url}`;

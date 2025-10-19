@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import { API_BASE_URL } from "@/config/api";
 import {
   Send,
   Bot,
@@ -347,10 +348,7 @@ ChatWidgetProps) {
                       selectedChatbot.avatar_url.includes(
                         "storage/v1/object/uploads/"
                       )
-                        ? `${
-                            process.env.NEXT_PUBLIC_API_BASE_URL ||
-                            "http://localhost:8001"
-                          }/api/uploads/avatar/legacy/${
+                        ? `${API_BASE_URL}/api/uploads/avatar/legacy/${
                             selectedChatbot.avatar_url.split(
                               "storage/v1/object/uploads/"
                             )[1]
