@@ -12,7 +12,7 @@ import {
   ContextAnalytics
 } from "./types";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
 
 export const conversationApi = {
   sendMessage: async (

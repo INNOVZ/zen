@@ -20,7 +20,7 @@ import type {
   ChannelConfigUpdateResponse,
 } from "@/types/subscription";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
 
 export const subscriptionApi = {
   // ==========================================

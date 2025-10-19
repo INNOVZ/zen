@@ -2,7 +2,7 @@
 import { getAuthInfo } from "@/app/api/auth";
 import { apiCache } from "@/utils/cache";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
 
 export const apiUtils = {
   formatError: (error: unknown): string => {

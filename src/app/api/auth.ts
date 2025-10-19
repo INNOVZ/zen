@@ -1,7 +1,7 @@
 // utils/auth.ts
 import { supabase } from './SupabaseClient'
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {

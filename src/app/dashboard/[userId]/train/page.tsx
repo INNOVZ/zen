@@ -36,7 +36,9 @@ export default function IngestPage() {
   const [isLoadingUploads, setIsLoadingUploads] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("Loading uploads...");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+  const API_BASE =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "https://zaakiy-production.up.railway.app";
 
   const getAuthHeaders = async () => {
     const {
