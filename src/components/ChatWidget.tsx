@@ -256,6 +256,23 @@ ChatWidgetProps) {
         conversationId
       );
 
+      console.log("Chat response received:", {
+        hasResponse: !!response.response,
+        hasConversationId: !!response.conversation_id,
+        hasSources: !!response.sources,
+        responseLength: response.response?.length,
+        conversationId: response.conversation_id,
+      });
+
+      // Validate response structure
+      if (!response || typeof response !== "object") {
+        throw new Error("Invalid response format from server");
+      }
+
+      if (!response.response) {
+        throw new Error("No response content received from server");
+      }
+
       // Store conversation ID for follow-up messages
       if (response.conversation_id && !conversationId) {
         setConversationId(response.conversation_id);
@@ -272,6 +289,12 @@ ChatWidgetProps) {
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
       console.error("Error getting bot response:", error);
+      console.error("Error details:", {
+        name: error instanceof Error ? error.name : "Unknown",
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+        type: typeof error,
+      });
 
       // Handle authentication errors specially
       if (
@@ -288,7 +311,7 @@ ChatWidgetProps) {
       const errorResponse: Message = {
         id: (Date.now() + 1).toString(),
         type: "bot",
-        content: errorMessage,
+        content: `I apologize, but I encountered an issue: ${errorMessage}`,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorResponse]);

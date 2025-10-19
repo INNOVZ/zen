@@ -110,8 +110,15 @@ export function useConnectionErrorHandler() {
   const getErrorMessage = useCallback(
     (error: unknown): string => {
       if (!(error instanceof Error)) {
+        console.warn("Non-Error object passed to getErrorMessage:", error);
         return "An unexpected error occurred";
       }
+
+      console.log("Processing error in getErrorMessage:", {
+        message: error.message,
+        name: error.name,
+        stack: error.stack?.split('\n')[0] // First line of stack for debugging
+      });
 
       if (isConnectionError(error)) {
         return "Unable to connect to server. Please check if the backend service is running and try again.";
@@ -135,6 +142,15 @@ export function useConnectionErrorHandler() {
         return "The request timed out. Please try again.";
       }
 
+      if (error.message.includes("Invalid response format")) {
+        return "Server returned an invalid response format. Please try again.";
+      }
+
+      if (error.message.includes("No response content")) {
+        return "Server returned an empty response. Please try again.";
+      }
+
+      // Return the actual error message instead of generic fallback
       return error.message || "An unexpected error occurred";
     },
     [isConnectionError]

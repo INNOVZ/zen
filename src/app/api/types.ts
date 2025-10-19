@@ -18,6 +18,7 @@ export interface TokenHandler {
 export interface ChatResponse {
   response: string;
   sources: string[];
+  product_links: any[]; // List of product links from backend
   conversation_id: string;
   message_id?: string;
   processing_time_ms: number;
