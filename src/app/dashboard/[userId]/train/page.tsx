@@ -40,6 +40,13 @@ export default function IngestPage() {
     process.env.NEXT_PUBLIC_API_URL ||
     "https://zaakiy-production.up.railway.app";
 
+  // Debug: Log environment variables
+  console.log("Environment variables:", {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL,
+    NODE_ENV: process.env.NODE_ENV,
+    API_BASE: API_BASE
+  });
+
   const getAuthHeaders = async () => {
     const {
       data: { session },
