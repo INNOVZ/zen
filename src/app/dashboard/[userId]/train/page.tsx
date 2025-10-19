@@ -329,7 +329,7 @@ export default function IngestPage() {
             `Loading uploads... (attempt ${attempt + 1}/${maxRetries})`
           );
 
-          const response = await axios.get(`${API_BASE_URL}/api/uploads`, {
+          const response = await axios.get(`${API_BASE_URL}/api/uploads/`, {
             headers,
             timeout: timeout,
           });

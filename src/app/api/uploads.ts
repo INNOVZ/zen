@@ -21,7 +21,7 @@ export const uploadsApi = {
         controller.abort(new Error("Request timeout after 8 seconds"));
       }, 8000);
 
-      const data = await fetchWithAuth("/api/uploads", {
+      const data = await fetchWithAuth("/api/uploads/", {
         signal: controller.signal,
       });
 
