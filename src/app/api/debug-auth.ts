@@ -2,15 +2,36 @@
 import { supabase } from './SupabaseClient';
 
 export async function debugAuth() {
-  const debug = {
+  type DebugSession =
+    | {
+        hasSession: boolean;
+        hasUser: boolean;
+        hasToken: boolean;
+        userId?: string | null;
+        userEmail?: string | null;
+      }
+    | null;
+
+  type DebugResult = {
+    supabaseClient: boolean;
+    environment: {
+      NEXT_PUBLIC_SUPABASE_URL: string;
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: string;
+      NODE_ENV?: string | undefined;
+    };
+    session: DebugSession;
+    error: unknown;
+  };
+
+  const debug: DebugResult = {
     supabaseClient: !!supabase,
     environment: {
       NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'Set' : 'Missing',
       NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'Set' : 'Missing',
       NODE_ENV: process.env.NODE_ENV,
     },
-    session: null as any,
-    error: null as any,
+    session: null,
+    error: null,
   };
 
   if (supabase) {
