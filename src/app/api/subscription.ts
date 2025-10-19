@@ -3,6 +3,7 @@
 
 import { getAuthInfo, fetchWithAuth } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
+import { getApiBaseUrl } from "@/config/api";
 import type {
   SubscriptionPlans,
   SubscriptionStatus,
@@ -20,7 +21,7 @@ import type {
   ChannelConfigUpdateResponse,
 } from "@/types/subscription";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+const BASE_URL = getApiBaseUrl();
 
 export const subscriptionApi = {
   // ==========================================

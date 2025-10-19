@@ -7,8 +7,9 @@ import {
   OrganizationResponse, 
   UpdateOrganizationResponse 
 } from "./types";
+import { getApiBaseUrl } from "@/config/api";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+const BASE_URL = getApiBaseUrl();
 
 export const organizationApi = {
   getOrganizationInfo: async (): Promise<OrganizationResponse> => {
