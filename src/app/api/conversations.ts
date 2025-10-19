@@ -2,7 +2,8 @@
 import { ConversationInfo } from "@/types/schemaTypes";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
-import { API_BASE_URL } from "@/config/api";
+import { getApiBaseUrl } from "@/config/api";
+import type { ChatResponse, TokenHandler, FeedbackRequest, ContextConfig, PerformanceMetrics, ContextAnalytics, HealthCheck } from "./types";
 
 export const conversationApi = {
   sendMessage: async (
@@ -121,7 +122,7 @@ export const conversationApi = {
       };
 
       const response = await fetch(
-        `${BASE_URL}/api/chat/context-config?config_name=${configName}`,
+        `${getApiBaseUrl()}/api/chat/context-config?config_name=${configName}`,
         {
           method: "GET",
           headers,
@@ -187,7 +188,7 @@ export const conversationApi = {
         ...(orgId && { "X-Org-ID": orgId }),
       };
 
-      const response = await fetch(`${BASE_URL}/api/chat/context-config`, {
+      const response = await fetch(`${getApiBaseUrl()}/api/chat/context-config`, {
         method: "PUT",
         headers,
         body: JSON.stringify(requestPayload),
@@ -398,7 +399,7 @@ export const conversationApi = {
   },
 
   getHealthCheck: async (): Promise<HealthCheck> => {
-    const response = await fetch(`${BASE_URL}/api/chat/health`);
+    const response = await fetch(`${getApiBaseUrl()}/api/chat/health`);
     return response.json();
   },
 
