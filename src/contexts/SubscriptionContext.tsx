@@ -38,27 +38,41 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
 
   // Load subscription plans on mount
   useEffect(() => {
+    let mounted = true;
+
     const loadPlans = async () => {
       try {
         const plansData = await subscriptionApi.getPlans();
-        setPlans(plansData);
+        if (mounted) {
+          setPlans(plansData);
+        }
       } catch (err) {
-        console.error("Failed to load subscription plans:", err);
-        setError("Failed to load subscription plans");
+        if (mounted) {
+          console.error("Failed to load subscription plans:", err);
+          setError("Failed to load subscription plans");
+        }
       }
     };
 
     loadPlans();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   // Load subscription status when user is authenticated
   useEffect(() => {
+    let mounted = true;
+
     const loadSubscriptionStatus = async () => {
       try {
+        if (!mounted) return;
         setIsLoading(true);
         setError(null);
 
         const { userId, orgId } = await getAuthInfo();
+        if (!mounted) return;
 
         // FIXED: Try both user and organization subscriptions
         // Priority: organization subscription first, then user subscription
@@ -72,9 +86,11 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
               "organization",
               orgId
             );
+            if (!mounted) return;
             entityType = "organization";
             console.log("Found organization subscription:", response);
           } catch {
+            if (!mounted) return;
             console.log(
               "No organization subscription found, trying user subscription"
             );
@@ -89,15 +105,18 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
               "user",
               userId
             );
+            if (!mounted) return;
             entityType = "user";
             console.log("Found user subscription:", response);
           } catch {
+            if (!mounted) return;
             console.log("No user subscription found either");
             response = null;
           }
         }
 
         // Handle the response
+        if (!mounted) return;
         if (!response || response.has_subscription === false) {
           console.log("No subscription found for user or organization");
           setSubscription(null);
@@ -122,6 +141,7 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
           );
         }
       } catch (err) {
+        if (!mounted) return;
         console.error("Failed to load subscription status:", err);
 
         // FIXED: Better error handling
@@ -145,16 +165,25 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
           setError("Failed to load subscription status");
         }
       } finally {
-        setIsLoading(false);
+        if (mounted) {
+          setIsLoading(false);
+        }
       }
     };
 
     loadSubscriptionStatus();
 
     // Refresh subscription status every 30 seconds
-    const interval = setInterval(loadSubscriptionStatus, 30000);
+    const interval = setInterval(() => {
+      if (mounted) {
+        loadSubscriptionStatus();
+      }
+    }, 30000);
 
-    return () => clearInterval(interval);
+    return () => {
+      mounted = false;
+      clearInterval(interval);
+    };
   }, []);
 
   const refreshSubscription = async () => {

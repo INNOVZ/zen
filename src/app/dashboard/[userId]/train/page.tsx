@@ -36,7 +36,7 @@ export default function IngestPage() {
   const [isLoadingUploads, setIsLoadingUploads] = useState(true);
   const [loadingMessage, setLoadingMessage] = useState("Loading uploads...");
 
-  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
 
   const getAuthHeaders = async () => {
     const {
@@ -437,7 +437,23 @@ export default function IngestPage() {
 
   // Load uploads on component mount
   useEffect(() => {
-    fetchUploads();
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        await fetchUploads();
+      } catch (error) {
+        if (mounted) {
+          console.error("Error fetching uploads:", error);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
   }, [fetchUploads]);
 
   return (

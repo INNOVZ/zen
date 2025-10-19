@@ -148,7 +148,23 @@ export default function EnhancedCustomizePage() {
 
   // Load initial data
   useEffect(() => {
-    initializePage();
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        await initializePage();
+      } catch (error) {
+        if (mounted) {
+          console.error("Error initializing page:", error);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
   }, [initializePage]);
 
   // Periodic connection check

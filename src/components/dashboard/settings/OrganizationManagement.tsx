@@ -71,7 +71,23 @@ export default function OrganizationManagement() {
 
   // Load current organization info
   useEffect(() => {
-    loadOrganizationInfo();
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        await loadOrganizationInfo();
+      } catch (error) {
+        if (mounted) {
+          console.error("Error loading organization info:", error);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const loadOrganizationInfo = async () => {

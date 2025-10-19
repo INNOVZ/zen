@@ -64,15 +64,20 @@ ChatWidgetProps) {
 
   // Load organization's chatbots
   useEffect(() => {
+    let mounted = true;
+
     const loadChatbots = async () => {
       try {
+        if (!mounted) return;
         setLoadingChatbots(true);
 
         // Check authentication first
         const authCheck = await conversationApi.getCurrentUserContext();
+        if (!mounted) return;
         setIsAuthenticated(authCheck.isAuthenticated);
 
         if (!authCheck.isAuthenticated) {
+          if (!mounted) return;
           setMessages([
             {
               id: "greeting",
@@ -86,6 +91,7 @@ ChatWidgetProps) {
         }
 
         const chatbots = await chatbotApi.getChatbots();
+        if (!mounted) return;
 
         if (chatbots && chatbots.length > 0) {
           setAvailableChatbots(chatbots);
@@ -110,6 +116,7 @@ ChatWidgetProps) {
           if (targetChatbot) {
             // Get full chatbot details
             const fullChatbot = await chatbotApi.getChatbot(targetChatbot.id);
+            if (!mounted) return;
             setSelectedChatbot(fullChatbot);
 
             // Set initial greeting message
@@ -126,6 +133,7 @@ ChatWidgetProps) {
           }
         } else {
           // No chatbots available - show default message
+          if (!mounted) return;
           setMessages([
             {
               id: "greeting",
@@ -137,6 +145,7 @@ ChatWidgetProps) {
           ]);
         }
       } catch (error) {
+        if (!mounted) return;
         console.error("Error loading chatbots:", error);
 
         // Check if it's an authentication error
@@ -167,11 +176,17 @@ ChatWidgetProps) {
           ]);
         }
       } finally {
-        setLoadingChatbots(false);
+        if (mounted) {
+          setLoadingChatbots(false);
+        }
       }
     };
 
     loadChatbots();
+
+    return () => {
+      mounted = false;
+    };
   }, [chatbotId, getErrorMessage]);
 
   // Handle chatbot selection change

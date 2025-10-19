@@ -219,7 +219,23 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
 
   // Load chatbots when component mounts or chatbotId changes
   useEffect(() => {
-    loadOrgChatbots();
+    let mounted = true;
+
+    const load = async () => {
+      try {
+        await loadOrgChatbots();
+      } catch (error) {
+        if (mounted) {
+          console.error("Error loading organization chatbots:", error);
+        }
+      }
+    };
+
+    load();
+
+    return () => {
+      mounted = false;
+    };
   }, [loadOrgChatbots]);
 
   // Update input values when config changes from store
@@ -250,13 +266,14 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
         updateConfig({ [field]: value } as Partial<ChatbotInfo>);
         setUnsavedChanges(true);
 
-        // Validate
-        const newConfig = { ...config, [field]: value };
+        // Get latest config state for validation
+        const currentConfig = useCustomizeStore.getState().config;
+        const newConfig = { ...currentConfig, [field]: value };
         const errors = validateConfig(newConfig);
         setValidationErrors(errors);
       }, 300);
     },
-    [updateConfig, validateConfig, config]
+    [updateConfig, validateConfig] // Removed config from dependencies
   );
 
   // Individual debounced functions for each field
