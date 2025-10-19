@@ -1,7 +1,6 @@
 // utils/auth.ts
 import { supabase } from './SupabaseClient'
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+import { API_BASE_URL } from '@/config/api';
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
@@ -76,7 +75,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   const startTime = Date.now();
   
   try {
-    const response = await fetch(`${BASE_URL}${url}`, {
+    const response = await fetch(`${API_BASE_URL}${url}`, {
       ...options,
       headers,
     });
@@ -173,7 +172,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       // Add additional context to the error
       enhancedError.status = response.status;
       enhancedError.statusText = response.statusText;
-      enhancedError.url = `${BASE_URL}${url}`;
+      enhancedError.url = `${API_BASE_URL}${url}`;
       enhancedError.errorData = errorData;
       enhancedError.errorText = errorText;
       throw enhancedError;

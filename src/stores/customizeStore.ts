@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
+import { API_BASE_URL } from "@/config/api";
 import type {
   ChatbotInfo,
   UploadFile,
@@ -570,7 +571,7 @@ export const useCustomizeStore = create<CustomizeState>()(
 
       generateEmbedCode: (chatbotId) => {
         const API_BASE =
-          process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001";
+          API_BASE_URL || "https://zaakiy-production.up.railway.app";
         const embedScript = `<script>
   (function() {
     var script = document.createElement('script');

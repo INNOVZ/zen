@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { WifiOff, Server, RefreshCw, ExternalLink } from "lucide-react";
+import { API_BASE_URL } from "@/config/api";
 
 interface OfflineModeProps {
   onRetry: () => void;
@@ -81,7 +82,7 @@ export default function OfflineMode({
             <div>
               <p className="font-medium text-sm mb-1">Expected server URL:</p>
               <code className="text-xs bg-gray-100 px-2 py-1 rounded">
-                {process.env.NEXT_PUBLIC_API_URL || "http://localhost:8001"}
+                {API_BASE_URL}
               </code>
             </div>
 

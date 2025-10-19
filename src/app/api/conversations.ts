@@ -2,17 +2,7 @@
 import { ConversationInfo } from "@/types/schemaTypes";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
-import { 
-  ChatResponse, 
-  ContextConfig, 
-  PerformanceMetrics, 
-  FeedbackRequest, 
-  HealthCheck,
-  TokenHandler,
-  ContextAnalytics
-} from "./types";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+import { API_BASE_URL } from "@/config/api";
 
 export const conversationApi = {
   sendMessage: async (

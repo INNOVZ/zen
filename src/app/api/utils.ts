@@ -1,8 +1,7 @@
 // API Utility Functions
 import { getAuthInfo } from "@/app/api/auth";
 import { apiCache } from "@/utils/cache";
-
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://zaakiy-production.up.railway.app";
+import { API_BASE_URL } from "@/config/api";
 
 export const apiUtils = {
   formatError: (error: unknown): string => {
@@ -24,7 +23,7 @@ export const apiUtils = {
     }
   },
 
-  getBaseUrl: (): string => BASE_URL,
+  getBaseUrl: (): string => API_BASE_URL,
 
   createRequestId: (): string =>
     `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
