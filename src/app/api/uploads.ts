@@ -71,7 +71,8 @@ export const uploadsApi = {
       `📤 Uploading file: ${file.name} (${file.size} bytes) as ${type}`
     );
 
-    const response = await fetch(`${getApiBaseUrl()}/api/uploads/${type}`, {
+    const apiUrl = `${getApiBaseUrl()}/api/uploads/${type}`.replace('http://', 'https://');
+    const response = await fetch(apiUrl, {
       method: "POST",
       headers,
       body: formData,

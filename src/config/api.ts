@@ -2,15 +2,18 @@
 // This ensures consistent API URL across all components
 
 export const getApiBaseUrl = (): string => {
-  // Force HTTPS for production - always return HTTPS
+  const baseUrl = 'https://zaakiy-production.up.railway.app';
+  
+  // Force HTTPS for all environments
   if (typeof window !== 'undefined') {
-    // We're in the browser - always use HTTPS for production
     console.log('🔧 getApiBaseUrl called - forcing HTTPS');
-    return 'https://zaakiy-production.up.railway.app';
+    // Ensure URL starts with https://
+    if (!baseUrl.startsWith('https://')) {
+      return `https://${baseUrl.replace('http://', '')}`;
+    }
   }
   
-  // Server-side rendering fallback
-  return 'https://zaakiy-production.up.railway.app';
+  return baseUrl;
 };
 
 // For backward compatibility, export a constant that calls the function
