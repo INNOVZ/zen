@@ -52,27 +52,27 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={18} strokeWidth={1.5} />,
+      icon: <Home size={16} />,
       path: getMenuItemPath(""),
     },
     {
       title: "Train",
-      icon: <Brain size={18} strokeWidth={1.5} />,
+      icon: <Brain size={16} />,
       path: getMenuItemPath("/train"),
     },
     {
       title: "AI",
-      icon: <BrainCircuit size={18} strokeWidth={1.5} />,
+      icon: <BrainCircuit size={16} />,
       path: getMenuItemPath("/context-settings"),
     },
     {
       title: "Customize",
-      icon: <RiRobot3Line size={18} />,
+      icon: <RiRobot3Line size={16} />,
       path: getMenuItemPath("/customize"),
     },
     {
       title: "Settings",
-      icon: <Settings size={18} strokeWidth={1.5} />,
+      icon: <Settings size={16} />,
       path: getMenuItemPath("/settings"),
     },
   ];
@@ -103,16 +103,13 @@ const Sidebar = () => {
           className="pointer"
         >
           {isCollapsed ? (
-            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
-              <ChevronRight
-                size={18}
-                className="text-white"
-                strokeWidth={1.5}
-              />
+            <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
+              {" "}
+              <ChevronRight size={18} className="text-white" />
             </span>
           ) : (
-            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
-              <ChevronLeft size={18} className="text-white" strokeWidth={1.5} />
+            <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
+              <ChevronLeft size={18} className="text-white" />
             </span>
           )}
         </button>
@@ -122,8 +119,8 @@ const Sidebar = () => {
       {!isCollapsed && user && (
         <div className="p-4 border-r border-gray-700 overflow-y-auto">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#0a0a60] rounded-full flex items-center justify-center shrink-0">
-              <User size={16} className="text-white" strokeWidth={1.5} />
+            <div className="w-8 h-8 bg-[#0a0a60] rounded-full flex items-center justify-center">
+              <User size={16} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700 truncate">
@@ -178,12 +175,12 @@ const Sidebar = () => {
                   className={`flex items-center gap-4 p-2 rounded-lg transition-colors
                     ${
                       isActive
-                        ? "bg-[#0a0a60] text-white font-bold shadow-sm"
-                        : "text-[#0a0a60] hover:text-[#020617] hover:bg-gray-100"
+                        ? "glass shadow-sm text-white font-bold"
+                        : "text-[#0a0a60] hover:text-[#020617]"
                     }
                   `}
                 >
-                  <div className="flex items-center justify-center w-5 h-5 shrink-0">
+                  <div className="flex items-center justify-center w-4 h-4">
                     {item.icon}
                   </div>
                   {!isCollapsed && (
@@ -214,8 +211,8 @@ const Sidebar = () => {
             isCollapsed ? "px-2" : ""
           }`}
         >
-          <div className="flex items-center justify-center w-5 h-5 shrink-0">
-            <LogOut size={20} strokeWidth={1.5} />
+          <div className="[&>svg]:!size-5 [&>svg]:!shrink-0">
+            <LogOut size={20} />
           </div>
           {!isCollapsed && <span className="ml-4">Logout</span>}
         </Button>
