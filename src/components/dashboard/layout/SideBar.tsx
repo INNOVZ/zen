@@ -52,27 +52,27 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={24} />,
+      icon: <Home size={32} />,
       path: getMenuItemPath(""),
     },
     {
       title: "Train",
-      icon: <Brain size={24} />,
+      icon: <Brain size={32} />,
       path: getMenuItemPath("/train"),
     },
     {
       title: "AI",
-      icon: <BrainCircuit size={24} />,
+      icon: <BrainCircuit size={32} />,
       path: getMenuItemPath("/context-settings"),
     },
     {
       title: "Customize",
-      icon: <RiRobot3Line size={24} />,
+      icon: <RiRobot3Line size={32} />,
       path: getMenuItemPath("/customize"),
     },
     {
       title: "Settings",
-      icon: <Settings size={24} />,
+      icon: <Settings size={32} />,
       path: getMenuItemPath("/settings"),
     },
   ];
@@ -90,7 +90,7 @@ const Sidebar = () => {
   return (
     <div
       className={`${
-        isCollapsed ? "w-[4vw]" : "sm:w-60 w-60 z-[999]"
+        isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
       } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
     >
       {/* Header */}
@@ -105,11 +105,11 @@ const Sidebar = () => {
           {isCollapsed ? (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
               {" "}
-              <ChevronRight size={20} color="#fff" />
+              <ChevronRight size={24} color="#fff" />
             </span>
           ) : (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
-              <ChevronLeft size={20} color="#fff" />
+              <ChevronLeft size={24} color="#fff" />
             </span>
           )}
         </button>
@@ -119,11 +119,11 @@ const Sidebar = () => {
       {!isCollapsed && user && (
         <div className="p-4 border-r border-gray-700 overflow-y-auto">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-              <User size={16} className="text-white" />
+            <div className="w-8 h-8 bg-[#0a0a60] rounded-full flex items-center justify-center">
+              <User size={16} className="text-gray-700" />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">
+              <p className="text-sm font-medium text-gray-700 truncate">
                 {getUserDisplayName({
                   id: user.id,
                   email: user.email || "",
@@ -131,7 +131,7 @@ const Sidebar = () => {
                   display_name: user.user_metadata?.display_name || "",
                 })}
               </p>
-              <p className="text-xs text-white">
+              <p className="text-xs text-gray-700">
                 User ID: {user.id.slice(0, 8)}...
               </p>
             </div>
@@ -180,7 +180,9 @@ const Sidebar = () => {
                     }
                   `}
                 >
-                  {item.icon}
+                  <div className="[&>svg]:!size-8 [&>svg]:!shrink-0">
+                    {item.icon}
+                  </div>
                   {!isCollapsed && (
                     <span className="text-base font-semibold">
                       {item.title}
@@ -209,7 +211,9 @@ const Sidebar = () => {
             isCollapsed ? "px-2" : ""
           }`}
         >
-          <LogOut size={20} />
+          <div className="[&>svg]:!size-8 [&>svg]:!shrink-0">
+            <LogOut size={32} />
+          </div>
           {!isCollapsed && <span className="ml-4">Logout</span>}
         </Button>
       </div>
