@@ -52,27 +52,27 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={32} />,
+      icon: <Home size={20} />,
       path: getMenuItemPath(""),
     },
     {
       title: "Train",
-      icon: <Brain size={32} />,
+      icon: <Brain size={20} />,
       path: getMenuItemPath("/train"),
     },
     {
       title: "AI",
-      icon: <BrainCircuit size={32} />,
+      icon: <BrainCircuit size={20} />,
       path: getMenuItemPath("/context-settings"),
     },
     {
       title: "Customize",
-      icon: <RiRobot3Line size={32} />,
+      icon: <RiRobot3Line size={20} />,
       path: getMenuItemPath("/customize"),
     },
     {
       title: "Settings",
-      icon: <Settings size={32} />,
+      icon: <Settings size={20} />,
       path: getMenuItemPath("/settings"),
     },
   ];
