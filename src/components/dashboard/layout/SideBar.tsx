@@ -105,11 +105,11 @@ const Sidebar = () => {
           {isCollapsed ? (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
               {" "}
-              <ChevronRight size={24} color="#fff" />
+              <ChevronRight size={20} color="#fff" />
             </span>
           ) : (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
-              <ChevronLeft size={24} color="#fff" />
+              <ChevronLeft size={20} color="#fff" />
             </span>
           )}
         </button>
@@ -180,7 +180,7 @@ const Sidebar = () => {
                     }
                   `}
                 >
-                  <div className="[&>svg]:!size-8 [&>svg]:!shrink-0">
+                  <div className="[&>svg]:!size-5 [&>svg]:!shrink-0">
                     {item.icon}
                   </div>
                   {!isCollapsed && (
@@ -211,8 +211,8 @@ const Sidebar = () => {
             isCollapsed ? "px-2" : ""
           }`}
         >
-          <div className="[&>svg]:!size-8 [&>svg]:!shrink-0">
-            <LogOut size={32} />
+          <div className="[&>svg]:!size-5 [&>svg]:!shrink-0">
+            <LogOut size={20} />
           </div>
           {!isCollapsed && <span className="ml-4">Logout</span>}
         </Button>
