@@ -52,27 +52,27 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={20} />,
+      icon: <Home size={18} />,
       path: getMenuItemPath(""),
     },
     {
       title: "Train",
-      icon: <Brain size={20} />,
+      icon: <Brain size={18} />,
       path: getMenuItemPath("/train"),
     },
     {
       title: "AI",
-      icon: <BrainCircuit size={20} />,
+      icon: <BrainCircuit size={18} />,
       path: getMenuItemPath("/context-settings"),
     },
     {
       title: "Customize",
-      icon: <RiRobot3Line size={20} />,
+      icon: <RiRobot3Line size={18} />,
       path: getMenuItemPath("/customize"),
     },
     {
       title: "Settings",
-      icon: <Settings size={20} />,
+      icon: <Settings size={18} />,
       path: getMenuItemPath("/settings"),
     },
   ];
@@ -96,7 +96,7 @@ const Sidebar = () => {
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-r border-gray-700 overflow-y-auto">
         {!isCollapsed && (
-          <span className="text-xl font-bold text-white">Zentria Pro</span>
+          <span className="text-xl font-bold text-[#0a0a60]">Zentria Pro</span>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -105,11 +105,11 @@ const Sidebar = () => {
           {isCollapsed ? (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
               {" "}
-              <ChevronRight size={20} color="#fff" />
+              <ChevronRight size={18} className="text-white" />
             </span>
           ) : (
             <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
-              <ChevronLeft size={20} color="#fff" />
+              <ChevronLeft size={18} className="text-white" />
             </span>
           )}
         </button>
@@ -120,7 +120,7 @@ const Sidebar = () => {
         <div className="p-4 border-r border-gray-700 overflow-y-auto">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-[#0a0a60] rounded-full flex items-center justify-center">
-              <User size={16} className="text-gray-700" />
+              <User size={16} className="text-white" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-gray-700 truncate">
