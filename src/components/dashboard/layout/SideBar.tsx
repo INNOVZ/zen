@@ -13,7 +13,6 @@ import {
   User,
   BrainCircuit,
 } from "lucide-react";
-
 import { RiRobot3Line } from "react-icons/ri";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
@@ -53,27 +52,27 @@ const Sidebar = () => {
   const menuItems = [
     {
       title: "Dashboard",
-      icon: <Home size={20} />,
+      icon: <Home size={24} />,
       path: getMenuItemPath(""),
     },
     {
       title: "Train",
-      icon: <Brain size={20} />,
+      icon: <Brain size={24} />,
       path: getMenuItemPath("/train"),
     },
     {
       title: "AI",
-      icon: <BrainCircuit size={20} />,
+      icon: <BrainCircuit size={24} />,
       path: getMenuItemPath("/context-settings"),
     },
     {
       title: "Customize",
-      icon: <RiRobot3Line size={20} />,
+      icon: <RiRobot3Line size={24} />,
       path: getMenuItemPath("/customize"),
     },
     {
       title: "Settings",
-      icon: <Settings size={20} />,
+      icon: <Settings size={24} />,
       path: getMenuItemPath("/settings"),
     },
   ];
@@ -91,7 +90,7 @@ const Sidebar = () => {
   return (
     <div
       className={`${
-        isCollapsed ? "w-[3.8vw]" : "sm:w-60 w-60 z-[999]"
+        isCollapsed ? "w-[4vw]" : "sm:w-60 w-60 z-[999]"
       } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
     >
       {/* Header */}

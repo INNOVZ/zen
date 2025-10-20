@@ -262,6 +262,8 @@ ChatWidgetProps) {
         hasSources: !!response.sources,
         responseLength: response.response?.length,
         conversationId: response.conversation_id,
+        isFallback: response.conversation_id?.startsWith("fallback-"),
+        responsePreview: response.response?.substring(0, 100),
       });
 
       // Validate response structure
@@ -271,6 +273,14 @@ ChatWidgetProps) {
 
       if (!response.response) {
         throw new Error("No response content received from server");
+      }
+
+      // Check if this is a fallback response (indicates backend error)
+      if (response.conversation_id?.startsWith("fallback-")) {
+        console.warn(
+          "⚠️ Received fallback response from backend - chat service encountered an error"
+        );
+        console.warn("Backend error response:", response.response);
       }
 
       // Store conversation ID for follow-up messages

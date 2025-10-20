@@ -36,7 +36,6 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning={true}>
       <body
         className={`${ubuntu.variable} ${cody.variable} ${doto.variable} antialiased`}
-        suppressHydrationWarning={true}
       >
         <Toaster richColors position="top-center" />
         {children}
