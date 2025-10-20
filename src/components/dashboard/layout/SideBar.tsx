@@ -103,12 +103,11 @@ const Sidebar = () => {
           className="pointer"
         >
           {isCollapsed ? (
-            <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
-              {" "}
+            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
               <ChevronRight size={18} className="text-white" />
             </span>
           ) : (
-            <span className="glass shadow-sm p-2 rounded-full flex items-center justify-center">
+            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
               <ChevronLeft size={18} className="text-white" />
             </span>
           )}
@@ -175,12 +174,12 @@ const Sidebar = () => {
                   className={`flex items-center gap-4 p-2 rounded-lg transition-colors
                     ${
                       isActive
-                        ? "glass shadow-sm text-white font-bold"
-                        : "text-[#0a0a60] hover:text-[#020617]"
+                        ? "bg-[#0a0a60] text-white font-bold shadow-sm"
+                        : "text-[#0a0a60] hover:text-[#020617] hover:bg-gray-100"
                     }
                   `}
                 >
-                  <div className="flex items-center justify-center w-4 h-4">
+                  <div className="flex items-center justify-center w-5 h-5 shrink-0">
                     {item.icon}
                   </div>
                   {!isCollapsed && (
@@ -211,7 +210,7 @@ const Sidebar = () => {
             isCollapsed ? "px-2" : ""
           }`}
         >
-          <div className="[&>svg]:!size-5 [&>svg]:!shrink-0">
+          <div className="flex items-center justify-center w-5 h-5 shrink-0">
             <LogOut size={20} />
           </div>
           {!isCollapsed && <span className="ml-4">Logout</span>}
