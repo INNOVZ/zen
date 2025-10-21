@@ -13,7 +13,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import Zaakiy from "../../../public/zaakiybot.svg";
 import Image from "next/image";
 
@@ -21,7 +20,6 @@ export const LoginForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
-  const router = useRouter();
   const supabase = createClientComponentClient();
 
   const [email, setEmail] = useState("");
@@ -51,12 +49,16 @@ export const LoginForm = ({
         return;
       }
 
-      if (data.user?.id) {
+      if (data.user?.id && data.session) {
+        console.log("Login successful, user ID:", data.user.id);
         toast.success("Login successful!");
-        // Refresh the page to trigger middleware redirect
-        // This ensures server and client sessions are in sync
-        router.refresh();
-        router.push(`/dashboard/${data.user.id}`);
+
+        // Wait a moment for cookies to be set
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Force a hard navigation to ensure middleware picks up the session
+        // Using window.location ensures a full page reload with proper cookie sync
+        window.location.href = `/dashboard/${data.user.id}`;
       } else {
         toast.error("Login failed - no user data received");
         setIsLoading(false);
