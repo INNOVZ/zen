@@ -575,7 +575,7 @@ export const useCustomizeStore = create<CustomizeState>()(
         const embedScript = `<script>
   (function() {
     var script = document.createElement('script');
-    script.src = '${window.location.origin}/chatbot-widget.js';
+    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
     script.setAttribute('data-chatbot-id', '${chatbotId}');
     script.setAttribute('data-api-url', '${API_BASE}');
     document.head.appendChild(script);

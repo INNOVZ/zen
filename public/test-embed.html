@@ -108,14 +108,18 @@
             </ol>
             
             <h4>Integration Code:</h4>
-            <p>To add this widget to your website, simply include this script tag before the closing &lt;/body&gt; tag:</p>
-            <pre style="background: #1f2937; color: #f9fafb; padding: 15px; display: block; border-radius: 4px; margin: 10px 0; overflow-x: auto; line-height: 1.6;">
-&lt;script 
-  src="https://zaakiy.vercel.app/chatbot-widget.js"
-  data-chatbot-id="<span style="color: #fbbf24;">YOUR_CHATBOT_ID</span>"
-  data-api-url="https://zaakiy-production.up.railway.app"
-&gt;&lt;/script&gt;</pre>
-            <p style="margin-top: 15px;"><strong>Important:</strong> Replace <code style="background: #fef3c7; color: #92400e; padding: 2px 6px; border-radius: 3px;">YOUR_CHATBOT_ID</code> with your actual chatbot ID from the dashboard.</p>
+            <p>To add this widget to your website, simply include this script tag:</p>
+            <code style="background: #1f2937; color: #f9fafb; padding: 10px; display: block; border-radius: 4px; margin: 10px 0; font-size: 12px; overflow-x: auto;">
+&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+    script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
+    script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;
+            </code>
         </div>
         
         <div style="margin-top: 40px; padding: 20px; background: #f0fdf4; border-radius: 8px; border: 1px solid #bbf7d0;">
@@ -136,12 +140,16 @@
         </div>
     </div>
 
-    <!-- Include the Zaakiy Chatbot Widget -->
-    <!-- Replace YOUR_CHATBOT_ID with your actual chatbot ID from the dashboard -->
-    <script 
-      src="./chatbot-widget.js"
-      data-chatbot-id="YOUR_CHATBOT_ID"
-      data-api-url="https://zaakiy-production.up.railway.app"
-    ></script>
+    <!-- Include the chat widget -->
+    <script>
+      (function() {
+        var script = document.createElement('script');
+        script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+        // Optional: specify a chatbot ID
+        // script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
+        script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
+        document.head.appendChild(script);
+      })();
+    </script>
 </body>
 </html>

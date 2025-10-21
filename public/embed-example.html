@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zaakiy Chatbot - Simple Embed Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            color: #333;
+        }
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        code {
+            background: #1f2937;
+            color: #10b981;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 14px;
+        }
+        pre {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        pre code {
+            background: none;
+            color: #10b981;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🤖 Zaakiy Chatbot Widget</h1>
+    
+    <p>This is a simple example showing how to embed the Zaakiy chatbot on any website. The chatbot should appear in the bottom-right corner.</p>
+    
+    <div class="info-box">
+        <h3>📌 How it works:</h3>
+        <ul>
+            <li>The widget loads asynchronously without affecting your page speed</li>
+            <li>It automatically fetches your chatbot configuration</li>
+            <li>All conversations are tracked and analyzed in your dashboard</li>
+            <li>Works on any website - WordPress, Shopify, custom HTML, etc.</li>
+        </ul>
+    </div>
+    
+    <h2>💻 Embed Code</h2>
+    <p>Copy and paste this code before the closing <code>&lt;/body&gt;</code> tag of your website:</p>
+    
+    <pre><code>&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+    script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID_HERE');
+    script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;</code></pre>
+    
+    <h2>⚙️ Configuration Options</h2>
+    <p>You can customize the widget by adding these optional data attributes:</p>
+    <ul>
+        <li><code>data-chatbot-id</code> - Your specific chatbot ID (required)</li>
+        <li><code>data-api-url</code> - API endpoint (default: https://zaakiy-production.up.railway.app)</li>
+        <li><code>data-position</code> - Widget position: "bottom-right" or "bottom-left" (default: bottom-right)</li>
+        <li><code>data-primary-color</code> - Custom color (e.g., "#ff6b35")</li>
+        <li><code>data-bot-name</code> - Custom bot name</li>
+        <li><code>data-greeting</code> - Custom greeting message</li>
+    </ul>
+    
+    <h2>🎨 Advanced Example</h2>
+    <pre><code>&lt;script&gt;
+  (function() {
+    var script = document.createElement('script');
+    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+    script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
+    script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
+    script.setAttribute('data-position', 'bottom-left');
+    script.setAttribute('data-primary-color', '#10b981');
+    script.setAttribute('data-bot-name', 'Support Bot');
+    script.setAttribute('data-greeting', 'Hello! How can I assist you?');
+    document.head.appendChild(script);
+  })();
+&lt;/script&gt;</code></pre>
+    
+    <p style="margin-top: 40px; padding: 20px; background: #ecfdf5; border-radius: 8px; border: 1px solid #6ee7b7;">
+        ✅ <strong>Widget Status:</strong> The chatbot widget is active on this page! Look for the chat bubble in the bottom-right corner.
+    </p>
+
+    <!-- Zaakiy Chatbot Widget -->
+    <script>
+      (function() {
+        var script = document.createElement('script');
+        script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+        // Replace with your actual chatbot ID from the dashboard
+        // script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
+        script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
+        document.head.appendChild(script);
+      })();
+    </script>
+</body>
+</html>
+

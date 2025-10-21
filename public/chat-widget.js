@@ -1,20 +1,20 @@
 (function() {
+  // Get script tag to read configuration from data attributes
+  const scriptTag = document.currentScript || document.querySelector('script[src*="chat-widget.js"]');
+  
   // Configuration
   const config = {
     // Set to your hosted API (use HTTPS in production)
-    apiUrl: 'https://your-host.example.com', // Your Next.js app URL
-    position: 'bottom-right', // 'bottom-right' or 'bottom-left'
-    chatbotId: null, // Specific chatbot ID (optional)
-    orgId: null, // Organization ID (optional)
-    // Optional: integrator's server endpoint that mints ephemeral tokens for the widget.
-    // If provided, the widget will POST to this endpoint to obtain a short-lived token
-    // which will be sent in the Authorization header to your backend.
-    tokenEndpoint: null,
+    apiUrl: scriptTag?.getAttribute('data-api-url') || 'https://zaakiy-production.up.railway.app',
+    position: scriptTag?.getAttribute('data-position') || 'bottom-right',
+    chatbotId: scriptTag?.getAttribute('data-chatbot-id') || null,
+    orgId: scriptTag?.getAttribute('data-org-id') || null,
+    tokenEndpoint: scriptTag?.getAttribute('data-token-endpoint') || null,
     // These will be loaded from the API
-    primaryColor: '#3B82F6',
-    botName: 'Assistant',
-    greeting: 'Hi! How can I help you today?',
-    avatarUrl: null // Avatar image URL
+    primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
+    botName: scriptTag?.getAttribute('data-bot-name') || 'Assistant',
+    greeting: scriptTag?.getAttribute('data-greeting') || 'Hi! How can I help you today?',
+    avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null
   };
 
   // State
