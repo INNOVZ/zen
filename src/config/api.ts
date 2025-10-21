@@ -2,13 +2,15 @@
 // This ensures consistent API URL across all components
 
 export const getApiBaseUrl = (): string => {
-  const baseUrl = 'https://zaakiy-production.up.railway.app';
+  // Check for environment variable first, then fall back to production URL
+  const envUrl = process.env.NEXT_PUBLIC_API_URL;
+  const baseUrl = envUrl || 'https://zaakiy-production.up.railway.app';
   
-  // Force HTTPS for all environments
+  // Force HTTPS for production environments only
   if (typeof window !== 'undefined') {
-    console.log('🔧 getApiBaseUrl called - forcing HTTPS');
-    // Ensure URL starts with https://
-    if (!baseUrl.startsWith('https://')) {
+    console.log('🔧 getApiBaseUrl called');
+    // Only force HTTPS if not localhost
+    if (!baseUrl.includes('localhost') && !baseUrl.startsWith('https://')) {
       return `https://${baseUrl.replace('http://', '')}`;
     }
   }
