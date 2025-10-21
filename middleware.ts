@@ -58,27 +58,33 @@ export async function middleware(req: NextRequest) {
   // Get the session
   const { data: { session } } = await supabase.auth.getSession()
   const isAuth = !!session?.user
-  const isAuthPage = req.nextUrl.pathname.startsWith('/auth')
-  const isDashboard = req.nextUrl.pathname.startsWith('/dashboard')
+  const pathname = req.nextUrl.pathname
+  const isAuthPage = pathname.startsWith('/auth')
+  const isDashboard = pathname.startsWith('/dashboard')
 
-  // Redirect unauthenticated users to login
+  // Redirect unauthenticated users trying to access dashboard to login
   if (!isAuth && isDashboard) {
     const loginUrl = req.nextUrl.clone()
     loginUrl.pathname = '/auth/login'
+    console.log(`[Middleware] Redirecting unauthenticated user from ${pathname} to /auth/login`)
     return NextResponse.redirect(loginUrl)
   }
 
-  // Redirect authenticated users away from auth pages
-  if (isAuth && isAuthPage) {
+  // Redirect authenticated users away from auth pages to their dashboard
+  // BUT only if they're on the login/signup page, not if they're being redirected
+  if (isAuth && isAuthPage && !req.nextUrl.searchParams.has('redirected')) {
     const dashboardUrl = req.nextUrl.clone()
     dashboardUrl.pathname = `/dashboard/${session.user.id}`
+    dashboardUrl.searchParams.delete('redirected') // Clean up URL
+    console.log(`[Middleware] Redirecting authenticated user from ${pathname} to dashboard`)
     return NextResponse.redirect(dashboardUrl)
   }
 
-  // Redirect /dashboard to user-specific dashboard
-  if (isDashboard && req.nextUrl.pathname === '/dashboard' && isAuth) {
+  // Redirect /dashboard root to user-specific dashboard
+  if (isDashboard && pathname === '/dashboard' && isAuth) {
     const userDashboardUrl = req.nextUrl.clone()
     userDashboardUrl.pathname = `/dashboard/${session.user.id}`
+    console.log(`[Middleware] Redirecting from /dashboard to /dashboard/${session.user.id}`)
     return NextResponse.redirect(userDashboardUrl)
   }
 

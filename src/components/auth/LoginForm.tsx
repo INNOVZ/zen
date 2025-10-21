@@ -1,5 +1,5 @@
 "use client";
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { supabase } from "@/app/api/SupabaseClient";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import Zaakiy from "../../../public/zaakiybot.svg";
@@ -22,87 +22,49 @@ export const LoginForm = ({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
   const router = useRouter();
+  const supabase = createClientComponentClient();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  useEffect(() => {
-    if (!supabase) return;
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      if (session?.user?.id) {
-        router.replace(`/dashboard/${session.user.id}`);
-      }
-    });
-
-    const checkAuth = async () => {
-      if (!supabase) return;
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      console.log(token);
-    };
-
-    const callBackend = async () => {
-      if (!supabase) return;
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      const token = session?.access_token;
-      if (!token) return;
-
-      const backendUrl =
-        process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:8001";
-      const response = await fetch(`${backendUrl}/api/auth/me`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(token);
-      const data = await response.json();
-      console.log(data);
-    };
-    callBackend();
-    checkAuth();
-  }, [router]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    console.log("Login attempt started", { email });
 
     if (!email || !password) {
       toast.error("Please enter both email and password");
       return;
     }
 
+    setIsLoading(true);
+
     try {
-      if (!supabase) {
-        throw new Error("Supabase client is not initialized.");
-      }
       const { data, error } = await supabase.auth.signInWithPassword({
-        email: email,
+        email: email.trim(),
         password: password,
       });
-
-      console.log("Supabase response:", { data, error });
 
       if (error) {
         console.error("Login error:", error);
         toast.error(error.message);
-      } else if (data.user?.id) {
-        console.log("Login successful, redirecting to dashboard");
+        setIsLoading(false);
+        return;
+      }
+
+      if (data.user?.id) {
         toast.success("Login successful!");
-        // Redirect to user-specific dashboard
-        router.replace(`/dashboard/${data.user.id}`);
+        // Refresh the page to trigger middleware redirect
+        // This ensures server and client sessions are in sync
+        router.refresh();
+        router.push(`/dashboard/${data.user.id}`);
       } else {
-        console.error("No user data received");
         toast.error("Login failed - no user data received");
+        setIsLoading(false);
       }
     } catch (err) {
       console.error("Login exception:", err);
       toast.error("An unexpected error occurred during login");
+      setIsLoading(false);
     }
   };
 
@@ -153,8 +115,12 @@ export const LoginForm = ({
                   }
                 />
               </div>
-              <Button type="submit" className="w-full pointer">
-                Login
+              <Button
+                type="submit"
+                className="w-full pointer"
+                disabled={isLoading}
+              >
+                {isLoading ? "Logging in..." : "Login"}
               </Button>
             </div>
           </form>

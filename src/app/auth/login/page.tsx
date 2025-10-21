@@ -2,6 +2,10 @@ import { LoginForm } from "@/components/auth/LoginForm";
 import Zaakiy from "../../../../public/zaakiy.svg";
 import Image from "next/image";
 
+// Force this page to be dynamic (not pre-rendered at build time)
+// This is required because authentication state is client-side
+export const dynamic = "force-dynamic";
+
 export default function Page() {
   return (
     <div className="min-h-svh grid grid-cols-1 md:grid-cols-2">
