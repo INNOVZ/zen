@@ -44,6 +44,7 @@ export const LoginForm = ({
     e.preventDefault();
 
     console.log("🔐 Login attempt started");
+    console.log("📍 Current URL:", window.location.href);
 
     if (!email || !password) {
       toast.error("Please enter both email and password");
@@ -78,18 +79,43 @@ export const LoginForm = ({
         console.log("✅ Login successful!");
         console.log("   User ID:", data.user.id);
         console.log("   Email:", data.user.email);
-        console.log("   Session:", !!data.session);
+        console.log("   Session access_token:", data.session.access_token.substring(0, 20) + "...");
+        console.log("   Session refresh_token:", data.session.refresh_token.substring(0, 20) + "...");
+
+        // Check cookies immediately after login
+        console.log("🍪 Checking cookies after login...");
+        const allCookies = document.cookie;
+        console.log("   All cookies:", allCookies);
+        
+        const supabaseCookies = allCookies.split(';').filter(c => 
+          c.trim().startsWith('sb-') || c.trim().includes('supabase')
+        );
+        console.log("   Supabase cookies:", supabaseCookies.length > 0 ? supabaseCookies : "❌ NONE FOUND!");
 
         toast.success("Login successful!");
 
-        // Wait a moment for cookies to be set
-        console.log("⏳ Waiting 100ms for cookie propagation...");
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        // Wait longer for cookies to fully propagate
+        console.log("⏳ Waiting 300ms for cookie propagation...");
+        await new Promise((resolve) => setTimeout(resolve, 300));
+
+        // Check cookies again after waiting
+        console.log("🍪 Checking cookies after wait...");
+        const cookiesAfterWait = document.cookie;
+        console.log("   Cookies after wait:", cookiesAfterWait);
+
+        // Force refresh the session to ensure cookies are synced
+        console.log("🔄 Refreshing session...");
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        console.log("   Session refresh result:", {
+          hasSession: !!sessionData.session,
+          error: sessionError?.message,
+        });
 
         // Force a hard navigation to ensure middleware picks up the session
         const dashboardUrl = `/dashboard/${data.user.id}`;
         console.log("🚀 Redirecting to:", dashboardUrl);
         console.log("   Using window.location.href for hard navigation");
+        console.log("   Browser will make new request with cookies");
 
         window.location.href = dashboardUrl;
       } else {

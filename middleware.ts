@@ -55,18 +55,43 @@ export async function middleware(req: NextRequest) {
     }
   )
 
+  // Log all cookies to debug
+  const allCookies = req.cookies.getAll()
+  const supabaseCookies = allCookies.filter(c => c.name.startsWith('sb-') || c.name.includes('supabase'))
+  
+  console.log(`[Middleware] Request to: ${req.nextUrl.pathname}`)
+  console.log(`[Middleware] Total cookies: ${allCookies.length}`)
+  console.log(`[Middleware] Supabase cookies: ${supabaseCookies.length}`, supabaseCookies.map(c => c.name))
+  
   // Refresh session to get latest state from cookies
   // This is critical for multi-tenant auth
-  await supabase.auth.getUser()
+  const { data: userData, error: userError } = await supabase.auth.getUser()
+  console.log(`[Middleware] getUser result:`, {
+    hasUser: !!userData.user,
+    userId: userData.user?.id,
+    error: userError?.message
+  })
   
   // Get the session
-  const { data: { session } } = await supabase.auth.getSession()
+  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
+  console.log(`[Middleware] getSession result:`, {
+    hasSession: !!session,
+    userId: session?.user?.id,
+    error: sessionError?.message
+  })
+  
   const isAuth = !!session?.user
   const pathname = req.nextUrl.pathname
   const isAuthPage = pathname.startsWith('/auth')
   const isDashboard = pathname.startsWith('/dashboard')
   
-  console.log(`[Middleware] Path: ${pathname}, Auth: ${isAuth}, Session: ${session?.user?.id || 'none'}`)
+  console.log(`[Middleware] ====================================`)
+  console.log(`[Middleware] Path: ${pathname}`)
+  console.log(`[Middleware] Auth: ${isAuth}`)
+  console.log(`[Middleware] Session User: ${session?.user?.id || 'NONE'}`)
+  console.log(`[Middleware] Is Auth Page: ${isAuthPage}`)
+  console.log(`[Middleware] Is Dashboard: ${isDashboard}`)
+  console.log(`[Middleware] ====================================`)
 
   // Redirect unauthenticated users trying to access dashboard to login
   if (!isAuth && isDashboard) {
