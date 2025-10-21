@@ -30,8 +30,14 @@ export const LoginForm = ({
   useEffect(() => {
     console.log("🔍 Supabase Client Check:");
     console.log("   Client exists:", !!supabase);
-    console.log("   NEXT_PUBLIC_SUPABASE_URL:", process.env.NEXT_PUBLIC_SUPABASE_URL ? "✅ Set" : "❌ Missing");
-    console.log("   NEXT_PUBLIC_SUPABASE_ANON_KEY:", process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "✅ Set" : "❌ Missing");
+    console.log(
+      "   NEXT_PUBLIC_SUPABASE_URL:",
+      process.env.NEXT_PUBLIC_SUPABASE_URL ? "✅ Set" : "❌ Missing"
+    );
+    console.log(
+      "   NEXT_PUBLIC_SUPABASE_ANON_KEY:",
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? "✅ Set" : "❌ Missing"
+    );
   }, [supabase]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,7 +79,7 @@ export const LoginForm = ({
         console.log("   User ID:", data.user.id);
         console.log("   Email:", data.user.email);
         console.log("   Session:", !!data.session);
-        
+
         toast.success("Login successful!");
 
         // Wait a moment for cookies to be set
@@ -84,7 +90,7 @@ export const LoginForm = ({
         const dashboardUrl = `/dashboard/${data.user.id}`;
         console.log("🚀 Redirecting to:", dashboardUrl);
         console.log("   Using window.location.href for hard navigation");
-        
+
         window.location.href = dashboardUrl;
       } else {
         console.error("❌ Login failed - missing user data or session");
