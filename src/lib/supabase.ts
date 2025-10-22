@@ -1,6 +1,13 @@
-import { createClient } from '@supabase/supabase-js'
+// Re-export the unified browser client
+// This maintains backward compatibility with existing imports
+import { createClient } from './supabase/client'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
- 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+// Create a singleton instance for backward compatibility
+let supabaseInstance: ReturnType<typeof createClient> | null = null
+
+export const supabase = (() => {
+  if (!supabaseInstance) {
+    supabaseInstance = createClient()
+  }
+  return supabaseInstance
+})()
