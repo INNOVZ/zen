@@ -572,10 +572,11 @@ export const useCustomizeStore = create<CustomizeState>()(
       generateEmbedCode: (chatbotId) => {
         const API_BASE =
           API_BASE_URL || "https://zaakiy-production.up.railway.app";
+        const FRONTEND_URL = "https://zaakiy.vercel.app";
         const embedScript = `<script>
   (function() {
     var script = document.createElement('script');
-    script.src = '${API_BASE}/api/public/chatbot/${chatbotId}/widget.js';
+    script.src = '${FRONTEND_URL}/chat-widget.js';
     script.setAttribute('data-chatbot-id', '${chatbotId}');
     script.setAttribute('data-api-url', '${API_BASE}');
     document.head.appendChild(script);
