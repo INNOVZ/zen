@@ -63,7 +63,8 @@
     <pre><code>&lt;script&gt;
   (function() {
     var script = document.createElement('script');
-    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+    // Replace YOUR_CHATBOT_ID_HERE with your actual chatbot ID
+    script.src = 'https://zaakiy-production.up.railway.app/api/public/chatbot/YOUR_CHATBOT_ID_HERE/widget.js';
     script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID_HERE');
     script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
     document.head.appendChild(script);
@@ -85,7 +86,7 @@
     <pre><code>&lt;script&gt;
   (function() {
     var script = document.createElement('script');
-    script.src = 'https://zaakiy.vercel.app/chat-widget.js';
+    script.src = 'https://zaakiy-production.up.railway.app/api/public/chatbot/YOUR_CHATBOT_ID/widget.js';
     script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
     script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
     script.setAttribute('data-position', 'bottom-left');
@@ -104,8 +105,8 @@
     <script>
       (function() {
         var script = document.createElement('script');
-        script.src = 'https://zaakiy.vercel.app/chat-widget.js';
-        // Replace with your actual chatbot ID from the dashboard
+        // Replace YOUR_CHATBOT_ID with your actual chatbot ID from the dashboard
+        // script.src = 'https://zaakiy-production.up.railway.app/api/public/chatbot/YOUR_CHATBOT_ID/widget.js';
         // script.setAttribute('data-chatbot-id', 'YOUR_CHATBOT_ID');
         script.setAttribute('data-api-url', 'https://zaakiy-production.up.railway.app');
         document.head.appendChild(script);
