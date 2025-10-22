@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { createServerClient } from "@supabase/ssr";
-import { cookies } from "next/headers";
+import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 import Sidebar from "@/components/dashboard/layout/SideBar";
 import { Toaster } from "@/components/ui/sonner";
@@ -21,36 +20,17 @@ export default async function DashboardLayout({
 }>) {
   // SERVER-SIDE AUTHENTICATION CHECK
   // This ensures the dashboard layout only renders for authenticated users
-  const cookieStore = await cookies();
-
-  // Use the updated non-deprecated Supabase SSR API
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            );
-          } catch {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
-          }
-        },
-      },
-    }
-  );
+  const supabase = await createClient();
 
   // Check authentication
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  console.log("[Dashboard Layout] Auth check:", {
+    hasSession: !!session,
+    userId: session?.user?.id,
+  });
 
   // If no session, redirect to login (server-side protection)
   if (!session?.user) {
