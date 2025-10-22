@@ -422,7 +422,15 @@
     
     if (!message) return;
     
+    // Validate chatbot ID
+    if (!config.chatbotId) {
+      console.error('❌ No chatbot ID configured!');
+      zaakiyAddMessage('Configuration error: No chatbot ID set.', 'bot');
+      return;
+    }
+    
     console.log('📤 Sending message:', message);
+    console.log('🤖 Using chatbot ID:', selectedChatbot?.id || config.chatbotId);
     
     // Add user message
     zaakiyAddMessage(message, 'user');
@@ -432,17 +440,41 @@
     zaakiyShowTyping();
     
     // Send to API
+    const requestBody = {
+      message: message,
+      chatbot_id: selectedChatbot?.id || config.chatbotId,
+      session_id: conversationId || null
+    };
+    
+    console.log('📡 Request body:', requestBody);
+    
     fetch(`${config.apiUrl}/api/public/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        message: message,
-        chatbot_id: selectedChatbot?.id || config.chatbotId,
-        session_id: conversationId
-      })
+      body: JSON.stringify(requestBody)
     })
-    .then(response => {
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    .then(async response => {
+      console.log('📡 Response status:', response.status);
+      
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Server error response:', errorText);
+        
+        let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
+        try {
+          const errorData = JSON.parse(errorText);
+          if (errorData.detail) {
+            errorMessage = `Error: ${errorData.detail}`;
+          }
+        } catch (e) {
+          // Not JSON, use text
+          if (errorText) {
+            errorMessage = `Server error: ${errorText.substring(0, 100)}`;
+          }
+        }
+        
+        throw new Error(errorMessage);
+      }
       return response.json();
     })
     .then(data => {
@@ -450,15 +482,16 @@
       
       if (data.session_id && !conversationId) {
         conversationId = data.session_id;
+        console.log('💾 Session ID saved:', conversationId);
       }
       
-      console.log('📥 Received response');
+      console.log('📥 Received response:', data.response?.substring(0, 50) + '...');
       zaakiyAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot');
     })
     .catch((error) => {
       zaakiyHideTyping();
       console.error('❌ Chat API error:', error);
-      zaakiyAddMessage('Sorry, I\'m having connection issues. Please try again.', 'bot');
+      zaakiyAddMessage(error.message || 'Sorry, I\'m having connection issues. Please try again.', 'bot');
     });
   };
   
