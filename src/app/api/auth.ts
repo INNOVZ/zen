@@ -1,14 +1,11 @@
 // utils/auth.ts
-import { supabase } from './SupabaseClient'
+import { createClient } from '@/lib/supabase/client'
 import { getApiBaseUrl } from '@/config/api';
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
   try {
-    if (!supabase) {
-      console.error("Supabase client not initialized - missing environment variables");
-      throw new Error("Authentication service not available. Please check configuration.");
-    }
+    const supabase = createClient();
     
     const { data, error } = await supabase.auth.getSession();
     

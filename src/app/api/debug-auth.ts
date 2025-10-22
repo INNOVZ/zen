@@ -1,5 +1,5 @@
 // Debug authentication status
-import { supabase } from './SupabaseClient';
+import { createClient } from '@/lib/supabase/client';
 
 export async function debugAuth() {
   type DebugSession =
@@ -23,6 +23,8 @@ export async function debugAuth() {
     error: unknown;
   };
 
+  const supabase = createClient();
+
   const debug: DebugResult = {
     supabaseClient: !!supabase,
     environment: {
@@ -34,20 +36,18 @@ export async function debugAuth() {
     error: null,
   };
 
-  if (supabase) {
-    try {
-      const { data, error } = await supabase.auth.getSession();
-      debug.session = {
-        hasSession: !!data.session,
-        hasUser: !!data.session?.user,
-        hasToken: !!data.session?.access_token,
-        userId: data.session?.user?.id,
-        userEmail: data.session?.user?.email,
-      };
-      debug.error = error;
-    } catch (err) {
-      debug.error = err;
-    }
+  try {
+    const { data, error } = await supabase.auth.getSession();
+    debug.session = {
+      hasSession: !!data.session,
+      hasUser: !!data.session?.user,
+      hasToken: !!data.session?.access_token,
+      userId: data.session?.user?.id,
+      userEmail: data.session?.user?.email,
+    };
+    debug.error = error;
+  } catch (err) {
+    debug.error = err;
   }
 
   return debug;
