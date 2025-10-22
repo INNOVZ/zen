@@ -24,7 +24,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/lib/supabase";
+import { useAuthGuard } from "@/hooks/useAuthGuard";
 import { useCustomizeStore } from "@/stores/customizeStore";
 import { chatbotApi } from "@/app/api/routes";
 import type { ChatbotInfo } from "@/types/schemaTypes";
@@ -35,6 +35,13 @@ export default function EnhancedCustomizePage() {
   const { userId } = useParams();
   const router = useRouter();
   const chatbotId = searchParams.get("id");
+
+  // SECURITY: Verify user authorization before rendering
+  const {
+    isLoading: authLoading,
+    isAuthorized,
+    user: authUser,
+  } = useAuthGuard(userId as string);
 
   // Local state for advanced features
   const [retryCount, setRetryCount] = useState(0);
@@ -103,18 +110,11 @@ export default function EnhancedCustomizePage() {
   }, [testConnection, retryCount, setError]);
 
   const initializePage = useCallback(async () => {
-    try {
-      // Get current user session
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (!session?.user) {
-        toast.error("Please log in to access this page");
-        router.push("/auth/login");
-        return;
-      }
+    // Skip initialization if not authorized (auth guard will handle redirect)
+    if (!authUser) return;
 
-      setCurrentUser(session.user);
+    try {
+      setCurrentUser(authUser);
 
       // Initialize store with all data
       try {
@@ -137,17 +137,19 @@ export default function EnhancedCustomizePage() {
       );
     }
   }, [
+    authUser,
     initializeStore,
     setCurrentUser,
     setIsEditMode,
     chatbotId,
-    router,
     loadSpecificChatbot,
     setError,
   ]);
 
-  // Load initial data
+  // Load initial data - only after authorization is confirmed
   useEffect(() => {
+    if (authLoading || !isAuthorized) return;
+
     let mounted = true;
 
     const load = async () => {
@@ -165,7 +167,7 @@ export default function EnhancedCustomizePage() {
     return () => {
       mounted = false;
     };
-  }, [initializePage]);
+  }, [authLoading, isAuthorized, initializePage]);
 
   // Periodic connection check
   useEffect(() => {
@@ -235,6 +237,23 @@ export default function EnhancedCustomizePage() {
       await initializePage();
     }
   };
+
+  // Security: Show loading while verifying authorization
+  if (authLoading || !isAuthorized) {
+    return (
+      <div className="container mx-auto w-full max-w-7xl px-4 py-8">
+        <div className="animate-pulse space-y-6">
+          <div className="h-8 bg-gray-200 rounded w-1/3"></div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-32 bg-gray-200 rounded"></div>
+            <div className="h-32 bg-gray-200 rounded"></div>
+          </div>
+          <div className="h-96 bg-gray-200 rounded"></div>
+        </div>
+      </div>
+    );
+  }
 
   if (loading) {
     return (
