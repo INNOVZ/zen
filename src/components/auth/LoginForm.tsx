@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClient } from "@/lib/supabase/client";
 import { toast } from "sonner";
 import Zaakiy from "../../../public/zaakiybot.svg";
 import Image from "next/image";
@@ -20,7 +20,7 @@ export const LoginForm = ({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) => {
-  const supabase = createClientComponentClient();
+  const supabase = createClient();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -79,18 +79,29 @@ export const LoginForm = ({
         console.log("✅ Login successful!");
         console.log("   User ID:", data.user.id);
         console.log("   Email:", data.user.email);
-        console.log("   Session access_token:", data.session.access_token.substring(0, 20) + "...");
-        console.log("   Session refresh_token:", data.session.refresh_token.substring(0, 20) + "...");
+        console.log(
+          "   Session access_token:",
+          data.session.access_token.substring(0, 20) + "..."
+        );
+        console.log(
+          "   Session refresh_token:",
+          data.session.refresh_token.substring(0, 20) + "..."
+        );
 
         // Check cookies immediately after login
         console.log("🍪 Checking cookies after login...");
         const allCookies = document.cookie;
         console.log("   All cookies:", allCookies);
-        
-        const supabaseCookies = allCookies.split(';').filter(c => 
-          c.trim().startsWith('sb-') || c.trim().includes('supabase')
+
+        const supabaseCookies = allCookies
+          .split(";")
+          .filter(
+            (c) => c.trim().startsWith("sb-") || c.trim().includes("supabase")
+          );
+        console.log(
+          "   Supabase cookies:",
+          supabaseCookies.length > 0 ? supabaseCookies : "❌ NONE FOUND!"
         );
-        console.log("   Supabase cookies:", supabaseCookies.length > 0 ? supabaseCookies : "❌ NONE FOUND!");
 
         toast.success("Login successful!");
 
@@ -105,7 +116,8 @@ export const LoginForm = ({
 
         // Force refresh the session to ensure cookies are synced
         console.log("🔄 Refreshing session...");
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        const { data: sessionData, error: sessionError } =
+          await supabase.auth.getSession();
         console.log("   Session refresh result:", {
           hasSession: !!sessionData.session,
           error: sessionError?.message,
