@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zaakiy Chatbot Widget Test</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #1a202c;
+      margin-bottom: 10px;
+    }
+    .subtitle {
+      color: #718096;
+      font-size: 18px;
+      margin-bottom: 40px;
+    }
+    .info-card {
+      background: #f7fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .info-card h3 {
+      margin-top: 0;
+      color: #2d3748;
+    }
+    .info-card code {
+      background: #edf2f7;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 14px;
+      color: #d53f8c;
+    }
+    .success {
+      background: #c6f6d5;
+      border-color: #9ae6b4;
+      color: #22543d;
+    }
+    .warning {
+      background: #feebc8;
+      border-color: #fbd38d;
+      color: #7c2d12;
+    }
+    ul {
+      line-height: 1.8;
+    }
+    .test-button {
+      background: #3B82F6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 20px;
+      transition: background 0.2s;
+    }
+    .test-button:hover {
+      background: #2563eb;
+    }
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      color: #718096;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🤖 Zaakiy Chatbot Widget Test Page</h1>
+    <p class="subtitle">This page tests the integration of your Zaakiy AI chatbot</p>
+
+    <div class="info-card success">
+      <h3>✅ Widget Status</h3>
+      <p>If you see the chatbot button in the bottom-right corner, the widget is loaded successfully!</p>
+    </div>
+
+    <div class="info-card">
+      <h3>📋 Integration Details</h3>
+      <ul>
+        <li><strong>Widget Script:</strong> <code>chat-widget.js</code></li>
+        <li><strong>API Endpoint:</strong> <code>https://zaakiy-production.up.railway.app</code></li>
+        <li><strong>Mode:</strong> Public (No authentication required)</li>
+      </ul>
+    </div>
+
+    <div class="info-card warning">
+      <h3>⚠️ Important Notes</h3>
+      <ul>
+        <li>Make sure to replace <code>data-chatbot-id</code> with your actual chatbot ID</li>
+        <li>Chatbot must be <strong>active</strong> in your Zaakiy dashboard</li>
+        <li>Check browser console (F12) for any errors</li>
+      </ul>
+    </div>
+
+    <div class="info-card">
+      <h3>🧪 How to Test</h3>
+      <ol>
+        <li>Click the chatbot button in the bottom-right corner</li>
+        <li>Type a message and press send</li>
+        <li>Verify that:
+          <ul>
+            <li>Bot name and colors match your configuration</li>
+            <li>Bot responds to your message</li>
+            <li>Avatar displays correctly</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="info-card">
+      <h3>🐛 Troubleshooting</h3>
+      <p><strong>If the widget doesn't appear:</strong></p>
+      <ol>
+        <li>Open browser DevTools (F12)</li>
+        <li>Check the Console tab for errors</li>
+        <li>Check the Network tab for failed requests</li>
+        <li>Verify your chatbot ID is correct</li>
+        <li>Ensure your chatbot is active in the dashboard</li>
+      </ol>
+    </div>
+
+    <button class="test-button" onclick="testWidget()">
+      🧪 Run Widget Test
+    </button>
+    <div id="test-results" style="margin-top: 20px;"></div>
+
+    <div class="footer">
+      <p><strong>Need help?</strong> Check the <code>CHATBOT_WIDGET_INTEGRATION_GUIDE.md</code> for detailed documentation.</p>
+      <p>Powered by Zaakiy AI | Version 2.0</p>
+    </div>
+  </div>
+
+  <!-- ============================================
+       ZAAKIY CHATBOT WIDGET INTEGRATION
+       ============================================ -->
+  
+  <script
+    src="./chat-widget.js"
+    data-chatbot-id="65c0a93d-d62a-4397-97e6-9d85deaaaad6"
+    data-api-url="https://zaakiy-production.up.railway.app"
+    data-position="bottom-right"
+  ></script>
+
+  <!-- Test Script -->
+  <script>
+    function testWidget() {
+      const resultsDiv = document.getElementById('test-results');
+      const tests = [];
+
+      // Test 1: Check if widget container exists
+      const widgetContainer = document.getElementById('zentria-chat-widget');
+      tests.push({
+        name: 'Widget Container',
+        passed: !!widgetContainer,
+        message: widgetContainer ? 'Widget container found' : 'Widget container not found'
+      });
+
+      // Test 2: Check if widget button exists
+      const widgetButton = document.querySelector('.zentria-chat-button');
+      tests.push({
+        name: 'Chat Button',
+        passed: !!widgetButton,
+        message: widgetButton ? 'Chat button found' : 'Chat button not found'
+      });
+
+      // Test 3: Check if widget functions are available
+      tests.push({
+        name: 'Widget Functions',
+        passed: typeof window.zentriaOpenChat === 'function',
+        message: typeof window.zentriaOpenChat === 'function' ? 
+          'Widget functions loaded' : 'Widget functions not loaded'
+      });
+
+      // Test 4: Check API connectivity
+      fetch('https://zaakiy-production.up.railway.app/health')
+        .then(response => response.json())
+        .then(data => {
+          tests.push({
+            name: 'API Connection',
+            passed: data.status === 'healthy',
+            message: `API Status: ${data.status}`
+          });
+          displayResults(tests);
+        })
+        .catch(error => {
+          tests.push({
+            name: 'API Connection',
+            passed: false,
+            message: `API Error: ${error.message}`
+          });
+          displayResults(tests);
+        });
+
+      // Display initial results (without API test)
+      displayResults(tests.slice(0, 3));
+    }
+
+    function displayResults(tests) {
+      const resultsDiv = document.getElementById('test-results');
+      const passedCount = tests.filter(t => t.passed).length;
+      const totalCount = tests.length;
+      
+      let html = `
+        <div class="info-card ${passedCount === totalCount ? 'success' : 'warning'}">
+          <h3>Test Results: ${passedCount}/${totalCount} Passed</h3>
+          <ul>
+      `;
+      
+      tests.forEach(test => {
+        html += `<li>${test.passed ? '✅' : '❌'} <strong>${test.name}:</strong> ${test.message}</li>`;
+      });
+      
+      html += `
+          </ul>
+        </div>
+      `;
+      
+      resultsDiv.innerHTML = html;
+    }
+
+    // Auto-run tests on page load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        console.log('🤖 Zaakiy Widget Test Page Loaded');
+        console.log('Widget should appear in bottom-right corner');
+        console.log('Run testWidget() to check integration');
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
+

@@ -8,8 +8,6 @@
     apiUrl: scriptTag?.getAttribute('data-api-url') || 'https://zaakiy-production.up.railway.app',
     position: scriptTag?.getAttribute('data-position') || 'bottom-right',
     chatbotId: scriptTag?.getAttribute('data-chatbot-id') || null,
-    orgId: scriptTag?.getAttribute('data-org-id') || null,
-    tokenEndpoint: scriptTag?.getAttribute('data-token-endpoint') || null,
     // These will be loaded from the API
     primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
     botName: scriptTag?.getAttribute('data-bot-name') || 'Assistant',
@@ -20,7 +18,6 @@
   // State
   let selectedChatbot = null;
   let conversationId = null;
-  let ephemeralToken = null;
 
   // Convert legacy Supabase URLs to proxy URLs
   function convertLegacyUrl(url) {
@@ -296,57 +293,31 @@
   // Load chatbot configuration
   async function loadChatbotConfig() {
     try {
-      const response = await fetch(`${config.apiUrl}/api/chat/chatbots`);
+      // Use public endpoint to get chatbot configuration
+      if (!config.chatbotId) {
+        console.warn('No chatbot ID provided');
+        return;
+      }
+
+      const response = await fetch(`${config.apiUrl}/api/public/chatbot/${config.chatbotId}/config`);
+      
       if (response.ok) {
-        const data = await response.json();
-        const chatbots = data.chatbots || data || [];
+        const chatbot = await response.json();
+        selectedChatbot = chatbot;
         
-        if (chatbots.length > 0) {
-          // Select chatbot based on config or use active/first one
-          let targetChatbot = null;
-          
-          if (config.chatbotId) {
-            targetChatbot = chatbots.find(bot => bot.id === config.chatbotId);
-          }
-          
-          if (!targetChatbot) {
-            targetChatbot = chatbots.find(bot => bot.chain_status === 'active') || chatbots[0];
-          }
-          
-          if (targetChatbot) {
-            // Get full chatbot details
-            const detailResponse = await fetch(`${config.apiUrl}/api/chat/chatbots/${targetChatbot.id}`);
-            if (detailResponse.ok) {
-              selectedChatbot = await detailResponse.json();
-              
-              // Update config with chatbot details
-              config.primaryColor = selectedChatbot.color_hex || config.primaryColor;
-              config.botName = selectedChatbot.name || config.botName;
-              config.greeting = selectedChatbot.greeting_message || config.greeting;
-              config.avatarUrl = selectedChatbot.avatar_url || null;
-              
-              // Update UI with new config
-              updateWidgetAppearance();
-            }
-          }
-        }
+        // Update config with chatbot details
+        config.primaryColor = chatbot.color_hex || config.primaryColor;
+        config.botName = chatbot.name || config.botName;
+        config.greeting = chatbot.greeting_message || config.greeting;
+        config.avatarUrl = chatbot.avatar_url || null;
+        
+        // Update UI with new config
+        updateWidgetAppearance();
+      } else {
+        console.error('Failed to load chatbot config:', response.status);
       }
     } catch (error) {
       console.warn('Failed to load chatbot config:', error);
-    }
-    // Attempt to fetch ephemeral token if integrator provided a token endpoint
-    if (config.tokenEndpoint) {
-      try {
-        const tokenRes = await fetch(config.tokenEndpoint, { method: 'POST', credentials: 'include' });
-        if (tokenRes.ok) {
-          const tokenBody = await tokenRes.json();
-          ephemeralToken = tokenBody && tokenBody.token ? tokenBody.token : null;
-        } else {
-          console.warn('token endpoint returned', tokenRes.status);
-        }
-      } catch (e) {
-        console.warn('Failed to fetch ephemeral token:', e);
-      }
     }
   }
 
@@ -421,33 +392,36 @@
     // Show typing indicator
     zentriaShowTyping();
     
-    // Send to API (include ephemeral token if available)
-    const headers = { 'Content-Type': 'application/json' };
-    if (ephemeralToken) headers['Authorization'] = 'Bearer ' + ephemeralToken;
-
-    fetch(`${config.apiUrl}/api/chat/conversation`, {
+    // Send to public API endpoint (no authentication required)
+    fetch(`${config.apiUrl}/api/public/chat`, {
       method: 'POST',
-      headers: headers,
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         message: message,
         chatbot_id: selectedChatbot?.id || config.chatbotId,
-        conversation_id: conversationId
+        session_id: conversationId
       })
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
     .then(data => {
       zentriaHideTyping();
 
-      // Store conversation ID for follow-up messages
-      if (data.conversation_id && !conversationId) {
-        conversationId = data.conversation_id;
+      // Store session ID for follow-up messages
+      if (data.session_id && !conversationId) {
+        conversationId = data.session_id;
       }
 
       // Append bot response safely
       zentriaAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot');
     })
-    .catch(() => {
+    .catch((error) => {
       zentriaHideTyping();
+      console.error('Chat API error:', error);
       zentriaAddMessage('Sorry, I\'m having connection issues. Please try again.', 'bot');
     });
   };
@@ -548,4 +522,5 @@
     createWidget();
     loadChatbotConfig();
   }
+})();
 })();
