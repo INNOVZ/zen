@@ -338,10 +338,18 @@
           outline: none;
           font-size: 14px;
           font-family: inherit;
+          transition: all 0.2s ease;
         }
         
         .zaakiy-input-field:focus {
           border-color: ${config.primaryColor};
+        }
+        
+        .zaakiy-input-field:disabled {
+          background: #f3f4f6;
+          color: #9ca3af;
+          cursor: not-allowed;
+          opacity: 0.7;
         }
         
         .zaakiy-send-button {
@@ -359,13 +367,18 @@
           transition: all 0.2s ease;
         }
         
-        .zaakiy-send-button:hover {
+        .zaakiy-send-button:hover:not(:disabled) {
           opacity: 0.9;
           transform: scale(1.05);
         }
         
-        .zaakiy-send-button:active {
+        .zaakiy-send-button:active:not(:disabled) {
           transform: scale(0.95);
+        }
+        
+        .zaakiy-send-button:disabled {
+          cursor: not-allowed;
+          opacity: 0.5;
         }
         
         /* Mobile message adjustments */
@@ -721,6 +734,11 @@
   
   window.zaakiySendMessage = function() {
     const input = document.getElementById('zaakiy-input');
+    const sendButton = document.querySelector('.zaakiy-send-button');
+    
+    // Don't send if input is disabled (bot is typing)
+    if (input?.disabled || sendButton?.disabled) return;
+    
     const message = input?.value.trim();
     
     if (!message) return;
@@ -846,6 +864,19 @@
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
     
+    // Disable input and send button while bot is typing
+    const inputField = document.getElementById('zaakiy-input');
+    const sendButton = document.querySelector('.zaakiy-send-button');
+    if (inputField) {
+      inputField.disabled = true;
+      inputField.placeholder = 'Bot is typing...';
+    }
+    if (sendButton) {
+      sendButton.disabled = true;
+      sendButton.style.opacity = '0.5';
+      sendButton.style.cursor = 'not-allowed';
+    }
+    
     const typingDiv = document.createElement('div');
     typingDiv.className = 'zaakiy-message bot';
     typingDiv.id = 'zaakiy-typing';
@@ -881,6 +912,20 @@
   function zaakiyHideTyping() {
     const typingElement = document.getElementById('zaakiy-typing');
     if (typingElement) typingElement.remove();
+    
+    // Re-enable input and send button
+    const inputField = document.getElementById('zaakiy-input');
+    const sendButton = document.querySelector('.zaakiy-send-button');
+    if (inputField) {
+      inputField.disabled = false;
+      inputField.placeholder = 'Type your message...';
+      inputField.focus(); // Auto-focus for better UX
+    }
+    if (sendButton) {
+      sendButton.disabled = false;
+      sendButton.style.opacity = '1';
+      sendButton.style.cursor = 'pointer';
+    }
   }
   
   // Initialize widget
