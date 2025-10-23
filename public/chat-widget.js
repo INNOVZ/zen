@@ -55,19 +55,31 @@
   let conversationId = null;
   let isWidgetCreated = false;
   
-  // Convert legacy Supabase URLs to proxy URLs
+  // Convert legacy Supabase URLs to proxy URLs and ensure full URLs
   function convertLegacyUrl(url) {
     if (!url) return null;
     
+    // Handle legacy Supabase storage URLs
     if (url.includes('storage/v1/object/uploads/')) {
       const pathParts = url.split('storage/v1/object/uploads/');
       if (pathParts.length > 1) {
         const filePath = pathParts[1];
-        const baseUrl = config.apiUrl.replace('3000', '8001');
-        return `${baseUrl}/api/uploads/avatar/legacy/${filePath}`;
+        return `${config.apiUrl}/api/uploads/avatar/legacy/${filePath}`;
       }
     }
-    return url;
+    
+    // If URL is already absolute (starts with http:// or https://), return as-is
+    if (url.startsWith('http://') || url.startsWith('https://')) {
+      return url;
+    }
+    
+    // If URL is relative (starts with /), prepend the API base URL
+    if (url.startsWith('/')) {
+      return `${config.apiUrl}${url}`;
+    }
+    
+    // Otherwise, assume it's a relative path and prepend the API URL
+    return `${config.apiUrl}/${url}`;
   }
   
   // Create widget HTML
