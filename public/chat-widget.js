@@ -130,7 +130,7 @@
         .zaakiy-chat-window {
           width: 400px;
           max-width: calc(100vw - 40px);
-          height: 600px;
+          height: 75vh;
           max-height: calc(100vh - 120px);
           background: white;
           border-radius: 16px;
