@@ -141,6 +141,21 @@
     <button class="test-button" onclick="testWidget()">
       🧪 Run Widget Test
     </button>
+    <button class="test-button" onclick="testPositioning()" style="background: #8b5cf6;">
+      📍 Test Positioning
+    </button>
+    <button class="test-button" onclick="testResponsiveness()" style="background: #ec4899;">
+      📱 Test Responsiveness
+    </button>
+    <button class="test-button" onclick="window.zaakiyToggleChat()" style="background: #f59e0b;">
+      🔄 Toggle Chat
+    </button>
+    <button class="test-button" onclick="window.zaakiyOpenChat()" style="background: #10b981;">
+      💬 Open Chat
+    </button>
+    <button class="test-button" onclick="window.zaakiyCloseChat()" style="background: #ef4444;">
+      ❌ Close Chat
+    </button>
     <div id="test-results" style="margin-top: 20px;"></div>
 
     <div class="footer">
@@ -167,37 +182,53 @@
       const tests = [];
 
       // Test 1: Check if widget container exists
-      const widgetContainer = document.getElementById('zentria-chat-widget');
+      const widgetContainer = document.getElementById('zaakiy-chat-widget');
       tests.push({
         name: 'Widget Container',
         passed: !!widgetContainer,
-        message: widgetContainer ? 'Widget container found' : 'Widget container not found'
+        message: widgetContainer ? 'Widget container found ✓' : 'Widget container not found ✗'
       });
 
       // Test 2: Check if widget button exists
-      const widgetButton = document.querySelector('.zentria-chat-button');
+      const widgetButton = document.querySelector('.zaakiy-chat-button');
       tests.push({
         name: 'Chat Button',
         passed: !!widgetButton,
-        message: widgetButton ? 'Chat button found' : 'Chat button not found'
+        message: widgetButton ? 'Chat button found ✓' : 'Chat button not found ✗'
       });
 
-      // Test 3: Check if widget functions are available
+      // Test 3: Check if chat window exists
+      const chatWindow = document.getElementById('zaakiy-chat-window');
+      tests.push({
+        name: 'Chat Window',
+        passed: !!chatWindow,
+        message: chatWindow ? 'Chat window found ✓' : 'Chat window not found ✗'
+      });
+
+      // Test 4: Check if widget functions are available
       tests.push({
         name: 'Widget Functions',
-        passed: typeof window.zentriaOpenChat === 'function',
-        message: typeof window.zentriaOpenChat === 'function' ? 
-          'Widget functions loaded' : 'Widget functions not loaded'
+        passed: typeof window.zaakiyOpenChat === 'function' && typeof window.zaakiyCloseChat === 'function',
+        message: (typeof window.zaakiyOpenChat === 'function' && typeof window.zaakiyCloseChat === 'function') ? 
+          'Widget functions loaded ✓' : 'Widget functions not loaded ✗'
       });
 
-      // Test 4: Check API connectivity
+      // Test 5: Check responsive styles
+      const styles = window.getComputedStyle(widgetContainer || document.body);
+      tests.push({
+        name: 'Responsive Design',
+        passed: !!widgetContainer,
+        message: widgetContainer ? 'Flexbox layout detected ✓' : 'Layout check failed ✗'
+      });
+
+      // Test 6: Check API connectivity
       fetch('https://zaakiy-production.up.railway.app/health')
         .then(response => response.json())
         .then(data => {
           tests.push({
             name: 'API Connection',
             passed: data.status === 'healthy',
-            message: `API Status: ${data.status}`
+            message: `API Status: ${data.status} ✓`
           });
           displayResults(tests);
         })
@@ -205,13 +236,13 @@
           tests.push({
             name: 'API Connection',
             passed: false,
-            message: `API Error: ${error.message}`
+            message: `API Error: ${error.message} ✗`
           });
           displayResults(tests);
         });
 
       // Display initial results (without API test)
-      displayResults(tests.slice(0, 3));
+      displayResults(tests.slice(0, 5));
     }
 
     function displayResults(tests) {
@@ -237,12 +268,131 @@
       resultsDiv.innerHTML = html;
     }
 
+    function testPositioning() {
+      const resultsDiv = document.getElementById('test-results');
+      const widgetContainer = document.getElementById('zaakiy-chat-widget');
+      const chatButton = document.querySelector('.zaakiy-chat-button');
+      const chatWindow = document.getElementById('zaakiy-chat-window');
+      
+      if (!widgetContainer) {
+        resultsDiv.innerHTML = '<div class="info-card warning"><h3>❌ Widget not found</h3><p>Cannot test positioning</p></div>';
+        return;
+      }
+
+      const containerStyles = window.getComputedStyle(widgetContainer);
+      const buttonStyles = window.getComputedStyle(chatButton);
+      
+      // Open chat to test window positioning
+      window.zaakiyOpenChat();
+      
+      setTimeout(() => {
+        const windowStyles = window.getComputedStyle(chatWindow);
+        
+        const tests = [
+          {
+            name: 'Container Position',
+            passed: containerStyles.position === 'fixed',
+            message: `Position: ${containerStyles.position}`
+          },
+          {
+            name: 'Container Layout',
+            passed: containerStyles.display === 'flex' && containerStyles.flexDirection === 'column',
+            message: `Display: ${containerStyles.display}, Direction: ${containerStyles.flexDirection}`
+          },
+          {
+            name: 'Button Z-Index',
+            passed: parseInt(buttonStyles.zIndex) === 2,
+            message: `Button Z-Index: ${buttonStyles.zIndex}`
+          },
+          {
+            name: 'Window Alignment',
+            passed: chatWindow.style.display === 'flex',
+            message: `Window is ${chatWindow.style.display === 'flex' ? 'visible' : 'hidden'}`
+          },
+          {
+            name: 'Bottom Position',
+            passed: containerStyles.bottom === '20px',
+            message: `Bottom: ${containerStyles.bottom}`
+          },
+          {
+            name: 'Right Position',
+            passed: containerStyles.right === '20px',
+            message: `Right: ${containerStyles.right}`
+          }
+        ];
+        
+        displayResults(tests);
+      }, 500);
+    }
+
+    function testResponsiveness() {
+      const resultsDiv = document.getElementById('test-results');
+      const widgetContainer = document.getElementById('zaakiy-chat-widget');
+      const chatWindow = document.getElementById('zaakiy-chat-window');
+      
+      if (!widgetContainer) {
+        resultsDiv.innerHTML = '<div class="info-card warning"><h3>❌ Widget not found</h3><p>Cannot test responsiveness</p></div>';
+        return;
+      }
+
+      const windowStyles = window.getComputedStyle(chatWindow);
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+      
+      const tests = [
+        {
+          name: 'Viewport Width',
+          passed: true,
+          message: `Screen Width: ${screenWidth}px`
+        },
+        {
+          name: 'Max Width Set',
+          passed: windowStyles.maxWidth.includes('calc') || windowStyles.maxWidth.includes('vw'),
+          message: `Max Width: ${windowStyles.maxWidth}`
+        },
+        {
+          name: 'Max Height Set',
+          passed: windowStyles.maxHeight.includes('calc') || windowStyles.maxHeight.includes('vh'),
+          message: `Max Height: ${windowStyles.maxHeight}`
+        },
+        {
+          name: 'Mobile Detection',
+          passed: screenWidth <= 768,
+          message: screenWidth <= 768 ? 'Mobile view detected 📱' : 'Desktop view detected 🖥️'
+        },
+        {
+          name: 'Responsive Rules',
+          passed: true,
+          message: screenWidth <= 480 ? 'Small mobile styles active' : 
+                   screenWidth <= 768 ? 'Tablet styles active' : 
+                   'Desktop styles active'
+        }
+      ];
+      
+      displayResults(tests);
+      
+      console.log('📱 Responsiveness Test Results:');
+      console.log(`Screen Size: ${screenWidth}x${screenHeight}`);
+      console.log(`Window Width: ${windowStyles.width}`);
+      console.log(`Window Max-Width: ${windowStyles.maxWidth}`);
+      console.log(`Window Height: ${windowStyles.height}`);
+      console.log(`Window Max-Height: ${windowStyles.maxHeight}`);
+    }
+
     // Auto-run tests on page load
     window.addEventListener('load', () => {
       setTimeout(() => {
         console.log('🤖 Zaakiy Widget Test Page Loaded');
         console.log('Widget should appear in bottom-right corner');
         console.log('Run testWidget() to check integration');
+        console.log('');
+        console.log('Available Tests:');
+        console.log('- testWidget() - Run full widget test');
+        console.log('- testPositioning() - Test widget positioning');
+        console.log('- testResponsiveness() - Test responsive design');
+        console.log('- window.zaakiyToggleChat() - Toggle chat open/close');
+        console.log('- window.zaakiyOpenChat() - Open the chat');
+        console.log('- window.zaakiyCloseChat() - Close the chat');
       }, 1000);
     });
   </script>

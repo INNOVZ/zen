@@ -88,7 +88,10 @@
           ${config.position.includes('right') ? 'right: 20px;' : 'left: 20px;'}
           bottom: 20px;
           z-index: 999999;
-          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+          font-family: "Poppins", sans-serif;
+          display: flex;
+          flex-direction: column;
+          align-items: ${config.position.includes('right') ? 'flex-end' : 'flex-start'};
         }
         
         .zaakiy-chat-button {
@@ -103,6 +106,8 @@
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
+          position: relative;
+          z-index: 2;
         }
         
         .zaakiy-chat-button:hover {
@@ -111,30 +116,94 @@
         }
         
         .zaakiy-chat-window {
-          width: 350px;
-          height: 500px;
+          width: 400px;
+          max-width: calc(100vw - 40px);
+          height: 600px;
+          max-height: calc(100vh - 120px);
           background: white;
-          border-radius: 12px;
+          border-radius: 16px;
           box-shadow: 0 8px 30px rgba(0,0,0,0.2);
           display: none;
           flex-direction: column;
           overflow: hidden;
-          margin-bottom: 10px;
+          margin-bottom: 15px;
+          position: relative;
+          z-index: 1;
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 768px) {
+          #zaakiy-chat-widget {
+            right: 10px !important;
+            left: 10px !important;
+            bottom: 10px;
+            align-items: stretch;
+          }
+          
+          .zaakiy-chat-window {
+            width: 100%;
+            max-width: 100%;
+            height: calc(100vh - 100px);
+            max-height: calc(100vh - 100px);
+            margin-bottom: 10px;
+            border-radius: 12px;
+          }
+          
+          .zaakiy-chat-button {
+            align-self: ${config.position.includes('right') ? 'flex-end' : 'flex-start'};
+          }
+        }
+        
+        @media (max-width: 480px) {
+          .zaakiy-chat-window {
+            border-radius: 8px;
+          }
+          
+          .zaakiy-chat-button {
+            width: 56px;
+            height: 56px;
+          }
         }
         
         .zaakiy-chat-header {
           background: ${config.primaryColor};
           color: white;
-          padding: 15px;
+          padding: 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
+          flex-shrink: 0;
         }
         
         .zaakiy-chat-header-info {
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
+          flex: 1;
+          min-width: 0;
+        }
+          .zaakiy-bot-name-container {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 0;
+          }
+        
+        .zaakiy-bot-name-wrapper {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          min-width: 0;
+        }
+        
+        @media (max-width: 480px) {
+          .zaakiy-chat-header {
+            padding: 14px;
+          }
+          
+          .zaakiy-chat-header-info {
+            gap: 10px;
+          }
         }
         
         .zaakiy-avatar {
@@ -160,7 +229,33 @@
           flex: 1;
           padding: 15px;
           overflow-y: auto;
+          overflow-x: hidden;
           background: #f8f9fa;
+          scroll-behavior: smooth;
+        }
+        
+        /* Scrollbar styling */
+        .zaakiy-chat-messages::-webkit-scrollbar {
+          width: 6px;
+        }
+        
+        .zaakiy-chat-messages::-webkit-scrollbar-track {
+          background: transparent;
+        }
+        
+        .zaakiy-chat-messages::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 3px;
+        }
+        
+        .zaakiy-chat-messages::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+        
+        @media (max-width: 480px) {
+          .zaakiy-chat-messages {
+            padding: 12px;
+          }
         }
         
         .zaakiy-message {
@@ -197,10 +292,12 @@
         
         .zaakiy-message-content {
           max-width: 80%;
-          padding: 10px 12px;
+          padding: 10px 14px;
           border-radius: 12px;
           font-size: 14px;
-          line-height: 1.4;
+          line-height: 1.5;
+          word-wrap: break-word;
+          overflow-wrap: break-word;
         }
         
         .zaakiy-message.bot .zaakiy-message-content {
@@ -218,21 +315,27 @@
           border-top: 1px solid #e1e5e9;
           display: flex;
           gap: 10px;
+          background: white;
         }
         
         .zaakiy-input-field {
           flex: 1;
-          padding: 10px 12px;
+          padding: 10px 14px;
           border: 1px solid #e1e5e9;
-          border-radius: 20px;
+          border-radius: 10px;
           outline: none;
           font-size: 14px;
+          font-family: inherit;
+        }
+        
+        .zaakiy-input-field:focus {
+          border-color: ${config.primaryColor};
         }
         
         .zaakiy-send-button {
           background: ${config.primaryColor};
           border: none;
-          border-radius: 50%;
+          border-radius: 10px;
           width: 40px;
           height: 40px;
           cursor: pointer;
@@ -240,15 +343,75 @@
           align-items: center;
           justify-content: center;
           color: white;
+          flex-shrink: 0;
+          transition: all 0.2s ease;
+        }
+        
+        .zaakiy-send-button:hover {
+          opacity: 0.9;
+          transform: scale(1.05);
+        }
+        
+        .zaakiy-send-button:active {
+          transform: scale(0.95);
+        }
+        
+        /* Mobile message adjustments */
+        @media (max-width: 480px) {
+          .zaakiy-message-content {
+            max-width: 85%;
+            font-size: 13px;
+            padding: 8px 12px;
+          }
+          
+          .zaakiy-chat-input {
+            padding: 12px;
+            gap: 8px;
+          }
+          
+          .zaakiy-input-field {
+            font-size: 16px; /* Prevents zoom on iOS */
+            padding: 10px 12px;
+          }
+          
+          .zaakiy-send-button {
+            width: 38px;
+            height: 38px;
+          }
         }
         
         .zaakiy-close-button {
-          background: none;
+          background: rgb(255, 255, 255);
           border: none;
-          color: white;
+          color:${config.primaryColor};
           cursor: pointer;
-          font-size: 18px;
-          padding: 5px;
+          font-size: 14px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+          line-height: 1;
+        }
+        
+        .zaakiy-close-button:hover {
+          background: rgba(255, 255, 255, 0.3);
+          transform: scale(1.05);
+        }
+        
+        .zaakiy-close-button:active {
+          transform: scale(0.95);
+        }
+        
+        @media (max-width: 480px) {
+          .zaakiy-close-button {
+            width: 36px;
+            height: 36px;
+            font-size: 30px;
+          }
         }
         
         .zaakiy-typing {
@@ -276,6 +439,66 @@
           0%, 80%, 100% { transform: scale(0); }
           40% { transform: scale(1); }
         }
+        
+        @keyframes zaakiy-slideIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+        }
+        
+        @keyframes zaakiy-slideOut {
+          from {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+          }
+          to {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+          }
+        }
+        
+        .zaakiy-chat-window.zaakiy-opening {
+          animation: zaakiy-slideIn 0.3s ease forwards;
+        }
+        
+        .zaakiy-chat-window.zaakiy-closing {
+          animation: zaakiy-slideOut 0.2s ease forwards;
+        }
+          .zaakiy-powered-by {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 1px;
+          }
+          .zaakiy-powered-by:hover {
+            color: #333;
+          }
+          .zaakiy-powered-by:active {
+            color: #000;
+          }
+          .zaakiy-powered-by:focus {
+            color: #000;
+          }
+          .zaakiy-powered-by:visited {
+            color: #000;
+          }
+          .zaakiy-powered-by:link {
+            color: #000;
+          }
+          .zaakiy-powered-by:active {
+            color: #000;
+          }
+          .zaakiy-powered-by:focus {
+            color: #000;
+          }
+          .zaakiy-powered-by:visited {
+            color: #000;
+          }
       </style>
       
       <div class="zaakiy-chat-window" id="zaakiy-chat-window">
@@ -288,9 +511,9 @@
                 </svg>
               </div>
             </div>
-            <div>
-              <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-bottom: 2px;"></div>
+            <div class="zaakiy-bot-name-container">
               <span id="zaakiy-bot-name">${config.botName}</span>
+              <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-bottom: 2px;"></div>
             </div>
           </div>
           <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">×</button>
@@ -316,9 +539,11 @@
             </svg>
           </button>
         </div>
+        <p class="zaakiy-powered-by">Powered by Zaakiy</p>
       </div>
       
-      <button class="zaakiy-chat-button" onclick="window.zaakiyOpenChat()">
+      
+      <button class="zaakiy-chat-button" onclick="window.zaakiyToggleChat()">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
@@ -368,12 +593,19 @@
   function updateWidgetAppearance() {
     const button = document.querySelector('.zaakiy-chat-button');
     const header = document.querySelector('.zaakiy-chat-header');
+    const sendButton = document.querySelector('.zaakiy-send-button');
+    const closeButton = document.querySelector('.zaakiy-close-button');
     const botNameElement = document.querySelector('#zaakiy-bot-name');
     const greetingMessage = document.querySelector('#zaakiy-greeting');
     const avatarContainer = document.querySelector('#zaakiy-avatar-container');
     
+    // Update colors with primary color
     if (button) button.style.background = config.primaryColor;
     if (header) header.style.background = config.primaryColor;
+    if (sendButton) sendButton.style.background = config.primaryColor;
+    if (closeButton) closeButton.style.color = config.primaryColor;
+    
+    // Update text content
     if (botNameElement) botNameElement.textContent = config.botName;
     if (greetingMessage) greetingMessage.textContent = config.greeting;
     
@@ -400,18 +632,49 @@
   }
   
   // Global functions
+  window.zaakiyToggleChat = function() {
+    const chatWindow = document.getElementById('zaakiy-chat-window');
+    if (chatWindow) {
+      const isOpen = chatWindow.style.display === 'flex';
+      if (isOpen) {
+        window.zaakiyCloseChat();
+      } else {
+        window.zaakiyOpenChat();
+      }
+    }
+  };
+  
   window.zaakiyOpenChat = function() {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     if (chatWindow) {
+      chatWindow.classList.remove('zaakiy-closing');
       chatWindow.style.display = 'flex';
+      // Trigger animation after display is set
+      requestAnimationFrame(() => {
+        chatWindow.classList.add('zaakiy-opening');
+      });
       console.log('💬 Chat opened');
+      
+      // Focus input field for better UX
+      setTimeout(() => {
+        const input = document.getElementById('zaakiy-input');
+        if (input) input.focus();
+      }, 300);
     }
   };
   
   window.zaakiyCloseChat = function() {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     if (chatWindow) {
-      chatWindow.style.display = 'none';
+      chatWindow.classList.remove('zaakiy-opening');
+      chatWindow.classList.add('zaakiy-closing');
+      
+      // Hide after animation completes
+      setTimeout(() => {
+        chatWindow.style.display = 'none';
+        chatWindow.classList.remove('zaakiy-closing');
+      }, 200);
+      
       console.log('💬 Chat closed');
     }
   };
@@ -466,7 +729,7 @@
           if (errorData.detail) {
             errorMessage = `Error: ${errorData.detail}`;
           }
-        } catch (e) {
+        } catch {
           // Not JSON, use text
           if (errorText) {
             errorMessage = `Server error: ${errorText.substring(0, 100)}`;
