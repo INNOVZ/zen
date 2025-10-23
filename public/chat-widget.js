@@ -128,8 +128,8 @@
         }
         
         .zaakiy-chat-window {
-          width: 400px;
-          max-width: calc(100vw - 40px);
+          width: 420px;
+          max-width: calc(100vw - 20px);
           height: 75vh;
           max-height: calc(100vh - 120px);
           background: white;
@@ -601,6 +601,25 @@
     }
   }
   
+  // Helper function to update input focus color dynamically
+  function updateInputFocusColor() {
+    // Remove existing dynamic style if present
+    const existingStyle = document.getElementById('zaakiy-dynamic-styles');
+    if (existingStyle) {
+      existingStyle.remove();
+    }
+    
+    // Create new style element with updated primary color
+    const styleElement = document.createElement('style');
+    styleElement.id = 'zaakiy-dynamic-styles';
+    styleElement.textContent = `
+      .zaakiy-input-field:focus {
+        border-color: ${config.primaryColor} !important;
+      }
+    `;
+    document.head.appendChild(styleElement);
+  }
+  
   // Update widget appearance
   function updateWidgetAppearance() {
     const button = document.querySelector('.zaakiy-chat-button');
@@ -616,6 +635,15 @@
     if (header) header.style.background = config.primaryColor;
     if (sendButton) sendButton.style.background = config.primaryColor;
     if (closeButton) closeButton.style.color = config.primaryColor;
+    
+    // Update existing user messages
+    const userMessages = document.querySelectorAll('.zaakiy-message.user .zaakiy-message-content');
+    userMessages.forEach(msg => {
+      msg.style.background = config.primaryColor;
+    });
+    
+    // Update input field focus color by injecting a style rule
+    updateInputFocusColor();
     
     // Update text content
     if (botNameElement) botNameElement.textContent = config.botName;
@@ -802,6 +830,12 @@
     const contentDiv = document.createElement('div');
     contentDiv.className = 'zaakiy-message-content';
     contentDiv.textContent = content;
+    
+    // Apply primary color to user messages
+    if (type === 'user') {
+      contentDiv.style.background = config.primaryColor;
+    }
+    
     messageDiv.appendChild(contentDiv);
     
     messagesContainer.appendChild(messageDiv);
