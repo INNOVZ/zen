@@ -378,9 +378,31 @@
           padding: 10px 14px;
           border-radius: 12px;
           font-size: 18px;
-          line-height: 1.5;
+          line-height: 1.6;
           word-wrap: break-word;
           overflow-wrap: break-word;
+        }
+        
+        .zaakiy-message-content a {
+          color: ${config.primaryColor};
+          font-weight: 600;
+          text-decoration: underline;
+          transition: opacity 0.2s ease;
+        }
+        
+        .zaakiy-message-content a:hover {
+          opacity: 0.8;
+          text-decoration: underline;
+        }
+        
+        .zaakiy-message-content strong {
+          font-weight: 700;
+          color: #1a1a1a;
+        }
+        
+        .zaakiy-message-content em {
+          font-style: italic;
+          opacity: 0.95;
         }
         
         .zaakiy-message.bot .zaakiy-message-content {
@@ -667,9 +689,9 @@
         console.log('✅ Restored chat history with', savedMessages.length, 'messages');
       }
     } else {
-      // Set initial greeting for new session
+      // Set initial greeting for new session with markdown parsing
       const greetingEl = document.getElementById('zaakiy-greeting');
-      if (greetingEl) greetingEl.textContent = config.greeting;
+      if (greetingEl) greetingEl.innerHTML = parseMarkdown(config.greeting);
     }
     
     console.log('✅ Widget created successfully');
@@ -750,7 +772,7 @@
     
     // Update text content
     if (botNameElement) botNameElement.textContent = config.botName;
-    if (greetingMessage) greetingMessage.textContent = config.greeting;
+    if (greetingMessage) greetingMessage.innerHTML = parseMarkdown(config.greeting);
     
     if (avatarContainer) {
       while (avatarContainer.firstChild) avatarContainer.removeChild(avatarContainer.firstChild);
@@ -931,10 +953,10 @@
     if (messagesContainer) {
       messagesContainer.innerHTML = '';
       
-      // Add greeting message back
+      // Add greeting message back with markdown parsing
       const greetingDiv = document.createElement('div');
       greetingDiv.className = 'zaakiy-message bot';
-      greetingDiv.innerHTML = `<div class="zaakiy-message-content" id="zaakiy-greeting">${config.greeting}</div>`;
+      greetingDiv.innerHTML = `<div class="zaakiy-message-content" id="zaakiy-greeting">${parseMarkdown(config.greeting)}</div>`;
       messagesContainer.appendChild(greetingDiv);
       
       // Clear session
@@ -944,6 +966,56 @@
       console.log('🗑️ Chat history cleared');
     }
   };
+  
+  // Enhanced markdown parser with link highlighting
+  function parseMarkdown(text) {
+    if (!text) return '';
+    
+    // Store links temporarily to protect them from escaping
+    const linkPlaceholders = [];
+    let linkIndex = 0;
+    
+    // Extract and store links with a placeholder
+    let processedText = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
+      const placeholder = `___LINK_${linkIndex}___`;
+      linkPlaceholders.push({ linkText, url });
+      linkIndex++;
+      return placeholder;
+    });
+    
+    // Escape HTML to prevent XSS (after extracting links)
+    processedText = processedText
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    
+    // Parse bold **text** (must be before italic to handle ** correctly)
+    processedText = processedText.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700; color: #1a1a1a;">$1</strong>');
+    
+    // Parse italic *text* (single asterisks, but not part of **)
+    processedText = processedText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic; opacity: 0.95;">$1</em>');
+    
+    // Parse bullet points (- item)
+    processedText = processedText.replace(/^- (.+)$/gm, '<div style="margin-left: 16px; margin-bottom: 6px; margin-top: 2px;">• $1</div>');
+    
+    // Restore links with proper HTML and parse any markdown within link text
+    linkPlaceholders.forEach((link, index) => {
+      const placeholder = `___LINK_${index}___`;
+      
+      // Parse bold/italic within link text
+      let formattedLinkText = link.linkText
+        .replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700;">$1</strong>')
+        .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
+      
+      const linkHtml = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor}; font-weight: 600; text-decoration: underline; transition: opacity 0.2s;">${formattedLinkText}</a>`;
+      processedText = processedText.replace(placeholder, linkHtml);
+    });
+    
+    // Parse line breaks
+    processedText = processedText.replace(/\n/g, '<br>');
+    
+    return processedText;
+  }
   
   function zaakiyAddMessage(content, type, saveToStorage = true) {
     const messagesContainer = document.getElementById('zaakiy-messages');
@@ -976,10 +1048,12 @@
     
     const contentDiv = document.createElement('div');
     contentDiv.className = 'zaakiy-message-content';
-    contentDiv.textContent = content;
     
-    // Apply primary color to user messages
-    if (type === 'user') {
+    // Parse markdown for bot messages, plain text for user messages
+    if (type === 'bot') {
+      contentDiv.innerHTML = parseMarkdown(content);
+    } else {
+      contentDiv.textContent = content;
       contentDiv.style.background = config.primaryColor;
     }
     
