@@ -97,8 +97,8 @@
       <style>
         #zaakiy-chat-widget {
           position: fixed;
-          ${config.position.includes('right') ? 'right: 20px;' : 'left: 20px;'}
-          bottom: 20px;
+          ${config.position.includes('right') ? 'right: 25px;' : 'left: 25px;'}
+          bottom: 25px;
           z-index: 999999;
           font-family: "Poppins", sans-serif;
           display: flex;
@@ -306,7 +306,7 @@
           max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
-          font-size: 14px;
+          font-size: 16px;
           line-height: 1.5;
           word-wrap: break-word;
           overflow-wrap: break-word;
@@ -372,7 +372,7 @@
         @media (max-width: 480px) {
           .zaakiy-message-content {
             max-width: 85%;
-            font-size: 13px;
+            font-size: 16px;
             padding: 8px 12px;
           }
           
@@ -397,7 +397,7 @@
           border: none;
           color:${config.primaryColor};
           cursor: pointer;
-          font-size: 14px;
+          font-size: 16px;
           width: 24px;
           height: 24px;
           border-radius: 50%;
