@@ -55,6 +55,12 @@
   let conversationId = null;
   let isWidgetCreated = false;
   
+  // Session storage keys
+  const STORAGE_PREFIX = `zaakiy_chat_${config.chatbotId}_`;
+  const CONVERSATION_ID_KEY = STORAGE_PREFIX + 'conversation_id';
+  const MESSAGES_KEY = STORAGE_PREFIX + 'messages';
+  const SESSION_TIMESTAMP_KEY = STORAGE_PREFIX + 'timestamp';
+  
   // Convert legacy Supabase URLs to proxy URLs and ensure full URLs
   function convertLegacyUrl(url) {
     if (!url) return null;
@@ -80,6 +86,71 @@
     
     // Otherwise, assume it's a relative path and prepend the API URL
     return `${config.apiUrl}/${url}`;
+  }
+  
+  // Load saved session data
+  function loadSavedSession() {
+    try {
+      // Load conversation ID
+      const savedConversationId = localStorage.getItem(CONVERSATION_ID_KEY);
+      if (savedConversationId) {
+        conversationId = savedConversationId;
+        console.log('✅ Restored conversation ID:', conversationId);
+      }
+      
+      // Load messages
+      const savedMessages = localStorage.getItem(MESSAGES_KEY);
+      const savedTimestamp = localStorage.getItem(SESSION_TIMESTAMP_KEY);
+      
+      if (savedMessages && savedTimestamp) {
+        // Check if session is still valid (24 hours)
+        const sessionAge = Date.now() - parseInt(savedTimestamp);
+        const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
+        
+        if (sessionAge < maxSessionAge) {
+          const messages = JSON.parse(savedMessages);
+          console.log('✅ Restored', messages.length, 'messages from session');
+          return messages;
+        } else {
+          console.log('⏰ Session expired (>24h), starting fresh');
+          clearSavedSession();
+        }
+      }
+    } catch (error) {
+      console.warn('⚠️ Failed to load saved session:', error);
+    }
+    
+    return [];
+  }
+  
+  // Save session data
+  function saveSession(messages) {
+    try {
+      if (conversationId) {
+        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+      }
+      
+      // Only save the last 50 messages to avoid storage limits
+      const messagesToSave = messages.slice(-50);
+      localStorage.setItem(MESSAGES_KEY, JSON.stringify(messagesToSave));
+      localStorage.setItem(SESSION_TIMESTAMP_KEY, Date.now().toString());
+      
+      console.log('💾 Session saved:', messagesToSave.length, 'messages');
+    } catch (error) {
+      console.warn('⚠️ Failed to save session:', error);
+    }
+  }
+  
+  // Clear saved session
+  function clearSavedSession() {
+    try {
+      localStorage.removeItem(CONVERSATION_ID_KEY);
+      localStorage.removeItem(MESSAGES_KEY);
+      localStorage.removeItem(SESSION_TIMESTAMP_KEY);
+      console.log('🗑️ Session cleared');
+    } catch (error) {
+      console.warn('⚠️ Failed to clear session:', error);
+    }
   }
   
   // Create widget HTML
@@ -180,7 +251,7 @@
         .zaakiy-chat-header {
           background: ${config.primaryColor};
           color: white;
-          padding: 16px;
+          padding: 20px 16px;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -306,7 +377,7 @@
           max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
-          font-size: 16px;
+          font-size: 18px;
           line-height: 1.5;
           word-wrap: break-word;
           overflow-wrap: break-word;
@@ -578,9 +649,28 @@
     document.body.appendChild(widgetContainer);
     isWidgetCreated = true;
     
-    // Set initial greeting
-    const greetingEl = document.getElementById('zaakiy-greeting');
-    if (greetingEl) greetingEl.textContent = config.greeting;
+    // Load saved session and restore messages
+    const savedMessages = loadSavedSession();
+    
+    if (savedMessages && savedMessages.length > 0) {
+      // Restore saved messages
+      const messagesContainer = document.getElementById('zaakiy-messages');
+      if (messagesContainer) {
+        // Clear default greeting
+        messagesContainer.innerHTML = '';
+        
+        // Restore each message
+        savedMessages.forEach(msg => {
+          zaakiyAddMessage(msg.content, msg.type, false); // false = don't save to storage
+        });
+        
+        console.log('✅ Restored chat history with', savedMessages.length, 'messages');
+      }
+    } else {
+      // Set initial greeting for new session
+      const greetingEl = document.getElementById('zaakiy-greeting');
+      if (greetingEl) greetingEl.textContent = config.greeting;
+    }
     
     console.log('✅ Widget created successfully');
   }
@@ -754,7 +844,7 @@
     console.log('🤖 Using chatbot ID:', selectedChatbot?.id || config.chatbotId);
     
     // Add user message
-    zaakiyAddMessage(message, 'user');
+    zaakiyAddMessage(message, 'user', true); // Save to storage
     input.value = '';
     
     // Show typing indicator
@@ -769,12 +859,18 @@
     
     console.log('📡 Request body:', requestBody);
     
+    // Create abort controller for timeout
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    
     fetch(`${config.apiUrl}/api/public/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody)
+      body: JSON.stringify(requestBody),
+      signal: controller.signal
     })
     .then(async response => {
+      clearTimeout(timeoutId); // Clear timeout on success
       console.log('📡 Response status:', response.status);
       
       if (!response.ok) {
@@ -803,20 +899,53 @@
       
       if (data.session_id && !conversationId) {
         conversationId = data.session_id;
+        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
         console.log('💾 Session ID saved:', conversationId);
       }
       
       console.log('📥 Received response:', data.response?.substring(0, 50) + '...');
-      zaakiyAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot');
+      zaakiyAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot', true);
     })
     .catch((error) => {
+      clearTimeout(timeoutId); // Clear timeout on error
       zaakiyHideTyping();
       console.error('❌ Chat API error:', error);
-      zaakiyAddMessage(error.message || 'Sorry, I\'m having connection issues. Please try again.', 'bot');
+      
+      // Handle different error types
+      let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
+      
+      if (error.name === 'AbortError') {
+        errorMessage = 'Request timed out. The server is taking too long to respond. Please try again.';
+        console.error('❌ Request timeout after 30 seconds');
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
+      zaakiyAddMessage(errorMessage, 'bot', true);
     });
   };
   
-  function zaakiyAddMessage(content, type) {
+  // Add global function to clear chat history
+  window.zaakiyClearChat = function() {
+    const messagesContainer = document.getElementById('zaakiy-messages');
+    if (messagesContainer) {
+      messagesContainer.innerHTML = '';
+      
+      // Add greeting message back
+      const greetingDiv = document.createElement('div');
+      greetingDiv.className = 'zaakiy-message bot';
+      greetingDiv.innerHTML = `<div class="zaakiy-message-content" id="zaakiy-greeting">${config.greeting}</div>`;
+      messagesContainer.appendChild(greetingDiv);
+      
+      // Clear session
+      conversationId = null;
+      clearSavedSession();
+      
+      console.log('🗑️ Chat history cleared');
+    }
+  };
+  
+  function zaakiyAddMessage(content, type, saveToStorage = true) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
     
@@ -858,11 +987,49 @@
     
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Save to localStorage if requested
+    if (saveToStorage) {
+      saveCurrentMessages();
+    }
   }
+  
+  // Helper function to get all current messages
+  function getCurrentMessages() {
+    const messagesContainer = document.getElementById('zaakiy-messages');
+    if (!messagesContainer) return [];
+    
+    const messageElements = messagesContainer.querySelectorAll('.zaakiy-message:not(#zaakiy-typing)');
+    const messages = [];
+    
+    messageElements.forEach(msgEl => {
+      const content = msgEl.querySelector('.zaakiy-message-content')?.textContent;
+      const type = msgEl.classList.contains('user') ? 'user' : 'bot';
+      
+      if (content) {
+        messages.push({ content, type });
+      }
+    });
+    
+    return messages;
+  }
+  
+  // Save current messages to storage
+  function saveCurrentMessages() {
+    const messages = getCurrentMessages();
+    saveSession(messages);
+  }
+  
+  // Timer for showing elapsed time
+  let typingTimer = null;
+  let typingStartTime = null;
   
   function zaakiyShowTyping() {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
+    
+    // Record start time
+    typingStartTime = Date.now();
     
     // Disable input and send button while bot is typing
     const inputField = document.getElementById('zaakiy-input');
@@ -876,6 +1043,20 @@
       sendButton.style.opacity = '0.5';
       sendButton.style.cursor = 'not-allowed';
     }
+    
+    // Start timer to update elapsed time
+    let elapsedSeconds = 0;
+    typingTimer = setInterval(() => {
+      elapsedSeconds++;
+      if (inputField && elapsedSeconds > 3) {
+        inputField.placeholder = `Bot is typing... (${elapsedSeconds}s)`;
+      }
+      
+      // Show warning if taking too long
+      if (elapsedSeconds > 15) {
+        inputField.placeholder = `Still processing... (${elapsedSeconds}s)`;
+      }
+    }, 1000);
     
     const typingDiv = document.createElement('div');
     typingDiv.className = 'zaakiy-message bot';
@@ -912,6 +1093,19 @@
   function zaakiyHideTyping() {
     const typingElement = document.getElementById('zaakiy-typing');
     if (typingElement) typingElement.remove();
+    
+    // Clear the timer
+    if (typingTimer) {
+      clearInterval(typingTimer);
+      typingTimer = null;
+    }
+    
+    // Log response time
+    if (typingStartTime) {
+      const responseTime = ((Date.now() - typingStartTime) / 1000).toFixed(1);
+      console.log(`✅ Response received in ${responseTime}s`);
+      typingStartTime = null;
+    }
     
     // Re-enable input and send button
     const inputField = document.getElementById('zaakiy-input');
