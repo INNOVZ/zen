@@ -3,24 +3,23 @@
 (function() {
   'use strict';
   
-  console.log('🤖 ZaaKy Widget Loading...');
+  // Production-safe: All console logs disabled
+  // To enable debug mode, set DEBUG = true and uncomment the logger calls
+  const DEBUG = false;
   
   // Robust script tag detection - works with dynamic loading
   function getScriptTag() {
     // Try document.currentScript first
     if (document.currentScript) {
-      console.log('✅ Found script via document.currentScript');
       return document.currentScript;
     }
     
     // Fallback: find the script tag by src
     const scripts = document.querySelectorAll('script[src*="chat-widget.js"]');
     if (scripts.length > 0) {
-      console.log('✅ Found script via querySelector');
       return scripts[scripts.length - 1]; // Get the most recently added one
     }
     
-    console.warn('⚠️ Could not find script tag');
     return null;
   }
   
@@ -37,16 +36,10 @@
     avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null
   };
   
-  console.log('📋 Widget Config:', {
-    apiUrl: config.apiUrl,
-    chatbotId: config.chatbotId,
-    botName: config.botName,
-    hasAvatar: !!config.avatarUrl
-  });
-  
   // Validate required config
   if (!config.chatbotId) {
-    console.error('❌ ERROR: data-chatbot-id is required! Please set it on the script tag.');
+    // Critical error - show alert in development only
+    if (DEBUG) alert('ERROR: data-chatbot-id is required! Please set it on the script tag.');
     return;
   }
   
@@ -95,7 +88,6 @@
       const savedConversationId = localStorage.getItem(CONVERSATION_ID_KEY);
       if (savedConversationId) {
         conversationId = savedConversationId;
-        console.log('✅ Restored conversation ID:', conversationId);
       }
       
       // Load messages
@@ -109,15 +101,13 @@
         
         if (sessionAge < maxSessionAge) {
           const messages = JSON.parse(savedMessages);
-          console.log('✅ Restored', messages.length, 'messages from session');
           return messages;
         } else {
-          console.log('⏰ Session expired (>24h), starting fresh');
           clearSavedSession();
         }
       }
-    } catch (error) {
-      console.warn('⚠️ Failed to load saved session:', error);
+    } catch {
+      // Silently fail and start fresh session
     }
     
     return [];
@@ -134,10 +124,8 @@
       const messagesToSave = messages.slice(-50);
       localStorage.setItem(MESSAGES_KEY, JSON.stringify(messagesToSave));
       localStorage.setItem(SESSION_TIMESTAMP_KEY, Date.now().toString());
-      
-      console.log('💾 Session saved:', messagesToSave.length, 'messages');
-    } catch (error) {
-      console.warn('⚠️ Failed to save session:', error);
+    } catch {
+      // Silently fail
     }
   }
   
@@ -147,20 +135,16 @@
       localStorage.removeItem(CONVERSATION_ID_KEY);
       localStorage.removeItem(MESSAGES_KEY);
       localStorage.removeItem(SESSION_TIMESTAMP_KEY);
-      console.log('🗑️ Session cleared');
-    } catch (error) {
-      console.warn('⚠️ Failed to clear session:', error);
+    } catch {
+      // Silently fail
     }
   }
   
   // Create widget HTML
   function createWidget() {
     if (isWidgetCreated) {
-      console.warn('⚠️ Widget already created');
       return;
     }
-    
-    console.log('🎨 Creating widget...');
     
     const widgetContainer = document.createElement('div');
     widgetContainer.id = 'zaakiy-chat-widget';
@@ -691,30 +675,22 @@
           // Pass isHtml flag to preserve formatting for bot messages
           zaakiyAddMessage(msg.content, msg.type, false, msg.isHtml || false);
         });
-        
-        console.log('✅ Restored chat history with', savedMessages.length, 'messages');
       }
     } else {
       // Set initial greeting for new session with markdown parsing
       const greetingEl = document.getElementById('zaakiy-greeting');
       if (greetingEl) greetingEl.innerHTML = parseMarkdown(config.greeting);
     }
-    
-    console.log('✅ Widget created successfully');
   }
   
   // Load chatbot configuration
   async function loadChatbotConfig() {
     try {
-      console.log('📡 Loading chatbot config from API...');
-      
       const response = await fetch(`${config.apiUrl}/api/public/chatbot/${config.chatbotId}/config`);
       
       if (response.ok) {
         const chatbot = await response.json();
         selectedChatbot = chatbot;
-        
-        console.log('✅ Chatbot config loaded:', chatbot.name);
         
         // Update config with chatbot details
         config.primaryColor = chatbot.color_hex || config.primaryColor;
@@ -724,11 +700,9 @@
         
         // Update UI with new config
         updateWidgetAppearance();
-      } else {
-        console.error('❌ Failed to load chatbot config:', response.status);
       }
-    } catch (error) {
-      console.warn('⚠️ Failed to load chatbot config:', error);
+    } catch {
+      // Silently fail and use default config
     }
   }
   
@@ -824,7 +798,6 @@
       requestAnimationFrame(() => {
         chatWindow.classList.add('zaakiy-opening');
       });
-      console.log('💬 Chat opened');
       
       // Focus input field for better UX
       setTimeout(() => {
@@ -845,8 +818,6 @@
         chatWindow.style.display = 'none';
         chatWindow.classList.remove('zaakiy-closing');
       }, 200);
-      
-      console.log('💬 Chat closed');
     }
   };
   
@@ -863,13 +834,9 @@
     
     // Validate chatbot ID
     if (!config.chatbotId) {
-      console.error('❌ No chatbot ID configured!');
       zaakiyAddMessage('Configuration error: No chatbot ID set.', 'bot');
       return;
     }
-    
-    console.log('📤 Sending message:', message);
-    console.log('🤖 Using chatbot ID:', selectedChatbot?.id || config.chatbotId);
     
     // Add user message
     zaakiyAddMessage(message, 'user', true); // Save to storage
@@ -885,8 +852,6 @@
       session_id: conversationId || null
     };
     
-    console.log('📡 Request body:', requestBody);
-    
     // Create abort controller for timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
@@ -899,11 +864,9 @@
     })
     .then(async response => {
       clearTimeout(timeoutId); // Clear timeout on success
-      console.log('📡 Response status:', response.status);
       
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ Server error response:', errorText);
         
         let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
         try {
@@ -928,23 +891,19 @@
       if (data.session_id && !conversationId) {
         conversationId = data.session_id;
         localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
-        console.log('💾 Session ID saved:', conversationId);
       }
       
-      console.log('📥 Received response:', data.response?.substring(0, 50) + '...');
       zaakiyAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot', true);
     })
     .catch((error) => {
       clearTimeout(timeoutId); // Clear timeout on error
       zaakiyHideTyping();
-      console.error('❌ Chat API error:', error);
       
       // Handle different error types
       let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
       
       if (error.name === 'AbortError') {
         errorMessage = 'Request timed out. The server is taking too long to respond. Please try again.';
-        console.error('❌ Request timeout after 30 seconds');
       } else if (error.message) {
         errorMessage = error.message;
       }
@@ -968,8 +927,6 @@
       // Clear session
       conversationId = null;
       clearSavedSession();
-      
-      console.log('🗑️ Chat history cleared');
     }
   };
   
@@ -1192,10 +1149,8 @@
       typingTimer = null;
     }
     
-    // Log response time
+    // Clear response time tracking
     if (typingStartTime) {
-      const responseTime = ((Date.now() - typingStartTime) / 1000).toFixed(1);
-      console.log(`✅ Response received in ${responseTime}s`);
       typingStartTime = null;
     }
     
@@ -1216,18 +1171,13 @@
   
   // Initialize widget
   function initWidget() {
-    console.log('🚀 Initializing ZaaKy Widget...');
-    
     if (!document.body) {
-      console.log('⏳ Waiting for document.body...');
       setTimeout(initWidget, 100);
       return;
     }
     
     createWidget();
     loadChatbotConfig();
-    
-    console.log('✅ ZaaKy Widget initialized successfully!');
   }
   
   // Start initialization
