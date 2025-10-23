@@ -199,7 +199,7 @@
         }
         
         .zaakiy-chat-window {
-          width: 420px;
+          width: 399px;
           max-width: calc(100vw - 20px);
           height: 75vh;
           max-height: calc(100vh - 120px);
@@ -377,8 +377,8 @@
           max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
-          font-size: 12px;
-          line-height: 1.4;
+          font-size: 13px;
+          line-height: 1.45;
           word-wrap: break-word;
           overflow-wrap: break-word;
         }
@@ -483,7 +483,7 @@
         @media (max-width: 480px) {
           .zaakiy-message-content {
             max-width: 85%;
-            font-size: 12px;
+            font-size: 13px;
             padding: 8px 12px;
           }
           
