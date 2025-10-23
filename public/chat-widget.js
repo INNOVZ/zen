@@ -199,7 +199,7 @@
         }
         
         .zaakiy-chat-window {
-          width: 450px;
+          width: 420px;
           max-width: calc(100vw - 20px);
           height: 75vh;
           max-height: calc(100vh - 120px);
@@ -342,7 +342,7 @@
         }
         
         .zaakiy-message {
-          margin-bottom: 15px;
+          margin-bottom: 12px;
           display: flex;
           align-items: flex-start;
           gap: 8px;
@@ -377,8 +377,8 @@
           max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
-          font-size: 18px;
-          line-height: 1.6;
+          font-size: 12px;
+          line-height: 1.4;
           word-wrap: break-word;
           overflow-wrap: break-word;
         }
@@ -386,13 +386,14 @@
         .zaakiy-message-content a {
           color: ${config.primaryColor};
           font-weight: 600;
-          text-decoration: underline;
-          transition: opacity 0.2s ease;
+          text-decoration: none;
+          transition: all 0.2s ease;
+          border-bottom: 1px solid ${config.primaryColor};
         }
         
         .zaakiy-message-content a:hover {
           opacity: 0.8;
-          text-decoration: underline;
+          border-bottom: 2px solid ${config.primaryColor};
         }
         
         .zaakiy-message-content strong {
@@ -402,7 +403,11 @@
         
         .zaakiy-message-content em {
           font-style: italic;
-          opacity: 0.95;
+          opacity: 0.9;
+        }
+        
+        .zaakiy-message-content br {
+          line-height: 0.5;
         }
         
         .zaakiy-message.bot .zaakiy-message-content {
@@ -478,7 +483,7 @@
         @media (max-width: 480px) {
           .zaakiy-message-content {
             max-width: 85%;
-            font-size: 16px;
+            font-size: 12px;
             padding: 8px 12px;
           }
           
@@ -591,7 +596,7 @@
             font-size: 12px;
             color: #666;
             text-align: center;
-            margin-top: 1px;
+            margin-vertical: 5px;
           }
           .zaakiy-powered-by:hover {
             color: #333;
@@ -996,7 +1001,7 @@
     processedText = processedText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic; opacity: 0.95;">$1</em>');
     
     // Parse bullet points (- item)
-    processedText = processedText.replace(/^- (.+)$/gm, '<div style="margin-left: 16px; margin-bottom: 6px; margin-top: 2px;">• $1</div>');
+    processedText = processedText.replace(/^- (.+)$/gm, '<div style="margin-left: 12px; margin-bottom: 2px; margin-top: 1px;">• $1</div>');
     
     // Restore links with proper HTML and parse any markdown within link text
     linkPlaceholders.forEach((link, index) => {
@@ -1007,12 +1012,14 @@
         .replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700;">$1</strong>')
         .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
       
-      const linkHtml = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor}; font-weight: 600; text-decoration: underline; transition: opacity 0.2s;">${formattedLinkText}</a>`;
+      const linkHtml = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor}; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none; transition: all 0.2s;">${formattedLinkText}</a>`;
       processedText = processedText.replace(placeholder, linkHtml);
     });
     
-    // Parse line breaks
-    processedText = processedText.replace(/\n/g, '<br>');
+    // Parse line breaks - reduce excessive whitespace
+    // Convert double line breaks to paragraph breaks, single to just a break
+    processedText = processedText.replace(/\n\n+/g, '<br><br>'); // Multiple newlines -> double break
+    processedText = processedText.replace(/\n/g, '<br>'); // Single newlines -> single break
     
     return processedText;
   }
