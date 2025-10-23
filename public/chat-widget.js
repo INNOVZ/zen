@@ -688,7 +688,8 @@
         
         // Restore each message
         savedMessages.forEach(msg => {
-          zaakiyAddMessage(msg.content, msg.type, false); // false = don't save to storage
+          // Pass isHtml flag to preserve formatting for bot messages
+          zaakiyAddMessage(msg.content, msg.type, false, msg.isHtml || false);
         });
         
         console.log('✅ Restored chat history with', savedMessages.length, 'messages');
@@ -1024,7 +1025,7 @@
     return processedText;
   }
   
-  function zaakiyAddMessage(content, type, saveToStorage = true) {
+  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
     
@@ -1056,9 +1057,16 @@
     const contentDiv = document.createElement('div');
     contentDiv.className = 'zaakiy-message-content';
     
-    // Parse markdown for bot messages, plain text for user messages
+    // For bot messages: use pre-formatted HTML if available, otherwise parse markdown
+    // For user messages: always use plain text
     if (type === 'bot') {
-      contentDiv.innerHTML = parseMarkdown(content);
+      if (isHtml) {
+        // Already formatted HTML from localStorage
+        contentDiv.innerHTML = content;
+      } else {
+        // Fresh message from API - parse markdown
+        contentDiv.innerHTML = parseMarkdown(content);
+      }
     } else {
       contentDiv.textContent = content;
       contentDiv.style.background = config.primaryColor;
@@ -1084,11 +1092,14 @@
     const messages = [];
     
     messageElements.forEach(msgEl => {
-      const content = msgEl.querySelector('.zaakiy-message-content')?.textContent;
+      const contentEl = msgEl.querySelector('.zaakiy-message-content');
       const type = msgEl.classList.contains('user') ? 'user' : 'bot';
       
-      if (content) {
-        messages.push({ content, type });
+      if (contentEl) {
+        // For bot messages, save the HTML to preserve formatting
+        // For user messages, save plain text
+        const content = type === 'bot' ? contentEl.innerHTML : contentEl.textContent;
+        messages.push({ content, type, isHtml: type === 'bot' });
       }
     });
     
