@@ -152,10 +152,10 @@
       <style>
         #zaakiy-chat-widget {
           position: fixed;
-          ${config.position.includes('right') ? 'right: 25px;' : 'left: 25px;'}
-          bottom: 25px;
+          ${config.position.includes('right') ? 'right: 33px;' : 'left: 33px;'}
+          bottom: 33px;
           z-index: 999999;
-          font-family: "Poppins", sans-serif;
+          font-family: "Poppins", sans-serif !important;
           display: flex;
           flex-direction: column;
           align-items: ${config.position.includes('right') ? 'flex-end' : 'flex-start'};
@@ -183,7 +183,7 @@
         }
         
         .zaakiy-chat-window {
-          width: 380px;
+          width: 380px !important;
           max-width: calc(100vw - 20px);
           height: 75vh;
           max-height: calc(100vh - 120px);
@@ -233,9 +233,9 @@
         }
         
         .zaakiy-chat-header {
-          background: ${config.primaryColor};
-          color: white;
-          padding: 20px 16px;
+          background: ${config.primaryColor} !important;
+          color: white !important;
+          padding: 20px 16px !important;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -285,7 +285,7 @@
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(255, 255, 255, 0.2) !important;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -294,10 +294,10 @@
         
         .zaakiy-chat-messages {
           flex: 1;
-          padding: 15px;
+          padding: 15px !important;
           overflow-y: auto;
           overflow-x: hidden;
-          background: #f8f9fa;
+          background: #f8f9fa !important;
           scroll-behavior: smooth;
         }
         
@@ -311,12 +311,12 @@
         }
         
         .zaakiy-chat-messages::-webkit-scrollbar-thumb {
-          background: #cbd5e1;
+          background: #cbd5e1 !important;
           border-radius: 3px;
         }
         
         .zaakiy-chat-messages::-webkit-scrollbar-thumb:hover {
-          background: #94a3b8;
+          background: #94a3b8 !important;
         }
         
         @media (max-width: 480px) {
@@ -361,16 +361,16 @@
           max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
-          font-size: 14px;
-          line-height: 1.45;
-          word-wrap: break-word;
+          font-size: 14px !important;
+          line-height: 1.45 !important;
+          word-wrap: break-word !important1;
           overflow-wrap: break-word;
         }
         
         .zaakiy-message-content a {
           color: ${config.primaryColor};
-          font-weight: 600;
-          text-decoration: none;
+          font-weight: 600 !important;
+          text-decoration: none !important;
           transition: all 0.2s ease;
           border-bottom: 1px solid ${config.primaryColor};
         }

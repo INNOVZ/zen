@@ -97,10 +97,22 @@ export const subscriptionApi = {
 
   signup: async (request: SignupRequest): Promise<SignupResponse> => {
     try {
-      const data = await fetchWithAuth("/api/onboarding/admin/signup", {
+      // Admin signup doesn't require authentication - it's for creating new accounts
+      const response = await fetch(`${BASE_URL}/api/onboarding/admin/signup`, {
         method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(request),
       });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const errorMessage = errorData.detail || `Signup failed: ${response.status}`;
+        throw new Error(errorMessage);
+      }
+
+      const data = await response.json();
       return data;
     } catch (error) {
       console.error("Error during signup:", error);
