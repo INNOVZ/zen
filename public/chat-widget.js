@@ -252,7 +252,7 @@
           .zaakiy-bot-name-container {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 6px !important;
             min-width: 0;
           }
         
@@ -368,7 +368,7 @@
         }
         
         .zaakiy-message-content a {
-          color: ${config.primaryColor};
+          color: ${config.primaryColor} !important;
           font-weight: 600 !important;
           text-decoration: none !important;
           transition: all 0.2s ease;
@@ -382,7 +382,7 @@
         
         .zaakiy-message-content strong {
           font-weight: 700;
-          color: #1a1a1a;
+          color: #1a1a1a !important;
         }
         
         .zaakiy-message-content em {
