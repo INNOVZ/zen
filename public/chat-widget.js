@@ -562,7 +562,7 @@
             max-width: calc(100% - 68px);
           }
           .zaakiy-welcome-close {
-            top: -26px;
+            top: -30px;
             height: 28px;
             padding: 0 10px;
             font-size: 12px;
@@ -578,8 +578,8 @@
         
         .zaakiy-welcome-close {
           position: absolute;
-          top: -30px;
-          ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
+          top: -38px;
+          ${config.position.includes('right') ? 'right: 8px;' : 'left: 16px;'}
           width: auto;
           height: 30px;
           padding: 0 12px;
