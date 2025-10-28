@@ -606,7 +606,7 @@
           width: 10px;
           height: 10px;
           border-radius:50%;
-          background:${config.primaryColor};
+          background:${config.primaryColor} !important;
           border-left: 1px solid #e2e8f0;
           border-bottom: 1px solid  ${config.primaryColor};
           transform: rotate(45deg);
@@ -672,6 +672,7 @@
             color: #0a0a60;
             text-align: center;
             padding-vertical: 5px !important;
+            margin-bottom: 5px !important;
           }
           .zaakiy-powered-by:hover {
             color: #333;
