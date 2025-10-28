@@ -528,7 +528,7 @@
           position: absolute;
           bottom: 90px; /* above the chat button */
           ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
-          max-width: 320px;
+          max-width: 460px;
           background: #ffffff;
           color: #0f172a;
           border: 1px solid #e2e8f0;
@@ -544,8 +544,11 @@
         .zaakiy-welcome-text {
           font-size: 14px;
           line-height: 1.25;
-          max-width: 230px;
+          max-width: 380px;
           color: #0f172a;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
         
         .zaakiy-welcome-overlay .zaakiy-welcome-text a {
