@@ -410,6 +410,7 @@
           padding: 15px;
           border-top: 1px solid #e1e5e9;
           display: flex;
+          align-items: center;
           gap: 10px;
           background: white;
         }
@@ -503,11 +504,10 @@
           justify-content: center;
           transition: all 0.2s ease;
           flex-shrink: 0;
-          line-height: 1;
         }
         
         .zaakiy-close-button:hover {
-          background: rgba(255, 255, 255, 0.3);
+          background: rgba(255, 255, 255, 0.8);
           transform: scale(1.05);
         }
         
@@ -599,18 +599,6 @@
         
         .zaakiy-welcome-close:hover { filter: brightness(0.92); }
         
-        .zaakiy-welcome-caret {
-          position: absolute;
-          bottom: -20px;
-          ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
-          width: 10px;
-          height: 10px;
-          border-radius:50%;
-          background:${config.primaryColor} !important;
-          border-left: 1px solid #e2e8f0;
-          border-bottom: 1px solid  ${config.primaryColor};
-          transform: rotate(45deg);
-        }
         
         .zaakiy-typing {
           display: flex;
@@ -751,7 +739,6 @@
       <div class="zaakiy-welcome-overlay" id="zaakiy-welcome-overlay" style="display: none;">
         <div class="zaakiy-welcome-text" id="zaakiy-welcome-text"></div>
         <button class="zaakiy-welcome-close" onclick="window.zaakiyCloseWelcome()">Close</button>
-        <div class="zaakiy-welcome-caret"></div>
       </div>
     `;
     
