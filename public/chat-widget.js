@@ -264,6 +264,10 @@
           gap: 6px;
           min-width: 0;
         }
+        #zaakiy-bot-name {
+         font-family: "Ubuntu", sans-serif;
+         font-weight: 700 !important;
+        }
         
         @media (max-width: 480px) {
           .zaakiy-chat-header {
@@ -491,7 +495,7 @@
         }
         
         .zaakiy-close-button {
-          background: rgb(255, 255, 255);
+          background: rgba(255, 255, 255, 0.87);
           border: none;
           color:${config.primaryColor};
           cursor: pointer;
@@ -507,7 +511,7 @@
         }
         
         .zaakiy-close-button:hover {
-          background: rgba(255, 255, 255, 0.8);
+           background: rgb(255, 255, 255);
           transform: scale(1.05);
         }
         
