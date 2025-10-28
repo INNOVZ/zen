@@ -528,7 +528,7 @@
           position: absolute;
           bottom: 90px; /* above the chat button */
           ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
-          max-width: min(460px, calc(100vw - 24px));
+          max-width: min(430px, calc(100vw - 24px));
           background: #ffffff;
           color: #0f172a;
           border: 1px solid #e2e8f0;
@@ -579,7 +579,7 @@
         .zaakiy-welcome-close {
           position: absolute;
           top: -38px;
-          ${config.position.includes('right') ? 'right: 8px;' : 'left: 16px;'}
+          ${config.position.includes('right') ? 'right: 5px;' : 'left: 16px;'}
           width: auto;
           height: 30px;
           padding: 0 12px;
@@ -603,8 +603,9 @@
           position: absolute;
           bottom: -8px;
           ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
-          width: 10px;
-          height: 10px;
+          width: 5px;
+          height: 5px;
+          border-radius:50%;
           background: #ffffff;
           border-left: 1px solid #e2e8f0;
           border-bottom: 1px solid #e2e8f0;
