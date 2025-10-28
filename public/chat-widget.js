@@ -33,7 +33,9 @@
     primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
     botName: scriptTag?.getAttribute('data-bot-name') || 'Assistant',
     greeting: scriptTag?.getAttribute('data-greeting') || 'Hi! How can I help you today?',
-    avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null
+    avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null,
+    welcomeMessage: scriptTag?.getAttribute('data-welcome-message') || null,
+    showWelcome: (scriptTag?.getAttribute('data-show-welcome') || 'true') !== 'false'
   };
   
   // Validate required config
@@ -521,6 +523,61 @@
           }
         }
         
+        /* Welcome overlay */
+        .zaakiy-welcome-overlay {
+          position: absolute;
+          bottom: 90px; /* above the chat button */
+          ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
+          max-width: 300px;
+          background: #ffffff;
+          color: #0f172a;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          box-shadow: 0 10px 25px rgba(2, 6, 23, 0.15);
+          padding: 14px 40px 14px 14px;
+          z-index: 1000000;
+        }
+        
+        .zaakiy-welcome-overlay .zaakiy-welcome-text a {
+          color: ${config.primaryColor};
+          font-weight: 600;
+          text-decoration: none;
+          border-bottom: 1px solid ${config.primaryColor};
+        }
+        
+        .zaakiy-welcome-close {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 22px;
+          height: 22px;
+          border-radius: 9999px;
+          border: none;
+          background: #f1f5f9;
+          color: ${config.primaryColor};
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          line-height: 1;
+        }
+        
+        .zaakiy-welcome-close:hover {
+          background: #e2e8f0;
+        }
+        
+        .zaakiy-welcome-caret {
+          position: absolute;
+          bottom: -8px;
+          ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
+          width: 14px;
+          height: 14px;
+          background: #ffffff;
+          border-left: 1px solid #e2e8f0;
+          border-bottom: 1px solid #e2e8f0;
+          transform: rotate(45deg);
+        }
+        
         .zaakiy-typing {
           display: flex;
           gap: 4px;
@@ -655,6 +712,12 @@
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
       </button>
+      
+      <div class="zaakiy-welcome-overlay" id="zaakiy-welcome-overlay" style="display: none;">
+        <div class="zaakiy-welcome-text" id="zaakiy-welcome-text"></div>
+        <button class="zaakiy-welcome-close" onclick="window.zaakiyCloseWelcome()">×</button>
+        <div class="zaakiy-welcome-caret"></div>
+      </div>
     `;
     
     document.body.appendChild(widgetContainer);
@@ -680,6 +743,19 @@
       // Set initial greeting for new session with markdown parsing
       const greetingEl = document.getElementById('zaakiy-greeting');
       if (greetingEl) greetingEl.innerHTML = parseMarkdown(config.greeting);
+    }
+    
+    // Initialize welcome overlay
+    const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
+    const welcomeText = document.getElementById('zaakiy-welcome-text');
+    if (welcomeEl && welcomeText) {
+      if (config.showWelcome) {
+        const message = config.welcomeMessage || config.greeting;
+        welcomeText.innerHTML = parseMarkdown(message);
+        welcomeEl.style.display = 'block';
+      } else {
+        welcomeEl.style.display = 'none';
+      }
     }
   }
   
@@ -740,6 +816,8 @@
     if (header) header.style.background = config.primaryColor;
     if (sendButton) sendButton.style.background = config.primaryColor;
     if (closeButton) closeButton.style.color = config.primaryColor;
+    const welcomeClose = document.querySelector('.zaakiy-welcome-close');
+    if (welcomeClose) welcomeClose.style.color = config.primaryColor;
     
     // Update existing user messages
     const userMessages = document.querySelectorAll('.zaakiy-message.user .zaakiy-message-content');
@@ -753,6 +831,8 @@
     // Update text content
     if (botNameElement) botNameElement.textContent = config.botName;
     if (greetingMessage) greetingMessage.innerHTML = parseMarkdown(config.greeting);
+    const welcomeTextEl = document.querySelector('#zaakiy-welcome-text');
+    if (welcomeTextEl) welcomeTextEl.innerHTML = parseMarkdown(config.welcomeMessage || config.greeting);
     
     if (avatarContainer) {
       while (avatarContainer.firstChild) avatarContainer.removeChild(avatarContainer.firstChild);
@@ -818,6 +898,14 @@
         chatWindow.style.display = 'none';
         chatWindow.classList.remove('zaakiy-closing');
       }, 200);
+    }
+  };
+  
+  // Close welcome overlay
+  window.zaakiyCloseWelcome = function() {
+    const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
+    if (welcomeEl) {
+      welcomeEl.style.display = 'none';
     }
   };
   
