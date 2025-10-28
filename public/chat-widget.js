@@ -342,6 +342,20 @@
           flex-direction: row-reverse;
         }
         
+        .zaakiy-message-content-wrapper {
+          display: flex;
+          flex-direction: column;
+          max-width: 80%;
+        }
+        
+        .zaakiy-message.user .zaakiy-message-content-wrapper {
+          align-items: flex-end;
+        }
+        
+        .zaakiy-message.bot .zaakiy-message-content-wrapper {
+          align-items: flex-start;
+        }
+        
         .zaakiy-message-avatar {
           width: 24px;
           height: 24px;
@@ -361,6 +375,14 @@
           justify-content: center;
           flex-shrink: 0;
           margin-top: 2px;
+        }
+        
+        .zaakiy-message-timestamp {
+          font-size: 11px;
+          color: #9ca3af;
+          margin-top: 4px;
+          padding-left: 4px;
+          padding-right: 4px;
         }
         
         .zaakiy-message-content {
@@ -730,7 +752,7 @@
             </svg>
           </button>
         </div>
-        <p class="zaakiy-powered-by">Powered by Zaakiy</p>
+        <p class="zaakiy-powered-by">Conversations powered by Zaakiy AI</p>
       </div>
       
       
@@ -762,7 +784,9 @@
         // Restore each message
         savedMessages.forEach(msg => {
           // Pass isHtml flag to preserve formatting for bot messages
-          zaakiyAddMessage(msg.content, msg.type, false, msg.isHtml || false);
+          // Pass timestamp if available
+          const timestamp = msg.timestamp ? new Date(msg.timestamp) : null;
+          zaakiyAddMessage(msg.content, msg.type, false, msg.isHtml || false, timestamp);
         });
       }
     } else {
@@ -1050,6 +1074,45 @@
     }
   };
   
+  // Format timestamp for display
+  function formatTimestamp(date) {
+    const now = new Date();
+    const diff = now - date;
+    
+    // Less than 1 minute ago
+    if (diff < 60000) {
+      return 'Just now';
+    }
+    
+    // Less than 1 hour ago
+    if (diff < 3600000) {
+      const minutes = Math.floor(diff / 60000);
+      return `${minutes}m ago`;
+    }
+    
+    // Today
+    if (date.toDateString() === now.toDateString()) {
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    }
+    
+    // Yesterday
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (date.toDateString() === yesterday.toDateString()) {
+      return `Yesterday ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
+    }
+    
+    // Older than yesterday - show date and time
+    const daysDiff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    if (daysDiff < 7) {
+      return `${daysDiff}d ago`;
+    }
+    
+    // Return formatted date and time for older messages
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + 
+           date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+  }
+  
   // Enhanced markdown parser with link highlighting
   function parseMarkdown(text) {
     if (!text) return '';
@@ -1102,12 +1165,16 @@
     return processedText;
   }
   
-  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false) {
+  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
     
     const messageDiv = document.createElement('div');
     messageDiv.className = `zaakiy-message ${type}`;
+    
+    // Store timestamp or use current time
+    const messageTimestamp = timestamp || new Date();
+    messageDiv.dataset.timestamp = messageTimestamp.getTime();
     
     let avatarHtml = '';
     if (type === 'bot') {
@@ -1131,6 +1198,10 @@
       messageDiv.appendChild(avatarWrapper.firstChild);
     }
     
+    // Create content wrapper
+    const contentWrapper = document.createElement('div');
+    contentWrapper.className = 'zaakiy-message-content-wrapper';
+    
     const contentDiv = document.createElement('div');
     contentDiv.className = 'zaakiy-message-content';
     
@@ -1149,7 +1220,15 @@
       contentDiv.style.background = config.primaryColor;
     }
     
-    messageDiv.appendChild(contentDiv);
+    // Add timestamp
+    const timestampDisplay = formatTimestamp(messageTimestamp);
+    const timestampDiv = document.createElement('div');
+    timestampDiv.className = 'zaakiy-message-timestamp';
+    timestampDiv.textContent = timestampDisplay;
+    
+    contentWrapper.appendChild(contentDiv);
+    contentWrapper.appendChild(timestampDiv);
+    messageDiv.appendChild(contentWrapper);
     
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -1169,14 +1248,18 @@
     const messages = [];
     
     messageElements.forEach(msgEl => {
-      const contentEl = msgEl.querySelector('.zaakiy-message-content');
       const type = msgEl.classList.contains('user') ? 'user' : 'bot';
+      const timestamp = msgEl.dataset.timestamp ? new Date(parseInt(msgEl.dataset.timestamp)) : new Date();
+      
+      // Look for content inside the wrapper
+      const contentWrapper = msgEl.querySelector('.zaakiy-message-content-wrapper');
+      const contentEl = contentWrapper ? contentWrapper.querySelector('.zaakiy-message-content') : msgEl.querySelector('.zaakiy-message-content');
       
       if (contentEl) {
         // For bot messages, save the HTML to preserve formatting
         // For user messages, save plain text
         const content = type === 'bot' ? contentEl.innerHTML : contentEl.textContent;
-        messages.push({ content, type, isHtml: type === 'bot' });
+        messages.push({ content, type, isHtml: type === 'bot', timestamp });
       }
     });
     
