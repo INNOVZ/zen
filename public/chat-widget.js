@@ -528,7 +528,7 @@
           position: absolute;
           bottom: 90px; /* above the chat button */
           ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
-          max-width: 460px;
+          max-width: min(460px, calc(100vw - 24px));
           background: #ffffff;
           color: #0f172a;
           border: 1px solid #e2e8f0;
@@ -544,11 +544,29 @@
         .zaakiy-welcome-text {
           font-size: 14px;
           line-height: 1.25;
-          max-width: 380px;
+          max-width: calc(100% - 70px);
           color: #0f172a;
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
+        }
+
+        @media (max-width: 480px) {
+          .zaakiy-welcome-overlay {
+            bottom: 80px;
+            ${config.position.includes('right') ? 'right: 10px;' : 'left: 10px;'}
+            padding: 7px 8px 7px 12px;
+          }
+          .zaakiy-welcome-text {
+            font-size: 13px;
+            max-width: calc(100% - 68px);
+          }
+          .zaakiy-welcome-close {
+            top: -18px;
+            height: 28px;
+            padding: 0 10px;
+            font-size: 12px;
+          }
         }
         
         .zaakiy-welcome-overlay .zaakiy-welcome-text a {
@@ -559,9 +577,12 @@
         }
         
         .zaakiy-welcome-close {
+          position: absolute;
+          top: -22px;
+          ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
           width: auto;
-          height: 28px;
-          padding: 0 10px;
+          height: 30px;
+          padding: 0 12px;
           border-radius: 9999px;
           border: none;
           background: ${config.primaryColor};
@@ -574,7 +595,6 @@
           font-weight: 600;
           line-height: 1;
           transition: filter 0.15s ease;
-          margin-left: auto;
         }
         
         .zaakiy-welcome-close:hover { filter: brightness(0.92); }
