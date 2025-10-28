@@ -345,15 +345,17 @@
         .zaakiy-message-content-wrapper {
           display: flex;
           flex-direction: column;
-          max-width: 80%;
+          max-width: 85%;
         }
         
         .zaakiy-message.user .zaakiy-message-content-wrapper {
           align-items: flex-end;
+          max-width: 85%;
         }
         
         .zaakiy-message.bot .zaakiy-message-content-wrapper {
           align-items: flex-start;
+          max-width: 85%;
         }
         
         .zaakiy-message-avatar {
@@ -386,7 +388,6 @@
         }
         
         .zaakiy-message-content {
-          max-width: 80%;
           padding: 10px 14px;
           border-radius: 12px;
           font-size: 14px !important;
@@ -495,7 +496,6 @@
         /* Mobile message adjustments */
         @media (max-width: 480px) {
           .zaakiy-message-content {
-            max-width: 85%;
             font-size: 14px;
             padding: 8px 12px;
           }
