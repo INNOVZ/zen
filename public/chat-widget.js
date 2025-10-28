@@ -540,6 +540,13 @@
           align-items: center;
           gap: 10px;
         }
+
+        .zaakiy-welcome-text {
+          font-size: 14px;
+          line-height: 1.25;
+          max-width: 230px;
+          color: #0f172a;
+        }
         
         .zaakiy-welcome-overlay .zaakiy-welcome-text a {
           color: ${config.primaryColor};
@@ -564,6 +571,7 @@
           font-weight: 600;
           line-height: 1;
           transition: filter 0.15s ease;
+          margin-left: auto;
         }
         
         .zaakiy-welcome-close:hover { filter: brightness(0.92); }
@@ -883,6 +891,9 @@
       requestAnimationFrame(() => {
         chatWindow.classList.add('zaakiy-opening');
       });
+      // Hide welcome overlay when chat opens
+      const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
+      if (welcomeEl) welcomeEl.style.display = 'none';
       
       // Focus input field for better UX
       setTimeout(() => {
