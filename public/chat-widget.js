@@ -534,17 +534,17 @@
           border: 1px solid #e2e8f0;
           border-radius: 9999px;
           box-shadow: 0 8px 20px rgba(2, 6, 23, 0.12);
-          padding: 8px 8px 8px 12px;
+          padding: 8px 12px; /* even left/right so no extra right whitespace */
           z-index: 1000000;
           display: inline-flex;
           align-items: center;
-          gap: 10px;
+          gap: 0; /* no internal gap since close button is outside */
         }
 
         .zaakiy-welcome-text {
           font-size: 14px;
           line-height: 1.25;
-          max-width: calc(100% - 70px);
+          max-width: 100%;
           color: #0f172a;
           white-space: nowrap;
           overflow: hidden;
@@ -555,11 +555,11 @@
           .zaakiy-welcome-overlay {
             bottom: 80px;
             ${config.position.includes('right') ? 'right: 10px;' : 'left: 10px;'}
-            padding: 7px 8px 7px 12px;
+            padding: 7px 12px;
           }
           .zaakiy-welcome-text {
             font-size: 13px;
-            max-width: calc(100% - 68px);
+            max-width: 100%;
           }
           .zaakiy-welcome-close {
             top: -30px;
@@ -579,7 +579,7 @@
         .zaakiy-welcome-close {
           position: absolute;
           top: -38px;
-          ${config.position.includes('right') ? 'right: 5px;' : 'left: 16px;'}
+          ${config.position.includes('right') ? 'right: 0px;' : 'left: 16px;'}
           width: auto;
           height: 30px;
           padding: 0 12px;
@@ -601,14 +601,14 @@
         
         .zaakiy-welcome-caret {
           position: absolute;
-          bottom: -8px;
+          bottom: -12px;
           ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
-          width: 5px;
-          height: 5px;
+          width: 10px;
+          height: 10px;
           border-radius:50%;
           background: #ffffff;
           border-left: 1px solid #e2e8f0;
-          border-bottom: 1px solid #e2e8f0;
+          border-bottom: 1px solid  ${config.primaryColor};
           transform: rotate(45deg);
         }
         
