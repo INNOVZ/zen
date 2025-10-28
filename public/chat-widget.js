@@ -601,12 +601,12 @@
         
         .zaakiy-welcome-caret {
           position: absolute;
-          bottom: -12px;
+          bottom: -20px;
           ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
           width: 10px;
           height: 10px;
           border-radius:50%;
-          background: #ffffff;
+          background:${config.primaryColor};
           border-left: 1px solid #e2e8f0;
           border-bottom: 1px solid  ${config.primaryColor};
           transform: rotate(45deg);
@@ -669,9 +669,9 @@
         }
           .zaakiy-powered-by {
             font-size: 12px;
-            color: #666;
+            color: #0a0a60;
             text-align: center;
-            margin-vertical: 5px;
+            padding-vertical: 5px !important;
           }
           .zaakiy-powered-by:hover {
             color: #333;
