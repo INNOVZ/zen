@@ -523,19 +523,22 @@
           }
         }
         
-        /* Welcome overlay */
+        /* Welcome overlay - compact horizontal pill */
         .zaakiy-welcome-overlay {
           position: absolute;
           bottom: 90px; /* above the chat button */
           ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
-          max-width: 300px;
+          max-width: 320px;
           background: #ffffff;
           color: #0f172a;
           border: 1px solid #e2e8f0;
-          border-radius: 12px;
-          box-shadow: 0 10px 25px rgba(2, 6, 23, 0.15);
-          padding: 14px 40px 14px 14px;
+          border-radius: 9999px;
+          box-shadow: 0 8px 20px rgba(2, 6, 23, 0.12);
+          padding: 8px 8px 8px 12px;
           z-index: 1000000;
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
         }
         
         .zaakiy-welcome-overlay .zaakiy-welcome-text a {
@@ -546,32 +549,31 @@
         }
         
         .zaakiy-welcome-close {
-          position: absolute;
-          top: 8px;
-          right: 8px;
-          width: 22px;
-          height: 22px;
+          width: auto;
+          height: 28px;
+          padding: 0 10px;
           border-radius: 9999px;
           border: none;
-          background: #f1f5f9;
-          color: ${config.primaryColor};
+          background: ${config.primaryColor};
+          color: #ffffff;
           cursor: pointer;
-          display: flex;
+          display: inline-flex;
           align-items: center;
           justify-content: center;
+          font-size: 12px;
+          font-weight: 600;
           line-height: 1;
+          transition: filter 0.15s ease;
         }
         
-        .zaakiy-welcome-close:hover {
-          background: #e2e8f0;
-        }
+        .zaakiy-welcome-close:hover { filter: brightness(0.92); }
         
         .zaakiy-welcome-caret {
           position: absolute;
           bottom: -8px;
           ${config.position.includes('right') ? 'right: 16px;' : 'left: 16px;'}
-          width: 14px;
-          height: 14px;
+          width: 10px;
+          height: 10px;
           background: #ffffff;
           border-left: 1px solid #e2e8f0;
           border-bottom: 1px solid #e2e8f0;
@@ -715,7 +717,7 @@
       
       <div class="zaakiy-welcome-overlay" id="zaakiy-welcome-overlay" style="display: none;">
         <div class="zaakiy-welcome-text" id="zaakiy-welcome-text"></div>
-        <button class="zaakiy-welcome-close" onclick="window.zaakiyCloseWelcome()">×</button>
+        <button class="zaakiy-welcome-close" onclick="window.zaakiyCloseWelcome()">Close</button>
         <div class="zaakiy-welcome-caret"></div>
       </div>
     `;
@@ -813,11 +815,14 @@
     
     // Update colors with primary color
     if (button) button.style.background = config.primaryColor;
-    if (header) header.style.background = config.primaryColor;
+    if (header) header.style.setProperty('background', config.primaryColor, 'important');
     if (sendButton) sendButton.style.background = config.primaryColor;
     if (closeButton) closeButton.style.color = config.primaryColor;
     const welcomeClose = document.querySelector('.zaakiy-welcome-close');
-    if (welcomeClose) welcomeClose.style.color = config.primaryColor;
+    if (welcomeClose) {
+      welcomeClose.style.background = config.primaryColor;
+      welcomeClose.style.color = '#ffffff';
+    }
     
     // Update existing user messages
     const userMessages = document.querySelectorAll('.zaakiy-message.user .zaakiy-message-content');
