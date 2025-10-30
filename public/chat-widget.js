@@ -185,10 +185,10 @@
         }
         
         .zaakiy-chat-window {
-          width: 380px !important;
+          width: 360px !important;
           max-width: calc(100vw - 20px);
-          height: 75vh;
-          max-height: calc(100vh - 120px);
+          height: 70vh;
+          max-height: calc(100vh - 150px);
           background: white;
           border-radius: 16px;
           box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -291,7 +291,6 @@
           width: 32px;
           height: 32px;
           border-radius: 50%;
-          background: rgba(255, 255, 255, 0.2) !important;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -371,7 +370,6 @@
           width: 24px;
           height: 24px;
           border-radius: 50%;
-          background: #e5e7eb;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -683,33 +681,24 @@
         }
           .zaakiy-powered-by {
             font-size: 12px;
-            color: #0a0a60;
+            color: #333;    
             text-align: center;
             padding-vertical: 5px !important;
             margin-bottom: 5px !important;
           }
           .zaakiy-powered-by:hover {
-            color: #333;
+            color: #0a0a60;
           }
           .zaakiy-powered-by:active {
             color: #000;
           }
           .zaakiy-powered-by:focus {
-            color: #000;
+            color:  #0a0a60;
           }
           .zaakiy-powered-by:visited {
             color: #000;
           }
           .zaakiy-powered-by:link {
-            color: #000;
-          }
-          .zaakiy-powered-by:active {
-            color: #000;
-          }
-          .zaakiy-powered-by:focus {
-            color: #000;
-          }
-          .zaakiy-powered-by:visited {
             color: #000;
           }
       </style>
