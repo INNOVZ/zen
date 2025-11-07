@@ -28,6 +28,9 @@ export default function IngestPage() {
   const [tab, setTab] = useState<"pdf" | "url" | "json">("pdf");
   const [file, setFile] = useState<File | null>(null);
   const [url, setUrl] = useState("");
+  const [recursive, setRecursive] = useState(false);
+  const [maxPages, setMaxPages] = useState<number | null>(null);
+  const [maxDepth, setMaxDepth] = useState<number | null>(null);
   const [status, setStatus] = useState("");
   const [uploads, setUploads] = useState<UploadItem[]>([]);
   const [deleteStatus, setDeleteStatus] = useState<{ [key: string]: string }>(
@@ -145,9 +148,26 @@ export default function IngestPage() {
 
         console.log("Submitting URL:", url);
 
+        // Build request payload with recursive options
+        const payload: {
+          url: string;
+          recursive?: boolean;
+          max_pages?: number;
+          max_depth?: number;
+        } = { url: url.trim() };
+        if (recursive) {
+          payload.recursive = true;
+          if (maxPages) {
+            payload.max_pages = maxPages;
+          }
+          if (maxDepth) {
+            payload.max_depth = maxDepth;
+          }
+        }
+
         const response = await axios.post(
           `${getApiBaseUrl()}/api/uploads/url`,
-          { url: url.trim() },
+          payload,
           {
             headers,
             timeout: 30000,
@@ -165,6 +185,9 @@ export default function IngestPage() {
       // Clear form
       setFile(null);
       setUrl("");
+      setRecursive(false);
+      setMaxPages(null);
+      setMaxDepth(null);
 
       // Reset file input
       const fileInput = document.getElementById(
@@ -552,17 +575,100 @@ export default function IngestPage() {
                   )}
                 </div>
               ) : (
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Website URL
-                  </label>
-                  <input
-                    type="url"
-                    className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                    placeholder="https://example.com/content"
-                    value={url}
-                    onChange={(e) => setUrl(e.target.value)}
-                  />
+                <div className="space-y-4">
+                  <div className="space-y-2">
+                    <label className="text-sm font-medium text-gray-700">
+                      Website URL
+                    </label>
+                    <input
+                      type="url"
+                      className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="https://example.com/content"
+                      value={url}
+                      onChange={(e) => setUrl(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Recursive Scraping Options */}
+                  <div className="space-y-3 p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="recursive-scrape"
+                        checked={recursive}
+                        onChange={(e) => setRecursive(e.target.checked)}
+                        className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                      />
+                      <label
+                        htmlFor="recursive-scrape"
+                        className="text-sm font-medium text-gray-700 cursor-pointer"
+                      >
+                        Scrape all sub-links (recursive)
+                      </label>
+                    </div>
+                    <p className="text-xs text-gray-500 ml-6">
+                      Automatically discover and scrape all pages on the same
+                      domain
+                    </p>
+
+                    {recursive && (
+                      <div className="ml-6 space-y-3 pt-2 border-t border-gray-200">
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-1">
+                            <label
+                              htmlFor="max-pages"
+                              className="text-xs font-medium text-gray-600"
+                            >
+                              Max Pages (1-1000)
+                            </label>
+                            <input
+                              type="number"
+                              id="max-pages"
+                              min="1"
+                              max="1000"
+                              className="w-full p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="100 (default)"
+                              value={maxPages || ""}
+                              onChange={(e) =>
+                                setMaxPages(
+                                  e.target.value
+                                    ? parseInt(e.target.value, 10)
+                                    : null
+                                )
+                              }
+                            />
+                          </div>
+                          <div className="space-y-1">
+                            <label
+                              htmlFor="max-depth"
+                              className="text-xs font-medium text-gray-600"
+                            >
+                              Max Depth (1-10)
+                            </label>
+                            <input
+                              type="number"
+                              id="max-depth"
+                              min="1"
+                              max="10"
+                              className="w-full p-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              placeholder="5 (default)"
+                              value={maxDepth || ""}
+                              onChange={(e) =>
+                                setMaxDepth(
+                                  e.target.value
+                                    ? parseInt(e.target.value, 10)
+                                    : null
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                        <p className="text-xs text-gray-500">
+                          Leave empty to use default settings
+                        </p>
+                      </div>
+                    )}
+                  </div>
                 </div>
               )}
 

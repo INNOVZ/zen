@@ -1,0 +1,143 @@
+<svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="headerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="messageGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10"/>
+      <feOffset dx="0" dy="10" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main Chat Window -->
+  <g filter="url(#shadow)">
+    <rect x="210" y="150" width="380" height="600" rx="20" fill="white"/>
+    
+    <!-- Chat Header -->
+    <rect x="210" y="150" width="380" height="80" rx="20" fill="#0a0a60"/>
+    <rect x="210" y="210" width="380" height="20" fill="#0a0a60"/>
+    
+    <!-- Avatar -->
+    <circle cx="250" cy="190" r="25" fill="white"/>
+    <text x="250" y="200" font-size="24" text-anchor="middle" fill="#ffffffff"><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 25 25">
+  <!-- Generator: Adobe Illustrator 29.8.2, SVG Export Plug-In . SVG Version: 2.1.1 Build 3)  -->
+  <image width="892" height="929" transform="translate(4.09 3.54) scale(.02)" xlink:href="data:image/png;base64,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"/>
+</svg></text>
+    
+    <!-- Header Text -->
+    <text x="290" y="185" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white">Zaakiy</text>
+    <text x="290" y="205" font-family="Arial, sans-serif" font-size="13" fill="rgba(81, 251, 152, 0.9)">•</text>
+    
+    <!-- Chat Body Background -->
+    <rect x="210" y="230" width="380" height="440" fill="#f8f9fa"/>
+    
+    <!-- Bot Message 1 -->
+    <rect x="230" y="260" width="280" height="60" rx="18" fill="white"/>
+    <foreignObject x="240" y="270" width="260" height="40">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.4;">
+        Hi! I'm Zaakiy your AI assistant. How can I help you today?
+      </div>
+    </foreignObject>
+    
+    <!-- User Message 1 -->
+    <rect x="360" y="345" width="210" height="45" rx="18" fill="#0a0a60"/>
+    <text x="465" y="373" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">What are your pricing plans?</text>
+    
+    <!-- Bot Message 2 -->
+    <rect x="230" y="415" width="300" height="70" rx="18" fill="white"/>
+    <foreignObject x="240" y="425" width="280" height="50">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.4;">
+        We offer flexible plans starting at $29/month. Would you like to see a detailed comparison?
+      </div>
+    </foreignObject>
+    
+    <!-- User Message 2 -->
+    <rect x="480" y="510" width="90" height="40" rx="18" fill="#0a0a60"/>
+    <text x="525" y="535" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Yes, please!</text>
+    
+    <!-- Bot Typing Indicator -->
+    <rect x="230" y="575" width="100" height="45" rx="18" fill="white"/>
+    <circle cx="260" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="280" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" begin="0.4s" repeatCount="indefinite"/>
+    </circle>
+    
+    <!-- Chat Input Area -->
+    <rect x="210" y="670" width="380" height="80" fill="white"/>
+    <line x1="210" y1="670" x2="590" y2="670" stroke="#e0e0e0" stroke-width="1"/>
+    
+    <!-- Input Field -->
+    <rect x="230" y="690" width="290" height="40" rx="20" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="245" y="715" font-family="Arial, sans-serif" font-size="14" fill="#999">Type your message...</text>
+    
+    <!-- Send Button -->
+    <circle cx="550" cy="710" r="20" fill="url(#messageGradient)"/>
+    <text x="550" y="717" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle">➤</text>
+  </g>
+  
+  <!-- Floating Message 1 (Top Left) -->
+  <g filter="url(#shadow)">
+    <rect x="50" y="100" width="180" height="60" rx="15" fill="white">
+      <animate attributeName="y" values="100;90;100" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <text x="140" y="135" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="135;125;135" dur="3s" repeatCount="indefinite"/>
+      ✨ 24/7 automated
+    </text>
+    <text x="140" y="155" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="155;145;155" dur="3s" repeatCount="indefinite"/>
+      support
+    </text>
+  </g>
+  
+  <!-- Floating Message 2 (Top Right) -->
+  <g filter="url(#shadow)">
+    <rect x="620" y="250" width="170" height="55" rx="15" fill="url(#messageGradient)">
+      <animate attributeName="y" values="250;240;250" dur="3s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="705" y="285" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">
+      <animate attributeName="y" values="285;275;285" dur="3s" begin="1s" repeatCount="indefinite"/>
+      💬 Instant responses
+    </text>
+  </g>
+  
+  <!-- Floating Message 3 (Bottom Left) -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="650" width="160" height="55" rx="15" fill="white">
+      <animate attributeName="y" values="650;640;650" dur="3s" begin="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="120" y="685" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="685;675;685" dur="3s" begin="2s" repeatCount="indefinite"/>
+      🚀 Deploy in minutes
+    </text>
+  </g>
+  
+  <!-- Floating Message 4 (Bottom Right) -->
+  <g filter="url(#shadow)">
+    <rect x="610" y="700" width="180" height="55" rx="15" fill="white">
+      <animate attributeName="y" values="700;690;700" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="700" y="735" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="735;725;735" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      📊 Smart analytics
+    </text>
+  </g>
+</svg>

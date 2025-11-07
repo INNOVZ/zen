@@ -1,0 +1,144 @@
+<svg viewBox="0 0 800 900" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="10"/>
+      <feOffset dx="0" dy="10" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.3"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Main Chat Window -->
+  <g filter="url(#shadow)">
+    <rect x="210" y="150" width="380" height="600" rx="20" fill="white"/>
+    
+    <!-- Chat Header - Dark Blue -->
+    <rect x="210" y="150" width="380" height="80" rx="20" fill="#0a0f3d"/>
+    <rect x="210" y="210" width="380" height="20" fill="#0a0f3d"/>
+    
+    <!-- Avatar Circle with Logo -->
+    <circle cx="250" cy="190" r="25" fill="none" stroke="#4a5583" stroke-width="2"/>
+    <!-- Logo Z inside circle -->
+    <path d="M 243 180 L 257 180 L 243 200 L 257 200" fill="none" stroke="#4a5583" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Header Text -->
+    <text x="290" y="190" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="white">Zaakiy AI</text>
+    
+    <!-- Online Status Dot -->
+    <circle cx="399" cy="185" r="5" fill="#21e489ff"/>
+    
+    <!-- Close Button -->
+    <circle cx="560" cy="190" r="18" fill="white"/>
+    <text x="560" y="197" font-family="Arial, sans-serif" font-size="20" fill="#0a0f3d" text-anchor="middle">×</text>
+    
+    <!-- Chat Body Background -->
+    <rect x="210" y="230" width="380" height="500" fill="#f5f5f5"/>
+    
+    <!-- Bot Message 1 -->
+    <rect x="230" y="260" width="310" height="55" rx="20" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+    <!-- Bot Message 1 -->
+    <rect x="230" y="260" width="280" height="60" rx="18" fill="white"/>
+    <foreignObject x="240" y="270" width="260" height="40">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.4;">
+        Hi! I'm Zaakiy your AI assistant. How can I help you today?
+      </div>
+    </foreignObject>
+    
+    <!-- User Message 1 -->
+    <rect x="360" y="345" width="210" height="45" rx="18" fill="#0a0a60"/>
+    <text x="465" y="373" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">What are your pricing plans?</text>
+    
+    <!-- Bot Message 2 -->
+    <rect x="230" y="415" width="300" height="70" rx="18" fill="white"/>
+    <foreignObject x="240" y="425" width="280" height="50">
+      <div xmlns="http://www.w3.org/1999/xhtml" style="font-family: Arial, sans-serif; font-size: 14px; color: #333; line-height: 1.4;">
+        Hi, We offer flexible plans starting at $40/month. Would you like to know more?
+      </div>
+    </foreignObject>
+    
+    <!-- User Message 2 -->
+    <rect x="480" y="510" width="90" height="40" rx="18" fill="#0a0a60"/>
+    <text x="525" y="535" font-family="Arial, sans-serif" font-size="14" fill="white" text-anchor="middle">Yes, please!</text>
+    
+    <!-- Bot Typing Indicator -->
+    <rect x="230" y="575" width="100" height="45" rx="18" fill="white"/>
+    <circle cx="260" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="280" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" begin="0.2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="597.5" r="5" fill="#999">
+      <animate attributeName="cy" values="597.5;587.5;597.5" dur="1.4s" begin="0.4s" repeatCount="indefinite"/>
+    </circle>
+    <!-- Chat Input Area -->
+    <rect x="210" y="610" width="380" height="80" fill="white"/>
+    <line x1="210" y1="610" x2="590" y2="610" stroke="#e0e0e0" stroke-width="1"/>
+    
+    <!-- Input Field -->
+    <rect x="230" y="630" width="290" height="50" rx="25" fill="white" stroke="#e0e0e0" stroke-width="1"/>
+    <text x="250" y="660" font-family="Arial, sans-serif" font-size="15" fill="#999">Type your message...</text>
+    
+    <!-- Send Button -->
+    <rect x="540" y="635" width="40" height="40" rx="10" fill="#0a0f3d"/>
+    <text x="560" y="663" font-family="Arial, sans-serif" font-size="20" fill="white" text-anchor="middle">➤</text>
+    
+    <!-- Footer Text -->
+    <rect x="210" y="690" width="380" height="60" rx="20" fill="white"/>
+    <rect x="210" y="690" width="380" height="20" fill="white"/>
+    <text x="400" y="730" font-family="Arial, sans-serif" font-size="13" fill="#666" text-anchor="middle">Conversations powered by Zaakiy AI</text>
+  </g>
+  
+  <!-- Floating Message 1 (Top Left) -->
+  <g filter="url(#shadow)">
+    <rect x="50" y="120" width="180" height="80" rx="15" fill="white">
+      <animate attributeName="y" values="100;90;100" dur="3s" repeatCount="indefinite"/>
+    </rect>
+    <text x="140" y="135" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="135;125;135" dur="3s" repeatCount="indefinite"/>
+      ✨ 24/7 automated
+    </text>
+    <text x="140" y="155" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="155;145;155" dur="3s" repeatCount="indefinite"/>
+      support
+    </text>
+  </g>
+  
+  <!-- Floating Message 2 (Top Right) -->
+  <g filter="url(#shadow)">
+    <rect x="620" y="250" width="170" height="55" rx="15" fill="#0a0f3d">
+      <animate attributeName="y" values="250;240;250" dur="3s" begin="1s" repeatCount="indefinite"/>
+    </rect>
+    <text x="705" y="285" font-family="Arial, sans-serif" font-size="16" fill="white" text-anchor="middle">
+      <animate attributeName="y" values="285;275;285" dur="3s" begin="1s" repeatCount="indefinite"/>
+      💬 Instant responses
+    </text>
+  </g>
+  
+  <!-- Floating Message 3 (Bottom Left) -->
+  <g filter="url(#shadow)">
+    <rect x="40" y="650" width="160" height="55" rx="15" fill="white">
+      <animate attributeName="y" values="650;640;650" dur="3s" begin="2s" repeatCount="indefinite"/>
+    </rect>
+    <text x="120" y="685" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="685;675;685" dur="3s" begin="2s" repeatCount="indefinite"/>
+      🚀 Deploy in minutes
+    </text>
+  </g>
+  
+  <!-- Floating Message 4 (Bottom Right) -->
+  <g filter="url(#shadow)">
+    <rect x="610" y="700" width="180" height="55" rx="15" fill="white">
+      <animate attributeName="y" values="700;690;700" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+    </rect>
+    <text x="700" y="735" font-family="Arial, sans-serif" font-size="16" fill="#333" text-anchor="middle">
+      <animate attributeName="y" values="735;725;735" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+      📊 Smart analytics
+    </text>
+  </g>
+</svg>

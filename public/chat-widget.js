@@ -185,10 +185,10 @@
         }
         
         .zaakiy-chat-window {
-          width: 360px !important;
+          width: 380px !important;
           max-width: calc(100vw - 20px);
-          height: 70vh;
-          max-height: calc(100vh - 150px);
+          height: 75vh;
+          max-height: calc(100vh - 120px);
           background: white;
           border-radius: 16px;
           box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -291,6 +291,7 @@
           width: 32px;
           height: 32px;
           border-radius: 50%;
+          background: rgba(255, 255, 255, 0.2) !important;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -370,6 +371,7 @@
           width: 24px;
           height: 24px;
           border-radius: 50%;
+          background: #e5e7eb;
           display: flex;
           align-items: center;
           justify-content: center;

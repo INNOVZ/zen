@@ -71,7 +71,11 @@ export const uploadsApi = {
       `📤 Uploading file: ${file.name} (${file.size} bytes) as ${type}`
     );
 
-    const apiUrl = `${getApiBaseUrl()}/api/uploads/${type}`.replace('http://', 'https://');
+    // Allow HTTP for localhost, force HTTPS for production
+    let apiUrl = `${getApiBaseUrl()}/api/uploads/${type}`;
+    if (!apiUrl.includes('localhost') && !apiUrl.startsWith('https://')) {
+      apiUrl = apiUrl.replace('http://', 'https://');
+    }
     const response = await fetch(apiUrl, {
       method: "POST",
       headers,

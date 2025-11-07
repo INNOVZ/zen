@@ -84,8 +84,11 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
   const requestId = headers["X-Request-ID"];
   const apiBaseUrl = getApiBaseUrl();
-  // Hard guard: never allow http in browser requests
-  const fullUrl = `${apiBaseUrl}${url}`.replace(/^http:\/\//, 'https://');
+  // Allow HTTP for localhost, force HTTPS for production
+  let fullUrl = `${apiBaseUrl}${url}`;
+  if (!fullUrl.includes('localhost') && !fullUrl.startsWith('https://')) {
+    fullUrl = fullUrl.replace(/^http:\/\//, 'https://');
+  }
   console.log(`🔍 [${requestId}] API Call:`, fullUrl, { 
     userId: userId.substring(0, 8) + "...", 
     orgId: orgId?.substring(0, 8) + "..." || "none",
