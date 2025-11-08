@@ -636,7 +636,7 @@
           border: none;
           color:${config.primaryColor};
           cursor: pointer;
-          font-size: 16px;
+          font-size: 12px;
           width: 24px;
           height: 24px;
           border-radius: 50%;
