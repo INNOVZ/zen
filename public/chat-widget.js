@@ -729,8 +729,8 @@
           }
           .zaakiy-welcome-close {
             top: -42px; /* Position above overlay with more space */
-            height: 40px; /* Larger touch target on mobile */
-            min-height: 44px; /* Minimum touch target size for accessibility */
+            height: 30px; /* Larger touch target on mobile */
+            min-height: 30px; /* Minimum touch target size for accessibility */
             width: auto;
             min-width: 70px; /* Larger minimum width for mobile - easier to tap */
             padding: 0 16px; /* More padding for easier tapping */
@@ -773,9 +773,8 @@
           ${config.position.includes('right') ? 'right: 0px;' : 'left: 16px;'}
           width: auto;
           min-width: 44px; /* Minimum touch target size for mobile */
-          height: 30px;
-          min-height: 44px; /* Minimum touch target size for mobile */
-          padding: 0 12px;
+         
+          padding: 7px 12px;
           border-radius: 9999px;
           border: none;
           background: ${config.primaryColor};
