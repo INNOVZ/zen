@@ -227,8 +227,8 @@
             max-height: calc(100dvh - 20px) !important;
             /* Uniform margins - use same value for left and right */
             margin: 0 !important;
-            margin-top: max(10px, calc(10px + env(safe-area-inset-top, 0px))) !important;
-            margin-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px))) !important;
+            margin-top: max(10px, calc(1px + env(safe-area-inset-top, 0px))) !important;
+            margin-bottom: max(10px, calc(1px + env(safe-area-inset-bottom, 0px))) !important;
             margin-left: 0 !important;
             margin-right: 0 !important;
             border-radius: 16px 16px 0 0 !important;
@@ -494,7 +494,7 @@
           border-radius: 12px;
           font-size: 14px !important;
           line-height: 1.45 !important;
-          word-wrap: break-word !important1;
+          word-wrap: break-word !important;
           overflow-wrap: break-word;
         }
         
@@ -525,9 +525,30 @@
           line-height: 0.5;
         }
         
+        /* Bot messages - explicit styling to prevent brand color inheritance */
         .zaakiy-message.bot .zaakiy-message-content {
-          background: white;
-          border: 1px solid #e1e5e9;
+          background: white !important;
+          border: 1px solid #e1e5e9 !important;
+          color: #1a1a1a !important; /* Explicit dark text color */
+          /* Prevent any color inheritance from parent elements */
+          isolation: isolate;
+        }
+        
+        /* Links in bot messages should use primary color (override the general rule) */
+        .zaakiy-message.bot .zaakiy-message-content a {
+          color: ${config.primaryColor} !important;
+        }
+        
+        /* Strong text in bot messages */
+        .zaakiy-message.bot .zaakiy-message-content strong {
+          color: #1a1a1a !important;
+          font-weight: 700 !important;
+        }
+        
+        /* Ensure paragraphs and divs in bot messages use correct color */
+        .zaakiy-message.bot .zaakiy-message-content p,
+        .zaakiy-message.bot .zaakiy-message-content div {
+          color: #1a1a1a !important;
         }
         
         .zaakiy-message.user .zaakiy-message-content {
@@ -680,6 +701,7 @@
           display: inline-flex;
           align-items: center;
           gap: 0; /* no internal gap since close button is outside */
+          pointer-events: auto !important; /* Ensure overlay is clickable */
         }
 
         .zaakiy-welcome-text {
@@ -697,16 +719,44 @@
             bottom: 80px;
             ${config.position.includes('right') ? 'right: 10px;' : 'left: 10px;'}
             padding: 7px 12px;
+            /* Ensure overlay is clickable on mobile */
+            pointer-events: auto !important;
+            z-index: 1000000;
           }
           .zaakiy-welcome-text {
             font-size: 13px;
             max-width: 100%;
           }
           .zaakiy-welcome-close {
-            top: -30px;
-            height: 28px;
-            padding: 0 10px;
-            font-size: 12px;
+            top: -42px; /* Position above overlay with more space */
+            height: 40px; /* Larger touch target on mobile */
+            min-height: 44px; /* Minimum touch target size for accessibility */
+            width: auto;
+            min-width: 70px; /* Larger minimum width for mobile - easier to tap */
+            padding: 0 16px; /* More padding for easier tapping */
+            font-size: 13px; /* Slightly larger text */
+            /* Ensure button is clickable */
+            pointer-events: auto !important;
+            z-index: 1000002; /* Higher z-index than overlay */
+            position: absolute !important; /* Keep absolute positioning */
+            /* Ensure button is always visible and clickable */
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.3);
+            touch-action: manipulation;
+          }
+        }
+        
+        /* Mobile-specific: Better positioning for welcome close button */
+        @media (max-width: 768px) {
+          .zaakiy-welcome-overlay {
+            pointer-events: auto !important;
+            z-index: 1000000;
+          }
+          .zaakiy-welcome-close {
+            pointer-events: auto !important;
+            z-index: 1000002;
+            /* Ensure button is always clickable */
+            -webkit-tap-highlight-color: rgba(0, 0, 0, 0.2);
+            touch-action: manipulation;
           }
         }
         
@@ -722,7 +772,9 @@
           top: -38px;
           ${config.position.includes('right') ? 'right: 0px;' : 'left: 16px;'}
           width: auto;
+          min-width: 44px; /* Minimum touch target size for mobile */
           height: 30px;
+          min-height: 44px; /* Minimum touch target size for mobile */
           padding: 0 12px;
           border-radius: 9999px;
           border: none;
@@ -736,9 +788,20 @@
           font-weight: 600;
           line-height: 1;
           transition: filter 0.15s ease;
+          z-index: 1000001; /* Ensure it's above other elements */
+          pointer-events: auto !important; /* Ensure clicks work */
+          -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); /* Mobile tap feedback */
+          touch-action: manipulation; /* Improve touch responsiveness */
         }
         
-        .zaakiy-welcome-close:hover { filter: brightness(0.92); }
+        .zaakiy-welcome-close:hover { 
+          filter: brightness(0.92); 
+        }
+        
+        .zaakiy-welcome-close:active {
+          filter: brightness(0.85);
+          transform: scale(0.95);
+        }
         
         
         .zaakiy-typing {
@@ -890,12 +953,66 @@
       
       <div class="zaakiy-welcome-overlay" id="zaakiy-welcome-overlay" style="display: none;">
         <div class="zaakiy-welcome-text" id="zaakiy-welcome-text"></div>
-        <button class="zaakiy-welcome-close" onclick="window.zaakiyCloseWelcome()">Close</button>
+        <button 
+          class="zaakiy-welcome-close" 
+          onclick="window.zaakiyCloseWelcome(event); return false;"
+          ontouchstart="window.zaakiyCloseWelcome(event); return false;"
+          aria-label="Close welcome message"
+          type="button"
+        >Close</button>
       </div>
     `;
     
     document.body.appendChild(widgetContainer);
     isWidgetCreated = true;
+    
+    // Add event listener for welcome close button (more reliable than onclick on mobile)
+    function setupWelcomeCloseButton() {
+      const welcomeCloseBtn = document.querySelector('.zaakiy-welcome-close');
+      if (welcomeCloseBtn) {
+        // Remove existing onclick to avoid double-firing
+        welcomeCloseBtn.removeAttribute('onclick');
+        welcomeCloseBtn.removeAttribute('ontouchstart');
+        
+        // Clear any existing listeners by cloning and replacing
+        const newBtn = welcomeCloseBtn.cloneNode(true);
+        welcomeCloseBtn.parentNode.replaceChild(newBtn, welcomeCloseBtn);
+        
+        // Add event listeners for both click and touch
+        newBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          window.zaakiyCloseWelcome(e);
+          return false;
+        }, { passive: false, capture: true });
+        
+        newBtn.addEventListener('touchend', function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          e.stopImmediatePropagation();
+          window.zaakiyCloseWelcome(e);
+          return false;
+        }, { passive: false, capture: true });
+        
+        // Also handle touchstart to prevent default behaviors
+        newBtn.addEventListener('touchstart', function(e) {
+          // Don't prevent default here, just stop propagation
+          e.stopPropagation();
+        }, { passive: true });
+        
+        // Ensure button is clickable
+        newBtn.style.pointerEvents = 'auto';
+        newBtn.style.cursor = 'pointer';
+        newBtn.style.userSelect = 'none';
+        newBtn.style.webkitUserSelect = 'none';
+      }
+    }
+    
+    // Setup button immediately and also after a delay (in case DOM isn't ready)
+    setupWelcomeCloseButton();
+    setTimeout(setupWelcomeCloseButton, 100);
+    setTimeout(setupWelcomeCloseButton, 500); // Also try after longer delay
     
     // Initialize button state on mobile
     const chatButton = widgetContainer.querySelector('.zaakiy-chat-button');
@@ -967,6 +1084,8 @@
         const message = config.welcomeMessage || config.greeting;
         welcomeText.innerHTML = parseMarkdown(message);
         welcomeEl.style.display = 'block';
+        // Re-setup close button when overlay is shown
+        setTimeout(setupWelcomeCloseButton, 50);
       } else {
         welcomeEl.style.display = 'none';
       }
@@ -1177,11 +1296,33 @@
   };
   
   // Close welcome overlay
-  window.zaakiyCloseWelcome = function() {
-    const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
-    if (welcomeEl) {
-      welcomeEl.style.display = 'none';
+  window.zaakiyCloseWelcome = function(event) {
+    // Prevent event bubbling and default behavior
+    if (event) {
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     }
+    
+    const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
+    if (welcomeEl && welcomeEl.style.display !== 'none') {
+      // Add fade-out animation
+      welcomeEl.style.opacity = '0';
+      welcomeEl.style.transition = 'opacity 0.2s ease';
+      
+      // Hide after animation
+      setTimeout(() => {
+        welcomeEl.style.display = 'none';
+        welcomeEl.style.opacity = '1'; // Reset for next time
+        welcomeEl.style.transition = '';
+      }, 200);
+      
+      // Log for debugging (can be removed in production)
+      console.log('Welcome overlay closed');
+    }
+    
+    // Also ensure the button click is registered
+    return false;
   };
   
   window.zaakiySendMessage = function() {
