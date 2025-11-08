@@ -855,7 +855,7 @@
               <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-bottom: 2px;"></div>
             </div>
           </div>
-          <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">×</button>
+          <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">-</button>
         </div>
         
         <div class="zaakiy-chat-messages" id="zaakiy-messages">
