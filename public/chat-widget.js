@@ -203,29 +203,75 @@
         /* Mobile responsiveness */
         @media (max-width: 768px) {
           #zaakiy-chat-widget {
-            right: 10px !important;
-            left: 10px !important;
-            bottom: 10px;
-            align-items: stretch;
+            right: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            top: 0 !important;
+            align-items: flex-end;
+            justify-content: center;
+            /* Ensure widget doesn't exceed viewport */
+            width: 100vw;
+            max-width: 100vw;
+            height: 100vh;
+            height: 100dvh; /* Use dynamic viewport height for mobile browsers */
+            max-height: 100vh;
+            max-height: 100dvh;
+            pointer-events: none; /* Allow clicks to pass through container */
           }
           
           .zaakiy-chat-window {
-            width: 100%;
-            max-width: 100%;
-            height: calc(100vh - 100px);
-            max-height: calc(100vh - 100px);
-            margin-bottom: 10px;
-            border-radius: 12px;
+            width: 100% !important;
+            max-width: 100% !important;
+            /* Use dvh which accounts for browser UI changes */
+            height: calc(100dvh - 20px) !important;
+            max-height: calc(100dvh - 20px) !important;
+            margin: 10px !important;
+            margin-top: max(10px, calc(10px + env(safe-area-inset-top, 0px))) !important;
+            margin-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px))) !important;
+            border-radius: 16px 16px 0 0 !important;
+            /* Ensure header is always visible */
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto; /* Re-enable pointer events on chat window */
+            /* Ensure chat window starts from top with proper spacing */
+            align-self: flex-start;
+          }
+          
+          /* When chat is open on mobile, ensure proper full-height */
+          .zaakiy-chat-window.zaakiy-mobile-open {
+            height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
+            max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
+            margin-top: max(10px, calc(10px + env(safe-area-inset-top, 0px))) !important;
+            margin-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px))) !important;
           }
           
           .zaakiy-chat-button {
             align-self: ${config.position.includes('right') ? 'flex-end' : 'flex-start'};
+            margin: 10px;
+            margin-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px)));
+            position: absolute;
+            bottom: 0;
+            ${config.position.includes('right') ? 'right: 10px;' : 'left: 10px;'}
+            z-index: 1000001;
+            pointer-events: auto; /* Ensure button is clickable */
           }
         }
         
         @media (max-width: 480px) {
           .zaakiy-chat-window {
-            border-radius: 8px;
+            border-top-left-radius: 12px !important;
+            border-top-right-radius: 12px !important;
+            /* Full height on small screens */
+            height: calc(100dvh - 20px) !important;
+            max-height: calc(100dvh - 20px) !important;
+            margin: 10px !important;
+            margin-top: max(10px, calc(10px + env(safe-area-inset-top, 0px))) !important;
+            margin-bottom: max(10px, calc(10px + env(safe-area-inset-bottom, 0px))) !important;
+          }
+          
+          .zaakiy-chat-window.zaakiy-mobile-open {
+            height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
+            max-height: calc(100dvh - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px) - 20px) !important;
           }
           
           .zaakiy-chat-button {
@@ -242,6 +288,14 @@
           justify-content: space-between;
           align-items: center;
           flex-shrink: 0;
+          /* Ensure header stays visible and not cut off */
+          position: sticky;
+          top: 0;
+          z-index: 10;
+          /* Add safe area padding for mobile devices with notches */
+          padding-top: calc(20px + env(safe-area-inset-top, 0px)) !important;
+          padding-left: calc(16px + env(safe-area-inset-left, 0px)) !important;
+          padding-right: calc(16px + env(safe-area-inset-right, 0px)) !important;
         }
         
         .zaakiy-chat-header-info {
@@ -271,7 +325,13 @@
         
         @media (max-width: 480px) {
           .zaakiy-chat-header {
-            padding: 14px;
+            padding: 14px !important;
+            /* Ensure header padding accounts for safe areas on small screens */
+            padding-top: calc(14px + env(safe-area-inset-top, 0px)) !important;
+            padding-left: calc(14px + env(safe-area-inset-left, 0px)) !important;
+            padding-right: calc(14px + env(safe-area-inset-right, 0px)) !important;
+            /* Ensure header is always visible on mobile */
+            min-height: calc(60px + env(safe-area-inset-top, 0px));
           }
           
           .zaakiy-chat-header-info {
@@ -915,9 +975,35 @@
   
   window.zaakiyOpenChat = function() {
     const chatWindow = document.getElementById('zaakiy-chat-window');
+    const widgetContainer = document.getElementById('zaakiy-chat-widget');
     if (chatWindow) {
       chatWindow.classList.remove('zaakiy-closing');
       chatWindow.style.display = 'flex';
+      
+      // Mobile-specific fixes: Ensure header is visible
+      if (window.innerWidth <= 768) {
+        // Add mobile class for additional styling
+        chatWindow.classList.add('zaakiy-mobile-open');
+        
+        // Ensure widget container accounts for mobile browser UI
+        if (widgetContainer) {
+          // Use dynamic viewport height which accounts for browser UI changes
+          const dvh = window.innerHeight || document.documentElement.clientHeight;
+          widgetContainer.style.height = dvh + 'px';
+          widgetContainer.style.maxHeight = dvh + 'px';
+        }
+        
+        // Ensure chat window is positioned correctly to show header
+        // Add a small delay to ensure DOM is ready
+        setTimeout(() => {
+          // Scroll messages container to top to ensure header is visible
+          const messagesContainer = document.querySelector('.zaakiy-chat-messages');
+          if (messagesContainer) {
+            messagesContainer.scrollTop = 0;
+          }
+        }, 50);
+      }
+      
       // Trigger animation after display is set
       requestAnimationFrame(() => {
         chatWindow.classList.add('zaakiy-opening');
@@ -936,9 +1022,17 @@
   
   window.zaakiyCloseChat = function() {
     const chatWindow = document.getElementById('zaakiy-chat-window');
+    const widgetContainer = document.getElementById('zaakiy-chat-widget');
     if (chatWindow) {
       chatWindow.classList.remove('zaakiy-opening');
+      chatWindow.classList.remove('zaakiy-mobile-open'); // Remove mobile class
       chatWindow.classList.add('zaakiy-closing');
+      
+      // Reset widget container height on mobile when closing
+      if (window.innerWidth <= 768 && widgetContainer) {
+        widgetContainer.style.height = '';
+        widgetContainer.style.maxHeight = '';
+      }
       
       // Hide after animation completes
       setTimeout(() => {
