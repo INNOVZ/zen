@@ -660,7 +660,7 @@
           .zaakiy-close-button {
             width: 36px;
             height: 36px;
-            font-size: 36px;
+            font-size: 18px;
           }
         }
         
