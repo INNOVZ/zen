@@ -24,8 +24,8 @@ import { SimpleSubscriptionStatus } from "@/components/subscription/SimpleSubscr
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [user, setUser] = useState<SupabaseUser | null>(null);
-  const pathname = usePathname();
-  const params = useParams();
+  const pathname = usePathname() ?? "";
+  const params = useParams<{ userId?: string }>();
 
   useEffect(() => {
     const getUser = async () => {
@@ -40,7 +40,13 @@ const Sidebar = () => {
   }, []);
 
   // Get userId from params or user state
-  const currentUserId = params?.userId || user?.id;
+  const routeUserId =
+    typeof params?.userId === "string"
+      ? params.userId
+      : Array.isArray(params?.userId)
+        ? params.userId[0]
+        : undefined;
+  const currentUserId = routeUserId || user?.id;
 
   // Create a function to get the correct path for menu items
   const getMenuItemPath = (basePath: string) => {

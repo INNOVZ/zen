@@ -3,10 +3,10 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 import Sidebar from "@/components/dashboard/layout/SideBar";
-import { Toaster } from "@/components/ui/sonner";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import ChatWidget from "@/components/ChatWidget";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Zaakiy | Console",

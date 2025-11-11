@@ -20,7 +20,13 @@ import { toast } from "sonner";
 
 export default function AIConfigurationPage() {
   const router = useRouter();
-  const { userId } = useParams();
+  const params = useParams<{ userId?: string }>();
+  const userId =
+    typeof params?.userId === "string"
+      ? params.userId
+      : Array.isArray(params?.userId)
+      ? params.userId[0]
+      : undefined;
   const [loading, setLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
 

@@ -88,8 +88,14 @@ interface ChatbotConfigurationProps {
 export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const { userId } = useParams();
-  const chatbotId = searchParams.get("id");
+  const params = useParams<{ userId?: string }>();
+  const userId =
+    typeof params?.userId === "string"
+      ? params.userId
+      : Array.isArray(params?.userId)
+      ? params.userId[0]
+      : undefined;
+  const chatbotId = searchParams?.get("id") ?? null;
 
   // Local state for validation and preview
   const [validationErrors, setValidationErrors] = useState<string[]>([]);

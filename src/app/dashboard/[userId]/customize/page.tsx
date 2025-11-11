@@ -32,9 +32,15 @@ import ChatbotConfiguration from "@/components/dashboard/customize/ChatbotConfig
 
 export default function EnhancedCustomizePage() {
   const searchParams = useSearchParams();
-  const { userId } = useParams();
+  const params = useParams<{ userId?: string }>();
+  const userId =
+    typeof params?.userId === "string"
+      ? params.userId
+      : Array.isArray(params?.userId)
+        ? params.userId[0]
+        : undefined;
   const router = useRouter();
-  const chatbotId = searchParams.get("id");
+  const chatbotId = searchParams?.get("id") ?? null;
 
   // SECURITY: Verify user authorization before rendering
   const {

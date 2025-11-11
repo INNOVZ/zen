@@ -3,7 +3,17 @@ import { ConversationInfo } from "@/types/schemaTypes";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
-import type { ChatResponse, TokenHandler, FeedbackRequest, ContextConfig, PerformanceMetrics, ContextAnalytics, HealthCheck } from "./types";
+import type { 
+  ChatResponse, 
+  TokenHandler, 
+  FeedbackRequest, 
+  ContextConfig, 
+  PerformanceMetrics, 
+  ContextAnalytics, 
+  HealthCheck,
+  IntentAnalyticsResponse,
+  IntentDetailsResponse,
+} from "./types";
 
 export const conversationApi = {
   sendMessage: async (
@@ -369,6 +379,71 @@ export const conversationApi = {
       return await fetchWithAuth(`/api/chat/analytics/context?days=${days}`);
     } catch (error) {
       console.warn("Context analytics not available:", error);
+      return null;
+    }
+  },
+
+  // ==========================================
+  // INTENT ANALYTICS
+  // ==========================================
+
+  getIntentAnalytics: async (
+    days: number = 7
+  ): Promise<IntentAnalyticsResponse | null> => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort(new Error("Request timeout after 30 seconds"));
+      }, 30000);
+
+      const result = await fetchWithAuth(
+        `/api/chat/analytics/intent?days=${days}`,
+        {
+          signal: controller.signal,
+        }
+      );
+
+      clearTimeout(timeoutId);
+      return result;
+    } catch (error) {
+      console.warn("Intent analytics not available:", error);
+      if (
+        error instanceof Error &&
+        (error.name === "AbortError" || error.message.includes("timeout"))
+      ) {
+        console.warn("Intent analytics request timed out");
+      }
+      return null;
+    }
+  },
+
+  getIntentDetails: async (
+    intentType: string,
+    days: number = 7
+  ): Promise<IntentDetailsResponse | null> => {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort(new Error("Request timeout after 30 seconds"));
+      }, 30000);
+
+      const result = await fetchWithAuth(
+        `/api/chat/analytics/intent/${encodeURIComponent(intentType)}?days=${days}`,
+        {
+          signal: controller.signal,
+        }
+      );
+
+      clearTimeout(timeoutId);
+      return result;
+    } catch (error) {
+      console.warn("Intent details not available:", error);
+      if (
+        error instanceof Error &&
+        (error.name === "AbortError" || error.message.includes("timeout"))
+      ) {
+        console.warn("Intent details request timed out");
+      }
       return null;
     }
   },

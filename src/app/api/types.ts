@@ -165,6 +165,76 @@ export interface PerformanceMetrics {
   generated_at: string;
 }
 
+// Intent Analytics Types
+export interface IntentAnalytics {
+  summary: {
+    total_queries: number;
+    queries_with_intent: number;
+    intent_coverage: number;
+    unique_intents: number;
+    period_days: number;
+  };
+  intent_distribution: Record<string, number>;
+  intent_performance: Record<
+    string,
+    {
+      total_queries: number;
+      avg_retrieval_time_ms: number;
+      avg_quality_score: number;
+      avg_sources_used: number;
+      avg_confidence: number;
+    }
+  >;
+  intent_confidence: Record<string, number>;
+  detection_methods: Record<string, number>;
+  intent_trends: Array<{
+    date: string;
+    intents: Record<string, number>;
+    total: number;
+  }>;
+  intent_fulfillment: Record<
+    string,
+    {
+      total_queries: number;
+      queries_with_feedback: number;
+      positive_feedback: number;
+      avg_rating: number;
+      satisfaction_rate: number;
+    }
+  >;
+  generated_at: string;
+}
+
+export interface IntentDetails {
+  intent_type: string;
+  total_queries: number;
+  confidence: {
+    average: number;
+    min: number;
+    max: number;
+    distribution: Record<string, number>;
+  };
+  performance: {
+    avg_retrieval_time_ms: number;
+    avg_quality_score: number;
+    avg_sources_used: number;
+  };
+  detection_methods: Record<string, number>;
+  period_days: number;
+  generated_at: string;
+  error?: string;
+}
+
+export interface IntentAnalyticsResponse {
+  success: boolean;
+  analytics: IntentAnalytics;
+}
+
+export interface IntentDetailsResponse {
+  success: boolean;
+  details: IntentDetails;
+}
+
 export interface FeedbackRequest {
   message_id: string;
   rating: 1 | -1;

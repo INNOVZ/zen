@@ -22,8 +22,12 @@ const doto = Doto({
   display: "swap",
   weight: ["400", "500", "700"],
 });
+
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 export const metadata: Metadata = {
-  title: "Zentria AI | Upgrade to AI workforce",
+  title: "Zaakiy AI | Upgrade to AI workforce",
   description: "Making the workforce better with AI",
 };
 

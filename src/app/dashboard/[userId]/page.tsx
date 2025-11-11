@@ -31,6 +31,14 @@ const AnalyticsDashboard = dynamic(
   }
 );
 
+const IntentAnalyticsDashboard = dynamic(
+  () => import("@/components/dashboard/home/IntentAnalyticsDashboard"),
+  {
+    loading: () => <LoadingSkeleton />,
+    ssr: false,
+  }
+);
+
 const PerformanceMonitor = dynamic(
   () => import("@/components/PerformanceMonitor"),
   {
@@ -46,7 +54,13 @@ const OfflineMode = dynamic(
 );
 
 export default function UserDashboard() {
-  const { userId } = useParams();
+  const params = useParams<{ userId?: string }>();
+  const userId =
+    typeof params?.userId === "string"
+      ? params.userId
+      : Array.isArray(params?.userId)
+      ? params.userId[0]
+      : undefined;
   const userIdString = userId as string;
 
   // Custom hooks for separation of concerns
@@ -170,11 +184,19 @@ export default function UserDashboard() {
           </Suspense>
         </ErrorBoundary>
 
-        {/* Subscription Analytics */}
+        {/* Intent Analytics Dashboard */}
         <ErrorBoundary fallback={SimpleErrorFallback}>
           <Suspense fallback={<LoadingSkeleton />}>
-           
+            <IntentAnalyticsDashboard
+              initialDays={7}
+              onRefresh={handleRefreshAnalytics}
+            />
           </Suspense>
+        </ErrorBoundary>
+
+        {/* Subscription Analytics */}
+        <ErrorBoundary fallback={SimpleErrorFallback}>
+          <Suspense fallback={<LoadingSkeleton />}></Suspense>
         </ErrorBoundary>
 
         {/* Quick Actions */}
