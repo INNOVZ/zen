@@ -13,11 +13,11 @@
  * @returns Authentication status and user data
  */
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
-import { toast } from 'sonner';
-import { User as SupabaseUser } from '@supabase/supabase-js';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
+import type { User as SupabaseUser } from "@supabase/supabase-js";
 
 interface AuthGuardResult {
   isLoading: boolean;
@@ -25,7 +25,7 @@ interface AuthGuardResult {
   user: SupabaseUser | null;
 }
 
-export function useAuthGuard(expectedUserId: string): AuthGuardResult {
+export function useAuthGuard(expectedUserId?: string): AuthGuardResult {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -38,50 +38,65 @@ export function useAuthGuard(expectedUserId: string): AuthGuardResult {
       try {
         setIsLoading(true);
         const supabase = createClient();
-        const { data: { session }, error } = await supabase.auth.getSession();
+        const [{ data: userData, error: userError }, sessionResult] =
+          await Promise.all([
+            supabase.auth.getUser(),
+            supabase.auth.getSession(),
+          ]);
 
         if (!mounted) return;
 
-        // Check 1: Authentication - Is user logged in?
-        if (error || !session?.user) {
-          console.warn('[AuthGuard] No valid session found');
+        const authedUser = userData?.user;
+        const sessionUser = sessionResult.data?.session?.user;
+
+        // Check 1: Authentication - revalidate via Supabase Auth server
+        if (userError || !authedUser) {
+          console.warn("[AuthGuard] No valid authenticated user", {
+            userError,
+          });
           toast.error("Authentication required. Please log in.");
           router.replace("/auth/login");
           setIsAuthorized(false);
           return;
         }
 
+        // Optional: warn if session storage didn't match authenticated user
+        if (sessionUser && sessionUser.id !== authedUser.id) {
+          console.warn("[AuthGuard] Session/user mismatch detected", {
+            sessionUserId: sessionUser.id,
+            authedUserId: authedUser.id,
+          });
+        }
+
         // Check 2: Authorization - Does user ID match URL parameter?
-        // CRITICAL for multi-tenant security
-        if (session.user.id !== expectedUserId) {
-          console.warn('[AuthGuard] Unauthorized access attempt:', {
-            sessionUserId: session.user.id,
-            requestedUserId: expectedUserId
+        if (expectedUserId && authedUser.id !== expectedUserId) {
+          console.warn("[AuthGuard] Unauthorized access attempt:", {
+            authedUserId: authedUser.id,
+            requestedUserId: expectedUserId,
           });
           toast.error("Unauthorized access. Redirecting to your dashboard.");
-          
-          // Redirect to user's own dashboard
-          const currentPath = window.location.pathname;
+
+          const currentPath =
+            typeof window !== "undefined" ? window.location.pathname : "/";
           const newPath = currentPath.replace(
             `/dashboard/${expectedUserId}`,
-            `/dashboard/${session.user.id}`
+            `/dashboard/${authedUser.id}`
           );
           router.replace(newPath);
           setIsAuthorized(false);
           return;
         }
 
-        // Both checks passed - user is authenticated AND authorized
-        console.log('[AuthGuard] Access granted:', {
-          userId: session.user.id,
-          email: session.user.email
+        // Both checks passed
+        console.log("[AuthGuard] Access granted:", {
+          userId: authedUser.id,
+          email: authedUser.email,
         });
 
-        setUser(session.user);
+        setUser(authedUser);
         setIsAuthorized(true);
-
       } catch (error) {
-        console.error('[AuthGuard] Verification failed:', error);
+        console.error("[AuthGuard] Verification failed:", error);
         if (mounted) {
           toast.error("Security verification failed");
           router.replace("/auth/login");
@@ -123,18 +138,19 @@ export function useAuth() {
     const checkAuth = async () => {
       try {
         const supabase = createClient();
-        const { data: { session } } = await supabase.auth.getSession();
+        const { data, error } = await supabase.auth.getUser();
 
         if (!mounted) return;
 
-        if (!session?.user) {
+        if (error || !data.user) {
+          console.warn("[Auth] Missing authenticated user", { error });
           router.replace("/auth/login");
           return;
         }
 
-        setUser(session.user);
+        setUser(data.user);
       } catch (error) {
-        console.error('[Auth] Check failed:', error);
+        console.error("[Auth] Check failed:", error);
         if (mounted) {
           router.replace("/auth/login");
         }

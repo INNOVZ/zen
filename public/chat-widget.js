@@ -83,6 +83,83 @@
     return `${config.apiUrl}/${url}`;
   }
   
+  // Helper function to create avatar placeholder element
+  function createAvatarPlaceholder(isHeader = false) {
+    const placeholder = document.createElement('div');
+    placeholder.className = isHeader ? 'zaakiy-avatar-placeholder' : 'zaakiy-message-avatar-placeholder';
+    const svgSize = isHeader ? '16' : '12';
+    const fillColor = isHeader ? 'white' : '#6b7280';
+    placeholder.innerHTML = `
+      <svg width="${svgSize}" height="${svgSize}" viewBox="0 0 24 24" fill="${fillColor}">
+        <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
+      </svg>
+    `;
+    return placeholder;
+  }
+  
+  // Helper function to create avatar image with error handling
+  function createAvatarImage(avatarUrl, botName, isHeader = false) {
+    if (!avatarUrl) {
+      return createAvatarPlaceholder(isHeader);
+    }
+    
+    const convertedUrl = convertLegacyUrl(avatarUrl);
+    if (!convertedUrl) {
+      return createAvatarPlaceholder(isHeader);
+    }
+    
+    const img = document.createElement('img');
+    img.className = isHeader ? 'zaakiy-avatar' : 'zaakiy-message-avatar';
+    img.alt = botName || 'Bot';
+    
+    // Track retry attempts to prevent infinite loops
+    let retryAttempted = false;
+    
+    // Check if URL is from same origin - only set crossOrigin for cross-origin requests
+    // This prevents CORS issues in Chrome when server doesn't send proper headers
+    let needsCrossOrigin = false;
+    try {
+      const urlObj = new URL(convertedUrl, window.location.href);
+      const currentOrigin = window.location.origin;
+      // Only set crossOrigin if it's a different origin
+      if (urlObj.origin !== currentOrigin) {
+        needsCrossOrigin = true;
+        img.crossOrigin = 'anonymous';
+      }
+    } catch {
+      // If URL parsing fails, don't set crossOrigin
+      // This handles relative URLs and edge cases
+    }
+    
+    // Add error handler to fallback to placeholder if image fails to load
+    // This handles network errors, CORS issues, 404s, etc.
+    img.onerror = function() {
+      // Try once more without crossOrigin if it was set and we haven't retried (Chrome-specific fix)
+      if (needsCrossOrigin && !retryAttempted && img.crossOrigin) {
+        retryAttempted = true;
+        // Remove crossOrigin and retry
+        img.removeAttribute('crossorigin');
+        img.src = '';
+        // Use setTimeout to ensure the error handler is reset
+        setTimeout(function() {
+          img.src = convertedUrl;
+        }, 10);
+        return;
+      }
+      
+      // If retry failed or crossOrigin wasn't set, show placeholder
+      const placeholder = createAvatarPlaceholder(isHeader);
+      if (img.parentNode) {
+        img.parentNode.replaceChild(placeholder, img);
+      }
+    };
+    
+    // Set src after setting crossOrigin (if needed) and error handlers
+    img.src = convertedUrl;
+    
+    return img;
+  }
+  
   // Load saved session data
   function loadSavedSession() {
     try {
@@ -1171,23 +1248,8 @@
     
     if (avatarContainer) {
       while (avatarContainer.firstChild) avatarContainer.removeChild(avatarContainer.firstChild);
-      if (config.avatarUrl) {
-        const convertedUrl = convertLegacyUrl(config.avatarUrl);
-        const img = document.createElement('img');
-        img.src = convertedUrl;
-        img.alt = config.botName;
-        img.className = 'zaakiy-avatar';
-        avatarContainer.appendChild(img);
-      } else {
-        const placeholder = document.createElement('div');
-        placeholder.className = 'zaakiy-avatar-placeholder';
-        placeholder.innerHTML = `
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="white">
-            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
-          </svg>
-        `;
-        avatarContainer.appendChild(placeholder);
-      }
+      const avatarElement = createAvatarImage(config.avatarUrl, config.botName, true);
+      avatarContainer.appendChild(avatarElement);
     }
   }
   
@@ -1535,26 +1597,9 @@
     const messageTimestamp = timestamp || new Date();
     messageDiv.dataset.timestamp = messageTimestamp.getTime();
     
-    let avatarHtml = '';
     if (type === 'bot') {
-      if (config.avatarUrl) {
-        const convertedUrl = convertLegacyUrl(config.avatarUrl);
-        avatarHtml = `<img src="${convertedUrl}" alt="${config.botName}" class="zaakiy-message-avatar" />`;
-      } else {
-        avatarHtml = `
-          <div class="zaakiy-message-avatar-placeholder">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="#6b7280">
-              <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
-            </svg>
-          </div>
-        `;
-      }
-    }
-    
-    if (avatarHtml) {
-      const avatarWrapper = document.createElement('div');
-      avatarWrapper.innerHTML = avatarHtml;
-      messageDiv.appendChild(avatarWrapper.firstChild);
+      const avatarElement = createAvatarImage(config.avatarUrl, config.botName, false);
+      messageDiv.appendChild(avatarElement);
     }
     
     // Create content wrapper
@@ -1673,25 +1718,8 @@
     typingDiv.className = 'zaakiy-message bot';
     typingDiv.id = 'zaakiy-typing';
     
-    let avatarHtml = '';
-    if (config.avatarUrl) {
-      const convertedUrl = convertLegacyUrl(config.avatarUrl);
-      avatarHtml = `<img src="${convertedUrl}" alt="${config.botName}" class="zaakiy-message-avatar" />`;
-    } else {
-      avatarHtml = `
-        <div class="zaakiy-message-avatar-placeholder">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="#6b7280">
-            <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
-          </svg>
-        </div>
-      `;
-    }
-    
-    if (avatarHtml) {
-      const avatarWrapper = document.createElement('div');
-      avatarWrapper.innerHTML = avatarHtml;
-      typingDiv.appendChild(avatarWrapper.firstChild);
-    }
+    const avatarElement = createAvatarImage(config.avatarUrl, config.botName, false);
+    typingDiv.appendChild(avatarElement);
     
     const typingInner = document.createElement('div');
     typingInner.className = 'zaakiy-typing';
