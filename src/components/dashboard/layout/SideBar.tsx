@@ -12,6 +12,7 @@ import {
   LogOut,
   User,
   BrainCircuit,
+  Plug,
 } from "lucide-react";
 import { RiRobot3Line } from "react-icons/ri";
 import { supabase } from "@/lib/supabase";
@@ -75,6 +76,11 @@ const Sidebar = () => {
       title: "Customize",
       icon: <RiRobot3Line size={16} />,
       path: getMenuItemPath("/customize"),
+    },
+    {
+      title: "Integration",
+      icon: <Plug size={16} />,
+      path: getMenuItemPath("/integration"),
     },
     {
       title: "Settings",
@@ -145,7 +151,7 @@ const Sidebar = () => {
       )}
 
       {/* Navigation */}
-      <nav className="p-4 flex-1 border-r border-gray-700 overflow-y-auto">
+      <nav className="pr-4 py-4 flex-1 border-r border-gray-700 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => {
             // Normalize paths by removing trailing slashes
@@ -177,7 +183,7 @@ const Sidebar = () => {
               <li key={index}>
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-4 p-2 rounded-lg transition-colors
+                  className={`flex items-center gap-4 p-2 rounded-r-lg transition-colors
                     ${
                       isActive
                         ? "bg-[#0a0a60] text-white font-bold shadow-sm"

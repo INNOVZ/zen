@@ -271,7 +271,8 @@ export default function OrganizationManagement() {
       </header>
 
       {/* Update Organization Form */}
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="container mx-auto space-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card className="border-0">
           <CardHeader>
             <CardTitle>Update Organization</CardTitle>
@@ -429,6 +430,7 @@ export default function OrganizationManagement() {
               </div>
             </>
           )}
+        </div>
         </div>
       </div>
     </div>

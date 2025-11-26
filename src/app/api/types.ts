@@ -57,6 +57,7 @@ export interface ContextConfig {
   retrieval_strategy:
     | "semantic_only"
     | "hybrid"
+    | "keyword_boost"
     | "keyword_only"
     | "domain_specific";
   semantic_weight: number;

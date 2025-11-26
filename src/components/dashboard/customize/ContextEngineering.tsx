@@ -308,6 +308,7 @@ export default function ContextEngineering({
                     retrieval_strategy: value as
                       | "semantic_only"
                       | "hybrid"
+                      | "keyword_boost"
                       | "keyword_only"
                       | "domain_specific",
                   })
@@ -330,6 +331,14 @@ export default function ContextEngineering({
                       <div className="font-medium">Hybrid</div>
                       <div className="text-xs text-gray-500">
                         Combines semantic + keyword search
+                      </div>
+                    </div>
+                  </SelectItem>
+                  <SelectItem value="keyword_boost">
+                    <div>
+                      <div className="font-medium">Keyword Boost (Recommended)</div>
+                      <div className="text-xs text-gray-500">
+                        Semantic search + intelligent topic boosting
                       </div>
                     </div>
                   </SelectItem>

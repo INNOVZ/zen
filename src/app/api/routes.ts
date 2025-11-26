@@ -6,6 +6,7 @@ export { chatbotApi } from './chatbot';
 export { uploadsApi } from './uploads';
 export { conversationApi } from './conversations';
 export { organizationApi } from './organization';
+export { whatsappApi } from './whatsapp';
 export { apiUtils } from './utils';
 
 // Re-export all types for convenience

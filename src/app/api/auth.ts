@@ -187,10 +187,15 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       } else if (response.status === 429) {
         throw new Error("Too many requests. Please try again later.");
       } else if (response.status >= 500) {
+        // For 500 errors, try to extract the actual error message from the backend
+        const backendError = errorData?.detail || errorData?.message || errorText;
+        if (backendError && typeof backendError === 'string' && backendError !== 'No error text') {
+          throw new Error(backendError);
+        }
         throw new Error("Server error. Please try again later.");
       }
       
-      const errorMessage = errorData?.message || errorText || response.statusText || `API error (${response.status})`;
+      const errorMessage = errorData?.detail || errorData?.message || errorText || response.statusText || `API error (${response.status})`;
       const enhancedError = new Error(errorMessage) as ApiError;
       // Add additional context to the error
       enhancedError.status = response.status;
