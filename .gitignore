@@ -32,6 +32,12 @@ pnpm-debug.log*
 coverage/
 .cache/
 
+# Test Artifacts (generated, not source code)
+test-results/artifacts/
+.test-logs/
+playwright-report/
+.playwright/
+
 # Hosting
 .vercel/
 

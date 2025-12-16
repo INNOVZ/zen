@@ -1,0 +1,2 @@
+# This file ensures the test-results directory is tracked in git
+# Even though artifacts are gitignored, test configuration should be committed

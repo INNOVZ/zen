@@ -1,0 +1,38 @@
+# NPM ignore file - prevents test files from being included if published as package
+
+# Test files (source code - not needed in published package)
+tests/
+e2e/
+test-results/
+test-logs/
+.test-logs/
+
+# Test configuration
+playwright.config.ts
+jest.config.js
+jest.setup.js
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Test documentation
+TEST_*.md
+.testignore
+
+# Test artifacts and logs
+playwright-report/
+.playwright/
+e2e-*.log
+*test*.log
+
+# Development only
+scripts/manage-tests.sh
+
+# Other development files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store

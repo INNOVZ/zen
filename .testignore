@@ -1,0 +1,14 @@
+# Test Results and Logs
+test-results/
+playwright-report/
+.test-logs/
+
+# Coverage reports
+coverage/
+
+# E2E test artifacts
+e2e-*.log
+*test*.log
+
+# Playwright cache
+.playwright/
