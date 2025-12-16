@@ -119,6 +119,32 @@ export async function middleware(req: NextRequest) {
     return NextResponse.redirect(userDashboardUrl)
   }
 
+  // Redirect /dashboard/settings (without userId) to /dashboard/{userId}/settings
+  // This prevents "Unauthorized access" errors when userId is missing
+  // Also handle any path that matches /dashboard/{non-uuid}/settings
+  if (isDashboard && isAuth) {
+    const settingsMatch = pathname.match(/^\/dashboard\/([^\/]+)\/settings$/)
+    if (settingsMatch) {
+      const routeUserId = settingsMatch[1]
+      // Check if routeUserId is NOT a valid UUID (e.g., "settings", "train", etc.)
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(routeUserId)
+      
+      if (!isUUID) {
+        const userSettingsUrl = req.nextUrl.clone()
+        userSettingsUrl.pathname = `/dashboard/${session.user.id}/settings`
+        // Preserve query params (like ?success=zoho_connected&tab=mcp)
+        console.log(`[Middleware] Invalid userId "${routeUserId}" in settings path, redirecting to /dashboard/${session.user.id}/settings`)
+        return NextResponse.redirect(userSettingsUrl)
+      }
+    } else if (pathname === '/dashboard/settings') {
+      // Direct /dashboard/settings path
+      const userSettingsUrl = req.nextUrl.clone()
+      userSettingsUrl.pathname = `/dashboard/${session.user.id}/settings`
+      console.log(`[Middleware] Redirecting from /dashboard/settings to /dashboard/${session.user.id}/settings`)
+      return NextResponse.redirect(userSettingsUrl)
+    }
+  }
+
   return response
 }
 

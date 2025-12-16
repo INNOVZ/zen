@@ -1,6 +1,7 @@
 // utils/auth.ts
 import { createClient } from '@/lib/supabase/client'
 import { getApiBaseUrl } from '@/config/api';
+import { logger } from '@/utils/logger';
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
@@ -89,10 +90,9 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   if (!fullUrl.includes('localhost') && !fullUrl.startsWith('https://')) {
     fullUrl = fullUrl.replace(/^http:\/\//, 'https://');
   }
-  console.log(`🔍 [${requestId}] API Call:`, fullUrl, { 
+  logger.apiRequest(requestId, options.method || "GET", fullUrl, { 
     userId: userId.substring(0, 8) + "...", 
     orgId: orgId?.substring(0, 8) + "..." || "none",
-    method: options.method || "GET"
   });
 
   const startTime = Date.now();
@@ -104,7 +104,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     });
 
     const responseTime = Date.now() - startTime;
-    console.log(`⏱️ [${requestId}] Response:`, response.status, `(${responseTime}ms)`);
+    logger.apiResponse(requestId, response.status, responseTime);
 
     if (!response.ok) {
       let errorText = '';
@@ -161,13 +161,21 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       // Reduce console noise for expected failures
       const isContextConfigEndpoint = url.includes('/context-config');
       const isOrganizationEndpoint = url.includes('/organization');
+      const isIntegrationStatusEndpoint = url.includes('/integrations/status') || url.includes('/integrations/') && url.includes('/status');
       const isExpectedFailure = response.status === 404 && (isContextConfigEndpoint || isOrganizationEndpoint);
+      const isIntegrationError = isIntegrationStatusEndpoint && (response.status === 404 || response.status === 500);
       
       if (isExpectedFailure) {
         console.debug(`📝 [${requestId}] Endpoint not available (expected in development):`, {
           url: errorInfo.url,
           status: response.status,
           endpoint: isContextConfigEndpoint ? 'context-config' : 'organization'
+        });
+      } else if (isIntegrationError) {
+        // Suppress integration status errors - they're handled gracefully by the frontend
+        console.debug(`📝 [${requestId}] Integration status check failed (handled gracefully):`, {
+          url: errorInfo.url,
+          status: response.status,
         });
       } else {
         console.error(`❌ [${requestId}] API Error:`, logError);
@@ -187,10 +195,22 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       } else if (response.status === 429) {
         throw new Error("Too many requests. Please try again later.");
       } else if (response.status >= 500) {
+        // For 500 errors, try to extract the actual error message from the backend
+        const backendError = errorData?.detail || errorData?.message || errorText;
+        if (backendError && typeof backendError === 'string' && backendError !== 'No error text') {
+          throw new Error(backendError);
+        }
         throw new Error("Server error. Please try again later.");
+      } else if (response.status === 400) {
+        // For 400 errors, show the detailed error message from backend
+        const backendError = errorData?.detail || errorData?.message || errorText;
+        if (backendError && typeof backendError === 'string' && backendError !== 'No error text') {
+          throw new Error(backendError);
+        }
+        throw new Error(`Bad request: ${errorText || response.statusText}`);
       }
       
-      const errorMessage = errorData?.message || errorText || response.statusText || `API error (${response.status})`;
+      const errorMessage = errorData?.detail || errorData?.message || errorText || response.statusText || `API error (${response.status})`;
       const enhancedError = new Error(errorMessage) as ApiError;
       // Add additional context to the error
       enhancedError.status = response.status;
@@ -203,7 +223,7 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
 
     try {
       const data = await response.json();
-      console.log(`✅ [${requestId}] Success:`, typeof data === 'object' ? 'JSON response' : data);
+      logger.debug(`✅ [${requestId}] Success:`, typeof data === 'object' ? 'JSON response' : data);
       return data;
     } catch (parseError) {
       console.error(`⚠️ [${requestId}] Failed to parse JSON response:`, parseError);
@@ -213,11 +233,11 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       // If JSON parsing fails, try to get the response as text
       try {
         const textData = await response.text();
-        console.log(`📄 [${requestId}] Text response:`, textData);
+        logger.debug(`📄 [${requestId}] Text response:`, textData);
         
         // If the response is empty or just whitespace, it might be a successful update
         if (!textData || textData.trim() === '') {
-          console.log(`📄 [${requestId}] Empty response - likely successful update`);
+          logger.debug(`📄 [${requestId}] Empty response - likely successful update`);
           return { success: true, message: 'Update successful' };
         }
         

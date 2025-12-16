@@ -1,3 +1,5 @@
+"use client";
+
 import { memo } from "react";
 import { Zap } from "lucide-react";
 import { useSubscription } from "@/contexts/SubscriptionContext";

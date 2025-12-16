@@ -2,6 +2,7 @@
 import { ChatbotInfo } from "@/types/schemaTypes";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
+import { apiUtils } from "@/app/api/utils";
 
 export const chatbotApi = {
   // ==========================================
@@ -9,41 +10,43 @@ export const chatbotApi = {
   // ==========================================
 
   getChatbots: async (): Promise<ChatbotInfo[]> => {
-    const cacheKey = createCacheKey("/api/chat/chatbots");
+    return apiUtils.withDeduplication('/api/chat/chatbots', async () => {
+      const cacheKey = createCacheKey("/api/chat/chatbots");
 
-    // Check cache first 
-    const cached = apiCache.get<ChatbotInfo[]>(cacheKey);
-    if (cached) {
-      return cached;
-    }
-
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        controller.abort(new Error("Request timeout after 10 seconds"));
-      }, 10000);
-
-      const data = await fetchWithAuth("/api/chat/chatbots", {
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-      const result = data.chatbots || data || [];
-
-      // Cache for 2 minutes
-      apiCache.set(cacheKey, result, 2 * 60 * 1000);
-
-      return result;
-    } catch (error) {
-      console.error("Error fetching chatbots:", error);
-      if (
-        error instanceof Error &&
-        (error.name === "AbortError" || error.message.includes("timeout"))
-      ) {
-        throw new Error("Request timed out. Please try again.");
+      // Check cache first 
+      const cached = apiCache.get<ChatbotInfo[]>(cacheKey);
+      if (cached) {
+        return cached;
       }
-      throw error;
-    }
+
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          controller.abort(new Error("Request timeout after 10 seconds"));
+        }, 10000);
+
+        const data = await fetchWithAuth("/api/chat/chatbots", {
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+        const result = data.chatbots || data || [];
+
+        // Cache for 2 minutes
+        apiCache.set(cacheKey, result, 2 * 60 * 1000);
+
+        return result;
+      } catch (error) {
+        console.error("Error fetching chatbots:", error);
+        if (
+          error instanceof Error &&
+          (error.name === "AbortError" || error.message.includes("timeout"))
+        ) {
+          throw new Error("Request timed out. Please try again.");
+        }
+        throw error;
+      }
+    });
   },
 
   getChatbot: async (chatbotId: string): Promise<ChatbotInfo> => {

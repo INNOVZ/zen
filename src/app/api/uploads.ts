@@ -4,52 +4,55 @@ import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { TokenHandler, RetrainResponse } from "./types";
 import { getApiBaseUrl } from "@/config/api";
+import { apiUtils } from "@/app/api/utils";
 
 export const uploadsApi = {
   getUploads: async (): Promise<UploadFile[]> => {
-    const cacheKey = createCacheKey("/api/uploads/");
+    return apiUtils.withDeduplication('/api/uploads', async () => {
+      const cacheKey = createCacheKey("/api/uploads/");
 
-    // Check cache first
-    const cached = apiCache.get<UploadFile[]>(cacheKey);
-    if (cached) {
-      return cached;
-    }
- 
-    try {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        controller.abort(new Error("Request timeout after 8 seconds"));
-      }, 8000);
-
-      const data = await fetchWithAuth("/api/uploads/", {
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      let result: UploadFile[] = [];
-      if (Array.isArray(data)) {
-        result = data;
-      } else if (data.uploads && Array.isArray(data.uploads)) {
-        result = data.uploads;
-      } else if (data.data && Array.isArray(data.data)) {
-        result = data.data;
-      } else {
-        console.warn("Unexpected uploads response structure:", data);
-        result = [];
+      // Check cache first
+      const cached = apiCache.get<UploadFile[]>(cacheKey);
+      if (cached) {
+        return cached;
       }
+   
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          controller.abort(new Error("Request timeout after 8 seconds"));
+        }, 8000);
 
-      // Cache for 1 minute (uploads change more frequently)
-      apiCache.set(cacheKey, result, 1 * 60 * 1000);
+        const data = await fetchWithAuth("/api/uploads/", {
+          signal: controller.signal,
+        });
 
-      return result;
-    } catch (error) {
-      console.error("Error fetching uploads:", error);
-      if (error instanceof Error && error.name === "AbortError") {
-        throw new Error("Request timed out. Please try again.");
+        clearTimeout(timeoutId);
+
+        let result: UploadFile[] = [];
+        if (Array.isArray(data)) {
+          result = data;
+        } else if (data.uploads && Array.isArray(data.uploads)) {
+          result = data.uploads;
+        } else if (data.data && Array.isArray(data.data)) {
+          result = data.data;
+        } else {
+          console.warn("Unexpected uploads response structure:", data);
+          result = [];
+        }
+
+        // Cache for 1 minute (uploads change more frequently)
+        apiCache.set(cacheKey, result, 1 * 60 * 1000);
+
+        return result;
+      } catch (error) {
+        console.error("Error fetching uploads:", error);
+        if (error instanceof Error && error.name === "AbortError") {
+          throw new Error("Request timed out. Please try again.");
+        }
+        throw error;
       }
-      throw error;
-    }
+    });
   },
 
   uploadFile: async (file: File, type: string): Promise<UploadFile> => {

@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { API_BASE_URL } from "@/config/api";
 import {
   Send,
   Bot,
-  User,
   MessageCircle,
   X,
   Minus,
@@ -16,7 +15,21 @@ import { Input } from "@/components/ui/input";
 import { conversationApi, chatbotApi } from "@/app/api/routes";
 import { ChatbotInfo } from "@/types/schemaTypes";
 import { useConnectionErrorHandler } from "@/hooks/useServerConnection";
+import { mcpApi } from "@/app/api/mcp";
 import Image from "next/image";
+import { ChatMessage } from "@/components/ChatMessage";
+
+interface MessageButton {
+  text: string;
+  value: string;
+  type?: string;
+}
+
+interface CTAButton {
+  id: string;
+  label: string;
+  message: string;
+}
 
 interface Message {
   id: string;
@@ -24,6 +37,7 @@ interface Message {
   content: string;
   timestamp: Date;
   sources?: string[];
+  buttons?: MessageButton[];  // Add buttons support
 }
 
 interface ChatWidgetProps {
@@ -33,7 +47,11 @@ interface ChatWidgetProps {
   orgId?: string; // Organization ID (optional, will use current user's org)
 }
 
-export default function ChatWidget({
+/**
+ * Memoized Chat Widget Component
+ * Only re-renders when chatbotId, position, or showChatbotSelector changes
+ */
+const ChatWidget = memo(function ChatWidget({
   position = "bottom-right",
   chatbotId,
   showChatbotSelector = false,
@@ -53,6 +71,7 @@ ChatWidgetProps) {
   const [showChatbotDropdown, setShowChatbotDropdown] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [ctaButtons, setCtaButtons] = useState<CTAButton[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Connection error handling
@@ -62,6 +81,33 @@ ChatWidgetProps) {
   useEffect(() => {
     setIsClient(true);
   }, []);
+
+  // Load CTA buttons based on active integrations
+  useEffect(() => {
+    let mounted = true;
+
+    const loadCTAButtons = async () => {
+      try {
+        if (!mounted) return;
+        const buttons = await mcpApi.getCTAButtons();
+        if (!mounted) return;
+        setCtaButtons(buttons.buttons || []);
+      } catch (error) {
+        console.warn("Failed to load CTA buttons:", error);
+        if (!mounted) return;
+        setCtaButtons([]);
+      }
+    };
+
+    // Only load if authenticated
+    if (isAuthenticated === true) {
+      loadCTAButtons();
+    }
+
+    return () => {
+      mounted = false;
+    };
+  }, [isAuthenticated]);
 
   // Load organization's chatbots
   useEffect(() => {
@@ -226,27 +272,30 @@ ChatWidgetProps) {
     }
   };
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, scrollToBottom]);
 
-  const handleSendMessage = async () => {
-    if (!inputMessage.trim() || isTyping || !isAuthenticated) return;
+  const handleSendMessage = useCallback(async (messageToSend?: string) => {
+    const message = messageToSend || inputMessage;
+    if (!message.trim() || isTyping || !isAuthenticated) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
       type: "user",
-      content: inputMessage,
+      content: message,
       timestamp: new Date(),
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    const currentMessage = inputMessage;
-    setInputMessage("");
+    const currentMessage = message;
+    if (!messageToSend) {
+      setInputMessage("");  // Only clear input if not from button
+    }
     setIsTyping(true);
 
     try {
@@ -283,9 +332,20 @@ ChatWidgetProps) {
         console.warn("Backend error response:", response.response);
       }
 
-      // Store conversation ID for follow-up messages
-      if (response.conversation_id && !conversationId) {
-        setConversationId(response.conversation_id);
+      // CRITICAL: Always store and use conversation_id for state persistence
+      // This ensures booking flow and other multi-turn flows work correctly
+      if (response.conversation_id) {
+        // Always update conversationId, even if it already exists
+        // This handles cases where the ID might have changed
+        if (conversationId !== response.conversation_id) {
+          console.log("📝 Updating conversation ID:", {
+            old: conversationId,
+            new: response.conversation_id
+          });
+          setConversationId(response.conversation_id);
+        }
+      } else {
+        console.warn("⚠️ Response missing conversation_id - state may not persist");
       }
 
       const botResponse: Message = {
@@ -294,7 +354,14 @@ ChatWidgetProps) {
         content: response.response,
         timestamp: new Date(),
         sources: response.sources || [],
+        buttons: response.buttons || [],  // Include buttons from response
       };
+      
+      console.log("Bot response with buttons:", {
+        hasButtons: !!response.buttons,
+        buttonCount: response.buttons?.length || 0,
+        buttons: response.buttons
+      });
 
       setMessages((prev) => [...prev, botResponse]);
     } catch (error) {
@@ -328,14 +395,14 @@ ChatWidgetProps) {
     } finally {
       setIsTyping(false);
     }
-  };
+  }, [inputMessage, isTyping, isAuthenticated, selectedChatbot, chatbotId, conversationId, getErrorMessage]);
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSendMessage();
     }
-  };
+  }, [handleSendMessage]);
 
   const positionClasses = {
     "bottom-right": "bottom-10 right-4",
@@ -511,43 +578,12 @@ ChatWidgetProps) {
               )}
 
               {messages.map((message) => (
-                <div
+                <ChatMessage
                   key={message.id}
-                  className={`flex ${
-                    message.type === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  <div
-                    className={`max-w-[85%] p-2 rounded-lg text-sm ${
-                      message.type === "user"
-                        ? "text-white ml-2"
-                        : "bg-gray-100 mr-2"
-                    }`}
-                    style={{
-                      backgroundColor:
-                        message.type === "user"
-                          ? selectedChatbot?.color_hex || "#3B82F6"
-                          : undefined,
-                    }}
-                  >
-                    <div className="flex items-start gap-2">
-                      {message.type === "bot" && (
-                        <Bot className="h-3 w-3 text-blue-500 mt-0.5 flex-shrink-0" />
-                      )}
-                      {message.type === "user" && (
-                        <User className="h-3 w-3 text-white mt-0.5 flex-shrink-0" />
-                      )}
-                      <div className="flex-1">
-                        <p className="whitespace-pre-wrap">{message.content}</p>
-                        {message.sources && message.sources.length > 0 && (
-                          <div className="mt-1 text-xs text-gray-500">
-                            Sources: {message.sources.length} document(s)
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                  {...message}
+                  botColor={selectedChatbot?.color_hex || "#3B82F6"}
+                  onButtonClick={handleSendMessage}
+                />
               ))}
 
               {/* Typing Indicator */}
@@ -571,6 +607,27 @@ ChatWidgetProps) {
 
             {/* Input Area */}
             <div className="p-2 border-t bg-gray-50 ">
+              {/* CTA Buttons - Show if authenticated and buttons available */}
+              {isAuthenticated && ctaButtons.length > 0 && (
+                <div className="mb-2 flex flex-wrap gap-2">
+                  {ctaButtons.map((button) => (
+                    <Button
+                      key={button.id}
+                      size="sm"
+                      variant="outline"
+                      className="text-xs h-7 px-2 hover:bg-blue-50 hover:border-blue-300 transition-colors"
+                      onClick={() => {
+                        // Send the CTA message
+                        handleSendMessage(button.message);
+                      }}
+                      disabled={isTyping || !selectedChatbot}
+                    >
+                      {button.label}
+                    </Button>
+                  ))}
+                </div>
+              )}
+              
               <div className="flex items-center gap-2">
                 <Input
                   value={inputMessage}
@@ -614,4 +671,13 @@ ChatWidgetProps) {
       </div>
     </div>
   );
-}
+}, (prevProps, nextProps) => {
+  // Custom comparison: only re-render when these props actually change
+  return (
+    prevProps.chatbotId === nextProps.chatbotId &&
+    prevProps.position === nextProps.position &&
+    prevProps.showChatbotSelector === nextProps.showChatbotSelector
+  );
+});
+
+export default ChatWidget;

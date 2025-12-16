@@ -19,6 +19,12 @@ export interface ProductLink {
   [key: string]: unknown;
 }
 
+export interface MessageButton {
+  text: string;
+  value: string;
+  type?: string;
+}
+
 export interface ChatResponse {
   response: string;
   sources: string[];
@@ -26,6 +32,7 @@ export interface ChatResponse {
   conversation_id: string;
   message_id?: string;
   processing_time_ms: number;
+  buttons?: MessageButton[]; // Add buttons support
   context_quality: {
     context_length?: number;
     has_context?: boolean;
@@ -57,6 +64,7 @@ export interface ContextConfig {
   retrieval_strategy:
     | "semantic_only"
     | "hybrid"
+    | "keyword_boost"
     | "keyword_only"
     | "domain_specific";
   semantic_weight: number;

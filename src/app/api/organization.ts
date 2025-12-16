@@ -8,58 +8,61 @@ import {
   UpdateOrganizationResponse 
 } from "./types";
 import { getApiBaseUrl } from "@/config/api";
+import { apiUtils } from "@/app/api/utils";
 
 const BASE_URL = getApiBaseUrl();
 
 export const organizationApi = {
   getOrganizationInfo: async (): Promise<OrganizationResponse> => {
-    try {
-      const cacheKey = createCacheKey("/api/org/info");
-      
-      // Check cache first
-      const cached = apiCache.get<OrganizationResponse>(cacheKey);
-      if (cached) {
-        return cached;
-      }
-
-      console.log("🔍 Fetching organization info from:", `${BASE_URL}/api/org/info`);
-      
+    return apiUtils.withDeduplication('/api/org/info', async () => {
       try {
-        const data = await fetchWithAuth("/api/org/info");
+        const cacheKey = createCacheKey("/api/org/info");
         
-        // Cache for 5 minutes
-        apiCache.set(cacheKey, data, 5 * 60 * 1000);
+        // Check cache first
+        const cached = apiCache.get<OrganizationResponse>(cacheKey);
+        if (cached) {
+          return cached;
+        }
+
+        console.log("🔍 Fetching organization info from:", `${BASE_URL}/api/org/info`);
         
-        return data;
+        try {
+          const data = await fetchWithAuth("/api/org/info");
+          
+          // Cache for 5 minutes
+          apiCache.set(cacheKey, data, 5 * 60 * 1000);
+          
+          return data;
+        } catch (error) {
+          // If organization endpoint doesn't exist, return mock data
+          console.warn("Organization endpoint not available, using mock data:", error);
+          
+          const mockData: OrganizationResponse = {
+            user: {
+              email: "user@example.com"
+            },
+            organization: {
+              name: "Demo Organization",
+              email: "org@example.com",
+              plan_id: "free"
+            }
+          };
+          
+          // Cache mock data for 1 minute
+          apiCache.set(cacheKey, mockData, 1 * 60 * 1000);
+          
+          return mockData;
+        }
       } catch (error) {
-        // If organization endpoint doesn't exist, return mock data
-        console.warn("Organization endpoint not available, using mock data:", error);
-        
-        const mockData: OrganizationResponse = {
-          user: {
-            email: "user@example.com"
-          },
-          organization: {
-            name: "Demo Organization",
-            email: "org@example.com",
-            plan_id: "free"
-          }
-        };
-        
-        // Cache mock data for 1 minute
-        apiCache.set(cacheKey, mockData, 1 * 60 * 1000);
-        
-        return mockData;
+        console.error("Error fetching organization info:", error);
+        console.error("Error details:", {
+          name: error instanceof Error ? error.name : 'Unknown',
+          message: error instanceof Error ? error.message : String(error),
+          stack: error instanceof Error ? error.stack : undefined
+        });
+        throw error;
       }
-    } catch (error) {
-      console.error("Error fetching organization info:", error);
-      console.error("Error details:", {
-        name: error instanceof Error ? error.name : 'Unknown',
-        message: error instanceof Error ? error.message : String(error),
-        stack: error instanceof Error ? error.stack : undefined
-      });
-      throw error;
-    }
+    });
   },
 
   updateOrganization: async (

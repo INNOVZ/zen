@@ -12,6 +12,7 @@ import {
   LogOut,
   User,
   BrainCircuit,
+  Users,
 } from "lucide-react";
 import { RiRobot3Line } from "react-icons/ri";
 import { supabase } from "@/lib/supabase";
@@ -49,10 +50,14 @@ const Sidebar = () => {
   const currentUserId = routeUserId || user?.id;
 
   // Create a function to get the correct path for menu items
+  // ALWAYS include userId - never generate paths without it
   const getMenuItemPath = (basePath: string) => {
-    return currentUserId
-      ? `/dashboard/${currentUserId}${basePath}`
-      : `/dashboard${basePath}`;
+    if (!currentUserId) {
+      console.warn("[SideBar] No userId available, cannot generate menu path");
+      // Return a path that will trigger redirect
+      return `/dashboard${basePath}`;
+    }
+    return `/dashboard/${currentUserId}${basePath}`;
   };
 
   const menuItems = [
@@ -77,6 +82,11 @@ const Sidebar = () => {
       path: getMenuItemPath("/customize"),
     },
     {
+      title: "Leads",
+      icon: <Users size={16} />,
+      path: getMenuItemPath("/leads"),
+    },
+    {
       title: "Settings",
       icon: <Settings size={16} />,
       path: getMenuItemPath("/settings"),
@@ -95,9 +105,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${
-        isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
-      } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
+      className={`${isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
+        } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-r border-gray-700 overflow-y-auto">
@@ -145,7 +154,7 @@ const Sidebar = () => {
       )}
 
       {/* Navigation */}
-      <nav className="p-4 flex-1 border-r border-gray-700 overflow-y-auto">
+      <nav className="pr-4 py-4 flex-1 border-r border-gray-700 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => {
             // Normalize paths by removing trailing slashes
@@ -177,11 +186,10 @@ const Sidebar = () => {
               <li key={index}>
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-4 p-2 rounded-lg transition-colors
-                    ${
-                      isActive
-                        ? "bg-[#0a0a60] text-white font-bold shadow-sm"
-                        : "text-[#0a0a60] hover:text-[#020617] hover:bg-gray-100"
+                  className={`flex items-center gap-4 p-2 rounded-r-lg transition-colors
+                    ${isActive
+                      ? "bg-[#0a0a60] text-white font-bold shadow-sm"
+                      : "text-[#0a0a60] hover:text-[#020617] hover:bg-gray-100"
                     }
                   `}
                 >
@@ -212,9 +220,8 @@ const Sidebar = () => {
         <Button
           onClick={handleLogout}
           variant="ghost"
-          className={`w-full justify-start text-gray-600 hover:text-white hover:bg-red-500 ${
-            isCollapsed ? "px-2" : ""
-          }`}
+          className={`w-full justify-start text-gray-600 hover:text-white hover:bg-red-500 ${isCollapsed ? "px-2" : ""
+            }`}
         >
           <div className="flex items-center justify-center w-5 h-5 shrink-0">
             <LogOut size={20} />
