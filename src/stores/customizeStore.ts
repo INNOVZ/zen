@@ -571,8 +571,7 @@ export const useCustomizeStore = create<CustomizeState>()(
       },
 
       generateEmbedCode: (chatbotId) => {
-        const API_BASE =
-          API_BASE_URL || "https://zaakiy-production.up.railway.app";
+        const API_BASE = API_BASE_URL;
         const FRONTEND_URL = "https://zaakiy.vercel.app";
         const embedScript = `<script>
   (function() {
@@ -682,8 +681,7 @@ export const useCustomizeStore = create<CustomizeState>()(
           ) {
             // Partial success but critical failures - retry
             console.log(
-              `Retrying initialization (${
-                retryCount + 1
+              `Retrying initialization (${retryCount + 1
               }/${maxRetries}) due to critical failures`
             );
             await new Promise((resolve) =>
@@ -693,8 +691,7 @@ export const useCustomizeStore = create<CustomizeState>()(
           } else if (!hasAnySuccess && retryCount < maxRetries) {
             // Complete failure - retry
             console.log(
-              `Retrying initialization (${
-                retryCount + 1
+              `Retrying initialization (${retryCount + 1
               }/${maxRetries}) due to complete failure`
             );
             await new Promise((resolve) =>
@@ -704,8 +701,7 @@ export const useCustomizeStore = create<CustomizeState>()(
           } else {
             // Final failure after retries
             throw new Error(
-              `Failed to load critical application data after ${
-                retryCount + 1
+              `Failed to load critical application data after ${retryCount + 1
               } attempts`
             );
           }
@@ -720,8 +716,7 @@ export const useCustomizeStore = create<CustomizeState>()(
 
           if (isRetryable) {
             console.log(
-              `Retrying initialization (${
-                retryCount + 1
+              `Retrying initialization (${retryCount + 1
               }/${maxRetries}) after error:`,
               error.message
             );
@@ -732,9 +727,8 @@ export const useCustomizeStore = create<CustomizeState>()(
           } else {
             set({
               loading: false,
-              error: `Failed to initialize application${
-                retryCount > 0 ? ` after ${retryCount + 1} attempts` : ""
-              }`,
+              error: `Failed to initialize application${retryCount > 0 ? ` after ${retryCount + 1} attempts` : ""
+                }`,
               connectionStatus: "disconnected",
             });
             toast.error(

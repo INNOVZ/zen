@@ -1,30 +1,30 @@
 // ZaaKy AI Chatbot Widget v3.0 - Production Ready
 // Works with dynamic script loading, Next.js, React, and all modern frameworks
-(function() {
+(function () {
   'use strict';
-  
+
   // Production-safe: All console logs disabled
   // To enable debug mode, set DEBUG = true and uncomment the logger calls
   const DEBUG = false;
-  
+
   // Robust script tag detection - works with dynamic loading
   function getScriptTag() {
     // Try document.currentScript first
     if (document.currentScript) {
       return document.currentScript;
     }
-    
+
     // Fallback: find the script tag by src
     const scripts = document.querySelectorAll('script[src*="chat-widget.js"]');
     if (scripts.length > 0) {
       return scripts[scripts.length - 1]; // Get the most recently added one
     }
-    
+
     return null;
   }
-  
+
   const scriptTag = getScriptTag();
-  
+
   // Configuration with fallbacks
   function normalizeLanguage(lang) {
     if (!lang) return 'en';
@@ -42,7 +42,7 @@
     ? normalizeLanguage(navigator.language)
     : 'en';
   const config = {
-    apiUrl: scriptTag?.getAttribute('data-api-url') || 'https://zaakiy-production.up.railway.app',
+    apiUrl: scriptTag?.getAttribute('data-api-url') || '', // URL must be provided via data attribute
     position: scriptTag?.getAttribute('data-position') || 'bottom-right',
     chatbotId: scriptTag?.getAttribute('data-chatbot-id') || null,
     primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
@@ -55,30 +55,36 @@
       scriptTag?.getAttribute('data-language') || storedLanguage || browserLanguage
     )
   };
-  
+
   // Validate required config
   if (!config.chatbotId) {
     // Critical error - show alert in development only
     if (DEBUG) alert('ERROR: data-chatbot-id is required! Please set it on the script tag.');
     return;
   }
-  
+
+  if (!config.apiUrl) {
+    if (DEBUG) alert('ERROR: data-api-url is required! Please set it on the script tag.');
+    console.error('ZaaKy Widget: data-api-url is missing');
+    return;
+  }
+
   // State
   let selectedChatbot = null;
   let conversationId = null;
   let isWidgetCreated = false;
   let ctaButtons = [];
-  
+
   // Session storage keys
   const STORAGE_PREFIX = `zaakiy_chat_${config.chatbotId}_`;
   const CONVERSATION_ID_KEY = STORAGE_PREFIX + 'conversation_id';
   const MESSAGES_KEY = STORAGE_PREFIX + 'messages';
   const SESSION_TIMESTAMP_KEY = STORAGE_PREFIX + 'timestamp';
-  
+
   // Convert legacy Supabase URLs to proxy URLs and ensure full URLs
   function convertLegacyUrl(url) {
     if (!url) return null;
-    
+
     // Handle legacy Supabase storage URLs
     if (url.includes('storage/v1/object/uploads/')) {
       const pathParts = url.split('storage/v1/object/uploads/');
@@ -87,21 +93,21 @@
         return `${config.apiUrl}/api/uploads/avatar/legacy/${filePath}`;
       }
     }
-    
+
     // If URL is already absolute (starts with http:// or https://), return as-is
     if (url.startsWith('http://') || url.startsWith('https://')) {
       return url;
     }
-    
+
     // If URL is relative (starts with /), prepend the API base URL
     if (url.startsWith('/')) {
       return `${config.apiUrl}${url}`;
     }
-    
+
     // Otherwise, assume it's a relative path and prepend the API URL
     return `${config.apiUrl}/${url}`;
   }
-  
+
   // Helper function to create avatar placeholder element
   function createAvatarPlaceholder(isHeader = false) {
     const placeholder = document.createElement('div');
@@ -115,25 +121,25 @@
     `;
     return placeholder;
   }
-  
+
   // Helper function to create avatar image with error handling
   function createAvatarImage(avatarUrl, botName, isHeader = false) {
     if (!avatarUrl) {
       return createAvatarPlaceholder(isHeader);
     }
-    
+
     const convertedUrl = convertLegacyUrl(avatarUrl);
     if (!convertedUrl) {
       return createAvatarPlaceholder(isHeader);
     }
-    
+
     const img = document.createElement('img');
     img.className = isHeader ? 'zaakiy-avatar' : 'zaakiy-message-avatar';
     img.alt = botName || 'Bot';
-    
+
     // Track retry attempts to prevent infinite loops
     let retryAttempted = false;
-    
+
     // Check if URL is from same origin - only set crossOrigin for cross-origin requests
     // This prevents CORS issues in Chrome when server doesn't send proper headers
     let needsCrossOrigin = false;
@@ -149,10 +155,10 @@
       // If URL parsing fails, don't set crossOrigin
       // This handles relative URLs and edge cases
     }
-    
+
     // Add error handler to fallback to placeholder if image fails to load
     // This handles network errors, CORS issues, 404s, etc.
-    img.onerror = function() {
+    img.onerror = function () {
       // Try once more without crossOrigin if it was set and we haven't retried (Chrome-specific fix)
       if (needsCrossOrigin && !retryAttempted && img.crossOrigin) {
         retryAttempted = true;
@@ -160,25 +166,25 @@
         img.removeAttribute('crossorigin');
         img.src = '';
         // Use setTimeout to ensure the error handler is reset
-        setTimeout(function() {
+        setTimeout(function () {
           img.src = convertedUrl;
         }, 10);
         return;
       }
-      
+
       // If retry failed or crossOrigin wasn't set, show placeholder
       const placeholder = createAvatarPlaceholder(isHeader);
       if (img.parentNode) {
         img.parentNode.replaceChild(placeholder, img);
       }
     };
-    
+
     // Set src after setting crossOrigin (if needed) and error handlers
     img.src = convertedUrl;
-    
+
     return img;
   }
-  
+
   // Load saved session data
   function loadSavedSession() {
     try {
@@ -187,16 +193,16 @@
       if (savedConversationId) {
         conversationId = savedConversationId;
       }
-      
+
       // Load messages
       const savedMessages = localStorage.getItem(MESSAGES_KEY);
       const savedTimestamp = localStorage.getItem(SESSION_TIMESTAMP_KEY);
-      
+
       if (savedMessages && savedTimestamp) {
         // Check if session is still valid (24 hours)
         const sessionAge = Date.now() - parseInt(savedTimestamp);
         const maxSessionAge = 24 * 60 * 60 * 1000; // 24 hours
-        
+
         if (sessionAge < maxSessionAge) {
           const messages = JSON.parse(savedMessages);
           return messages;
@@ -207,17 +213,17 @@
     } catch {
       // Silently fail and start fresh session
     }
-    
+
     return [];
   }
-  
+
   // Save session data
   function saveSession(messages) {
     try {
       if (conversationId) {
         localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
       }
-      
+
       // Only save the last 50 messages to avoid storage limits
       const messagesToSave = messages.slice(-50);
       localStorage.setItem(MESSAGES_KEY, JSON.stringify(messagesToSave));
@@ -226,7 +232,7 @@
       // Silently fail
     }
   }
-  
+
   // Clear saved session
   function clearSavedSession() {
     try {
@@ -237,13 +243,13 @@
       // Silently fail
     }
   }
-  
+
   // Create widget HTML
   function createWidget() {
     if (isWidgetCreated) {
       return;
     }
-    
+
     const widgetContainer = document.createElement('div');
     widgetContainer.id = 'zaakiy-chat-widget';
     widgetContainer.innerHTML = `
@@ -1103,11 +1109,11 @@
         >Close</button>
       </div>
     `;
-    
+
     document.body.appendChild(widgetContainer);
     widgetContainer.style.setProperty('--zaakiy-primary-color', config.primaryColor);
     isWidgetCreated = true;
-    
+
     // Add event listener for welcome close button (more reliable than onclick on mobile)
     function setupWelcomeCloseButton() {
       const welcomeCloseBtn = document.querySelector('.zaakiy-welcome-close');
@@ -1115,34 +1121,34 @@
         // Remove existing onclick to avoid double-firing
         welcomeCloseBtn.removeAttribute('onclick');
         welcomeCloseBtn.removeAttribute('ontouchstart');
-        
+
         // Clear any existing listeners by cloning and replacing
         const newBtn = welcomeCloseBtn.cloneNode(true);
         welcomeCloseBtn.parentNode.replaceChild(newBtn, welcomeCloseBtn);
-        
+
         // Add event listeners for both click and touch
-        newBtn.addEventListener('click', function(e) {
+        newBtn.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
           e.stopImmediatePropagation();
           window.zaakiyCloseWelcome(e);
           return false;
         }, { passive: false, capture: true });
-        
-        newBtn.addEventListener('touchend', function(e) {
+
+        newBtn.addEventListener('touchend', function (e) {
           e.preventDefault();
           e.stopPropagation();
           e.stopImmediatePropagation();
           window.zaakiyCloseWelcome(e);
           return false;
         }, { passive: false, capture: true });
-        
+
         // Also handle touchstart to prevent default behaviors
-        newBtn.addEventListener('touchstart', function(e) {
+        newBtn.addEventListener('touchstart', function (e) {
           // Don't prevent default here, just stop propagation
           e.stopPropagation();
         }, { passive: true });
-        
+
         // Ensure button is clickable
         newBtn.style.pointerEvents = 'auto';
         newBtn.style.cursor = 'pointer';
@@ -1150,7 +1156,7 @@
         newBtn.style.webkitUserSelect = 'none';
       }
     }
-    
+
     // Setup button immediately and also after a delay (in case DOM isn't ready)
     setupWelcomeCloseButton();
     setTimeout(setupWelcomeCloseButton, 100);
@@ -1170,7 +1176,7 @@
         window.zaakiySendMessage(value);
       });
     }
-    
+
     // Initialize button state on mobile
     const chatButton = widgetContainer.querySelector('.zaakiy-chat-button');
     const chatWindow = widgetContainer.querySelector('.zaakiy-chat-window');
@@ -1184,7 +1190,7 @@
         chatButton.style.transform = 'scale(1)';
       }
     }
-    
+
     // Handle window resize to maintain button state
     let resizeTimeout;
     window.addEventListener('resize', () => {
@@ -1208,17 +1214,17 @@
         }
       }, 100);
     });
-    
+
     // Load saved session and restore messages
     const savedMessages = loadSavedSession();
-    
+
     if (savedMessages && savedMessages.length > 0) {
       // Restore saved messages
       const messagesContainer = document.getElementById('zaakiy-messages');
       if (messagesContainer) {
         // Clear default greeting
         messagesContainer.innerHTML = '';
-        
+
         // Restore each message
         savedMessages.forEach(msg => {
           // Pass isHtml flag to preserve formatting for bot messages
@@ -1239,7 +1245,7 @@
       const greetingEl = document.getElementById('zaakiy-greeting');
       if (greetingEl) greetingEl.innerHTML = parseMarkdown(config.greeting);
     }
-    
+
     // Initialize welcome overlay
     const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
     const welcomeText = document.getElementById('zaakiy-welcome-text');
@@ -1255,22 +1261,22 @@
       }
     }
   }
-  
+
   // Load chatbot configuration
   async function loadChatbotConfig() {
     try {
       const response = await fetch(`${config.apiUrl}/api/public/chatbot/${config.chatbotId}/config`);
-      
+
       if (response.ok) {
         const chatbot = await response.json();
         selectedChatbot = chatbot;
-        
+
         // Update config with chatbot details
         config.primaryColor = chatbot.color_hex || config.primaryColor;
         config.botName = chatbot.name || config.botName;
         config.greeting = chatbot.greeting_message || config.greeting;
         config.avatarUrl = chatbot.avatar_url || null;
-        
+
         // Update UI with new config
         updateWidgetAppearance();
       }
@@ -1326,7 +1332,7 @@
       container.appendChild(buttonEl);
     });
   }
-  
+
   // Helper function to update input focus color dynamically
   function updateInputFocusColor() {
     // Remove existing dynamic style if present
@@ -1334,7 +1340,7 @@
     if (existingStyle) {
       existingStyle.remove();
     }
-    
+
     // Create new style element with updated primary color
     const styleElement = document.createElement('style');
     styleElement.id = 'zaakiy-dynamic-styles';
@@ -1345,7 +1351,7 @@
     `;
     document.head.appendChild(styleElement);
   }
-  
+
   // Update widget appearance
   function updateWidgetAppearance() {
     const button = document.querySelector('.zaakiy-chat-button');
@@ -1356,7 +1362,7 @@
     const botNameElement = document.querySelector('#zaakiy-bot-name');
     const greetingMessage = document.querySelector('#zaakiy-greeting');
     const avatarContainer = document.querySelector('#zaakiy-avatar-container');
-    
+
     // Update colors with primary color
     if (widgetRoot) widgetRoot.style.setProperty('--zaakiy-primary-color', config.primaryColor);
     if (button) button.style.background = config.primaryColor;
@@ -1368,31 +1374,31 @@
       welcomeClose.style.background = config.primaryColor;
       welcomeClose.style.color = '#ffffff';
     }
-    
+
     // Update existing user messages
     const userMessages = document.querySelectorAll('.zaakiy-message.user .zaakiy-message-content');
     userMessages.forEach(msg => {
       msg.style.background = config.primaryColor;
     });
-    
+
     // Update input field focus color by injecting a style rule
     updateInputFocusColor();
-    
+
     // Update text content
     if (botNameElement) botNameElement.textContent = config.botName;
     if (greetingMessage) greetingMessage.innerHTML = parseMarkdown(config.greeting);
     const welcomeTextEl = document.querySelector('#zaakiy-welcome-text');
     if (welcomeTextEl) welcomeTextEl.innerHTML = parseMarkdown(config.welcomeMessage || config.greeting);
-    
+
     if (avatarContainer) {
       while (avatarContainer.firstChild) avatarContainer.removeChild(avatarContainer.firstChild);
       const avatarElement = createAvatarImage(config.avatarUrl, config.botName, true);
       avatarContainer.appendChild(avatarElement);
     }
   }
-  
+
   // Global functions
-  window.zaakiyToggleChat = function() {
+  window.zaakiyToggleChat = function () {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     if (chatWindow) {
       const isOpen = chatWindow.style.display === 'flex';
@@ -1403,20 +1409,20 @@
       }
     }
   };
-  
-  window.zaakiyOpenChat = function() {
+
+  window.zaakiyOpenChat = function () {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     const widgetContainer = document.getElementById('zaakiy-chat-widget');
     const chatButton = document.querySelector('.zaakiy-chat-button');
     if (chatWindow) {
       chatWindow.classList.remove('zaakiy-closing');
       chatWindow.style.display = 'flex';
-      
+
       // Mobile-specific fixes: Ensure header is visible
       if (window.innerWidth <= 768) {
         // Add mobile class for additional styling
         chatWindow.classList.add('zaakiy-mobile-open');
-        
+
         // Hide chat button when chat window is open on mobile
         if (chatButton) {
           chatButton.style.opacity = '0';
@@ -1424,7 +1430,7 @@
           chatButton.style.pointerEvents = 'none';
           chatButton.style.transform = 'scale(0.8)';
         }
-        
+
         // Ensure widget container accounts for mobile browser UI
         if (widgetContainer) {
           // Use dynamic viewport height which accounts for browser UI changes
@@ -1432,7 +1438,7 @@
           widgetContainer.style.height = dvh + 'px';
           widgetContainer.style.maxHeight = dvh + 'px';
         }
-        
+
         // Ensure chat window is positioned correctly to show header
         // Add a small delay to ensure DOM is ready
         setTimeout(() => {
@@ -1443,7 +1449,7 @@
           }
         }, 50);
       }
-      
+
       // Trigger animation after display is set
       requestAnimationFrame(() => {
         chatWindow.classList.add('zaakiy-opening');
@@ -1451,7 +1457,7 @@
       // Hide welcome overlay when chat opens
       const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
       if (welcomeEl) welcomeEl.style.display = 'none';
-      
+
       // Focus input field for better UX
       setTimeout(() => {
         const input = document.getElementById('zaakiy-input');
@@ -1459,8 +1465,8 @@
       }, 300);
     }
   };
-  
-  window.zaakiyCloseChat = function() {
+
+  window.zaakiyCloseChat = function () {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     const widgetContainer = document.getElementById('zaakiy-chat-widget');
     const chatButton = document.querySelector('.zaakiy-chat-button');
@@ -1468,7 +1474,7 @@
       chatWindow.classList.remove('zaakiy-opening');
       chatWindow.classList.remove('zaakiy-mobile-open'); // Remove mobile class
       chatWindow.classList.add('zaakiy-closing');
-      
+
       // Show chat button when chat window is closed on mobile
       if (window.innerWidth <= 768 && chatButton) {
         // Show button after a short delay for smooth transition
@@ -1479,13 +1485,13 @@
           chatButton.style.transform = 'scale(1)';
         }, 200); // Match the closing animation duration
       }
-      
+
       // Reset widget container height on mobile when closing
       if (window.innerWidth <= 768 && widgetContainer) {
         widgetContainer.style.height = '';
         widgetContainer.style.maxHeight = '';
       }
-      
+
       // Hide after animation completes
       setTimeout(() => {
         chatWindow.style.display = 'none';
@@ -1493,202 +1499,202 @@
       }, 200);
     }
   };
-  
+
   // Close welcome overlay
-  window.zaakiyCloseWelcome = function(event) {
+  window.zaakiyCloseWelcome = function (event) {
     // Prevent event bubbling and default behavior
     if (event) {
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
     }
-    
+
     const welcomeEl = document.getElementById('zaakiy-welcome-overlay');
     if (welcomeEl && welcomeEl.style.display !== 'none') {
       // Add fade-out animation
       welcomeEl.style.opacity = '0';
       welcomeEl.style.transition = 'opacity 0.2s ease';
-      
+
       // Hide after animation
       setTimeout(() => {
         welcomeEl.style.display = 'none';
         welcomeEl.style.opacity = '1'; // Reset for next time
         welcomeEl.style.transition = '';
       }, 200);
-      
+
       // Log for debugging (can be removed in production)
       console.log('Welcome overlay closed');
     }
-    
+
     // Also ensure the button click is registered
     return false;
   };
-  
-  window.zaakiySendMessage = function(messageOverride) {
+
+  window.zaakiySendMessage = function (messageOverride) {
     const input = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
-    
+
     // Don't send if input is disabled (bot is typing)
     if (input?.disabled || sendButton?.disabled) return;
-    
+
     const message = (messageOverride || input?.value || '').trim();
-    
+
     if (!message) return;
-    
+
     // Validate chatbot ID
     if (!config.chatbotId) {
       zaakiyAddMessage('Configuration error: No chatbot ID set.', 'bot');
       return;
     }
-    
+
     // Add user message
     zaakiyAddMessage(message, 'user', true); // Save to storage
     if (!messageOverride && input) {
       input.value = '';
     }
-    
+
     // Show typing indicator
     zaakiyShowTyping();
-    
+
     // Send to API
     const requestBody = {
       message: message,
       chatbot_id: selectedChatbot?.id || config.chatbotId,
       session_id: conversationId || null
     };
-    
+
     // Create abort controller for timeout
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-    
+
     fetch(`${config.apiUrl}/api/public/chat`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
       signal: controller.signal
     })
-    .then(async response => {
-      clearTimeout(timeoutId); // Clear timeout on success
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        
-        let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
-        try {
-          const errorData = JSON.parse(errorText);
-          if (errorData.detail) {
-            errorMessage = `Error: ${errorData.detail}`;
+      .then(async response => {
+        clearTimeout(timeoutId); // Clear timeout on success
+
+        if (!response.ok) {
+          const errorText = await response.text();
+
+          let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
+          try {
+            const errorData = JSON.parse(errorText);
+            if (errorData.detail) {
+              errorMessage = `Error: ${errorData.detail}`;
+            }
+          } catch {
+            // Not JSON, use text
+            if (errorText) {
+              errorMessage = `Server error: ${errorText.substring(0, 100)}`;
+            }
           }
-        } catch {
-          // Not JSON, use text
-          if (errorText) {
-            errorMessage = `Server error: ${errorText.substring(0, 100)}`;
-          }
+
+          throw new Error(errorMessage);
         }
-        
-        throw new Error(errorMessage);
-      }
-      return response.json();
-    })
-    .then(data => {
-      zaakiyHideTyping();
-      
-      if (data.session_id && !conversationId) {
-        conversationId = data.session_id;
-        localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
-      }
-      
-      zaakiyAddMessage(
-        data.response || 'Sorry, I had trouble processing that.',
-        'bot',
-        true,
-        false,
-        null,
-        data.buttons || []
-      );
-    })
-    .catch((error) => {
-      clearTimeout(timeoutId); // Clear timeout on error
-      zaakiyHideTyping();
-      
-      // Handle different error types
-      let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
-      
-      if (error.name === 'AbortError') {
-        errorMessage = 'Request timed out. The server is taking too long to respond. Please try again.';
-      } else if (error.message) {
-        errorMessage = error.message;
-      }
-      
-      zaakiyAddMessage(errorMessage, 'bot', true);
-    });
+        return response.json();
+      })
+      .then(data => {
+        zaakiyHideTyping();
+
+        if (data.session_id && !conversationId) {
+          conversationId = data.session_id;
+          localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+        }
+
+        zaakiyAddMessage(
+          data.response || 'Sorry, I had trouble processing that.',
+          'bot',
+          true,
+          false,
+          null,
+          data.buttons || []
+        );
+      })
+      .catch((error) => {
+        clearTimeout(timeoutId); // Clear timeout on error
+        zaakiyHideTyping();
+
+        // Handle different error types
+        let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
+
+        if (error.name === 'AbortError') {
+          errorMessage = 'Request timed out. The server is taking too long to respond. Please try again.';
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+
+        zaakiyAddMessage(errorMessage, 'bot', true);
+      });
   };
-  
+
   // Add global function to clear chat history
-  window.zaakiyClearChat = function() {
+  window.zaakiyClearChat = function () {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (messagesContainer) {
       messagesContainer.innerHTML = '';
-      
+
       // Add greeting message back with markdown parsing
       const greetingDiv = document.createElement('div');
       greetingDiv.className = 'zaakiy-message bot';
       greetingDiv.innerHTML = `<div class="zaakiy-message-content" id="zaakiy-greeting">${parseMarkdown(config.greeting)}</div>`;
       messagesContainer.appendChild(greetingDiv);
-      
+
       // Clear session
       conversationId = null;
       clearSavedSession();
     }
   };
-  
+
   // Format timestamp for display
   function formatTimestamp(date) {
     const now = new Date();
     const diff = now - date;
-    
+
     // Less than 1 minute ago
     if (diff < 60000) {
       return 'Just now';
     }
-    
+
     // Less than 1 hour ago
     if (diff < 3600000) {
       const minutes = Math.floor(diff / 60000);
       return `${minutes}m ago`;
     }
-    
+
     // Today
     if (date.toDateString() === now.toDateString()) {
       return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
     }
-    
+
     // Yesterday
     const yesterday = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
     if (date.toDateString() === yesterday.toDateString()) {
       return `Yesterday ${date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true })}`;
     }
-    
+
     // Older than yesterday - show date and time
     const daysDiff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
     if (daysDiff < 7) {
       return `${daysDiff}d ago`;
     }
-    
+
     // Return formatted date and time for older messages
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' + 
-           date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) + ' ' +
+      date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   }
-  
+
   // Enhanced markdown parser with link highlighting
   function parseMarkdown(text) {
     if (!text) return '';
-    
+
     // Store links temporarily to protect them from escaping
     const linkPlaceholders = [];
     let linkIndex = 0;
-    
+
     // Extract and store links with a placeholder
     let processedText = text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (match, linkText, url) => {
       const placeholder = `___LINK_${linkIndex}___`;
@@ -1696,40 +1702,40 @@
       linkIndex++;
       return placeholder;
     });
-    
+
     // Escape HTML to prevent XSS (after extracting links)
     processedText = processedText
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;');
-    
+
     // Parse bold **text** (must be before italic to handle ** correctly)
     processedText = processedText.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700; color: #1a1a1a;">$1</strong>');
-    
+
     // Parse italic *text* (single asterisks, but not part of **)
     processedText = processedText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic; opacity: 0.95;">$1</em>');
-    
+
     // Parse bullet points (- item)
     processedText = processedText.replace(/^- (.+)$/gm, '<div style="margin-left: 12px; margin-bottom: 2px; margin-top: 1px;">• $1</div>');
-    
+
     // Restore links with proper HTML and parse any markdown within link text
     linkPlaceholders.forEach((link, index) => {
       const placeholder = `___LINK_${index}___`;
-      
+
       // Parse bold/italic within link text
       let formattedLinkText = link.linkText
         .replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700;">$1</strong>')
         .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
-      
+
       const linkHtml = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor}; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none; transition: all 0.2s;">${formattedLinkText}</a>`;
       processedText = processedText.replace(placeholder, linkHtml);
     });
-    
+
     // Parse line breaks - reduce excessive whitespace
     // Convert double line breaks to paragraph breaks, single to just a break
     processedText = processedText.replace(/\n\n+/g, '<br><br>'); // Multiple newlines -> double break
     processedText = processedText.replace(/\n/g, '<br>'); // Single newlines -> single break
-    
+
     return processedText;
   }
 
@@ -1754,30 +1760,30 @@
 
     return container;
   }
-  
+
   function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null, buttons = []) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
-    
+
     const messageDiv = document.createElement('div');
     messageDiv.className = `zaakiy-message ${type}`;
-    
+
     // Store timestamp or use current time
     const messageTimestamp = timestamp || new Date();
     messageDiv.dataset.timestamp = messageTimestamp.getTime();
-    
+
     if (type === 'bot') {
       const avatarElement = createAvatarImage(config.avatarUrl, config.botName, false);
       messageDiv.appendChild(avatarElement);
     }
-    
+
     // Create content wrapper
     const contentWrapper = document.createElement('div');
     contentWrapper.className = 'zaakiy-message-content-wrapper';
-    
+
     const contentDiv = document.createElement('div');
     contentDiv.className = 'zaakiy-message-content';
-    
+
     // For bot messages: use pre-formatted HTML if available, otherwise parse markdown
     // For user messages: always use plain text
     if (type === 'bot') {
@@ -1792,13 +1798,13 @@
       contentDiv.textContent = content;
       contentDiv.style.background = config.primaryColor;
     }
-    
+
     // Add timestamp
     const timestampDisplay = formatTimestamp(messageTimestamp);
     const timestampDiv = document.createElement('div');
     timestampDiv.className = 'zaakiy-message-timestamp';
     timestampDiv.textContent = timestampDisplay;
-    
+
     contentWrapper.appendChild(contentDiv);
     if (type === 'bot' && buttons && buttons.length) {
       const buttonsEl = createMessageButtons(buttons);
@@ -1806,32 +1812,32 @@
     }
     contentWrapper.appendChild(timestampDiv);
     messageDiv.appendChild(contentWrapper);
-    
+
     messagesContainer.appendChild(messageDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    
+
     // Save to localStorage if requested
     if (saveToStorage) {
       saveCurrentMessages();
     }
   }
-  
+
   // Helper function to get all current messages
   function getCurrentMessages() {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return [];
-    
+
     const messageElements = messagesContainer.querySelectorAll('.zaakiy-message:not(#zaakiy-typing)');
     const messages = [];
-    
+
     messageElements.forEach(msgEl => {
       const type = msgEl.classList.contains('user') ? 'user' : 'bot';
       const timestamp = msgEl.dataset.timestamp ? new Date(parseInt(msgEl.dataset.timestamp)) : new Date();
-      
+
       // Look for content inside the wrapper
       const contentWrapper = msgEl.querySelector('.zaakiy-message-content-wrapper');
       const contentEl = contentWrapper ? contentWrapper.querySelector('.zaakiy-message-content') : msgEl.querySelector('.zaakiy-message-content');
-      
+
       if (contentEl) {
         // For bot messages, save the HTML to preserve formatting
         // For user messages, save plain text
@@ -1848,27 +1854,27 @@
         messages.push({ content, type, isHtml: type === 'bot', timestamp, buttons });
       }
     });
-    
+
     return messages;
   }
-  
+
   // Save current messages to storage
   function saveCurrentMessages() {
     const messages = getCurrentMessages();
     saveSession(messages);
   }
-  
+
   // Timer for showing elapsed time
   let typingTimer = null;
   let typingStartTime = null;
-  
+
   function zaakiyShowTyping() {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
-    
+
     // Record start time
     typingStartTime = Date.now();
-    
+
     // Disable input and send button while bot is typing
     const inputField = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
@@ -1881,7 +1887,7 @@
       sendButton.style.opacity = '0.5';
       sendButton.style.cursor = 'not-allowed';
     }
-    
+
     // Start timer to update elapsed time
     let elapsedSeconds = 0;
     typingTimer = setInterval(() => {
@@ -1889,20 +1895,20 @@
       if (inputField && elapsedSeconds > 3) {
         inputField.placeholder = `Bot is typing... (${elapsedSeconds}s)`;
       }
-      
+
       // Show warning if taking too long
       if (elapsedSeconds > 15) {
         inputField.placeholder = `Still processing... (${elapsedSeconds}s)`;
       }
     }, 1000);
-    
+
     const typingDiv = document.createElement('div');
     typingDiv.className = 'zaakiy-message bot';
     typingDiv.id = 'zaakiy-typing';
-    
+
     const avatarElement = createAvatarImage(config.avatarUrl, config.botName, false);
     typingDiv.appendChild(avatarElement);
-    
+
     const typingInner = document.createElement('div');
     typingInner.className = 'zaakiy-typing';
     typingInner.innerHTML = '<div class="zaakiy-typing-dot"></div><div class="zaakiy-typing-dot"></div><div class="zaakiy-typing-dot"></div>';
@@ -1910,22 +1916,22 @@
     messagesContainer.appendChild(typingDiv);
     messagesContainer.scrollTop = messagesContainer.scrollHeight;
   }
-  
+
   function zaakiyHideTyping() {
     const typingElement = document.getElementById('zaakiy-typing');
     if (typingElement) typingElement.remove();
-    
+
     // Clear the timer
     if (typingTimer) {
       clearInterval(typingTimer);
       typingTimer = null;
     }
-    
+
     // Clear response time tracking
     if (typingStartTime) {
       typingStartTime = null;
     }
-    
+
     // Re-enable input and send button
     const inputField = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
@@ -1940,19 +1946,19 @@
       sendButton.style.cursor = 'pointer';
     }
   }
-  
+
   // Initialize widget
   function initWidget() {
     if (!document.body) {
       setTimeout(initWidget, 100);
       return;
     }
-    
+
     createWidget();
     loadChatbotConfig();
     loadCTAButtons();
   }
-  
+
   // Start initialization
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initWidget);

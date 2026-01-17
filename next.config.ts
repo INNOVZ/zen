@@ -17,8 +17,7 @@ const nextConfig: NextConfig = {
   },
   images: {
     remotePatterns: [
-      { protocol: "https", hostname: "zaakiy-production.up.railway.app" },
-      { protocol: "https", hostname: "*.supabase.co" },
+      { protocol: "https", hostname: "**" }, // Allow images from any HTTPS source (e.g. AWS S3, CloudFront)
     ],
   },
 };
