@@ -11,7 +11,7 @@ export const ConversationsCard = memo<ConversationsCardProps>(
     conversationCountLoading,
   }) => (
     <div
-      className="px-4 py-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 border shadow-sm"
+      className="p-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 hover:shadow-blue-200 border shadow-sm"
       role="article"
       aria-label="Conversations statistics"
     >

@@ -1,5 +1,5 @@
 // Chatbot Management API
-import { ChatbotInfo } from "@/types/schemaTypes";
+import type { ChatbotInfo } from "./types/index";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { apiUtils } from "@/app/api/utils";
@@ -83,6 +83,10 @@ export const chatbotApi = {
       body: JSON.stringify(backendConfig),
     });
 
+    // Invalidate the chatbots list cache after create
+    const cacheKey = createCacheKey("/api/chat/chatbots");
+    apiCache.delete(cacheKey);
+
     return response.chatbot || response;
   },
 
@@ -95,6 +99,10 @@ export const chatbotApi = {
       body: JSON.stringify(config),
     });
 
+    // Invalidate the chatbots list cache after update
+    const cacheKey = createCacheKey("/api/chat/chatbots");
+    apiCache.delete(cacheKey);
+
     return response.chatbot || response;
   },
 
@@ -102,6 +110,10 @@ export const chatbotApi = {
     await fetchWithAuth(`/api/chat/chatbots/${chatbotId}`, {
       method: "DELETE",
     });
+
+    // Invalidate the chatbots list cache after delete
+    const cacheKey = createCacheKey("/api/chat/chatbots");
+    apiCache.delete(cacheKey);
   },
 
   activateChatbot: async (chatbotId: string): Promise<void> => {

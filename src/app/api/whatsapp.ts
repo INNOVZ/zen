@@ -1,31 +1,17 @@
 // WhatsApp/Twilio Configuration API
 import { fetchWithAuth } from "@/app/api/auth";
+import type {
+  WhatsAppConfig,
+  WhatsAppConfigResponse,
+  WhatsAppValidationResponse,
+} from "./types/index";
 
-export interface WhatsAppConfig {
-  twilio_account_sid: string;
-  twilio_auth_token: string;
-  twilio_phone_number: string;
-  webhook_url?: string;
-  is_active: boolean;
-}
-
-export interface WhatsAppConfigResponse {
-  success: boolean;
-  config?: WhatsAppConfig;
-  message?: string;
-  config_id?: string;
-}
-
-export interface WhatsAppValidationResponse {
-  success: boolean;
-  validation?: {
-    valid: boolean;
-    account_status?: string;
-    phone_number?: string;
-    is_active?: boolean;
-    error?: string;
-  };
-}
+// Re-export types for backward compatibility
+export type {
+  WhatsAppConfig,
+  WhatsAppConfigResponse,
+  WhatsAppValidationResponse,
+};
 
 export const whatsappApi = {
   /**

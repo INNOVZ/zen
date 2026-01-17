@@ -2,94 +2,73 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import {
   Home,
   Settings,
   Brain,
   ChevronLeft,
   ChevronRight,
-  LogOut,
   User,
-  BrainCircuit,
   Users,
+  Calendar,
 } from "lucide-react";
+import { RiLogoutCircleLine } from "react-icons/ri";
+
 import { RiRobot3Line } from "react-icons/ri";
 import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { getUserDisplayName } from "@/utils/userUtils";
-import { SimpleSubscriptionStatus } from "@/components/subscription/SimpleSubscriptionStatus";
+import { SimpleSubscriptionStatus } from "@/components/dashboard/layout/SimpleSubscriptionStatus";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   const [user, setUser] = useState<SupabaseUser | null>(null);
   const pathname = usePathname() ?? "";
-  const params = useParams<{ userId?: string }>();
 
   useEffect(() => {
     const getUser = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session?.user) {
-        setUser(session.user);
+      const { data: userData } = await supabase.auth.getUser();
+      if (userData?.user) {
+        setUser(userData.user);
       }
     };
     getUser();
   }, []);
 
-  // Get userId from params or user state
-  const routeUserId =
-    typeof params?.userId === "string"
-      ? params.userId
-      : Array.isArray(params?.userId)
-        ? params.userId[0]
-        : undefined;
-  const currentUserId = routeUserId || user?.id;
-
-  // Create a function to get the correct path for menu items
-  // ALWAYS include userId - never generate paths without it
-  const getMenuItemPath = (basePath: string) => {
-    if (!currentUserId) {
-      console.warn("[SideBar] No userId available, cannot generate menu path");
-      // Return a path that will trigger redirect
-      return `/dashboard${basePath}`;
-    }
-    return `/dashboard/${currentUserId}${basePath}`;
-  };
-
+  // Menu items with simple paths - no userId needed
   const menuItems = [
     {
       title: "Dashboard",
       icon: <Home size={16} />,
-      path: getMenuItemPath(""),
+      path: "/dashboard",
     },
     {
       title: "Train",
       icon: <Brain size={16} />,
-      path: getMenuItemPath("/train"),
-    },
-    {
-      title: "AI",
-      icon: <BrainCircuit size={16} />,
-      path: getMenuItemPath("/context-settings"),
+      path: "/dashboard/train",
     },
     {
       title: "Customize",
       icon: <RiRobot3Line size={16} />,
-      path: getMenuItemPath("/customize"),
+      path: "/dashboard/customize",
     },
     {
       title: "Leads",
       icon: <Users size={16} />,
-      path: getMenuItemPath("/leads"),
+      path: "/dashboard/leads",
+    },
+    {
+      title: "Calendar",
+      icon: <Calendar size={16} />,
+      path: "/dashboard/calendar",
     },
     {
       title: "Settings",
       icon: <Settings size={16} />,
-      path: getMenuItemPath("/settings"),
+      path: "/dashboard/settings",
     },
   ];
 
@@ -105,91 +84,61 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
-        } min-h-screen bg-white text-white transition-all-ease-in-out duration-400 fixed left-0 top-0 flex flex-col`}
+      className={`${
+        isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
+      } my-4 bg-white text-white transition-all-ease-in-out duration-400 fixed top-0 flex-col rounded-xl shadow-lg h-[97vh] hidden md:flex`}
     >
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-r border-gray-700 overflow-y-auto">
+      <div className="flex items-center justify-between p-4 overflow-y-auto">
         {!isCollapsed && (
-          <span className="text-xl font-bold text-[#0a0a60]">Zentria Pro</span>
+          <span className="text-xl text-center font-bold text-black">
+            Zaakiy Pro
+          </span>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
           className="pointer"
         >
           {isCollapsed ? (
-            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
+            <span className="bg-black shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
               <ChevronRight size={18} className="text-white" />
             </span>
           ) : (
-            <span className="bg-[#0a0a60] shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
+            <span className="bg-black shadow-sm p-2 rounded-full flex items-center justify-center w-8 h-8">
               <ChevronLeft size={18} className="text-white" />
             </span>
           )}
         </button>
       </div>
 
-      {/* User Info */}
-      {!isCollapsed && user && (
-        <div className="p-4 border-r border-gray-700 overflow-y-auto">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-[#0a0a60] rounded-full flex items-center justify-center">
-              <User size={16} className="text-white" />
-            </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-gray-700 truncate">
-                {getUserDisplayName({
-                  id: user.id,
-                  email: user.email || "",
-                  name: user.user_metadata?.name || "",
-                  display_name: user.user_metadata?.display_name || "",
-                })}
-              </p>
-              <p className="text-xs text-gray-700">
-                User ID: {user.id.slice(0, 8)}...
-              </p>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Navigation */}
-      <nav className="pr-4 py-4 flex-1 border-r border-gray-700 overflow-y-auto">
+      <nav className="p-4 flex-1 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => {
             // Normalize paths by removing trailing slashes
             const normalizedItemPath = item.path.replace(/\/$/, "");
             const normalizedPathname = pathname.replace(/\/$/, "");
 
-            // Much simpler and more reliable active state logic
+            // Simple active state logic for new URL structure without userId
             let isActive = false;
 
-            // Split paths into segments for comparison
-            const pathSegments = normalizedPathname.split("/").filter(Boolean);
-            const itemSegments = normalizedItemPath.split("/").filter(Boolean);
-
             if (item.title === "Dashboard") {
-              // Dashboard is active only when we're exactly on /dashboard/{userId} with no additional segments
-              isActive =
-                pathSegments.length === 2 &&
-                pathSegments[0] === "dashboard" &&
-                pathSegments[1] !== undefined &&
-                pathSegments[2] === undefined;
+              // Dashboard is active only when we're exactly on /dashboard with no additional segments
+              isActive = normalizedPathname === "/dashboard";
             } else {
-              // For other items, check if the last meaningful segment matches
-              const lastPathSegment = pathSegments[pathSegments.length - 1];
-              const expectedSegment = itemSegments[itemSegments.length - 1];
-              isActive = lastPathSegment === expectedSegment;
+              // For other items, check exact path match
+              isActive = normalizedPathname === normalizedItemPath;
             }
 
             return (
               <li key={index}>
                 <Link
                   href={item.path}
-                  className={`flex items-center gap-4 p-2 rounded-r-lg transition-colors
-                    ${isActive
-                      ? "bg-[#0a0a60] text-white font-bold shadow-sm"
-                      : "text-[#0a0a60] hover:text-[#020617] hover:bg-gray-100"
+                  className={`flex items-center gap-4 p-[6px] rounded-lg transition-colors
+                    ${
+                      isActive
+                        ? "bg-[#5d7dde] text-white font-bold shadow-sm"
+                        : "text-[#5d7dde] hover:text-[#5d7dde] hover:bg-gray-100"
                     }
                   `}
                 >
@@ -215,19 +164,47 @@ const Sidebar = () => {
         </div>
       )}
 
-      {/* Logout Button */}
-      <div className="p-4 border-t border-gray-700">
-        <Button
-          onClick={handleLogout}
-          variant="ghost"
-          className={`w-full justify-start text-gray-600 hover:text-white hover:bg-red-500 ${isCollapsed ? "px-2" : ""
-            }`}
-        >
-          <div className="flex items-center justify-center w-5 h-5 shrink-0">
-            <LogOut size={20} />
+      {/* User Info and Logout Section */}
+      <div className="mt-auto border-t border-gray-700">
+        {/* User Info */}
+        {!isCollapsed && user && (
+          <div className="p-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-black rounded-full flex items-center justify-center">
+                <User size={16} className="text-black" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-black truncate">
+                  {getUserDisplayName({
+                    id: user.id,
+                    email: user.email || "",
+                    name: user.user_metadata?.name || "",
+                    display_name: user.user_metadata?.name || "",
+                  })}
+                </p>
+                <p className="text-xs text-gray-600 truncate">
+                  User ID: {user.id.slice(0, 8)}...
+                </p>
+              </div>
+            </div>
           </div>
-          {!isCollapsed && <span className="ml-4">Logout</span>}
-        </Button>
+        )}
+
+        {/* Logout Button */}
+        <div className="p-4">
+          <Button
+            onClick={handleLogout}
+            variant="ghost"
+            className={`w-full justify-start text-white hover:text-gray-100 bg-gray-900 hover:bg-black pointer ${
+              isCollapsed ? "px-2" : ""
+            }`}
+          >
+            <div className="pointer flex items-center justify-center shrink-0">
+              <RiLogoutCircleLine />
+            </div>
+            {!isCollapsed && <span className="ml-4">Logout</span>}
+          </Button>
+        </div>
       </div>
     </div>
   );

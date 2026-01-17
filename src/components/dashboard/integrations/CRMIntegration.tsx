@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "next/navigation";
 import { mcpApi, type CRMConfig } from "@/app/api/mcp";
-import type { CRMType } from "@/types/mcp";
+import type { CRMType } from "@/types/integration";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -144,8 +144,12 @@ export default function CRMIntegration() {
 
     try {
       const response = await mcpApi.getZohoOAuthUrl(zohoRegion);
-      // Redirect to Zoho authorization page
-      window.location.href = response.auth_url;
+      if (response.auth_url) {
+        // Redirect to Zoho authorization page
+        window.location.href = response.auth_url;
+      } else {
+        throw new Error("No authorization URL received from Zoho");
+      }
     } catch (error) {
       console.error("Failed to initiate Zoho OAuth:", error);
       const errorMessage =
@@ -216,18 +220,33 @@ export default function CRMIntegration() {
 
             // Prefill credentials with masked values for editing
             if (crmConfig.credentials) {
+              const creds = crmConfig.credentials;
               setCredentials({
-                api_key: crmConfig.credentials.api_key || "",
-                username: crmConfig.credentials.username || "",
-                password: crmConfig.credentials.password || "",
-                security_token: crmConfig.credentials.security_token || "",
-                domain: crmConfig.credentials.domain || "login",
-                client_id: crmConfig.credentials.client_id || "",
-                client_secret: crmConfig.credentials.client_secret || "",
-                refresh_token: crmConfig.credentials.refresh_token || "",
+                api_key: typeof creds.api_key === "string" ? creds.api_key : "",
+                username:
+                  typeof creds.username === "string" ? creds.username : "",
+                password:
+                  typeof creds.password === "string" ? creds.password : "",
+                security_token:
+                  typeof creds.security_token === "string"
+                    ? creds.security_token
+                    : "",
+                domain:
+                  typeof creds.domain === "string" ? creds.domain : "login",
+                client_id:
+                  typeof creds.client_id === "string" ? creds.client_id : "",
+                client_secret:
+                  typeof creds.client_secret === "string"
+                    ? creds.client_secret
+                    : "",
+                refresh_token:
+                  typeof creds.refresh_token === "string"
+                    ? creds.refresh_token
+                    : "",
                 api_domain:
-                  crmConfig.credentials.api_domain ||
-                  "https://www.zohoapis.com",
+                  typeof creds.api_domain === "string"
+                    ? creds.api_domain
+                    : "https://www.zohoapis.com",
               });
             }
 

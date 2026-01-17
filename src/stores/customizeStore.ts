@@ -2,10 +2,10 @@ import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 import { API_BASE_URL } from "@/config/api";
 import type {
-  ChatbotInfo,
   UploadFile,
   ConversationInfo,
-} from "@/types/schemaTypes";
+} from "@/types";
+import type { ChatbotInfo } from "@/types";
 import type {
   ContextConfig,
   PerformanceMetrics,
@@ -149,6 +149,7 @@ const defaultContextConfig: ContextConfig = {
 // Default chatbot configuration
 const defaultConfig: ChatbotInfo = {
   id: "",
+  org_id: "",
   name: "",
   description: "",
   color_hex: "#6a8fff",

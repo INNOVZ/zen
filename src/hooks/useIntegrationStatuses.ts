@@ -36,7 +36,7 @@ export const useIntegrationStatuses = () => {
                 const whatsappConfig = await whatsappApi.getConfig();
                 if (whatsappConfig.success && whatsappConfig.config) {
                     whatsappConfigured = true;
-                    whatsappEnabled = whatsappConfig.config.is_active;
+                    whatsappEnabled = whatsappConfig.config.is_active ?? false;
 
                     // Determine status based on configuration
                     if (whatsappConfig.config.is_active) {

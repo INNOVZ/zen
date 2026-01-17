@@ -4,7 +4,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminUserManagement from "@/components/admin/AdminUserManagement";
-import { Users, Building, BarChart3, Settings } from "lucide-react";
+import { Users, Building, BarChart3, Settings, Activity } from "lucide-react";
 
 const AdminDashboardClient = () => {
   return (
@@ -79,8 +79,9 @@ const AdminDashboardClient = () => {
 
         {/* Main Content */}
         <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="users">User Management</TabsTrigger>
+            <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
             <TabsTrigger value="analytics">Analytics</TabsTrigger>
             <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
             <TabsTrigger value="settings">Settings</TabsTrigger>
@@ -88,6 +89,20 @@ const AdminDashboardClient = () => {
 
           <TabsContent value="users" className="mt-6">
             <AdminUserManagement />
+          </TabsContent>
+
+          <TabsContent value="monitoring" className="mt-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>System Monitoring</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-center py-12 text-gray-500">
+                  <Activity className="w-16 h-16 mx-auto mb-4 text-gray-300" />
+                  <p>System monitoring dashboard coming soon...</p>
+                </div>
+              </CardContent>
+            </Card>
           </TabsContent>
 
           <TabsContent value="analytics" className="mt-6">

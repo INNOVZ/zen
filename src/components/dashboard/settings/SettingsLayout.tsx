@@ -36,6 +36,7 @@ import CRMIntegration from "@/components/dashboard/integrations/CRMIntegration";
 import ShopifyIntegration from "@/components/dashboard/integrations/ShopifyIntegration";
 import LeadCaptureSettings from "@/components/dashboard/integrations/LeadCaptureSettings";
 import WhatsAppConfiguration from "@/components/dashboard/settings/WhatsAppConfiguration";
+import PasswordChange from "@/components/dashboard/settings/PasswordChange";
 
 export default function SettingsLayout() {
   const {
@@ -52,7 +53,7 @@ export default function SettingsLayout() {
     name: organizationInfo?.organization.name || "",
     email:
       organizationInfo?.organization.email ||
-      organizationInfo?.user.email ||
+      organizationInfo?.user?.email ||
       "",
     contact_phone: organizationInfo?.organization.contact_phone || "",
     business_type: organizationInfo?.organization.business_type || "",
@@ -73,7 +74,7 @@ export default function SettingsLayout() {
         name: organizationInfo.organization.name || "",
         email:
           organizationInfo.organization.email ||
-          organizationInfo.user.email ||
+          organizationInfo.user?.email ||
           "",
         contact_phone: organizationInfo.organization.contact_phone || "",
         business_type: organizationInfo.organization.business_type || "",
@@ -216,7 +217,7 @@ export default function SettingsLayout() {
   return (
     <div className="space-y-6 h-full w-full">
       {/* Current Organization Info */}
-      <header className="w-full bg-color-gradient p-8 rounded-t-xl">
+      <header className="w-full bg-color-gradient p-8 rounded-lg">
         {organizationInfo ? (
           <div className="w-full flex flex-col md:flex-row gap-4 md:gap-8 items-start md:items-center justify-between">
             <div className="flex-1">
@@ -380,6 +381,9 @@ export default function SettingsLayout() {
                 </form>
               </CardContent>
             </Card>
+
+            {/* Password Change Section */}
+            <PasswordChange />
           </div>
         </div>
       </div>

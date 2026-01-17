@@ -1,0 +1,172 @@
+<testsuites id="" name="" tests="10" failures="10" skipped="0" errors="0" time="3.1550529999999997">
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-31T23:59:52.005Z" hostname="chromium" tests="2" failures="2" skipped="0" time="0.001" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:9:7 › Authentication › should load login page ──────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-31T23:59:52.005Z" hostname="firefox" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:9:7 › Authentication › should load login page ───────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-31T23:59:52.005Z" hostname="webkit" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:9:7 › Authentication › should load login page ────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-31T23:59:52.005Z" hostname="Mobile Chrome" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-31T23:59:52.005Z" hostname="Mobile Safari" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

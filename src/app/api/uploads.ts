@@ -1,5 +1,5 @@
 // Knowledge Base Management API
-import { UploadFile } from "@/types/schemaTypes";
+import type { UploadFile } from "@/types";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { TokenHandler, RetrainResponse } from "./types";

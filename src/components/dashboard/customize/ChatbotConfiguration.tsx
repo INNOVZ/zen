@@ -1,8 +1,8 @@
 "use client";
 import React, { useCallback, useState, useEffect } from "react";
-import { useSearchParams, useParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import type { ChatbotInfo } from "@/types/schemaTypes";
+import type { ChatbotInfo } from "@/types";
 import { useCustomizeStore } from "@/stores/customizeStore";
 import { getApiBaseUrl } from "@/config/api";
 import { Button } from "@/components/ui/button";
@@ -24,9 +24,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-// import dynamic from "next/dynamic";
 
-// Custom debounce function to avoid lodash dependency
 const debounce = <T extends (...args: never[]) => void>(
   func: T,
   delay: number
@@ -39,31 +37,11 @@ const debounce = <T extends (...args: never[]) => void>(
 };
 
 const TONE_OPTIONS = [
-  {
-    value: "professional",
-    label: "Professional",
-    icon: "👔",
-  },
-  {
-    value: "friendly",
-    label: "Friendly",
-    icon: "😊",
-  },
-  {
-    value: "helpful",
-    label: "Helpful",
-    icon: "🤝",
-  },
-  {
-    value: "technical",
-    label: "Technical",
-    icon: "🔧",
-  },
-  {
-    value: "casual",
-    label: "Casual",
-    icon: "💬",
-  },
+  { value: "professional", label: "Professional", icon: "👔" },
+  { value: "friendly", label: "Friendly", icon: "😊" },
+  { value: "helpful", label: "Helpful", icon: "🤝" },
+  { value: "technical", label: "Technical", icon: "🔧" },
+  { value: "casual", label: "Casual", icon: "💬" },
 ];
 
 const COLOR_PRESETS = [
@@ -81,35 +59,20 @@ const COLOR_PRESETS = [
   "#8B5A2B",
 ];
 
-interface ChatbotConfigurationProps {
-  className?: string;
-}
-
-export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
+export default function ChatbotConfiguration() {
   const searchParams = useSearchParams();
   const router = useRouter();
-  const params = useParams<{ userId?: string }>();
-  const userId =
-    typeof params?.userId === "string"
-      ? params.userId
-      : Array.isArray(params?.userId)
-      ? params.userId[0]
-      : undefined;
   const chatbotId = searchParams?.get("id") ?? null;
 
-  // Local state for validation and preview
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
   const {
-    // State
     saving,
     currentUser,
     selectedChatbot,
     isEditMode,
     config,
-
-    // Actions
     setSaving,
     setOrgChatbots,
     setSelectedChatbot,
@@ -119,25 +82,20 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     updateConfig,
   } = useCustomizeStore();
 
-  // Enhanced validation function
   const validateConfig = useCallback((config: ChatbotInfo): string[] => {
     const errors: string[] = [];
-
     if (!config.name?.trim()) errors.push("Chatbot name is required");
     if (config.name && config.name.length > 50)
       errors.push("Name must be under 50 characters");
     if (!config.greeting_message?.trim())
       errors.push("Greeting message is required");
-    if (config.greeting_message && config.greeting_message.length > 200) {
+    if (config.greeting_message && config.greeting_message.length > 200)
       errors.push("Greeting message must be under 200 characters");
-    }
     if (!config.fallback_message?.trim())
       errors.push("Fallback message is required");
-
     return errors;
   }, []);
 
-  // Individual input states for immediate UI feedback
   const [inputValues, setInputValues] = useState({
     name: config.name || "",
     description: config.description || "",
@@ -149,7 +107,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     avatar_url: config.avatar_url || "",
   });
 
-  // Load configuration from chatbot
   const loadConfigFromChatbot = useCallback(
     (chatbot: ChatbotInfo) => {
       setConfig({
@@ -169,24 +126,20 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
           temperature: 0.7,
           max_tokens: 1000,
         },
-        is_active: chatbot.status === "active",
+        is_active: chatbot.chain_status === "ready",
       } satisfies ChatbotInfo);
-
-      // Clear unsaved changes when loading from existing chatbot
       setUnsavedChanges(false);
       setValidationErrors([]);
     },
-    [setConfig, setUnsavedChanges, setValidationErrors]
+    [setConfig]
   );
 
-  // Load organization chatbots
   const loadOrgChatbots = useCallback(async () => {
     try {
       const chatbots = await chatbotApi.getChatbots();
       setOrgChatbots(chatbots);
 
       if (chatbotId) {
-        // Edit mode: load the specific chatbot
         const targetChatbot = chatbots.find((bot) => bot.id === chatbotId);
         if (targetChatbot) {
           setSelectedChatbot(targetChatbot);
@@ -194,18 +147,15 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
           setIsEditMode(true);
           setShowCreateForm(false);
         } else {
-          // Chatbot not found, redirect to create mode
           toast.error("Chatbot not found");
-          router.push(`/dashboard/${userId}/customize`);
+          router.push(`/dashboard/customize`);
         }
       } else if (chatbots.length > 0) {
-        // Create mode: load first chatbot as template
         setSelectedChatbot(chatbots[0]);
         loadConfigFromChatbot(chatbots[0]);
         setIsEditMode(false);
         setShowCreateForm(true);
       } else {
-        // No chatbots exist, show create form
         setShowCreateForm(true);
         setIsEditMode(false);
       }
@@ -220,40 +170,26 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     setIsEditMode,
     setShowCreateForm,
     router,
-    userId,
     loadConfigFromChatbot,
   ]);
 
-  // Load chatbots when component mounts or chatbotId changes
   useEffect(() => {
     let mounted = true;
-
     const load = async () => {
       try {
         await loadOrgChatbots();
       } catch (error) {
-        if (mounted) {
+        if (mounted)
           console.error("Error loading organization chatbots:", error);
-        }
       }
     };
-
     load();
-
     return () => {
       mounted = false;
     };
   }, [loadOrgChatbots]);
 
-  // Update input values when config changes from store
-  React.useEffect(() => {
-    console.log("🔄 Updating input values from config:", {
-      configId: config.id,
-      configName: config.name,
-      isEditMode,
-      chatbotId,
-    });
-
+  useEffect(() => {
     setInputValues({
       name: config.name || "",
       description: config.description || "",
@@ -266,24 +202,20 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     });
   }, [config, config.id, isEditMode, chatbotId]);
 
-  // Create individual debounced update functions
   const createDebouncedUpdate = useCallback(
     (field: keyof ChatbotInfo) => {
       return debounce((value: string | boolean) => {
         updateConfig({ [field]: value } as Partial<ChatbotInfo>);
         setUnsavedChanges(true);
-
-        // Get latest config state for validation
         const currentConfig = useCustomizeStore.getState().config;
         const newConfig = { ...currentConfig, [field]: value };
         const errors = validateConfig(newConfig);
         setValidationErrors(errors);
       }, 300);
     },
-    [updateConfig, validateConfig] // Removed config from dependencies
+    [updateConfig, validateConfig]
   );
 
-  // Individual debounced functions for each field
   const debouncedUpdates = React.useMemo(
     () => ({
       name: createDebouncedUpdate("name"),
@@ -300,23 +232,18 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     [createDebouncedUpdate]
   );
 
-  // Handle input changes
   const handleInputChange = useCallback(
     (field: keyof typeof inputValues, value: string) => {
-      // Update local input state immediately
       setInputValues((prev) => ({ ...prev, [field]: value }));
-      // Debounce the store update
       debouncedUpdates[field]?.(value);
     },
     [debouncedUpdates]
   );
 
-  // Handle non-text field changes (switches, selects)
   const handleFieldChange = useCallback(
     (field: keyof ChatbotInfo, value: string | boolean) => {
       updateConfig({ [field]: value } as Partial<ChatbotInfo>);
       setUnsavedChanges(true);
-
       const newConfig = { ...config, [field]: value };
       const errors = validateConfig(newConfig);
       setValidationErrors(errors);
@@ -324,13 +251,11 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     [updateConfig, validateConfig, config]
   );
 
-  // Handle avatar image file upload
   const handleAvatarUpload = useCallback(
     async (event: React.ChangeEvent<HTMLInputElement>) => {
       const file = event.target.files?.[0];
       if (!file) return;
 
-      // Validate file type
       const validTypes = [
         "image/png",
         "image/jpeg",
@@ -345,20 +270,16 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
         return;
       }
 
-      // Validate file size (max 2MB)
-      const maxSize = 2 * 1024 * 1024; // 2MB
+      const maxSize = 2 * 1024 * 1024;
       if (file.size > maxSize) {
         toast.error("Image size must be less than 2MB");
         return;
       }
 
       try {
-        // Use the existing uploads API pattern
         const { uploadsApi } = await import("@/app/api/routes");
         const result = await uploadsApi.uploadFile(file, "image");
-
         if (result && result.url) {
-          // Convert relative URL to absolute URL
           const baseUrl = getApiBaseUrl();
           const fullUrl = result.url.startsWith("http")
             ? result.url
@@ -380,10 +301,8 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     [handleInputChange]
   );
 
-  // Convert legacy Supabase URLs to proxy URLs
   const convertLegacyUrl = useCallback((url: string): string => {
     if (url.includes("storage/v1/object/uploads/")) {
-      // Extract the path after "uploads/"
       const pathParts = url.split("storage/v1/object/uploads/");
       if (pathParts.length > 1) {
         const filePath = pathParts[1];
@@ -394,18 +313,14 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
     return url;
   }, []);
 
-  // Clear avatar
   const handleClearAvatar = useCallback(() => {
     handleInputChange("avatar_url", "");
     toast.success("Avatar cleared");
   }, [handleInputChange]);
 
-  // Enhanced save function with better error handling
   const handleSave = async () => {
     try {
       setSaving(true);
-
-      // Validate configuration first
       const errors = validateConfig(config);
       if (errors.length > 0) {
         toast.error(`Please fix validation errors: ${errors.join(", ")}`);
@@ -443,52 +358,29 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
         is_active: config.is_active,
       };
 
-      console.log("💾 Attempting to save chatbot:", {
-        isEditMode,
-        chatbotId: selectedChatbot?.id,
-        chatbotData,
-        currentUser: currentUser
-          ? { id: currentUser.id, org_id: currentUser.user_metadata?.org_id }
-          : null,
-      });
-
       let savedChatbot: ChatbotInfo;
-
       if (isEditMode && selectedChatbot?.id) {
-        console.log("🔄 Updating existing chatbot:", selectedChatbot.id);
         savedChatbot = await chatbotApi.updateChatbot(
           selectedChatbot.id,
           chatbotData
         );
         toast.success("Chatbot updated successfully!");
       } else {
-        console.log("✨ Creating new chatbot");
         savedChatbot = await chatbotApi.createChatbot(chatbotData);
         toast.success("Chatbot created successfully!");
         setIsEditMode(true);
         setShowCreateForm(false);
         setSelectedChatbot(savedChatbot);
-        router.push(`/dashboard/${userId}/customize?id=${savedChatbot.id}`);
+        router.push(`/dashboard/customize?id=${savedChatbot.id}`);
       }
 
-      // Clear unsaved changes flag
       setUnsavedChanges(false);
       setValidationErrors([]);
-
-      // After successful save, refresh the data
       await loadOrgChatbots();
     } catch (error) {
-      console.error("❌ Error saving chatbot:", error);
-
+      console.error("Error saving chatbot:", error);
       let errorMessage = "Failed to save chatbot configuration";
-
       if (error instanceof Error) {
-        console.error("🔍 Error details:", {
-          message: error.message,
-          stack: error.stack,
-          name: error.name,
-        });
-
         if (
           error.message.includes("401") ||
           error.message.includes("Authentication")
@@ -496,30 +388,20 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
           errorMessage = "Authentication failed. Please log in again.";
         } else if (error.message.includes("403")) {
           errorMessage = "Permission denied. Check your access rights.";
-        } else if (error.message.includes("404")) {
-          errorMessage =
-            "Backend endpoint not found. Check if server is running on http://localhost:8001";
-        } else if (error.message.includes("500")) {
-          errorMessage = "Server error. Please try again later.";
         } else if (
           error.message.includes("Network") ||
-          error.message.includes("fetch") ||
-          error.message.includes("Failed to fetch")
+          error.message.includes("fetch")
         ) {
-          errorMessage =
-            "Cannot connect to server. Is the backend running on http://localhost:8001?";
+          errorMessage = "Cannot connect to server. Is the backend running?";
         } else {
           errorMessage = `Save failed: ${error.message}`;
         }
       }
-
       toast.error(errorMessage);
     } finally {
       setSaving(false);
     }
   };
-
-  // Enhanced preview functionality
 
   return (
     <Card>
@@ -547,7 +429,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
       </CardHeader>
 
       <CardContent>
-        {/* Validation Errors */}
         {validationErrors.length > 0 && (
           <Alert className="mb-4 border-red-200 bg-red-50">
             <AlertTriangle className="h-4 w-4 text-red-600" />
@@ -564,9 +445,7 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
           </Alert>
         )}
 
-        {/* Single tab for chatbot configuration - context engineering moved to separate AI page */}
         <div className="w-full">
-          {/* Chatbot Configuration Form */}
           <div className="space-y-4">
             <div className="my-7 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
@@ -581,11 +460,9 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
               </div>
             </div>
 
-            {/* Avatar Upload Section */}
             <div className="my-7">
               <Label>Chatbot Avatar</Label>
               <div className="mt-4 space-y-4">
-                {/* Avatar Preview */}
                 {inputValues.avatar_url && (
                   <div className="flex items-center gap-4">
                     <div className="relative w-20 h-20">
@@ -619,7 +496,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
                   </div>
                 )}
 
-                {/* URL Input */}
                 <div className="space-y-2">
                   <Label htmlFor="avatar-url" className="text-sm text-gray-600">
                     Enter Image URL
@@ -635,7 +511,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
                   />
                 </div>
 
-                {/* File Upload */}
                 <div className="flex items-center gap-2">
                   <div className="flex-1 border-t border-gray-200"></div>
                   <span className="text-sm text-gray-500">OR</span>
@@ -768,7 +643,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
                   rows={2}
                 />
               </div>
-
               <div>
                 <Label htmlFor="fallback">Fallback Message</Label>
                 <Textarea
@@ -783,13 +657,14 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
                 />
               </div>
             </div>
+
             <div className="my-9">
               <Label htmlFor="behavior">Behavior & Personality</Label>
               <Textarea
                 id="behavior"
                 value={inputValues.behavior}
                 onChange={(e) => handleInputChange("behavior", e.target.value)}
-                placeholder="Describe how the chatbot should behave, its personality, and interaction style..."
+                placeholder="Describe how the chatbot should behave..."
                 className="mt-4"
                 rows={4}
               />
@@ -815,7 +690,6 @@ export default function ChatbotConfiguration({}: ChatbotConfigurationProps) {
           </div>
         </div>
 
-        {/* Enhanced Save Section */}
         <div className="flex justify-between mt-6 pt-6 border-t">
           <Button
             onClick={handleSave}

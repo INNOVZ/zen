@@ -10,13 +10,23 @@ import React, {
 import { subscriptionApi } from "@/app/api/subscription";
 import { getAuthInfo } from "@/app/api/auth";
 import type {
-  SubscriptionContextType,
   SubscriptionStatus,
   SubscriptionPlans,
   TokenAvailabilityCheck,
   TokenConsumptionRequest,
   TokenConsumptionResponse,
 } from "@/types/subscription";
+
+// Define the context type interface
+interface SubscriptionContextType {
+  subscription: SubscriptionStatus | null;
+  plans: SubscriptionPlans | null;
+  isLoading: boolean;
+  error: string | null;
+  refreshSubscription: () => Promise<void>;
+  checkTokenAvailability: (requiredTokens: number) => Promise<TokenAvailabilityCheck>;
+  consumeTokens: (request: TokenConsumptionRequest) => Promise<TokenConsumptionResponse>;
+}
 
 const SubscriptionContext = createContext<SubscriptionContextType | undefined>(
   undefined
@@ -308,6 +318,8 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
           tokens_required: requiredTokens,
           tokens_available: 0,
           can_proceed: false,
+          monthly_limit: 0,
+          reset_date: "",
         };
       }
     } catch (err) {
@@ -320,6 +332,8 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
         tokens_required: requiredTokens,
         tokens_available: 0,
         can_proceed: false,
+        monthly_limit: 0,
+        reset_date: "",
       };
     }
   };

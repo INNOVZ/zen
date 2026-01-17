@@ -31,8 +31,8 @@ export async function GET(request: NextRequest) {
       }
 
       if (data.user) {
-        // Redirect to user's dashboard
-        const dashboardUrl = `${requestUrl.origin}/dashboard/${data.user.id}`
+        // Redirect to dashboard (no userId in URL)
+        const dashboardUrl = `${requestUrl.origin}/dashboard`
         console.log('[Auth Callback] Redirecting to:', dashboardUrl)
         return NextResponse.redirect(dashboardUrl)
       }

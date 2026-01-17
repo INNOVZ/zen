@@ -1,57 +1,41 @@
-// MCP Integration Types
+/**
+ * MCP Types - Compatibility Shim
+ * 
+ * @deprecated Import from '@/types/integration' instead
+ * This file exists for backward compatibility with existing imports.
+ * 
+ * @example
+ * ```typescript
+ * // Old way (still works)
+ * import type { CRMType, MCPTool } from '@/types/mcp';
+ * 
+ * // New way (preferred)
+ * import type { CRMType } from '@/types/integration/crm';
+ * import type { MCPTool } from '@/types/integration';
+ * ```
+ */
 
-export type CRMType = "hubspot" | "salesforce" | "pipedrive" | "zoho";
+// Re-export MCP types from integration
+export type {
+  MCPTool,
+  MCPToolsResponse,
+  IntegrationStatus,
+  IntegrationProvider,
+  GoogleIntegration,
+  GoogleCalendarIntegration,
+  GoogleSheetsIntegration,
+  GoogleSheetsConfig,
+  GoogleOAuthResponse,
+  ZohoOAuthResponse,
+  CRMConfig,
+  LeadCaptureConfig,
+} from "./integration/mcp";
 
-export interface IntegrationProvider {
-  id: string;
-  name: string;
-  description: string;
-  icon?: string;
-  category: "calendar" | "sheets" | "crm" | "ecommerce" | "scraping";
-  requires_oauth: boolean;
-  requires_api_key: boolean;
-  status: "enabled" | "disabled" | "pending";
-}
+// Re-export CRMType from integration/crm
+export type { CRMType, CRMIntegration } from "./integration/crm";
 
-export interface GoogleIntegration {
-  calendar: {
-    enabled: boolean;
-    authenticated: boolean;
-  };
-  sheets: {
-    enabled: boolean;
-    authenticated: boolean;
-    leads_spreadsheet_id?: string;
-    leads_sheet_name?: string;
-  };
-}
+// Re-export Shopify types
+export type { ShopifyIntegration } from "./integration/shopify";
 
-export interface CRMIntegration {
-  enabled: boolean;
-  type: CRMType | null;
-  configured: boolean;
-  credentials_set: boolean;
-}
 
-export interface ShopifyIntegration {
-  enabled: boolean;
-  store_url?: string;
-  api_key?: string;
-  configured: boolean;
-}
-
-export interface LeadCaptureSettings {
-  enabled: boolean;
-  google_sheets: {
-    enabled: boolean;
-    spreadsheet_id?: string;
-    sheet_name?: string;
-  };
-  crm: {
-    enabled: boolean;
-    crm_type?: CRMType;
-  };
-  min_confidence: number;
-  require_contact: boolean;
-}
 

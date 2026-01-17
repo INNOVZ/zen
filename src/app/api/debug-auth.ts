@@ -37,15 +37,16 @@ export async function debugAuth() {
   };
 
   try {
-    const { data, error } = await supabase.auth.getSession();
+    const [{ data: userData, error: userError }, { data: sessionData }] =
+      await Promise.all([supabase.auth.getUser(), supabase.auth.getSession()]);
     debug.session = {
-      hasSession: !!data.session,
-      hasUser: !!data.session?.user,
-      hasToken: !!data.session?.access_token,
-      userId: data.session?.user?.id,
-      userEmail: data.session?.user?.email,
+      hasSession: !!sessionData.session,
+      hasUser: !!userData.user,
+      hasToken: !!sessionData.session?.access_token,
+      userId: userData.user?.id,
+      userEmail: userData.user?.email,
     };
-    debug.error = error;
+    debug.error = userError;
   } catch (err) {
     debug.error = err;
   }

@@ -9,15 +9,14 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import {
   Sheet,
-  CheckCircle2,
   Loader2,
   Info,
 } from "lucide-react";
 
 export default function GoogleSheetsIntegration() {
   const [config, setConfig] = useState<GoogleSheetsConfig>({
-    leads_spreadsheet_id: "",
-    leads_sheet_name: "Leads",
+    spreadsheet_id: "",
+    sheet_name: "Leads",
   });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
@@ -35,10 +34,10 @@ export default function GoogleSheetsIntegration() {
 
       // Load lead capture config to get spreadsheet ID
       const leadConfig = await mcpApi.getLeadCaptureConfig();
-      if (leadConfig.google_sheets) {
+      if (leadConfig.google_sheets?.config) {
         setConfig({
-          leads_spreadsheet_id: leadConfig.google_sheets.spreadsheet_id || "",
-          leads_sheet_name: leadConfig.google_sheets.sheet_name || "Leads",
+          spreadsheet_id: leadConfig.google_sheets.config.spreadsheet_id || "",
+          sheet_name: leadConfig.google_sheets.config.sheet_name || "Leads",
         });
       }
     } catch (error) {
@@ -49,7 +48,7 @@ export default function GoogleSheetsIntegration() {
   };
 
   const handleSave = async () => {
-    if (!config.leads_spreadsheet_id) {
+    if (!config.spreadsheet_id) {
       toast.error("Please enter a Google Sheets spreadsheet ID");
       return;
     }
@@ -102,9 +101,9 @@ export default function GoogleSheetsIntegration() {
             <Input
               id="spreadsheet_id"
               placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
-              value={config.leads_spreadsheet_id}
+              value={config.spreadsheet_id}
               onChange={(e) =>
-                setConfig({ ...config, leads_spreadsheet_id: e.target.value })
+                setConfig({ ...config, spreadsheet_id: e.target.value })
               }
             />
             <p className="text-xs text-muted-foreground">
@@ -120,13 +119,13 @@ export default function GoogleSheetsIntegration() {
             <Input
               id="sheet_name"
               placeholder="Leads"
-              value={config.leads_sheet_name}
+              value={config.sheet_name}
               onChange={(e) =>
-                setConfig({ ...config, leads_sheet_name: e.target.value })
+                setConfig({ ...config, sheet_name: e.target.value })
               }
             />
             <p className="text-xs text-muted-foreground">
-              Name of the sheet tab where leads will be captured (default: "Leads")
+              Name of the sheet tab where leads will be captured (default: Leads)
             </p>
           </div>
 

@@ -8,6 +8,7 @@ export async function middleware(req: NextRequest) {
       headers: req.headers,
     },
   })
+  const isDebug = process.env.NODE_ENV === 'development'
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -59,91 +60,63 @@ export async function middleware(req: NextRequest) {
   const allCookies = req.cookies.getAll()
   const supabaseCookies = allCookies.filter(c => c.name.startsWith('sb-') || c.name.includes('supabase'))
   
-  console.log(`[Middleware] Request to: ${req.nextUrl.pathname}`)
-  console.log(`[Middleware] Total cookies: ${allCookies.length}`)
-  console.log(`[Middleware] Supabase cookies: ${supabaseCookies.length}`, supabaseCookies.map(c => c.name))
+  if (isDebug) {
+    console.log(`[Middleware] Request to: ${req.nextUrl.pathname}`)
+    console.log(`[Middleware] Total cookies: ${allCookies.length}`)
+    console.log(`[Middleware] Supabase cookies: ${supabaseCookies.length}`, supabaseCookies.map(c => c.name))
+  }
   
-  // Refresh session to get latest state from cookies
+  // Refresh user to get latest state from cookies
   // This is critical for multi-tenant auth
   const { data: userData, error: userError } = await supabase.auth.getUser()
-  console.log(`[Middleware] getUser result:`, {
-    hasUser: !!userData.user,
-    userId: userData.user?.id,
-    error: userError?.message
-  })
-  
-  // Get the session
-  const { data: { session }, error: sessionError } = await supabase.auth.getSession()
-  console.log(`[Middleware] getSession result:`, {
-    hasSession: !!session,
-    userId: session?.user?.id,
-    error: sessionError?.message
-  })
-  
-  const isAuth = !!session?.user
+  if (isDebug) {
+    console.log(`[Middleware] getUser result:`, {
+      hasUser: !!userData.user,
+      userId: userData.user?.id,
+      error: userError?.message
+    })
+  }
+
+  const isAuth = !!userData.user
   const pathname = req.nextUrl.pathname
   const isAuthPage = pathname.startsWith('/auth')
   const isDashboard = pathname.startsWith('/dashboard')
   
-  console.log(`[Middleware] ====================================`)
-  console.log(`[Middleware] Path: ${pathname}`)
-  console.log(`[Middleware] Auth: ${isAuth}`)
-  console.log(`[Middleware] Session User: ${session?.user?.id || 'NONE'}`)
-  console.log(`[Middleware] Is Auth Page: ${isAuthPage}`)
-  console.log(`[Middleware] Is Dashboard: ${isDashboard}`)
-  console.log(`[Middleware] ====================================`)
+  if (isDebug) {
+    console.log(`[Middleware] ====================================`)
+    console.log(`[Middleware] Path: ${pathname}`)
+    console.log(`[Middleware] Auth: ${isAuth}`)
+    console.log(`[Middleware] User: ${userData.user?.id || 'NONE'}`)
+    console.log(`[Middleware] Is Auth Page: ${isAuthPage}`)
+    console.log(`[Middleware] Is Dashboard: ${isDashboard}`)
+    console.log(`[Middleware] ====================================`)
+  }
 
   // Redirect unauthenticated users trying to access dashboard to login
   if (!isAuth && isDashboard) {
     const loginUrl = req.nextUrl.clone()
     loginUrl.pathname = '/auth/login'
-    console.log(`[Middleware] Redirecting unauthenticated user from ${pathname} to /auth/login`)
+    if (isDebug) {
+      console.log(`[Middleware] Redirecting unauthenticated user from ${pathname} to /auth/login`)
+    }
     return NextResponse.redirect(loginUrl)
   }
 
   // Redirect authenticated users away from auth pages to their dashboard
-  // BUT only if they're on the login/signup page, not if they're being redirected
+  // Use clean URL without userId
   if (isAuth && isAuthPage && !req.nextUrl.searchParams.has('redirected')) {
     const dashboardUrl = req.nextUrl.clone()
-    dashboardUrl.pathname = `/dashboard/${session.user.id}`
+    dashboardUrl.pathname = `/dashboard`
     dashboardUrl.searchParams.delete('redirected') // Clean up URL
-    console.log(`[Middleware] Redirecting authenticated user from ${pathname} to dashboard`)
+    if (isDebug) {
+      console.log(`[Middleware] Redirecting authenticated user from ${pathname} to /dashboard`)
+    }
     return NextResponse.redirect(dashboardUrl)
   }
 
-  // Redirect /dashboard root to user-specific dashboard
-  if (isDashboard && pathname === '/dashboard' && isAuth) {
-    const userDashboardUrl = req.nextUrl.clone()
-    userDashboardUrl.pathname = `/dashboard/${session.user.id}`
-    console.log(`[Middleware] Redirecting from /dashboard to /dashboard/${session.user.id}`)
-    return NextResponse.redirect(userDashboardUrl)
-  }
-
-  // Redirect /dashboard/settings (without userId) to /dashboard/{userId}/settings
-  // This prevents "Unauthorized access" errors when userId is missing
-  // Also handle any path that matches /dashboard/{non-uuid}/settings
-  if (isDashboard && isAuth) {
-    const settingsMatch = pathname.match(/^\/dashboard\/([^\/]+)\/settings$/)
-    if (settingsMatch) {
-      const routeUserId = settingsMatch[1]
-      // Check if routeUserId is NOT a valid UUID (e.g., "settings", "train", etc.)
-      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(routeUserId)
-      
-      if (!isUUID) {
-        const userSettingsUrl = req.nextUrl.clone()
-        userSettingsUrl.pathname = `/dashboard/${session.user.id}/settings`
-        // Preserve query params (like ?success=zoho_connected&tab=mcp)
-        console.log(`[Middleware] Invalid userId "${routeUserId}" in settings path, redirecting to /dashboard/${session.user.id}/settings`)
-        return NextResponse.redirect(userSettingsUrl)
-      }
-    } else if (pathname === '/dashboard/settings') {
-      // Direct /dashboard/settings path
-      const userSettingsUrl = req.nextUrl.clone()
-      userSettingsUrl.pathname = `/dashboard/${session.user.id}/settings`
-      console.log(`[Middleware] Redirecting from /dashboard/settings to /dashboard/${session.user.id}/settings`)
-      return NextResponse.redirect(userSettingsUrl)
-    }
-  }
+  // Allow clean dashboard URLs without userId
+  // The app now uses /dashboard/settings, /dashboard/calendar, etc.
+  // No need to redirect to userId-based paths
 
   return response
 }

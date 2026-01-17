@@ -26,6 +26,21 @@
   const scriptTag = getScriptTag();
   
   // Configuration with fallbacks
+  function normalizeLanguage(lang) {
+    if (!lang) return 'en';
+    return String(lang).trim().split('-')[0].toLowerCase() || 'en';
+  }
+
+  let storedLanguage = null;
+  try {
+    storedLanguage = localStorage.getItem('chatbot_language');
+  } catch {
+    storedLanguage = null;
+  }
+
+  const browserLanguage = (typeof navigator !== 'undefined' && navigator.language)
+    ? normalizeLanguage(navigator.language)
+    : 'en';
   const config = {
     apiUrl: scriptTag?.getAttribute('data-api-url') || 'https://zaakiy-production.up.railway.app',
     position: scriptTag?.getAttribute('data-position') || 'bottom-right',
@@ -35,7 +50,10 @@
     greeting: scriptTag?.getAttribute('data-greeting') || 'Hi! How can I help you today?',
     avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null,
     welcomeMessage: scriptTag?.getAttribute('data-welcome-message') || null,
-    showWelcome: (scriptTag?.getAttribute('data-show-welcome') || 'true') !== 'false'
+    showWelcome: (scriptTag?.getAttribute('data-show-welcome') || 'true') !== 'false',
+    language: normalizeLanguage(
+      scriptTag?.getAttribute('data-language') || storedLanguage || browserLanguage
+    )
   };
   
   // Validate required config
@@ -49,6 +67,7 @@
   let selectedChatbot = null;
   let conversationId = null;
   let isWidgetCreated = false;
+  let ctaButtons = [];
   
   // Session storage keys
   const STORAGE_PREFIX = `zaakiy_chat_${config.chatbotId}_`;
@@ -574,6 +593,51 @@
           word-wrap: break-word !important;
           overflow-wrap: break-word;
         }
+
+        .zaakiy-message-buttons {
+          margin-top: 8px;
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .zaakiy-message-button {
+          border: 1px solid var(--zaakiy-primary-color, #3B82F6);
+          background: #ffffff;
+          color: var(--zaakiy-primary-color, #3B82F6);
+          padding: 6px 10px;
+          border-radius: 8px;
+          font-size: 12px;
+          text-align: left;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .zaakiy-message-button:hover {
+          background: rgba(59, 130, 246, 0.08);
+        }
+
+        .zaakiy-cta-buttons {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-bottom: 8px;
+        }
+
+        .zaakiy-cta-button {
+          border: 1px solid var(--zaakiy-primary-color, #3B82F6);
+          background: #ffffff;
+          color: var(--zaakiy-primary-color, #3B82F6);
+          padding: 4px 8px;
+          border-radius: 7px;
+          font-size: 11px;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+
+        .zaakiy-cta-button:hover {
+          background: rgba(59, 130, 246, 0.08);
+        }
         
         .zaakiy-message-content a {
           color: ${config.primaryColor} !important;
@@ -1004,6 +1068,7 @@
         </div>
         
         <div class="zaakiy-chat-input">
+          <div class="zaakiy-cta-buttons" id="zaakiy-cta-buttons" style="display: none;"></div>
           <input 
             type="text" 
             class="zaakiy-input-field" 
@@ -1040,6 +1105,7 @@
     `;
     
     document.body.appendChild(widgetContainer);
+    widgetContainer.style.setProperty('--zaakiy-primary-color', config.primaryColor);
     isWidgetCreated = true;
     
     // Add event listener for welcome close button (more reliable than onclick on mobile)
@@ -1089,6 +1155,21 @@
     setupWelcomeCloseButton();
     setTimeout(setupWelcomeCloseButton, 100);
     setTimeout(setupWelcomeCloseButton, 500); // Also try after longer delay
+
+    // Handle message button clicks (booking slots, quick replies)
+    const messagesContainer = document.getElementById('zaakiy-messages');
+    if (messagesContainer) {
+      messagesContainer.addEventListener('click', (event) => {
+        const target = event.target;
+        if (!target || !target.classList) return;
+        if (!target.classList.contains('zaakiy-message-button')) return;
+        const value = target.getAttribute('data-value') || target.textContent || '';
+        if (!value) return;
+        const inputField = document.getElementById('zaakiy-input');
+        if (inputField && inputField.disabled) return;
+        window.zaakiySendMessage(value);
+      });
+    }
     
     // Initialize button state on mobile
     const chatButton = widgetContainer.querySelector('.zaakiy-chat-button');
@@ -1143,7 +1224,14 @@
           // Pass isHtml flag to preserve formatting for bot messages
           // Pass timestamp if available
           const timestamp = msg.timestamp ? new Date(msg.timestamp) : null;
-          zaakiyAddMessage(msg.content, msg.type, false, msg.isHtml || false, timestamp);
+          zaakiyAddMessage(
+            msg.content,
+            msg.type,
+            false,
+            msg.isHtml || false,
+            timestamp,
+            msg.buttons || []
+          );
         });
       }
     } else {
@@ -1190,6 +1278,54 @@
       // Silently fail and use default config
     }
   }
+
+  // Load CTA buttons for public widget based on chatbot integrations
+  async function loadCTAButtons() {
+    try {
+      if (!config.chatbotId) return;
+      const params = new URLSearchParams();
+      params.append('language', config.language || 'en');
+      const response = await fetch(
+        `${config.apiUrl}/api/public/chatbot/${encodeURIComponent(config.chatbotId)}/cta-buttons?${params.toString()}`
+      );
+      if (!response.ok) {
+        ctaButtons = [];
+        renderCTAButtons();
+        return;
+      }
+      const data = await response.json();
+      ctaButtons = Array.isArray(data.buttons) ? data.buttons : [];
+      renderCTAButtons();
+    } catch {
+      ctaButtons = [];
+      renderCTAButtons();
+    }
+  }
+
+  function renderCTAButtons() {
+    const container = document.getElementById('zaakiy-cta-buttons');
+    if (!container) return;
+
+    container.innerHTML = '';
+    if (!ctaButtons.length) {
+      container.style.display = 'none';
+      return;
+    }
+
+    container.style.display = 'flex';
+    ctaButtons.forEach((button) => {
+      const buttonEl = document.createElement('button');
+      buttonEl.type = 'button';
+      buttonEl.className = 'zaakiy-cta-button';
+      buttonEl.textContent = button.label || button.id || 'Action';
+      buttonEl.addEventListener('click', () => {
+        const inputField = document.getElementById('zaakiy-input');
+        if (inputField && inputField.disabled) return;
+        window.zaakiySendMessage(button.message || button.label || '');
+      });
+      container.appendChild(buttonEl);
+    });
+  }
   
   // Helper function to update input focus color dynamically
   function updateInputFocusColor() {
@@ -1213,6 +1349,7 @@
   // Update widget appearance
   function updateWidgetAppearance() {
     const button = document.querySelector('.zaakiy-chat-button');
+    const widgetRoot = document.getElementById('zaakiy-chat-widget');
     const header = document.querySelector('.zaakiy-chat-header');
     const sendButton = document.querySelector('.zaakiy-send-button');
     const closeButton = document.querySelector('.zaakiy-close-button');
@@ -1221,6 +1358,7 @@
     const avatarContainer = document.querySelector('#zaakiy-avatar-container');
     
     // Update colors with primary color
+    if (widgetRoot) widgetRoot.style.setProperty('--zaakiy-primary-color', config.primaryColor);
     if (button) button.style.background = config.primaryColor;
     if (header) header.style.setProperty('background', config.primaryColor, 'important');
     if (sendButton) sendButton.style.background = config.primaryColor;
@@ -1386,14 +1524,14 @@
     return false;
   };
   
-  window.zaakiySendMessage = function() {
+  window.zaakiySendMessage = function(messageOverride) {
     const input = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
     
     // Don't send if input is disabled (bot is typing)
     if (input?.disabled || sendButton?.disabled) return;
     
-    const message = input?.value.trim();
+    const message = (messageOverride || input?.value || '').trim();
     
     if (!message) return;
     
@@ -1405,7 +1543,9 @@
     
     // Add user message
     zaakiyAddMessage(message, 'user', true); // Save to storage
-    input.value = '';
+    if (!messageOverride && input) {
+      input.value = '';
+    }
     
     // Show typing indicator
     zaakiyShowTyping();
@@ -1458,7 +1598,14 @@
         localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
       }
       
-      zaakiyAddMessage(data.response || 'Sorry, I had trouble processing that.', 'bot', true);
+      zaakiyAddMessage(
+        data.response || 'Sorry, I had trouble processing that.',
+        'bot',
+        true,
+        false,
+        null,
+        data.buttons || []
+      );
     })
     .catch((error) => {
       clearTimeout(timeoutId); // Clear timeout on error
@@ -1585,8 +1732,30 @@
     
     return processedText;
   }
+
+  function createMessageButtons(buttons) {
+    if (!buttons || !buttons.length) return null;
+
+    const container = document.createElement('div');
+    container.className = 'zaakiy-message-buttons';
+
+    buttons.forEach((button) => {
+      const buttonEl = document.createElement('button');
+      buttonEl.type = 'button';
+      buttonEl.className = 'zaakiy-message-button';
+      const label = button.text || button.label || button.value || 'Select';
+      const value = button.value || button.text || button.label || '';
+      buttonEl.textContent = label;
+      if (value) {
+        buttonEl.setAttribute('data-value', value);
+      }
+      container.appendChild(buttonEl);
+    });
+
+    return container;
+  }
   
-  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null) {
+  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null, buttons = []) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
     
@@ -1631,6 +1800,10 @@
     timestampDiv.textContent = timestampDisplay;
     
     contentWrapper.appendChild(contentDiv);
+    if (type === 'bot' && buttons && buttons.length) {
+      const buttonsEl = createMessageButtons(buttons);
+      if (buttonsEl) contentWrapper.appendChild(buttonsEl);
+    }
     contentWrapper.appendChild(timestampDiv);
     messageDiv.appendChild(contentWrapper);
     
@@ -1663,7 +1836,16 @@
         // For bot messages, save the HTML to preserve formatting
         // For user messages, save plain text
         const content = type === 'bot' ? contentEl.innerHTML : contentEl.textContent;
-        messages.push({ content, type, isHtml: type === 'bot', timestamp });
+        let buttons = [];
+        if (type === 'bot') {
+          const buttonEls = msgEl.querySelectorAll('.zaakiy-message-button');
+          buttonEls.forEach((buttonEl) => {
+            const text = buttonEl.textContent || '';
+            const value = buttonEl.getAttribute('data-value') || text;
+            buttons.push({ text, value });
+          });
+        }
+        messages.push({ content, type, isHtml: type === 'bot', timestamp, buttons });
       }
     });
     
@@ -1768,6 +1950,7 @@
     
     createWidget();
     loadChatbotConfig();
+    loadCTAButtons();
   }
   
   // Start initialization

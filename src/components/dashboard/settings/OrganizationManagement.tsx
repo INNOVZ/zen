@@ -26,19 +26,10 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import {
+  type OrganizationResponse,
+} from "@/app/api/routes";
 
-interface OrganizationInfo {
-  user: {
-    email: string;
-  };
-  organization: {
-    name: string;
-    email: string;
-    plan_id: string | null;
-    contact_phone?: string;
-    business_type?: string;
-  };
-}
 const supabase = createClient();
 
 export default function OrganizationManagement() {
@@ -53,7 +44,7 @@ export default function OrganizationManagement() {
   const [error, setError] = useState<string | null>(null);
   const [isLoadingInfo, setIsLoadingInfo] = useState(true);
   const [organizationInfo, setOrganizationInfo] =
-    useState<OrganizationInfo | null>(null);
+    useState<OrganizationResponse | null>(null);
 
   const [testStatus, setTestStatus] = useState<{
     auth: boolean;
@@ -96,7 +87,7 @@ export default function OrganizationManagement() {
       // Populate form with current data
       setFormData({
         name: info.organization.name || "",
-        email: info.organization.email || info.user.email || "", // Use organization email, fallback to user email
+        email: info.organization.email || info.user?.email || "", // Use organization email, fallback to user email
         contact_phone: info.organization.contact_phone || "",
         business_type: info.organization.business_type || "",
       });
@@ -171,8 +162,8 @@ export default function OrganizationManagement() {
         message: vectorStatus
           ? "All systems operational!"
           : authStatus
-          ? "Authentication successful, but some services need attention."
-          : "Authentication failed. Please check your login status.",
+            ? "Authentication successful, but some services need attention."
+            : "Authentication failed. Please check your login status.",
       });
     } catch (err: unknown) {
       setError(
@@ -273,164 +264,162 @@ export default function OrganizationManagement() {
       {/* Update Organization Form */}
       <div className="container mx-auto space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card className="border-0">
-          <CardHeader>
-            <CardTitle>Update Organization</CardTitle>
-            <CardDescription>
-              Update your organization details including name, email, contact
-              phone, and business type
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Organization Name</Label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
-                  placeholder="Enter organization name"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="email">Organization Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, email: e.target.value })
-                  }
-                  placeholder="Enter organization email address"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="contact_phone">Contact Phone</Label>
-                <Input
-                  id="contact_phone"
-                  type="tel"
-                  value={formData.contact_phone || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, contact_phone: e.target.value })
-                  }
-                  placeholder="Enter contact phone number"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="business_type">Business Type</Label>
-                <Input
-                  id="business_type"
-                  type="text"
-                  value={formData.business_type || ""}
-                  onChange={(e) =>
-                    setFormData({ ...formData, business_type: e.target.value })
-                  }
-                  placeholder="Enter business type (e.g., SaaS, E-commerce, etc.)"
-                />
-              </div>
-
-              <div className="flex gap-2">
-                <Button type="submit" disabled={isLoading}>
-                  {isLoading ? "Updating..." : "Update Organization"}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={loadOrganizationInfo}
-                  disabled={isLoadingInfo}
-                >
-                  <RefreshCw
-                    className={`h-4 w-4 mr-2 ${
-                      isLoadingInfo ? "animate-spin" : ""
-                    }`}
+          <Card className="border-0">
+            <CardHeader>
+              <CardTitle>Update Organization</CardTitle>
+              <CardDescription>
+                Update your organization details including name, email, contact
+                phone, and business type
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form onSubmit={handleSubmit} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Organization Name</Label>
+                  <Input
+                    id="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    placeholder="Enter organization name"
+                    required
                   />
-                  Refresh
-                </Button>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
-        <div className="p-6 bg-white rounded-lg border shadow-sm">
-          <h2 className="text-xl font-semibold mb-4">RAG Pipeline Test</h2>
-
-          {isRAGLoading ? (
-            <div className="flex items-center justify-center p-6">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
-            </div>
-          ) : error ? (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-md flex items-start gap-2">
-              <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
-              <div>
-                <p className="text-red-800 font-medium">Connection Error</p>
-                <p className="text-sm text-red-600">{error}</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  {testStatus.auth ? (
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  <span className="font-medium">Authentication</span>
-                  <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
-                    /api/auth/me
-                  </span>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  {testStatus.chatbots ? (
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  <span className="font-medium">Chatbot Configuration</span>
-                  <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
-                    /api/chat/chatbots
-                  </span>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Organization Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) =>
+                      setFormData({ ...formData, email: e.target.value })
+                    }
+                    placeholder="Enter organization email address"
+                    required
+                  />
                 </div>
 
-                <div className="flex items-center gap-2">
-                  {testStatus.vectors ? (
-                    <CheckCircle2 className="h-5 w-5 text-green-500" />
-                  ) : (
-                    <AlertCircle className="h-5 w-5 text-red-500" />
-                  )}
-                  <span className="font-medium">Vector Search & RAG</span>
-                  <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
-                    /api/chat/conversation
-                  </span>
+                <div className="space-y-2">
+                  <Label htmlFor="contact_phone">Contact Phone</Label>
+                  <Input
+                    id="contact_phone"
+                    type="tel"
+                    value={formData.contact_phone || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, contact_phone: e.target.value })
+                    }
+                    placeholder="Enter contact phone number"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="business_type">Business Type</Label>
+                  <Input
+                    id="business_type"
+                    type="text"
+                    value={formData.business_type || ""}
+                    onChange={(e) =>
+                      setFormData({ ...formData, business_type: e.target.value })
+                    }
+                    placeholder="Enter business type (e.g., SaaS, E-commerce, etc.)"
+                  />
+                </div>
+
+                <div className="flex gap-2">
+                  <Button type="submit" disabled={isLoading}>
+                    {isLoading ? "Updating..." : "Update Organization"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={loadOrganizationInfo}
+                    disabled={isLoadingInfo}
+                  >
+                    <RefreshCw
+                      className={`h-4 w-4 mr-2 ${isLoadingInfo ? "animate-spin" : ""
+                        }`}
+                    />
+                    Refresh
+                  </Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
+          <div className="p-6 bg-white rounded-lg border shadow-sm">
+            <h2 className="text-xl font-semibold mb-4">RAG Pipeline Test</h2>
+
+            {isRAGLoading ? (
+              <div className="flex items-center justify-center p-6">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              </div>
+            ) : error ? (
+              <div className="p-4 bg-red-50 border border-red-200 rounded-md flex items-start gap-2">
+                <AlertCircle className="h-5 w-5 text-red-500 mt-0.5" />
+                <div>
+                  <p className="text-red-800 font-medium">Connection Error</p>
+                  <p className="text-sm text-red-600">{error}</p>
                 </div>
               </div>
+            ) : (
+              <>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    {testStatus.auth ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                    )}
+                    <span className="font-medium">Authentication</span>
+                    <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
+                      /api/auth/me
+                    </span>
+                  </div>
 
-              <div
-                className={`mt-6 p-3 rounded-md ${
-                  testStatus.auth && testStatus.chatbots && testStatus.vectors
+                  <div className="flex items-center gap-2">
+                    {testStatus.chatbots ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                    )}
+                    <span className="font-medium">Chatbot Configuration</span>
+                    <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
+                      /api/chat/chatbots
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    {testStatus.vectors ? (
+                      <CheckCircle2 className="h-5 w-5 text-green-500" />
+                    ) : (
+                      <AlertCircle className="h-5 w-5 text-red-500" />
+                    )}
+                    <span className="font-medium">Vector Search & RAG</span>
+                    <span className="text-xs bg-gray-100 px-2 py-0.5 rounded">
+                      /api/chat/conversation
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className={`mt-6 p-3 rounded-md ${testStatus.auth && testStatus.chatbots && testStatus.vectors
                     ? "bg-green-50 text-green-800 border border-green-200"
                     : "bg-yellow-50 text-yellow-800 border border-yellow-200"
-                }`}
-              >
-                <p className="font-medium">{testStatus.message}</p>
-              </div>
+                    }`}
+                >
+                  <p className="font-medium">{testStatus.message}</p>
+                </div>
 
-              <div className="mt-6">
-                <Button onClick={testConnections} size="sm">
-                  Re-run Tests
-                </Button>
-              </div>
-            </>
-          )}
-        </div>
+                <div className="mt-6">
+                  <Button onClick={testConnections} size="sm">
+                    Re-run Tests
+                  </Button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

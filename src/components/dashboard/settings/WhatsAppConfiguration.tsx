@@ -86,7 +86,7 @@ export default function WhatsAppConfiguration({
           twilio_auth_token: response.config.twilio_auth_token || "",
         });
         setValidationStatus({
-          valid: response.config.is_active,
+          valid: !!response.config.is_active,
           message: response.config.is_active
             ? "Configuration is active"
             : "Configuration is inactive",
@@ -114,7 +114,8 @@ export default function WhatsAppConfiguration({
     }
 
     // If editing and token is masked placeholder, don't require it (will keep existing)
-    const tokenRequired = !isEditing || config.twilio_auth_token !== "••••••••••••";
+    const tokenRequired =
+      !isEditing || config.twilio_auth_token !== "••••••••••••";
     if (tokenRequired && !config.twilio_auth_token.trim()) {
       toast.error("Twilio Auth Token is required");
       return;
@@ -146,7 +147,7 @@ export default function WhatsAppConfiguration({
       if (response.success) {
         toast.success("WhatsApp configuration saved successfully!");
         setValidationStatus({
-          valid: config.is_active,
+          valid: !!config.is_active,
           message: "Configuration saved",
         });
         // Notify parent if phone number changed
@@ -157,14 +158,25 @@ export default function WhatsAppConfiguration({
         await loadConfig();
         setIsEditing(false);
       } else {
-        toast.error(response.message || "Failed to save configuration");
+        const errorMsg =
+          typeof response.message === "string"
+            ? response.message
+            : typeof response.error === "string"
+            ? response.error
+            : "Failed to save configuration";
+        toast.error(errorMsg);
       }
     } catch (error) {
       console.error("Error saving WhatsApp configuration:", error);
-      const message =
-        error instanceof Error
-          ? error.message
-          : "Failed to save WhatsApp configuration";
+      let message = "Failed to save WhatsApp configuration";
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (typeof error === "object" && error !== null) {
+        const errObj = error as Record<string, unknown>;
+        if (typeof errObj.message === "string") message = errObj.message;
+        else if (typeof errObj.error === "string") message = errObj.error;
+        else if (typeof errObj.detail === "string") message = errObj.detail;
+      }
       toast.error(message);
     } finally {
       setIsSaving(false);
@@ -180,8 +192,9 @@ export default function WhatsAppConfiguration({
         if (response.validation.valid) {
           setValidationStatus({
             valid: true,
-            message: `Connection successful! Account status: ${response.validation.account_status || "active"
-              }`,
+            message: `Connection successful! Account status: ${
+              response.validation.account_status || "active"
+            }`,
           });
           toast.success("Twilio connection validated successfully!");
         } else {
@@ -202,13 +215,20 @@ export default function WhatsAppConfiguration({
       }
     } catch (error) {
       console.error("Error validating WhatsApp configuration:", error);
-      const message =
-        error instanceof Error ? error.message : "Validation error";
+      let message = "Validation error";
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (typeof error === "object" && error !== null) {
+        const errObj = error as Record<string, unknown>;
+        if (typeof errObj.message === "string") message = errObj.message;
+        else if (typeof errObj.error === "string") message = errObj.error;
+        else if (typeof errObj.detail === "string") message = errObj.detail;
+      }
       setValidationStatus({
         valid: false,
         message,
       });
-      toast.error(message || "Failed to validate configuration");
+      toast.error(message);
     } finally {
       setIsValidating(false);
     }
@@ -237,12 +257,23 @@ export default function WhatsAppConfiguration({
         );
         setTestPhoneNumber("");
       } else {
-        toast.error(response.error || "Failed to send test message");
+        const errorMsg =
+          typeof response.error === "string"
+            ? response.error
+            : "Failed to send test message";
+        toast.error(errorMsg);
       }
     } catch (error) {
       console.error("Error sending test message:", error);
-      const message =
-        error instanceof Error ? error.message : "Failed to send test message";
+      let message = "Failed to send test message";
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (typeof error === "object" && error !== null) {
+        const errObj = error as Record<string, unknown>;
+        if (typeof errObj.message === "string") message = errObj.message;
+        else if (typeof errObj.error === "string") message = errObj.error;
+        else if (typeof errObj.detail === "string") message = errObj.detail;
+      }
       toast.error(message);
     } finally {
       setIsSendingTest(false);
@@ -314,7 +345,9 @@ export default function WhatsAppConfiguration({
             <AlertDescription className="text-green-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">WhatsApp integration is connected</p>
+                  <p className="font-medium">
+                    WhatsApp integration is connected
+                  </p>
                   <p className="text-sm text-green-700 mt-1">
                     Your WhatsApp integration is active and ready to use.
                   </p>
@@ -415,7 +448,10 @@ export default function WhatsAppConfiguration({
                   type="tel"
                   value={config.twilio_phone_number}
                   onChange={(e) =>
-                    setConfig({ ...config, twilio_phone_number: e.target.value })
+                    setConfig({
+                      ...config,
+                      twilio_phone_number: e.target.value,
+                    })
                   }
                   placeholder="+1234567890 (E.164 format)"
                   required
@@ -466,7 +502,8 @@ export default function WhatsAppConfiguration({
                 </Button>
               </div>
               <p className="text-sm text-muted-foreground">
-                Set this in your Twilio Console. For local testing, use ngrok URL.
+                Set this in your Twilio Console. For local testing, use ngrok
+                URL.
                 <a
                   href="https://www.twilio.com/docs/whatsapp/tutorial/connect-number-webhook"
                   target="_blank"
@@ -499,7 +536,11 @@ export default function WhatsAppConfiguration({
 
             {/* Action Buttons */}
             <div className="flex gap-3 pt-4">
-              <Button onClick={handleSave} disabled={isSaving} className="flex-1">
+              <Button
+                onClick={handleSave}
+                disabled={isSaving}
+                className="flex-1"
+              >
                 {isSaving ? (
                   <>
                     <RefreshCw className="h-4 w-4 mr-2 animate-spin" />

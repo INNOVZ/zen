@@ -12,7 +12,8 @@ export const mockChatbots = [
     greeting_message:
       "Hello! I'm a demo chatbot. This is running in detached mode without a backend.",
     tone: "helpful",
-    chain_status: "active",
+    status: "active",
+    chain_status: "ready",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     user_id: "mock-user",
@@ -27,7 +28,8 @@ export const mockChatbots = [
     greeting_message:
       "Hi! I'm your support assistant. How can I help you today?",
     tone: "professional",
-    chain_status: "inactive",
+    status: "inactive",
+    chain_status: "ready",
     created_at: new Date().toISOString(),
     updated_at: new Date().toISOString(),
     user_id: "mock-user",

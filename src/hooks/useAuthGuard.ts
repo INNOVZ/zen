@@ -1,15 +1,13 @@
 /**
  * Centralized Authentication Guard Hook
  * 
- * CRITICAL SECURITY: Verifies both authentication AND authorization
- * for multi-tenant access control.
+ * SECURITY: Verifies user authentication via Supabase session.
+ * Authorization is handled by the backend using JWT tokens and X-User-ID header.
  * 
  * This hook ensures:
  * 1. User is authenticated (has valid session)
- * 2. User ID in URL matches logged-in user ID (multi-tenant isolation)
- * 3. Automatic redirect on unauthorized access
+ * 2. Automatic redirect on unauthenticated access
  * 
- * @param expectedUserId - The user ID from the URL parameter
  * @returns Authentication status and user data
  */
 
@@ -25,7 +23,7 @@ interface AuthGuardResult {
   user: SupabaseUser | null;
 }
 
-export function useAuthGuard(expectedUserId?: string): AuthGuardResult {
+export function useAuthGuard(): AuthGuardResult {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
@@ -38,18 +36,13 @@ export function useAuthGuard(expectedUserId?: string): AuthGuardResult {
       try {
         setIsLoading(true);
         const supabase = createClient();
-        const [{ data: userData, error: userError }, sessionResult] =
-          await Promise.all([
-            supabase.auth.getUser(),
-            supabase.auth.getSession(),
-          ]);
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
 
         if (!mounted) return;
 
         const authedUser = userData?.user;
-        const sessionUser = sessionResult.data?.session?.user;
-
-        // Check 1: Authentication - revalidate via Supabase Auth server
+        // Check: Authentication - revalidate via Supabase Auth server
         if (userError || !authedUser) {
           console.warn("[AuthGuard] No valid authenticated user", {
             userError,
@@ -60,34 +53,7 @@ export function useAuthGuard(expectedUserId?: string): AuthGuardResult {
           return;
         }
 
-        // Optional: warn if session storage didn't match authenticated user
-        if (sessionUser && sessionUser.id !== authedUser.id) {
-          console.warn("[AuthGuard] Session/user mismatch detected", {
-            sessionUserId: sessionUser.id,
-            authedUserId: authedUser.id,
-          });
-        }
-
-        // Check 2: Authorization - Does user ID match URL parameter?
-        if (expectedUserId && authedUser.id !== expectedUserId) {
-          console.warn("[AuthGuard] Unauthorized access attempt:", {
-            authedUserId: authedUser.id,
-            requestedUserId: expectedUserId,
-          });
-          toast.error("Unauthorized access. Redirecting to your dashboard.");
-
-          const currentPath =
-            typeof window !== "undefined" ? window.location.pathname : "/";
-          const newPath = currentPath.replace(
-            `/dashboard/${expectedUserId}`,
-            `/dashboard/${authedUser.id}`
-          );
-          router.replace(newPath);
-          setIsAuthorized(false);
-          return;
-        }
-
-        // Both checks passed
+        // Authentication passed
         console.log("[AuthGuard] Access granted:", {
           userId: authedUser.id,
           email: authedUser.email,
@@ -114,7 +80,7 @@ export function useAuthGuard(expectedUserId?: string): AuthGuardResult {
     return () => {
       mounted = false;
     };
-  }, [expectedUserId, router]);
+  }, [router]);
 
   return {
     isLoading,
@@ -173,4 +139,3 @@ export function useAuth() {
     user,
   };
 }
-

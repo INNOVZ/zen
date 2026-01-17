@@ -9,7 +9,7 @@ export const logger = {
   /**
    * Log general information (development only)
    */
-  info: (...args: any[]) => {
+  info: (...args: unknown[]) => {
     if (isDevelopment) {
       console.log(...args);
     }
@@ -18,21 +18,21 @@ export const logger = {
   /**
    * Log warnings (always shown)
    */
-  warn: (...args: any[]) => {
+  warn: (...args: unknown[]) => {
     console.warn(...args);
   },
 
   /**
    * Log errors (always shown)
    */
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
     console.error(...args);
   },
 
   /**
    * Log debug information (development only)
    */
-  debug: (...args: any[]) => {
+  debug: (...args: unknown[]) => {
     if (isDevelopment) {
       console.debug(...args);
     }
@@ -52,7 +52,7 @@ export const logger = {
   /**
    * Log API requests (development only)
    */
-  apiRequest: (requestId: string, method: string, url: string, meta?: Record<string, any>) => {
+  apiRequest: (requestId: string, method: string, url: string, meta?: Record<string, unknown>) => {
     if (isDevelopment) {
       console.log(`🔍 [${requestId}] ${method} ${url}`, meta || '');
     }
@@ -67,4 +67,12 @@ export const logger = {
     }
   },
 };
+
+
+
+
+
+
+
+
 

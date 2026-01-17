@@ -3,25 +3,25 @@ import { useRouter } from "next/navigation";
 import { Bot, Upload, MessageSquare, TrendingUp } from "lucide-react";
 import { QuickActionProps } from "@/types/dashboard";
 
-export const useDashboardNavigation = (userId: string) => {
+export const useDashboardNavigation = () => {
   const router = useRouter();
 
-  // Memoized navigation handlers
+  // Memoized navigation handlers - no userId needed in URLs
   const handleTrainClick = useCallback(() => {
-    router.push(`/dashboard/${userId}/train`);
-  }, [router, userId]);
+    router.push(`/dashboard/train`);
+  }, [router]);
 
   const handleCustomizeClick = useCallback(() => {
-    router.push(`/dashboard/${userId}/customize`);
-  }, [router, userId]);
+    router.push(`/dashboard/customize`);
+  }, [router]);
 
   const handleChatClick = useCallback(() => {
-    router.push(`/dashboard/${userId}/chat`);
-  }, [router, userId]);
+    router.push(`/dashboard/chat`);
+  }, [router]);
 
   const handleSettingsClick = useCallback(() => {
-    router.push(`/dashboard/${userId}/settings`);
-  }, [router, userId]);
+    router.push(`/dashboard/settings`);
+  }, [router]);
 
   // Configuration-driven quick actions
   const quickActions = useMemo<QuickActionProps[]>(

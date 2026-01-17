@@ -1,26 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
-import { organizationApi, type UpdateOrganizationRequest } from '@/app/api/routes';
+import { organizationApi, type UpdateOrganizationRequest, type OrganizationResponse } from '@/app/api/routes';
 import { toast } from 'sonner';
-
-interface OrganizationInfo {
-    user: {
-        email: string;
-    };
-    organization: {
-        name: string;
-        email: string;
-        plan_id: string | null;
-        contact_phone?: string;
-        business_type?: string;
-    };
-}
 
 /**
  * Custom hook for managing organization information
  * Handles loading, updating, and state management for organization data
  */
 export const useOrganizationInfo = () => {
-    const [organizationInfo, setOrganizationInfo] = useState<OrganizationInfo | null>(null);
+    const [organizationInfo, setOrganizationInfo] = useState<OrganizationResponse | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<Error | null>(null);
     const [isMounted, setIsMounted] = useState(false);

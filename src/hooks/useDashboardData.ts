@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import { useCustomizeStore } from '@/stores/customizeStore';
 import { conversationApi } from '@/app/api/routes';
 import { analyzeError, logError } from '@/utils/errorHandling';
-import { ConversationInfo } from '@/types/schemaTypes';
+import type { ConversationInfo } from '@/types';
 /**
  * Custom hook for optimized dashboard data loading
  * Handles sequential loading of critical data first, then secondary data

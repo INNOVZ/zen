@@ -1,34 +1,17 @@
 // Leads API Client
 import { fetchWithAuth } from "./auth";
+import type {
+  LeadInfo,
+  LeadsResponse,
+  LeadsStats,
+} from "./types";
 
-export interface LeadInfo {
-  id: string;
-  name?: string;
-  email?: string;
-  phone?: string;
-  company?: string;
-  notes?: string;
-  conversation_id: string;
-  chatbot_id?: string;
-  chatbot_name?: string;
-  channel?: string;
-  captured_at: string;
-  captured_to: string[];
-  source: string;
-}
-
-export interface LeadsResponse {
-  leads: LeadInfo[];
-  total: number;
-  page: number;
-  page_size: number;
-}
-
-export interface LeadsStats {
-  total_leads: number;
-  leads_by_channel: Record<string, number>;
-  leads_by_month: Record<string, number>;
-}
+// Re-export types for backward compatibility
+export type {
+  LeadInfo,
+  LeadsResponse,
+  LeadsStats,
+};
 
 export const leadsApi = {
   /**
@@ -66,5 +49,19 @@ export const leadsApi = {
       throw error;
     }
   },
-};
 
+  /**
+   * Delete a lead by conversation id
+   */
+  deleteLead: async (conversationId: string): Promise<{ deleted: boolean }> => {
+    try {
+      const response = await fetchWithAuth(`/api/leads/${conversationId}`, {
+        method: "DELETE",
+      });
+      return response;
+    } catch (error) {
+      console.error("Error deleting lead:", error);
+      throw error;
+    }
+  },
+};

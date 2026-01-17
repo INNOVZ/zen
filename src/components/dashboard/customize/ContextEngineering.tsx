@@ -91,13 +91,13 @@ export default function ContextEngineering({
         "Organization ID could not be determined. Please try refreshing the page."
       );
     }
-    if (
-      config.confidence_threshold < 0.3 ||
-      config.confidence_threshold > 0.9
-    ) {
+    const confidence = config.confidence_threshold ?? 0.7;
+    if (confidence < 0.3 || confidence > 0.9) {
       errors.push("Confidence threshold must be between 30% and 90%");
     }
-    if (config.final_context_chunks < 1 || config.final_context_chunks > 10) {
+
+    const chunks = config.final_context_chunks ?? 5;
+    if (chunks < 1 || chunks > 10) {
       errors.push("Context chunks must be between 1 and 10");
     }
 
@@ -202,7 +202,7 @@ export default function ContextEngineering({
             <div>
               <Label htmlFor="model-tier">AI Model Tier</Label>
               <Select
-                value={contextConfig.model_tier}
+                value={contextConfig.model_tier || "balanced"}
                 onValueChange={(value) =>
                   handleConfigChange({
                     model_tier: value as
@@ -271,7 +271,7 @@ export default function ContextEngineering({
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>3s</span>
                   <span>
-                    {(contextConfig.max_response_time_ms / 1000).toFixed(1)}s
+                    {((contextConfig.max_response_time_ms ?? 10000) / 1000).toFixed(1)}s
                   </span>
                   <span>30s</span>
                 </div>
@@ -280,7 +280,7 @@ export default function ContextEngineering({
                   min="3000"
                   max="30000"
                   step="1000"
-                  value={contextConfig.max_response_time_ms}
+                  value={contextConfig.max_response_time_ms ?? 10000}
                   onChange={(e) =>
                     handleConfigChange({
                       max_response_time_ms: parseInt(e.target.value),
@@ -302,7 +302,7 @@ export default function ContextEngineering({
             <div>
               <Label htmlFor="retrieval-strategy">Retrieval Method</Label>
               <Select
-                value={contextConfig.retrieval_strategy}
+                value={contextConfig.retrieval_strategy || "hybrid"}
                 onValueChange={(value) =>
                   handleConfigChange({
                     retrieval_strategy: value as
@@ -369,7 +369,7 @@ export default function ContextEngineering({
                   type="number"
                   min="10"
                   max="100"
-                  value={contextConfig.initial_retrieval_count}
+                  value={contextConfig.initial_retrieval_count ?? 20}
                   onChange={(e) =>
                     handleConfigChange({
                       initial_retrieval_count: parseInt(e.target.value) || 20,
@@ -388,7 +388,7 @@ export default function ContextEngineering({
                   type="number"
                   min="5"
                   max="50"
-                  value={contextConfig.semantic_rerank_count}
+                  value={contextConfig.semantic_rerank_count ?? 10}
                   onChange={(e) =>
                     handleConfigChange({
                       semantic_rerank_count: parseInt(e.target.value) || 10,
@@ -407,7 +407,7 @@ export default function ContextEngineering({
                   type="number"
                   min="1"
                   max="10"
-                  value={contextConfig.final_context_chunks}
+                  value={contextConfig.final_context_chunks ?? 5}
                   onChange={(e) =>
                     handleConfigChange({
                       final_context_chunks: parseInt(e.target.value) || 5,
@@ -505,7 +505,7 @@ export default function ContextEngineering({
                 <div className="flex justify-between text-sm text-gray-600">
                   <span>Permissive (30%)</span>
                   <span className="font-medium">
-                    {Math.round(contextConfig.confidence_threshold * 100)}%
+                    {Math.round((contextConfig.confidence_threshold ?? 0.7) * 100)}%
                   </span>
                   <span>Conservative (90%)</span>
                 </div>
@@ -514,7 +514,7 @@ export default function ContextEngineering({
                   min="0.3"
                   max="0.9"
                   step="0.05"
-                  value={contextConfig.confidence_threshold}
+                  value={contextConfig.confidence_threshold ?? 0.7}
                   onChange={(e) =>
                     handleConfigChange({
                       confidence_threshold: parseFloat(e.target.value),
@@ -593,19 +593,19 @@ export default function ContextEngineering({
             <div>
               <span className="text-gray-600">Strategy:</span>
               <div className="font-medium">
-                {contextConfig.retrieval_strategy.replace("_", " ")}
+                {(contextConfig.retrieval_strategy || "hybrid").replace("_", " ")}
               </div>
             </div>
             <div>
               <span className="text-gray-600">Context Chunks:</span>
               <div className="font-medium">
-                {contextConfig.final_context_chunks}
+                {contextConfig.final_context_chunks ?? 5}
               </div>
             </div>
             <div>
               <span className="text-gray-600">Confidence:</span>
               <div className="font-medium">
-                {Math.round(contextConfig.confidence_threshold * 100)}%
+                {Math.round((contextConfig.confidence_threshold ?? 0.7) * 100)}%
               </div>
             </div>
           </div>

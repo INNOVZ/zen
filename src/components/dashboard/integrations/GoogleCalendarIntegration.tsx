@@ -15,6 +15,7 @@ import {
   Loader2,
 } from "lucide-react";
 import GoogleOAuthAppConfig from "./GoogleOAuthAppConfig";
+import CalendarSettings from "./CalendarSettings";
 
 export default function GoogleCalendarIntegration() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -143,6 +144,13 @@ export default function GoogleCalendarIntegration() {
         "https://www.googleapis.com/auth/calendar",
         "https://www.googleapis.com/auth/spreadsheets",
       ]);
+
+      // Validate response
+      if (!response.auth_url || !response.state) {
+        throw new Error(
+          "Invalid response from server: missing auth_url or state"
+        );
+      }
 
       // Store state in sessionStorage for callback verification
       sessionStorage.setItem("google_oauth_state", response.state);
@@ -286,6 +294,9 @@ export default function GoogleCalendarIntegration() {
               features.
             </AlertDescription>
           </Alert>
+
+          {/* Calendar Settings - appointment durations, business hours, etc. */}
+          <CalendarSettings />
 
           {/* Reconnect button - allows reconnecting to get fresh tokens */}
           <Button

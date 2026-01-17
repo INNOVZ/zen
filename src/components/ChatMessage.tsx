@@ -15,7 +15,7 @@ export interface ChatMessageProps {
   type: "user" | "bot";
   content: string;
   timestamp: Date;
-  sources?: string[];
+  sources?: ({ title: string; url: string; content?: string } | string)[];
   buttons?: MessageButton[];
   botColor?: string;
   onButtonClick?: (value: string) => void;
@@ -39,9 +39,8 @@ export const ChatMessage = memo(
         className={`flex ${type === "user" ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`max-w-[85%] p-2 rounded-lg text-sm ${
-            type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
-          }`}
+          className={`max-w-[85%] p-2 rounded-lg text-sm ${type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
+            }`}
           style={{
             backgroundColor: type === "user" ? botColor : undefined,
           }}
@@ -57,8 +56,28 @@ export const ChatMessage = memo(
               <p className="whitespace-pre-wrap">{content}</p>
 
               {sources && sources.length > 0 && (
-                <div className="mt-1 text-xs text-gray-500">
-                  Sources: {sources.length} document(s)
+                <div className="mt-2 text-xs text-gray-500 border-t pt-2 border-gray-200">
+                  <div className="font-medium mb-1">Sources:</div>
+                  <ul className="list-disc pl-4 space-y-0.5">
+                    {sources.map((source, index) => {
+                      const isString = typeof source === "string";
+                      const title = isString ? source : source.title || source.url;
+                      const url = isString ? source : source.url;
+
+                      return (
+                        <li key={index}>
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 hover:underline break-all"
+                          >
+                            {title}
+                          </a>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               )}
 
@@ -95,3 +114,11 @@ export const ChatMessage = memo(
     );
   }
 );
+
+
+
+
+
+
+
+

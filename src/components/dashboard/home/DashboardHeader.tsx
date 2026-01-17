@@ -6,16 +6,20 @@ import { getUserFirstName } from "@/utils/userUtils";
 
 export const DashboardHeader = memo<DashboardHeaderProps>(
   ({ user, onTrainClick, onCustomizeClick }) => (
-    <header className="flex justify-between items-center bg-white p-8 rounded-t-2xl">
+    <header className="flex justify-between lg:flex-row flex-col items-center bg-[#5d7dde] p-8 rounded-2xl">
       <div>
-        <h1 className="text-3xl text-[#0a0a60] font-bold">
+        <h1 className="text-3xl text-white font-bold">
           Welcome back, {getUserFirstName(user)}!
         </h1>
-        <p className="text-gray-700 mt-1">
-          Manage your AI chatbots and training data
+        <p className="text-white mt-1">
+          Manage your customer experience with ease.
         </p>
       </div>
-      <div className="flex gap-2" role="group" aria-label="Primary actions">
+      <div
+        className="flex gap-2 mt-5 lg:mt-0"
+        role="group"
+        aria-label="Primary actions"
+      >
         <Button
           onClick={onTrainClick}
           variant="outline"

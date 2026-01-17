@@ -29,7 +29,9 @@ export type {
   OrganizationResponse,
   UpdateOrganizationResponse,
   RetrainResponse,
+  AnalyticsDataExport,
 } from './types';
 
 // Re-export types from schemaTypes for convenience
-export type { ChatbotInfo, UploadFile, ConversationInfo } from '@/types/schemaTypes';
+export type { ConversationInfo } from "@/types/conversation";
+export type { ChatbotInfo, UploadFile } from "@/app/api/types/chat";

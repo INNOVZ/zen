@@ -1,67 +1,69 @@
 // MCP Integration API Client
 import { fetchWithAuth } from "./auth";
-import { getApiBaseUrl } from "@/config/api";
+import type {
+  MCPTool,
+  MCPToolsResponse,
+  IntegrationStatus,
+  GoogleSheetsConfig,
+  CRMConfig,
+  LeadCaptureConfig,
+  GoogleOAuthResponse,
+  ZohoOAuthResponse,
+} from "./types/integration";
 
-export interface MCPTool {
-  name: string;
-  description: string;
-  provider?: string;
-  rate_limit: number;
-  parameters?: Record<string, any>;
+// Re-export types for backward compatibility
+export type {
+  MCPTool,
+  MCPToolsResponse,
+  IntegrationStatus,
+  GoogleSheetsConfig,
+  CRMConfig,
+  LeadCaptureConfig,
+  GoogleOAuthResponse,
+  ZohoOAuthResponse,
+};
+
+// Error response types
+interface ApiErrorResponse {
+  detail?: string;
+  message?: string;
+  status?: number;
+  response?: {
+    data?: {
+      detail?: string;
+      message?: string;
+    };
+    status?: number;
+  };
 }
 
-export interface MCPToolsResponse {
-  tools: MCPTool[];
-  count: number;
-}
-
-export interface IntegrationStatus {
-  provider: string;
-  enabled: boolean;
-  configured: boolean;
-  last_sync?: string;
-}
-
-export interface GoogleSheetsConfig {
-  spreadsheet_id?: string;
-  sheet_name?: string;
-  leads_spreadsheet_id?: string;
-  leads_sheet_name?: string;
-}
-
-export interface CRMConfig {
-  enabled: boolean;
-  crm_type?: "hubspot" | "salesforce" | "pipedrive" | "zoho";
-  api_key?: string;
-  config?: Record<string, any>;
-}
-
-export interface LeadCaptureConfig {
-  enabled: boolean;
-  google_sheets?: GoogleSheetsConfig;
-  crm?: CRMConfig;
-  min_confidence?: number;
-  require_contact?: boolean;
-}
-
-export interface GoogleOAuthResponse {
-  auth_url: string;
-  state: string;
-}
-
-export interface ZohoOAuthResponse {
-  auth_url: string;
-  state: string;
+interface ToolExecuteResponse {
+  success?: boolean;
+  result?: string | number | boolean | Record<string, unknown> | unknown[];
+  error?: string;
+  message?: string;
+  [key: string]: string | number | boolean | Record<string, unknown> | unknown[] | undefined;
 }
 
 export const mcpApi = {
   /**
-   * List all available MCP tools for the organization
+   * List all available MCP tools for the organization with multilingual descriptions
+   * 
+   * @param language - Language code (en, es, fr, de, pt, ar, zh, ja). Defaults to 'en'
+   * @returns Promise with tools array and metadata
    */
-  listTools: async (): Promise<MCPToolsResponse> => {
-    return fetchWithAuth("/api/mcp/tools", {
-      method: "GET",
-    });
+  listTools: async (language: string = "en"): Promise<MCPToolsResponse & { language?: string }> => {
+    try {
+      const params = new URLSearchParams();
+      params.append("language", language);
+
+      return fetchWithAuth(`/api/mcp/tools?${params.toString()}`, {
+        method: "GET",
+      });
+    } catch (error) {
+      console.warn("Failed to list MCP tools:", error);
+      return { success: false, tools: [] };
+    }
   },
 
   /**
@@ -69,8 +71,8 @@ export const mcpApi = {
    */
   executeTool: async (
     toolName: string,
-    parameters: Record<string, any> = {}
-  ): Promise<any> => {
+    parameters: Record<string, unknown> = {}
+  ): Promise<ToolExecuteResponse> => {
     return fetchWithAuth("/api/mcp/tools/execute", {
       method: "POST",
       body: JSON.stringify({
@@ -119,7 +121,7 @@ export const mcpApi = {
         }
       );
       return response;
-    } catch (error) {
+    } catch {
       // If endpoint doesn't exist, return default
       return {
         provider,
@@ -161,30 +163,35 @@ export const mcpApi = {
         body: JSON.stringify({ scopes }),
       });
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Google OAuth authorize error:", {
         error,
-        message: error?.message,
-        response: error?.response,
-        status: error?.response?.status,
-        data: error?.response?.data,
+        message: error instanceof Error ? error.message : String(error),
+        response: (error as ApiErrorResponse)?.response,
+        status: (error as ApiErrorResponse)?.response?.status,
+        data: (error as ApiErrorResponse)?.response?.data,
       });
       
       // Extract detailed error from response
       let errorMessage = "Failed to get Google OAuth URL";
+      const apiError = error as ApiErrorResponse;
       
-      if (error?.response?.data?.detail) {
-        errorMessage = error.response.data.detail;
-      } else if (error?.detail) {
-        errorMessage = error.detail;
-      } else if (error?.message) {
+      if (apiError?.response?.data?.detail) {
+        errorMessage = apiError.response.data.detail;
+      } else if (apiError?.detail) {
+        errorMessage = apiError.detail;
+      } else if (error instanceof Error && error.message) {
         errorMessage = error.message;
       }
       
       // Create a more detailed error object
-      const detailedError: any = new Error(errorMessage);
-      detailedError.response = error?.response;
-      detailedError.status = error?.response?.status;
+      const detailedError = new Error(errorMessage) as Error & {
+        response?: ApiErrorResponse['response'];
+        status?: number;
+        originalError?: unknown;
+      };
+      detailedError.response = apiError?.response;
+      detailedError.status = apiError?.response?.status;
       detailedError.originalError = error;
       
       throw detailedError;
@@ -248,21 +255,26 @@ export const mcpApi = {
         body: JSON.stringify({ region }),
       });
       return response;
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Zoho OAuth authorize error:", error);
       let errorMessage = "Failed to get Zoho OAuth URL";
+      const apiError = error as ApiErrorResponse;
       
-      if (error?.response?.data?.detail) {
-        errorMessage = error.response.data.detail;
-      } else if (error?.detail) {
-        errorMessage = error.detail;
-      } else if (error?.message) {
+      if (apiError?.response?.data?.detail) {
+        errorMessage = apiError.response.data.detail;
+      } else if (apiError?.detail) {
+        errorMessage = apiError.detail;
+      } else if (error instanceof Error && error.message) {
         errorMessage = error.message;
       }
       
-      const detailedError: any = new Error(errorMessage);
-      detailedError.response = error?.response;
-      detailedError.status = error?.response?.status;
+      const detailedError = new Error(errorMessage) as Error & {
+        response?: ApiErrorResponse['response'];
+        status?: number;
+        originalError?: unknown;
+      };
+      detailedError.response = apiError?.response;
+      detailedError.status = apiError?.response?.status;
       detailedError.originalError = error;
       
       throw detailedError;
@@ -343,7 +355,7 @@ export const mcpApi = {
         }
       );
       return response;
-    } catch (error) {
+    } catch {
       // Return default config if not found
       return {
         enabled: false,
@@ -381,7 +393,7 @@ export const mcpApi = {
     success: boolean;
     configured: boolean;
     crm_type?: string;
-    credentials?: Record<string, any>;
+    credentials?: Record<string, unknown>;
   }> => {
     try {
       const response = await fetchWithAuth("/api/integrations/crm/config", {
@@ -413,25 +425,98 @@ export const mcpApi = {
     }
   },
 
+  // ============================================================================
+  // Calendar Settings API
+  // ============================================================================
+
   /**
-   * Get CTA buttons for active integrations
+   * Get calendar/appointment settings for the organization
    */
-  getCTAButtons: async (): Promise<{
+  getCalendarSettings: async (): Promise<{
+    appointment_durations: number[];
+    default_duration: number;
+    business_hours: { start_hour: number; end_hour: number };
+    working_days: number[];
+    buffer_minutes: number;
+    max_advance_days: number;
+    min_advance_hours: number;
+    timezone: string | null;
+  }> => {
+    try {
+      return await fetchWithAuth("/api/integrations/calendar/settings", {
+        method: "GET",
+      });
+    } catch (error) {
+      console.error("Failed to get calendar settings:", error);
+      // Return defaults
+      return {
+        appointment_durations: [15, 30, 45, 60],
+        default_duration: 30,
+        business_hours: { start_hour: 9, end_hour: 17 },
+        working_days: [1, 2, 3, 4, 5],
+        buffer_minutes: 0,
+        max_advance_days: 60,
+        min_advance_hours: 1,
+        timezone: null,
+      };
+    }
+  },
+
+  /**
+   * Update calendar/appointment settings for the organization
+   */
+  updateCalendarSettings: async (settings: {
+    appointment_durations?: number[];
+    default_duration?: number;
+    business_hours?: { start_hour: number; end_hour: number };
+    working_days?: number[];
+    buffer_minutes?: number;
+    max_advance_days?: number;
+    min_advance_hours?: number;
+    timezone?: string | null;
+  }): Promise<{ success: boolean; updated?: string[]; message?: string }> => {
+    try {
+      return await fetchWithAuth("/api/integrations/calendar/settings", {
+        method: "PUT",
+        body: JSON.stringify(settings),
+      });
+    } catch (error) {
+      console.error("Failed to update calendar settings:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get CTA buttons for active integrations with multilingual support
+   * 
+   * @param language - Language code (en, es, fr, de, pt, ar, zh, ja). Defaults to 'en'
+   * @returns Promise with buttons array and metadata
+   */
+  getCTAButtons: async (language: string = "en"): Promise<{
     buttons: Array<{
       id: string;
       label: string;
       message: string;
+      integration?: string;
     }>;
     count: number;
+    language: string;
+    supported_languages?: Record<string, string>;
   }> => {
     try {
-      const response = await fetchWithAuth("/api/integrations/cta-buttons", {
-        method: "GET",
-      });
+      const params = new URLSearchParams();
+      params.append("language", language);
+
+      const response = await fetchWithAuth(
+        `/api/integrations/cta-buttons?${params.toString()}`,
+        {
+          method: "GET",
+        }
+      );
       return response;
     } catch (error) {
       console.warn("Failed to get CTA buttons:", error);
-      return { buttons: [], count: 0 };
+      return { buttons: [], count: 0, language };
     }
   },
 };

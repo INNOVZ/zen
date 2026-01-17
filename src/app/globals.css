@@ -212,3 +212,11 @@ body {
 .pixel {
   font-family: "Doto", sans-serif !important;
 }
+.blur-box {
+  background: rgba(255, 255, 255, 0.802);
+  /* semi-transparent */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(50px);
+  /* Safari */
+  border-radius: 12px;
+}

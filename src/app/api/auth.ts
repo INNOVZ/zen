@@ -7,28 +7,27 @@ import { logger } from '@/utils/logger';
 export const getAuthInfo = async () => {
   try {
     const supabase = createClient();
-    
-    const { data, error } = await supabase.auth.getSession();
-    
-    if (error) {
-      console.warn("Auth session error:", error);
+
+    const [
+      { data: userData, error: userError },
+      { data: sessionData, error: sessionError },
+    ] = await Promise.all([supabase.auth.getUser(), supabase.auth.getSession()]);
+
+    if (userError) {
+      console.warn("Auth user error:", userError);
       throw new Error("Authentication error. Please log in again.");
     }
-    
-    const token = data.session?.access_token;
-    const userId = data.session?.user?.id;
-    
+    if (sessionError) {
+      console.warn("Auth session error:", sessionError);
+    }
+
+    const token = sessionData.session?.access_token;
+    const userId = userData.user?.id;
+
     if (!token || !userId) {
-      console.warn("No valid session found - user not authenticated", {
+      console.warn("No valid auth found - user not authenticated", {
         hasToken: !!token,
         hasUserId: !!userId,
-        sessionData: data.session ? {
-          user: data.session.user ? {
-            id: data.session.user.id,
-            email: data.session.user.email
-          } : null,
-          access_token: data.session.access_token ? "present" : "missing"
-        } : null
       });
       throw new Error("Not authenticated. Please log in again.");
     }
@@ -69,6 +68,58 @@ interface ApiError extends Error {
   errorData?: unknown;
   errorText?: string;
 }
+
+/**
+ * Safely extract a string error message from various error formats.
+ * Handles cases where error.detail or error.message might be an object.
+ */
+const extractErrorMessage = (value: unknown): string | null => {
+  if (!value) return null;
+  
+  // If it's already a string, return it
+  if (typeof value === 'string') {
+    return value;
+  }
+  
+  // If it's an object, try to extract meaningful message
+  if (typeof value === 'object') {
+    const obj = value as Record<string, unknown>;
+    
+    // Try common error message properties
+    if (typeof obj.message === 'string') return obj.message;
+    if (typeof obj.msg === 'string') return obj.msg;
+    if (typeof obj.error === 'string') return obj.error;
+    if (typeof obj.detail === 'string') return obj.detail;
+    
+    // If it's an array (like validation errors), join them
+    if (Array.isArray(value)) {
+      const messages = value
+        .map(item => {
+          if (typeof item === 'string') return item;
+          if (typeof item === 'object' && item !== null) {
+            const itemObj = item as Record<string, unknown>;
+            return itemObj.msg || itemObj.message || itemObj.error || JSON.stringify(item);
+          }
+          return String(item);
+        })
+        .filter(Boolean);
+      if (messages.length > 0) return messages.join('; ');
+    }
+    
+    // Last resort: stringify the object but make it readable
+    try {
+      const stringified = JSON.stringify(value);
+      // Only return if it's not too long and not just "{}"
+      if (stringified && stringified !== '{}' && stringified.length < 500) {
+        return stringified;
+      }
+    } catch {
+      // Ignore stringify errors
+    }
+  }
+  
+  return null;
+};
 
 // Enhanced helper with better error handling and logging
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
@@ -196,21 +247,21 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         throw new Error("Too many requests. Please try again later.");
       } else if (response.status >= 500) {
         // For 500 errors, try to extract the actual error message from the backend
-        const backendError = errorData?.detail || errorData?.message || errorText;
-        if (backendError && typeof backendError === 'string' && backendError !== 'No error text') {
+        const backendError = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText;
+        if (backendError && backendError !== 'No error text') {
           throw new Error(backendError);
         }
         throw new Error("Server error. Please try again later.");
       } else if (response.status === 400) {
         // For 400 errors, show the detailed error message from backend
-        const backendError = errorData?.detail || errorData?.message || errorText;
-        if (backendError && typeof backendError === 'string' && backendError !== 'No error text') {
+        const backendError = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText;
+        if (backendError && backendError !== 'No error text') {
           throw new Error(backendError);
         }
         throw new Error(`Bad request: ${errorText || response.statusText}`);
       }
       
-      const errorMessage = errorData?.detail || errorData?.message || errorText || response.statusText || `API error (${response.status})`;
+      const errorMessage = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText || response.statusText || `API error (${response.status})`;
       const enhancedError = new Error(errorMessage) as ApiError;
       // Add additional context to the error
       enhancedError.status = response.status;
@@ -221,32 +272,43 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       throw enhancedError;
     }
 
-    try {
-      const data = await response.json();
-      logger.debug(`✅ [${requestId}] Success:`, typeof data === 'object' ? 'JSON response' : data);
-      return data;
-    } catch (parseError) {
-      console.error(`⚠️ [${requestId}] Failed to parse JSON response:`, parseError);
-      console.error(`⚠️ [${requestId}] Response status:`, response.status, response.statusText);
-      console.error(`⚠️ [${requestId}] Response headers:`, Object.fromEntries(response.headers.entries()));
-      
-      // If JSON parsing fails, try to get the response as text
+    const responseText = await response.text();
+    const contentType = response.headers.get('content-type') || '';
+
+    if (!responseText || responseText.trim() === '') {
+      logger.debug(`📄 [${requestId}] Empty response - likely successful update`);
+      return { success: true, message: 'Update successful' };
+    }
+
+    const looksLikeJson =
+      responseText.startsWith('{') || responseText.startsWith('[');
+    if (contentType.includes('application/json') || looksLikeJson) {
       try {
-        const textData = await response.text();
-        logger.debug(`📄 [${requestId}] Text response:`, textData);
-        
-        // If the response is empty or just whitespace, it might be a successful update
-        if (!textData || textData.trim() === '') {
-          logger.debug(`📄 [${requestId}] Empty response - likely successful update`);
-          return { success: true, message: 'Update successful' };
-        }
-        
-        return { message: textData };
-      } catch (textError) {
-        console.error(`💥 [${requestId}] Failed to read response as text:`, textError);
-        throw new Error('Failed to parse server response');
+        const data = JSON.parse(responseText);
+        logger.debug(
+          `✅ [${requestId}] Success:`,
+          typeof data === 'object' ? 'JSON response' : data
+        );
+        return data;
+      } catch (parseError) {
+        console.error(
+          `⚠️ [${requestId}] Failed to parse JSON response:`,
+          parseError
+        );
+        console.error(
+          `⚠️ [${requestId}] Response status:`,
+          response.status,
+          response.statusText
+        );
+        console.error(
+          `⚠️ [${requestId}] Response headers:`,
+          Object.fromEntries(response.headers.entries())
+        );
       }
     }
+
+    logger.debug(`📄 [${requestId}] Text response:`, responseText);
+    return { message: responseText };
     
   } catch (error) {
     const responseTime = Date.now() - startTime;

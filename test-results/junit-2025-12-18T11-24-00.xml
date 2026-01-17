@@ -1,0 +1,1252 @@
+<testsuites id="" name="" tests="75" failures="75" skipped="0" errors="0" time="21.996776999999998">
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="chromium" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:9:7 › Authentication › should load login page ──────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/navigation.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="chromium" tests="4" failures="4" skipped="0" time="0.004" errors="0">
+<testcase name="Navigation › should load homepage successfully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:9:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [chromium] › e2e/navigation.test.ts:9:7 › Navigation › should load homepage successfully ─────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should have working navigation" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:16:7 should have working navigation" type="FAILURE">
+<![CDATA[  [chromium] › e2e/navigation.test.ts:16:7 › Navigation › should have working navigation ───────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should load dashboard (may require auth)" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:24:7 should load dashboard (may require auth)" type="FAILURE">
+<![CDATA[  [chromium] › e2e/navigation.test.ts:24:7 › Navigation › should load dashboard (may require auth) ─
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should handle invalid routes gracefully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:35:7 should handle invalid routes gracefully" type="FAILURE">
+<![CDATA[  [chromium] › e2e/navigation.test.ts:35:7 › Navigation › should handle invalid routes gracefully ──
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/responsiveness.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="chromium" tests="5" failures="5" skipped="0" time="0.005" errors="0">
+<testcase name="Responsiveness › should work on Desktop (1920x1080)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Desktop (1920x1080)" type="FAILURE">
+<![CDATA[  [chromium] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Desktop (1920x1080) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Laptop (1366x768)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Laptop (1366x768)" type="FAILURE">
+<![CDATA[  [chromium] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Laptop (1366x768) ─
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Tablet (768x1024)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Tablet (768x1024)" type="FAILURE">
+<![CDATA[  [chromium] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Tablet (768x1024) ─
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Mobile (375x667)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Mobile (375x667)" type="FAILURE">
+<![CDATA[  [chromium] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Mobile (375x667) ──
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should be readable on small screens" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:32:7 should be readable on small screens" type="FAILURE">
+<![CDATA[  [chromium] › e2e/responsiveness.test.ts:32:7 › Responsiveness › should be readable on small screens 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="chromium" tests="1" failures="1" skipped="0" time="0.001" errors="0">
+<testcase name="Smoke Tests › should load homepage" classname="e2e/smoke.test.ts" time="0.001">
+<failure message="smoke.test.ts:9:7 should load homepage" type="FAILURE">
+<![CDATA[  [chromium] › e2e/smoke.test.ts:9:7 › Smoke Tests › should load homepage ──────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="performance/load-time.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="chromium" tests="3" failures="3" skipped="0" time="0.003" errors="0">
+<testcase name="Performance › should load homepage within 5 seconds" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:9:7 should load homepage within 5 seconds" type="FAILURE">
+<![CDATA[  [chromium] › performance/load-time.test.ts:9:7 › Performance › should load homepage within 5 seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should have minimal console errors on homepage" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:20:7 should have minimal console errors on homepage" type="FAILURE">
+<![CDATA[  [chromium] › performance/load-time.test.ts:20:7 › Performance › should have minimal console errors on homepage 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should not have unhandled rejections" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:44:7 should not have unhandled rejections" type="FAILURE">
+<![CDATA[  [chromium] › performance/load-time.test.ts:44:7 › Performance › should not have unhandled rejections 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="firefox" tests="2" failures="2" skipped="0" time="0.001" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:9:7 › Authentication › should load login page ───────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/navigation.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="firefox" tests="4" failures="4" skipped="0" time="0.004" errors="0">
+<testcase name="Navigation › should load homepage successfully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:9:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [firefox] › e2e/navigation.test.ts:9:7 › Navigation › should load homepage successfully ──────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should have working navigation" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:16:7 should have working navigation" type="FAILURE">
+<![CDATA[  [firefox] › e2e/navigation.test.ts:16:7 › Navigation › should have working navigation ────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should load dashboard (may require auth)" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:24:7 should load dashboard (may require auth)" type="FAILURE">
+<![CDATA[  [firefox] › e2e/navigation.test.ts:24:7 › Navigation › should load dashboard (may require auth) ──
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should handle invalid routes gracefully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:35:7 should handle invalid routes gracefully" type="FAILURE">
+<![CDATA[  [firefox] › e2e/navigation.test.ts:35:7 › Navigation › should handle invalid routes gracefully ───
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/responsiveness.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="firefox" tests="5" failures="5" skipped="0" time="0.004" errors="0">
+<testcase name="Responsiveness › should work on Desktop (1920x1080)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Desktop (1920x1080)" type="FAILURE">
+<![CDATA[  [firefox] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Desktop (1920x1080) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Laptop (1366x768)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Laptop (1366x768)" type="FAILURE">
+<![CDATA[  [firefox] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Laptop (1366x768) ──
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Tablet (768x1024)" classname="e2e/responsiveness.test.ts" time="0">
+<failure message="responsiveness.test.ts:17:9 should work on Tablet (768x1024)" type="FAILURE">
+<![CDATA[  [firefox] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Tablet (768x1024) ──
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Mobile (375x667)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Mobile (375x667)" type="FAILURE">
+<![CDATA[  [firefox] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Mobile (375x667) ───
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should be readable on small screens" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:32:7 should be readable on small screens" type="FAILURE">
+<![CDATA[  [firefox] › e2e/responsiveness.test.ts:32:7 › Responsiveness › should be readable on small screens 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="firefox" tests="1" failures="1" skipped="0" time="0.001" errors="0">
+<testcase name="Smoke Tests › should load homepage" classname="e2e/smoke.test.ts" time="0.001">
+<failure message="smoke.test.ts:9:7 should load homepage" type="FAILURE">
+<![CDATA[  [firefox] › e2e/smoke.test.ts:9:7 › Smoke Tests › should load homepage ───────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="performance/load-time.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="firefox" tests="3" failures="3" skipped="0" time="0.003" errors="0">
+<testcase name="Performance › should load homepage within 5 seconds" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:9:7 should load homepage within 5 seconds" type="FAILURE">
+<![CDATA[  [firefox] › performance/load-time.test.ts:9:7 › Performance › should load homepage within 5 seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should have minimal console errors on homepage" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:20:7 should have minimal console errors on homepage" type="FAILURE">
+<![CDATA[  [firefox] › performance/load-time.test.ts:20:7 › Performance › should have minimal console errors on homepage 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should not have unhandled rejections" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:44:7 should not have unhandled rejections" type="FAILURE">
+<![CDATA[  [firefox] › performance/load-time.test.ts:44:7 › Performance › should not have unhandled rejections 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="webkit" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:9:7 › Authentication › should load login page ────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ──────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/navigation.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="webkit" tests="4" failures="4" skipped="0" time="0.004" errors="0">
+<testcase name="Navigation › should load homepage successfully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:9:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [webkit] › e2e/navigation.test.ts:9:7 › Navigation › should load homepage successfully ───────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should have working navigation" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:16:7 should have working navigation" type="FAILURE">
+<![CDATA[  [webkit] › e2e/navigation.test.ts:16:7 › Navigation › should have working navigation ─────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should load dashboard (may require auth)" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:24:7 should load dashboard (may require auth)" type="FAILURE">
+<![CDATA[  [webkit] › e2e/navigation.test.ts:24:7 › Navigation › should load dashboard (may require auth) ───
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should handle invalid routes gracefully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:35:7 should handle invalid routes gracefully" type="FAILURE">
+<![CDATA[  [webkit] › e2e/navigation.test.ts:35:7 › Navigation › should handle invalid routes gracefully ────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/responsiveness.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="webkit" tests="5" failures="5" skipped="0" time="0.005" errors="0">
+<testcase name="Responsiveness › should work on Desktop (1920x1080)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Desktop (1920x1080)" type="FAILURE">
+<![CDATA[  [webkit] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Desktop (1920x1080) ─
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Laptop (1366x768)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Laptop (1366x768)" type="FAILURE">
+<![CDATA[  [webkit] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Laptop (1366x768) ───
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Tablet (768x1024)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Tablet (768x1024)" type="FAILURE">
+<![CDATA[  [webkit] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Tablet (768x1024) ───
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Mobile (375x667)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Mobile (375x667)" type="FAILURE">
+<![CDATA[  [webkit] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Mobile (375x667) ────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should be readable on small screens" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:32:7 should be readable on small screens" type="FAILURE">
+<![CDATA[  [webkit] › e2e/responsiveness.test.ts:32:7 › Responsiveness › should be readable on small screens 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="webkit" tests="1" failures="1" skipped="0" time="0" errors="0">
+<testcase name="Smoke Tests › should load homepage" classname="e2e/smoke.test.ts" time="0">
+<failure message="smoke.test.ts:9:7 should load homepage" type="FAILURE">
+<![CDATA[  [webkit] › e2e/smoke.test.ts:9:7 › Smoke Tests › should load homepage ────────────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="performance/load-time.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="webkit" tests="3" failures="3" skipped="0" time="0.003" errors="0">
+<testcase name="Performance › should load homepage within 5 seconds" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:9:7 should load homepage within 5 seconds" type="FAILURE">
+<![CDATA[  [webkit] › performance/load-time.test.ts:9:7 › Performance › should load homepage within 5 seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should have minimal console errors on homepage" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:20:7 should have minimal console errors on homepage" type="FAILURE">
+<![CDATA[  [webkit] › performance/load-time.test.ts:20:7 › Performance › should have minimal console errors on homepage 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should not have unhandled rejections" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:44:7 should not have unhandled rejections" type="FAILURE">
+<![CDATA[  [webkit] › performance/load-time.test.ts:44:7 › Performance › should not have unhandled rejections 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Chrome" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/navigation.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Chrome" tests="4" failures="4" skipped="0" time="0.004" errors="0">
+<testcase name="Navigation › should load homepage successfully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:9:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/navigation.test.ts:9:7 › Navigation › should load homepage successfully ────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should have working navigation" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:16:7 should have working navigation" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/navigation.test.ts:16:7 › Navigation › should have working navigation ──────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should load dashboard (may require auth)" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:24:7 should load dashboard (may require auth)" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/navigation.test.ts:24:7 › Navigation › should load dashboard (may require auth) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should handle invalid routes gracefully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:35:7 should handle invalid routes gracefully" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/navigation.test.ts:35:7 › Navigation › should handle invalid routes gracefully 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/responsiveness.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Chrome" tests="5" failures="5" skipped="0" time="0.004" errors="0">
+<testcase name="Responsiveness › should work on Desktop (1920x1080)" classname="e2e/responsiveness.test.ts" time="0">
+<failure message="responsiveness.test.ts:17:9 should work on Desktop (1920x1080)" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Desktop (1920x1080) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Laptop (1366x768)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Laptop (1366x768)" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Laptop (1366x768) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Tablet (768x1024)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Tablet (768x1024)" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Tablet (768x1024) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Mobile (375x667)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Mobile (375x667)" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Mobile (375x667) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should be readable on small screens" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:32:7 should be readable on small screens" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/responsiveness.test.ts:32:7 › Responsiveness › should be readable on small screens 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Chrome" tests="1" failures="1" skipped="0" time="0" errors="0">
+<testcase name="Smoke Tests › should load homepage" classname="e2e/smoke.test.ts" time="0">
+<failure message="smoke.test.ts:9:7 should load homepage" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/smoke.test.ts:9:7 › Smoke Tests › should load homepage ─────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="performance/load-time.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Chrome" tests="3" failures="3" skipped="0" time="0.002" errors="0">
+<testcase name="Performance › should load homepage within 5 seconds" classname="performance/load-time.test.ts" time="0">
+<failure message="load-time.test.ts:9:7 should load homepage within 5 seconds" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › performance/load-time.test.ts:9:7 › Performance › should load homepage within 5 seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should have minimal console errors on homepage" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:20:7 should have minimal console errors on homepage" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › performance/load-time.test.ts:20:7 › Performance › should have minimal console errors on homepage 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should not have unhandled rejections" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:44:7 should not have unhandled rejections" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › performance/load-time.test.ts:44:7 › Performance › should not have unhandled rejections 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-arm64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Safari" tests="2" failures="2" skipped="0" time="0.017" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.017">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/navigation.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Safari" tests="4" failures="4" skipped="0" time="0.004" errors="0">
+<testcase name="Navigation › should load homepage successfully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:9:7 should load homepage successfully" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/navigation.test.ts:9:7 › Navigation › should load homepage successfully ────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should have working navigation" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:16:7 should have working navigation" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/navigation.test.ts:16:7 › Navigation › should have working navigation ──────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should load dashboard (may require auth)" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:24:7 should load dashboard (may require auth)" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/navigation.test.ts:24:7 › Navigation › should load dashboard (may require auth) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Navigation › should handle invalid routes gracefully" classname="e2e/navigation.test.ts" time="0.001">
+<failure message="navigation.test.ts:35:7 should handle invalid routes gracefully" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/navigation.test.ts:35:7 › Navigation › should handle invalid routes gracefully 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/responsiveness.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Safari" tests="5" failures="5" skipped="0" time="0.005" errors="0">
+<testcase name="Responsiveness › should work on Desktop (1920x1080)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Desktop (1920x1080)" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Desktop (1920x1080) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Laptop (1366x768)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Laptop (1366x768)" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Laptop (1366x768) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Tablet (768x1024)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Tablet (768x1024)" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Tablet (768x1024) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should work on Mobile (375x667)" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:17:9 should work on Mobile (375x667)" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/responsiveness.test.ts:17:9 › Responsiveness › should work on Mobile (375x667) 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Responsiveness › should be readable on small screens" classname="e2e/responsiveness.test.ts" time="0.001">
+<failure message="responsiveness.test.ts:32:7 should be readable on small screens" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/responsiveness.test.ts:32:7 › Responsiveness › should be readable on small screens 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/smoke.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Safari" tests="1" failures="1" skipped="0" time="0.001" errors="0">
+<testcase name="Smoke Tests › should load homepage" classname="e2e/smoke.test.ts" time="0.001">
+<failure message="smoke.test.ts:9:7 should load homepage" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/smoke.test.ts:9:7 › Smoke Tests › should load homepage ─────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="performance/load-time.test.ts" timestamp="2025-12-18T11:24:00.554Z" hostname="Mobile Safari" tests="3" failures="3" skipped="0" time="0.004" errors="0">
+<testcase name="Performance › should load homepage within 5 seconds" classname="performance/load-time.test.ts" time="0.001">
+<failure message="load-time.test.ts:9:7 should load homepage within 5 seconds" type="FAILURE">
+<![CDATA[  [Mobile Safari] › performance/load-time.test.ts:9:7 › Performance › should load homepage within 5 seconds 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should have minimal console errors on homepage" classname="performance/load-time.test.ts" time="0">
+<failure message="load-time.test.ts:20:7 should have minimal console errors on homepage" type="FAILURE">
+<![CDATA[  [Mobile Safari] › performance/load-time.test.ts:20:7 › Performance › should have minimal console errors on homepage 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Performance › should not have unhandled rejections" classname="performance/load-time.test.ts" time="0.003">
+<failure message="load-time.test.ts:44:7 should not have unhandled rejections" type="FAILURE">
+<![CDATA[  [Mobile Safari] › performance/load-time.test.ts:44:7 › Performance › should not have unhandled rejections 
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

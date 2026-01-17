@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
 import "../globals.css";
 import Sidebar from "@/components/dashboard/layout/SideBar";
+import MobileBottomMenu from "@/components/dashboard/layout/MobileBottomMenu";
 import { SubscriptionProvider } from "@/contexts/SubscriptionContext";
 import ChatWidget from "@/components/ChatWidget";
 import ClientOnlyWrapper from "@/components/ClientOnlyWrapper";
@@ -18,29 +17,11 @@ export default async function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // SERVER-SIDE AUTHENTICATION CHECK
-  // This ensures the dashboard layout only renders for authenticated users
-  const supabase = await createClient();
-
-  // Check authentication
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  console.log("[Dashboard Layout] Auth check:", {
-    hasSession: !!session,
-    userId: session?.user?.id,
-  });
-
-  // If no session, redirect to login (server-side protection)
-  if (!session?.user) {
-    redirect("/auth/login");
-  }
-
   return (
     <SubscriptionProvider>
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-linear-to-r/shorter from-slate-300 to-slate-300 p-4 md:p-4 pb-24 md:pb-4">
         <Sidebar />
+        <MobileBottomMenu />
         <Toaster />
         {children}
         <ClientOnlyWrapper>

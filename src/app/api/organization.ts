@@ -1,5 +1,5 @@
 // Organization Management API
-import { ChatbotInfo } from "@/types/schemaTypes";
+import type { ChatbotInfo } from "@/types";
 import { fetchWithAuth } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { 
@@ -42,9 +42,11 @@ export const organizationApi = {
               email: "user@example.com"
             },
             organization: {
+              id: "demo-org-id",
               name: "Demo Organization",
               email: "org@example.com",
-              plan_id: "free"
+              plan_id: "free",
+              created_at: new Date().toISOString()
             }
           };
           
@@ -71,7 +73,7 @@ export const organizationApi = {
     try {
       console.log("🏢 Updating organization:", {
         name: request.name,
-        email: request.email.substring(0, 3) + "***" // Log partial email for security
+        email: request.email ? request.email.substring(0, 3) + "***" : "Not provided" // Log partial email for security
       });
 
       // Debug: Log the full URL being called
@@ -101,8 +103,10 @@ export const organizationApi = {
               success: true,
               message: response.message as string,
               organization: {
-                name: request.name,
-                email: request.email
+                id: "updated-org",
+                name: request.name || "Organization",
+                email: request.email,
+                created_at: new Date().toISOString()
               }
             };
             
@@ -118,8 +122,10 @@ export const organizationApi = {
           success: true,
           message: "Organization updated successfully",
           organization: {
-            name: request.name,
-            email: request.email
+            id: "updated-org",
+            name: request.name || "Organization",
+            email: request.email,
+            created_at: new Date().toISOString()
           }
         };
 
@@ -160,8 +166,10 @@ export const organizationApi = {
           success: true,
           message: "Organization updated successfully (mock response - backend endpoint not available)",
           organization: {
-            name: request.name,
-            email: request.email
+            id: "mock-org",
+            name: request.name || "Organization",
+            email: request.email,
+            created_at: new Date().toISOString()
           }
         };
         

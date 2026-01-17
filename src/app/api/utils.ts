@@ -130,7 +130,7 @@ export const apiUtils = {
   getDeduplicationStats: () => {
     const now = Date.now();
     const active = Array.from(pendingRequests.entries()).filter(
-      ([_, req]) => req.expiresAt > now
+      ([, req]) => req.expiresAt > now
     );
     return {
       pendingRequests: active.length,

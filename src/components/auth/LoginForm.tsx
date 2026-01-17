@@ -124,7 +124,7 @@ export const LoginForm = ({
         });
 
         // Force a hard navigation to ensure middleware picks up the session
-        const dashboardUrl = `/dashboard/${data.user.id}`;
+        const dashboardUrl = `/dashboard`;
         console.log("🚀 Redirecting to:", dashboardUrl);
         console.log("   Using window.location.href for hard navigation");
         console.log("   Browser will make new request with cookies");

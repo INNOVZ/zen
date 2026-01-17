@@ -1,0 +1,8 @@
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="4.857551">
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:06:07.367Z" hostname="chromium" tests="2" failures="0" skipped="0" time="2.184" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="1.4">
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.784">
+</testcase>
+</testsuite>
+</testsuites>

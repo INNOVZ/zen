@@ -66,7 +66,7 @@ class LRUCache {
 
   has(key: string): boolean {
     const entry = this.cache.get(key);
-    
+
     if (!entry) {
       return false;
     }
@@ -102,15 +102,15 @@ class LRUCache {
   cleanup(): void {
     const now = Date.now();
     const keysToDelete: string[] = [];
-    
+
     for (const [key, entry] of this.cache.entries()) {
       if (now - entry.timestamp > entry.ttl) {
         keysToDelete.push(key);
       }
     }
-    
+
     keysToDelete.forEach(key => this.cache.delete(key));
-    
+
     // Only log in development
     if (process.env.NODE_ENV === 'development' && keysToDelete.length > 0) {
       console.log(`🧹 Cache cleanup: removed ${keysToDelete.length} expired entries`);
@@ -158,5 +158,5 @@ export const createCacheKey = (
 
 // Export cache stats for debugging (development only)
 if (typeof window !== "undefined" && process.env.NODE_ENV === 'development') {
-  (window as any).__API_CACHE__ = apiCache;
+  (window as unknown as Record<string, unknown>).__API_CACHE__ = apiCache;
 }

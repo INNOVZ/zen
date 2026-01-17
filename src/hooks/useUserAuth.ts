@@ -2,16 +2,16 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
-import { User } from "@/types/schemaTypes";
+import type { UserInfo } from "@/types";
 import { User as SupabaseUser } from "@supabase/supabase-js";
 
 // UUID validation regex
 const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-export const useUserAuth = (userId: string, 
+export const useUserAuth = (userId: string,
   setCurrentUser: (user: SupabaseUser | null) => void) => {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserInfo | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   useEffect(() => {
@@ -20,21 +20,25 @@ export const useUserAuth = (userId: string,
     const checkUserAccess = async () => {
       try {
         setIsAuthLoading(true);
-        const {
-          data: { session },
-        } = await supabase.auth.getSession();
+        const { data: userData, error: userError } =
+          await supabase.auth.getUser();
+
+        const authedUser = userData?.user || null;
 
         console.log("[useUserAuth] Checking access:", {
           urlUserId: userId,
-          sessionUserId: session?.user?.id,
-          hasSession: !!session,
-          currentPath: typeof window !== "undefined" ? window.location.pathname : "unknown",
+          userId: authedUser?.id,
+          hasUser: !!authedUser,
+          currentPath:
+            typeof window !== "undefined" ? window.location.pathname : "unknown",
         });
 
         if (!mounted) return;
 
-        if (!session?.user) {
-          console.warn("[useUserAuth] No session, redirecting to login");
+        if (userError || !authedUser) {
+          console.warn("[useUserAuth] No authenticated user, redirecting to login", {
+            userError,
+          });
           router.replace("/auth/login");
           return;
         }
@@ -47,34 +51,71 @@ export const useUserAuth = (userId: string,
           const currentPath = typeof window !== "undefined" ? window.location.pathname : "";
           const searchParams = typeof window !== "undefined" ? window.location.search : "";
           // Replace the invalid userId in the path with the correct one
-          const correctedPath = currentPath.replace(/\/dashboard\/[^\/]+/, `/dashboard/${session.user.id}`) + searchParams;
+          const correctedPath =
+            currentPath.replace(
+              /\/dashboard\/[^\/]+/,
+              `/dashboard/${authedUser.id}`
+            ) + searchParams;
           console.log("[useUserAuth] Redirecting to corrected path:", correctedPath);
           router.replace(correctedPath);
           return;
         }
 
         // Check if the userId in URL matches the logged-in user
-        if (session.user.id !== userId) {
+        if (authedUser.id !== userId) {
           console.error("[useUserAuth] User ID mismatch!", {
             expected: userId,
-            actual: session.user.id,
+            actual: authedUser.id,
           });
           toast.error("Unauthorized access");
-          router.replace(`/dashboard/${session.user.id}`);
+          router.replace(`/dashboard/${authedUser.id}`);
           return;
         }
 
-        console.log("[useUserAuth] Access granted for user:", session.user.id);
+        console.log("[useUserAuth] Access granted for user:", authedUser.id);
 
-        const userData: User = {
-          id: session.user.id,
-          email: session.user.email || "",
-          name: session.user.user_metadata?.name || session.user.email || "",
-          display_name: session.user.user_metadata?.display_name || session.user.user_metadata?.name || session.user.email || "",
+        // Fetch extended user info from the database
+        const { data: dbUser, error: dbError } = await supabase
+          .from("users")
+          .select("org_id, role, full_name, display_name")
+          .eq("id", authedUser.id)
+          .single();
+
+        if (dbError && dbError.code !== "PGRST116") {
+          console.warn("[useUserAuth] Failed to fetch extended user metadata:", dbError);
+        }
+
+        const userInfo: UserInfo = {
+          // BaseEntity
+          id: authedUser.id,
+
+          // BaseEntityWithTimestamps
+          created_at: authedUser.created_at,
+
+          // BaseOrganizationEntity
+          org_id: dbUser?.org_id || authedUser.user_metadata?.org_id || "",
+
+          // UserInfo specific
+          user_id: authedUser.id,
+          email: authedUser.email || "",
+          role: dbUser?.role || "user",
+          name:
+            dbUser?.full_name ||
+            authedUser.user_metadata?.name ||
+            authedUser.email ||
+            "",
+          display_name:
+            dbUser?.display_name ||
+            authedUser.user_metadata?.display_name ||
+            authedUser.user_metadata?.name ||
+            "",
+          full_name: dbUser?.full_name || authedUser.user_metadata?.name || "",
+          organization: null,
+          last_login: new Date().toISOString(),
         };
 
-        setUser(userData);
-        setCurrentUser(session.user);
+        setUser(userInfo);
+        setCurrentUser(authedUser);
       } catch (error) {
         console.error("Error checking user access:", error);
         if (mounted) {

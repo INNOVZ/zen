@@ -1,5 +1,5 @@
 // Enhanced Chat & Conversations API
-import { ConversationInfo } from "@/types/schemaTypes";
+import type { ConversationInfo } from "@/types";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
@@ -13,6 +13,7 @@ import type {
   HealthCheck,
   IntentAnalyticsResponse,
   IntentDetailsResponse,
+  AnalyticsDataExport,
 } from "./types";
 
 export const conversationApi = {
@@ -472,12 +473,7 @@ export const conversationApi = {
     startDate: string,
     endDate: string,
     format: "json" | "csv" = "json"
-  ): Promise<{
-    format: string;
-    data: unknown[];
-    count: number;
-    error?: string;
-  }> => {
+  ): Promise<AnalyticsDataExport> => {
     return fetchWithAuth("/api/chat/analytics/export", {
       method: "POST",
       body: JSON.stringify({

@@ -19,7 +19,7 @@ export const useTokenHandling = () => {
 
   const handleTokenError = (error: unknown) => {
     console.error('Token error:', error);
-    
+
     // Check if it's a token limit error
     if (typeof error === 'object' && error !== null) {
       const maybeStatus = (error as { status?: unknown }).status;
@@ -38,7 +38,7 @@ export const useTokenHandling = () => {
       setShowUpgradeModal(true);
       return true; // Indicates error was handled
     }
-    
+
     return false; // Error was not handled
   };
 
@@ -63,7 +63,7 @@ export const useTokenHandling = () => {
     try {
       const estimatedTokens = estimateTokensForOperation(operationType, messageLength, documentSize);
       const availability = await checkTokenAvailability(estimatedTokens);
-      
+
       if (!availability.has_enough_tokens) {
         setTokenError({
           error: 'Insufficient tokens',
@@ -75,7 +75,7 @@ export const useTokenHandling = () => {
         setShowUpgradeModal(true);
         return false;
       }
-      
+
       return true;
     } catch (error) {
       console.error('Error checking token availability:', error);
@@ -91,14 +91,12 @@ export const useTokenHandling = () => {
   ): Promise<boolean> => {
     try {
       const estimatedTokens = estimateTokensForOperation(operationType, messageLength, documentSize);
-      
+
       await consumeTokens({
-        entity_id: '', // Will be filled by the API
-        entity_type: 'user', // Will be determined by the API
-        tokens_consumed: estimatedTokens,
         operation_type: operationType,
+        token_count: estimatedTokens,
       });
-      
+
       return true;
     } catch (error) {
       return handleTokenError(error);
@@ -120,10 +118,10 @@ export const useTokenHandling = () => {
 
       // Make the API call
       const result = await apiCall();
-      
+
       // Consume tokens after successful operation
       await consumeTokensForOperation(operationType, messageLength, documentSize);
-      
+
       return result;
     } catch (error) {
       if (handleTokenError(error)) {

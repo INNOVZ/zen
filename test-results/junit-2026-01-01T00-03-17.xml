@@ -1,0 +1,230 @@
+<testsuites id="" name="" tests="10" failures="10" skipped="0" errors="0" time="11.75224">
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:03:17.309Z" hostname="chromium" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:9:7 › Authentication › should load login page ──────────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [chromium] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:03:17.309Z" hostname="firefox" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:9:7 › Authentication › should load login page ───────────────────────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/hk/cwhrf3xs4cs_xtxzzqw2gxgc0000gn/T/playwright_firefoxdev_profile-IG4Ikx -juggler-pipe -silent
+    <launched> pid=58701
+    [pid=58701][err] *** You are running in headless mode.
+    [pid=58701] <process did exit: exitCode=null, signal=SIGABRT>
+    [pid=58701] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/hk/cwhrf3xs4cs_xtxzzqw2gxgc0000gn/T/playwright_firefoxdev_profile-IG4Ikx -juggler-pipe -silent
+      - <launched> pid=58701
+      - [pid=58701][err] *** You are running in headless mode.
+      - [pid=58701] <process did exit: exitCode=null, signal=SIGABRT>
+      - [pid=58701] starting temporary directories cleanup
+      - [pid=58701] <gracefully close start>
+      - [pid=58701] finished temporary directories cleanup
+      - [pid=58701] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [firefox] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ─────────────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/hk/cwhrf3xs4cs_xtxzzqw2gxgc0000gn/T/playwright_firefoxdev_profile-t7Nep0 -juggler-pipe -silent
+    <launched> pid=58729
+    [pid=58729][err] *** You are running in headless mode.
+    [pid=58729] <process did exit: exitCode=null, signal=SIGABRT>
+    [pid=58729] starting temporary directories cleanup
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/firefox-1497/firefox/Nightly.app/Contents/MacOS/firefox -no-remote -headless -profile /var/folders/hk/cwhrf3xs4cs_xtxzzqw2gxgc0000gn/T/playwright_firefoxdev_profile-t7Nep0 -juggler-pipe -silent
+      - <launched> pid=58729
+      - [pid=58729][err] *** You are running in headless mode.
+      - [pid=58729] <process did exit: exitCode=null, signal=SIGABRT>
+      - [pid=58729] starting temporary directories cleanup
+      - [pid=58729] <gracefully close start>
+      - [pid=58729] finished temporary directories cleanup
+      - [pid=58729] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:03:17.309Z" hostname="webkit" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:9:7 › Authentication › should load login page ────────────────────────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+    <launched> pid=58736
+    [pid=58736][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58742 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+      - <launched> pid=58736
+      - [pid=58736][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58742 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+      - [pid=58736] <gracefully close start>
+      - [pid=58736] <kill>
+      - [pid=58736] <will force kill>
+      - [pid=58736] exception while trying to kill process: Error: kill ESRCH
+      - [pid=58736] <process did exit: exitCode=134, signal=null>
+      - [pid=58736] starting temporary directories cleanup
+      - [pid=58736] finished temporary directories cleanup
+      - [pid=58736] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [webkit] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ──────────────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+    <launched> pid=58800
+    [pid=58800][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58806 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+      - <launched> pid=58800
+      - [pid=58800][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58806 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+      - [pid=58800] <gracefully close start>
+      - [pid=58800] <kill>
+      - [pid=58800] <will force kill>
+      - [pid=58800] exception while trying to kill process: Error: kill ESRCH
+      - [pid=58800] <process did exit: exitCode=134, signal=null>
+      - [pid=58800] starting temporary directories cleanup
+      - [pid=58800] finished temporary directories cleanup
+      - [pid=58800] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:03:17.309Z" hostname="Mobile Chrome" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Chrome] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Executable doesn't exist at /Users/jithinjacob/Library/Caches/ms-playwright/chromium_headless_shell-1200/chrome-headless-shell-mac-x64/chrome-headless-shell
+    ╔═════════════════════════════════════════════════════════════════════════╗
+    ║ Looks like Playwright Test or Playwright was just installed or updated. ║
+    ║ Please run the following command to download new browsers:              ║
+    ║                                                                         ║
+    ║     npx playwright install                                              ║
+    ║                                                                         ║
+    ║ <3 Playwright Team                                                      ║
+    ╚═════════════════════════════════════════════════════════════════════════╝
+]]>
+</failure>
+</testcase>
+</testsuite>
+<testsuite name="e2e/auth.test.ts" timestamp="2026-01-01T00:03:17.309Z" hostname="Mobile Safari" tests="2" failures="2" skipped="0" time="0.002" errors="0">
+<testcase name="Authentication › should load login page" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:9:7 should load login page" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:9:7 › Authentication › should load login page ─────────────────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+    <launched> pid=58810
+    [pid=58810][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58817 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+      - <launched> pid=58810
+      - [pid=58810][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58817 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+      - [pid=58810] <gracefully close start>
+      - [pid=58810] <kill>
+      - [pid=58810] <will force kill>
+      - [pid=58810] exception while trying to kill process: Error: kill EPERM
+      - [pid=58810] <process did exit: exitCode=134, signal=null>
+      - [pid=58810] starting temporary directories cleanup
+      - [pid=58810] finished temporary directories cleanup
+      - [pid=58810] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+<testcase name="Authentication › should have login form elements" classname="e2e/auth.test.ts" time="0.001">
+<failure message="auth.test.ts:16:7 should have login form elements" type="FAILURE">
+<![CDATA[  [Mobile Safari] › e2e/auth.test.ts:16:7 › Authentication › should have login form elements ───────
+
+    Error: browserType.launch: Target page, context or browser has been closed
+    Browser logs:
+
+    <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+    <launched> pid=58832
+    [pid=58832][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58838 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+    Call log:
+      - <launching> /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh --inspector-pipe --headless --no-startup-window
+      - <launched> pid=58832
+      - [pid=58832][err] /Users/jithinjacob/Library/Caches/ms-playwright/webkit-2227/pw_run.sh: line 7: 58838 Abort trap: 6           DYLD_FRAMEWORK_PATH="$DYLIB_PATH" DYLD_LIBRARY_PATH="$DYLIB_PATH" "$PLAYWRIGHT" "$@"
+      - [pid=58832] <gracefully close start>
+      - [pid=58832] <kill>
+      - [pid=58832] <will force kill>
+      - [pid=58832] exception while trying to kill process: Error: kill ESRCH
+      - [pid=58832] <process did exit: exitCode=134, signal=null>
+      - [pid=58832] starting temporary directories cleanup
+      - [pid=58832] finished temporary directories cleanup
+      - [pid=58832] <gracefully close end>
+
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

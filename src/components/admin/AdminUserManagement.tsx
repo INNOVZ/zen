@@ -19,7 +19,7 @@ import { Users, Building, Plus } from "lucide-react";
 import type {
   OrganizationSignupRequest,
   SignupRequest,
-} from "@/types/subscription";
+} from "@/app/api/types/subscription";
 
 // interface User {
 //   id: string;
@@ -35,7 +35,7 @@ import type {
 export const AdminUserManagement = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
-  const [formData, setFormData] = useState<Partial<SignupRequest>>({
+  const [formData, setFormData] = useState<Partial<SignupRequest | OrganizationSignupRequest>>({
     entity_type: "user",
     selected_plan: "basic",
   });
@@ -78,7 +78,7 @@ export const AdminUserManagement = () => {
 
     setIsCreating(true);
     try {
-      let signupData: SignupRequest;
+      let signupData: SignupRequest | OrganizationSignupRequest;
 
       if (formData.entity_type === "organization") {
         signupData = {
@@ -96,7 +96,7 @@ export const AdminUserManagement = () => {
             | "professional"
             | "enterprise",
           password: formData.password!,
-        };
+        } as OrganizationSignupRequest;
       } else {
         signupData = {
           entity_type: "user",

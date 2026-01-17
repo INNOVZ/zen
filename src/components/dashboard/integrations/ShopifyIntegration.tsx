@@ -10,7 +10,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import {
   ShoppingCart,
-  CheckCircle2,
   Loader2,
   Info,
 } from "lucide-react";

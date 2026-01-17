@@ -12,16 +12,56 @@ import type {
   TokenAvailabilityCheck,
   SupportedChannels,
   ChannelConfigurations,
-  SubscriptionAnalytics,
-  ChannelComparison,
-  ChannelTrends,
   SignupRequest,
+  OrganizationSignupRequest,
   SignupResponse,
-  ChannelConfigUpdateRequest,
-  ChannelConfigUpdateResponse,
-} from "@/types/subscription";
+} from "@/types";
 
 const BASE_URL = getApiBaseUrl();
+
+// Local type definitions for subscription analytics
+interface SubscriptionAnalytics {
+  totalTokensConsumed: number;
+  tokensRemainingThisMonth: number;
+  percentageUsed: number;
+}
+
+interface ChannelComparison {
+  channels: Array<{
+    name: string;
+    usage: number;
+    percentage: number;
+  }>;
+  total: number;
+}
+
+interface ChannelTrends {
+  dates: string[];
+  data: Record<string, number[]>;
+}
+
+// SignupRequest is now imported from @/types
+
+// SignupResponse is now imported from @/types
+
+interface ChannelConfigUpdateRequest {
+  channel: SupportedChannels;
+  config: Record<string, unknown>;
+}
+
+interface ChannelConfigUpdateResponse {
+  success: boolean;
+  message?: string;
+}
+
+interface ChannelsResponse {
+  [key: string]: {
+    name: string;
+    description: string;
+    icon: string;
+    typical_use_cases: string[];
+  };
+}
 
 export const subscriptionApi = {
   // ==========================================
@@ -95,7 +135,7 @@ export const subscriptionApi = {
   // USER/ORGANIZATION SIGNUP
   // ==========================================
 
-  signup: async (request: SignupRequest): Promise<SignupResponse> => {
+  signup: async (request: SignupRequest | OrganizationSignupRequest): Promise<SignupResponse> => {
     try {
       // Admin signup doesn't require authentication - it's for creating new accounts
       const response = await fetch(`${BASE_URL}/api/onboarding/admin/signup`, {
@@ -209,11 +249,11 @@ export const subscriptionApi = {
 
       // Return mock availability for development
       return {
-        success: true,
         has_enough_tokens: true,
         tokens_required: requiredTokens,
         tokens_available: 7500,
-        can_proceed: true,
+        monthly_limit: 10000,
+        reset_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
       };
     }
   },
@@ -222,11 +262,11 @@ export const subscriptionApi = {
   // CHANNEL MANAGEMENT
   // ==========================================
 
-  getSupportedChannels: async (): Promise<SupportedChannels> => {
+  getSupportedChannels: async (): Promise<ChannelsResponse> => {
     const cacheKey = createCacheKey("/api/onboarding/channels");
 
     // Check cache first
-    const cached = apiCache.get<SupportedChannels>(cacheKey);
+    const cached = apiCache.get<ChannelsResponse>(cacheKey);
     if (cached) {
       return cached;
     }
@@ -249,7 +289,7 @@ export const subscriptionApi = {
       console.error("Error fetching supported channels:", error);
 
       // Return mock channels for development
-      const mockChannels: SupportedChannels = {
+      const mockChannels: ChannelsResponse = {
         website: {
           name: "Website Chat",
           description: "Embedded chat widget on websites",
