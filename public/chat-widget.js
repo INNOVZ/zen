@@ -45,7 +45,7 @@
     apiUrl: scriptTag?.getAttribute('data-api-url') || '', // URL must be provided via data attribute
     position: scriptTag?.getAttribute('data-position') || 'bottom-right',
     chatbotId: scriptTag?.getAttribute('data-chatbot-id') || null,
-    primaryColor: scriptTag?.getAttribute('data-primary-color') || '#000000',
+    primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
     botName: scriptTag?.getAttribute('data-bot-name') || 'Assistant',
     greeting: scriptTag?.getAttribute('data-greeting') || 'Hi! How can I help you today?',
     avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null,
@@ -628,14 +628,12 @@
           flex-wrap: wrap;
           gap: 6px;
           margin-bottom: 8px;
-          overflow-x: scroll;
-          scrollbar-width: none; /* Firefox */
         }
 
         .zaakiy-cta-button {
-          // border: 1px solid var(--zaakiy-primary-color, #3B82F6);
-          background-color: ${config.primaryColor}  !important;
-          color: #ffffff;
+          border: 1px solid var(--zaakiy-primary-color, #3B82F6);
+          background: #ffffff;
+          color: var(--zaakiy-primary-color, #3B82F6);
           padding: 4px 8px;
           border-radius: 7px;
           font-size: 11px;
@@ -712,24 +710,24 @@
           border-top: 1px solid #e1e5e9;
           display: flex;
           flex-direction: column;
-          align-items: center;
           gap: 10px;
           background: white;
           flex-shrink: 0;
         }
-           .zaakiy-chat-input-area {
-          border-top: 1px solid #e1e5e9;
+        .zaakiy-cta-container { 
+          width: 100%;
+        }
+        .zaakiy-chat-input-container {
+          width: 100%;
           display: flex;
           flex-direction: row;
           align-items: center;
           gap: 10px;
-          background: white;
-          flex-shrink: 0;
-        }
+        } 
         
         /* Ensure uniform input padding on mobile */
         @media (max-width: 768px) {
-          .zaakiy-chat-input-area {
+          .zaakiy-chat-input {
             padding-left: 15px !important;
             padding-right: 15px !important;
           }
@@ -1086,9 +1084,10 @@
         </div>
         
         <div class="zaakiy-chat-input">
-          <div class="zaakiy-chat-input-area">
+          <div class="zaakiy-cta-container">
             <div class="zaakiy-cta-buttons" id="zaakiy-cta-buttons" style="display: none;"></div>
           </div>
+          <div class="zaakiy-chat-input-container">
           <input 
             type="text" 
             class="zaakiy-input-field" 
@@ -1101,6 +1100,7 @@
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
             </svg>
           </button>
+          </div>
         </div>
         <p class="zaakiy-powered-by">Conversations powered by Zaakiy AI</p>
       </div>
