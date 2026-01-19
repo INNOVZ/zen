@@ -628,12 +628,14 @@
           flex-wrap: wrap;
           gap: 6px;
           margin-bottom: 8px;
+          overflow-x: scroll;
+          scrollbar-width: none; /* Firefox */
         }
 
         .zaakiy-cta-button {
           border: 1px solid var(--zaakiy-primary-color, #3B82F6);
-          background: #ffffff;
-          color: var(--zaakiy-primary-color, #3B82F6);
+          background: ${config.primaryColor}  !important;
+          color: #ffffff;
           padding: 4px 8px;
           border-radius: 7px;
           font-size: 11px;
@@ -714,10 +716,22 @@
           background: white;
           flex-shrink: 0;
         }
+           .zaakiy-chat-input-area {
+          padding: 15px;
+          padding-left: 15px !important;
+          padding-right: 15px !important;
+          border-top: 1px solid #e1e5e9;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 10px;
+          background: white;
+          flex-shrink: 0;
+        }
         
         /* Ensure uniform input padding on mobile */
         @media (max-width: 768px) {
-          .zaakiy-chat-input {
+          .zaakiy-chat-input-area {
             padding-left: 15px !important;
             padding-right: 15px !important;
           }
@@ -1074,7 +1088,9 @@
         </div>
         
         <div class="zaakiy-chat-input">
-          <div class="zaakiy-cta-buttons" id="zaakiy-cta-buttons" style="display: none;"></div>
+          <div class="zaakiy-chat-input-area">
+            <div class="zaakiy-cta-buttons" id="zaakiy-cta-buttons" style="display: none;"></div>
+          </div>
           <input 
             type="text" 
             class="zaakiy-input-field" 
@@ -1530,7 +1546,7 @@
     return false;
   };
 
-  window.zaakiySendMessage = function (messageOverride) {
+  window.zaakiySendMessage = async function (messageOverride) {
     const input = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
 
@@ -1556,78 +1572,102 @@
     // Show typing indicator
     zaakiyShowTyping();
 
-    // Send to API
     const requestBody = {
       message: message,
       chatbot_id: selectedChatbot?.id || config.chatbotId,
       session_id: conversationId || null
     };
 
-    // Create abort controller for timeout
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    try {
+      // Use streaming endpoint
+      const response = await fetch(`${config.apiUrl}/api/public/chat/stream`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(requestBody)
+      });
 
-    fetch(`${config.apiUrl}/api/public/chat`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(requestBody),
-      signal: controller.signal
-    })
-      .then(async response => {
-        clearTimeout(timeoutId); // Clear timeout on success
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
 
-        if (!response.ok) {
-          const errorText = await response.text();
+      // Hide typing indicator immediately when response starts
+      zaakiyHideTyping();
 
-          let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
-          try {
-            const errorData = JSON.parse(errorText);
-            if (errorData.detail) {
-              errorMessage = `Error: ${errorData.detail}`;
-            }
-          } catch {
-            // Not JSON, use text
-            if (errorText) {
-              errorMessage = `Server error: ${errorText.substring(0, 100)}`;
+      // Create empty bot message to fill
+      const { contentDiv, contentWrapper } = zaakiyAddMessage('', 'bot', false);
+      let fullResponseText = '';
+      let buttons = [];
+
+      // Setup stream reader
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        buffer += chunk;
+
+        const lines = buffer.split('\n\n');
+        buffer = lines.pop() || ''; // Keep the last incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const jsonStr = line.slice(6);
+            if (!jsonStr) continue;
+
+            try {
+              const data = JSON.parse(jsonStr);
+
+              if (data.type === 'token' && data.content) {
+                fullResponseText += data.content;
+                contentDiv.innerHTML = parseMarkdown(fullResponseText);
+                // Auto-scroll
+                const messagesContainer = document.getElementById('zaakiy-messages');
+                if (messagesContainer) {
+                  messagesContainer.scrollTop = messagesContainer.scrollHeight;
+                }
+              }
+              else if (data.type === 'complete') {
+                if (data.content && data.content.length > fullResponseText.length) {
+                  fullResponseText = data.content;
+                  contentDiv.innerHTML = parseMarkdown(fullResponseText);
+                }
+                if (data.buttons) {
+                  buttons = data.buttons;
+                  const buttonsEl = createMessageButtons(buttons);
+                  if (buttonsEl) contentWrapper.appendChild(buttonsEl);
+                }
+              }
+              else if (data.type === 'error') {
+                contentDiv.innerHTML += `<br><em>Error: ${data.error}</em>`;
+              }
+
+              if (data.session_id && !conversationId) {
+                conversationId = data.session_id;
+                localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+              }
+
+            } catch (e) {
+              console.error('Error parsing stream data', e);
             }
           }
-
-          throw new Error(errorMessage);
         }
-        return response.json();
-      })
-      .then(data => {
-        zaakiyHideTyping();
+      }
 
-        if (data.session_id && !conversationId) {
-          conversationId = data.session_id;
-          localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
-        }
+      // Save final state
+      // We need to update the internal storage manually since we bypassed zaakiyAddMessage's auto-save
+      // Or just call saveCurrentMessages()
+      saveCurrentMessages();
 
-        zaakiyAddMessage(
-          data.response || 'Sorry, I had trouble processing that.',
-          'bot',
-          true,
-          false,
-          null,
-          data.buttons || []
-        );
-      })
-      .catch((error) => {
-        clearTimeout(timeoutId); // Clear timeout on error
-        zaakiyHideTyping();
-
-        // Handle different error types
-        let errorMessage = 'Sorry, I\'m having connection issues. Please try again.';
-
-        if (error.name === 'AbortError') {
-          errorMessage = 'Request timed out. The server is taking too long to respond. Please try again.';
-        } else if (error.message) {
-          errorMessage = error.message;
-        }
-
-        zaakiyAddMessage(errorMessage, 'bot', true);
-      });
+    } catch (error) {
+      zaakiyHideTyping();
+      zaakiyAddMessage('Sorry, I encountered an error. Please try again.', 'bot', true);
+      console.error('Chat error:', error);
+    }
   };
 
   // Add global function to clear chat history
@@ -1820,6 +1860,8 @@
     if (saveToStorage) {
       saveCurrentMessages();
     }
+
+    return { messageDiv, contentDiv, contentWrapper };
   }
 
   // Helper function to get all current messages
