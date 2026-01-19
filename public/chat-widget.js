@@ -632,10 +632,10 @@
 
         .zaakiy-cta-button {
           background: ${config.primaryColor} !important;
-          color: var(--zaakiy-primary-color, #3B82F6);
+          color: var(--zaakiy-primary-color, #fff);
           padding: 4px 8px;
           border-radius: 7px;
-          font-size: 9px;
+          font-size: 11px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
@@ -1331,12 +1331,49 @@
       return;
     }
 
+    // Lucide Icons (SVG)
+    const icons = {
+      calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
+      clipboard: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`,
+      default: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`
+    };
+
     container.style.display = 'flex';
     ctaButtons.forEach((button) => {
       const buttonEl = document.createElement('button');
       buttonEl.type = 'button';
       buttonEl.className = 'zaakiy-cta-button';
-      buttonEl.textContent = button.label || button.id || 'Action';
+
+      // Determine Icon and Label
+      let icon = icons.default;
+      let label = button.label || button.id || 'Action';
+
+      // Sanitize label (remove emojis if present) and select icon
+      if (button.id === 'book_appointment' || label.toLowerCase().includes('book')) {
+        icon = icons.calendar;
+        label = label.replace(/📅|🗓️/g, '').trim();
+      } else if (button.id === 'enquiry' || label.toLowerCase().includes('enquiry')) {
+        icon = icons.clipboard;
+        label = label.replace(/📋|📝/g, '').trim();
+      }
+
+      // Structure with Icon
+      buttonEl.innerHTML = `<span style="display:flex; align-items:center; gap:6px;">${icon} <span>${label}</span></span>`;
+
+      // Explicit Output Styling (Force Brand Color)
+      // We use inline styles to guarantee priority over any generic CSS
+      buttonEl.style.setProperty('background', config.primaryColor, 'important');
+      buttonEl.style.setProperty('border-color', config.primaryColor, 'important');
+      buttonEl.style.color = '#ffffff';
+
+      // Hover effect simulation for inline styles
+      buttonEl.onmouseenter = () => {
+        buttonEl.style.opacity = '0.9';
+      };
+      buttonEl.onmouseleave = () => {
+        buttonEl.style.opacity = '1';
+      };
+
       buttonEl.addEventListener('click', () => {
         const inputField = document.getElementById('zaakiy-input');
         if (inputField && inputField.disabled) return;
