@@ -45,7 +45,7 @@
     apiUrl: scriptTag?.getAttribute('data-api-url') || '', // URL must be provided via data attribute
     position: scriptTag?.getAttribute('data-position') || 'bottom-right',
     chatbotId: scriptTag?.getAttribute('data-chatbot-id') || null,
-    primaryColor: scriptTag?.getAttribute('data-primary-color') || '#3B82F6',
+    primaryColor: scriptTag?.getAttribute('data-primary-color') || '#000000',
     botName: scriptTag?.getAttribute('data-bot-name') || 'Assistant',
     greeting: scriptTag?.getAttribute('data-greeting') || 'Hi! How can I help you today?',
     avatarUrl: scriptTag?.getAttribute('data-avatar-url') || null,
@@ -633,8 +633,8 @@
         }
 
         .zaakiy-cta-button {
-          border: 1px solid var(--zaakiy-primary-color, #3B82F6);
-          background: ${config.primaryColor}  !important;
+          // border: 1px solid var(--zaakiy-primary-color, #3B82F6);
+          background-color: ${config.primaryColor}  !important;
           color: #ffffff;
           padding: 4px 8px;
           border-radius: 7px;
@@ -711,6 +711,7 @@
           padding-right: 15px !important;
           border-top: 1px solid #e1e5e9;
           display: flex;
+          flex-direction: column;
           align-items: center;
           gap: 10px;
           background: white;
@@ -722,7 +723,6 @@
           padding-right: 15px !important;
           border-top: 1px solid #e1e5e9;
           display: flex;
-          flex-direction: column;
           align-items: center;
           gap: 10px;
           background: white;
