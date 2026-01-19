@@ -718,11 +718,9 @@
           flex-shrink: 0;
         }
            .zaakiy-chat-input-area {
-          padding: 15px;
-          padding-left: 15px !important;
-          padding-right: 15px !important;
           border-top: 1px solid #e1e5e9;
           display: flex;
+          flex-direction: row;
           align-items: center;
           gap: 10px;
           background: white;
