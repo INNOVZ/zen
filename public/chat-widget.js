@@ -631,12 +631,11 @@
         }
 
         .zaakiy-cta-button {
-          border: 1px solid var(--zaakiy-primary-color, #3B82F6);
-          background: #ffffff;
+          background: ${config.primaryColor} !important;
           color: var(--zaakiy-primary-color, #3B82F6);
           padding: 4px 8px;
           border-radius: 7px;
-          font-size: 11px;
+          font-size: 9px;
           cursor: pointer;
           transition: all 0.2s ease;
         }
@@ -710,7 +709,7 @@
           border-top: 1px solid #e1e5e9;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 5px;
           background: white;
           flex-shrink: 0;
         }
@@ -1019,7 +1018,7 @@
             font-size: 12px;
             color: #333;    
             text-align: center;
-            padding: 8px 15px !important;
+            padding: 2px 15px !important;
             padding-left: 15px !important;
             padding-right: 15px !important;
             margin: 0;
