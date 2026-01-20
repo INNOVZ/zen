@@ -34,9 +34,19 @@ export default function GoogleOAuthAppConfig() {
   });
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
-  const [redirectUri, setRedirectUri] = useState(
-    "http://localhost:8001/api/auth/google/callback"
-  );
+
+  // Determine default redirect URI based on environment
+  const getDefaultRedirectUri = () => {
+    if (typeof window !== 'undefined') {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (apiUrl && !apiUrl.includes('localhost')) {
+        return `${apiUrl}/api/auth/google/callback`;
+      }
+    }
+    return "http://localhost:8001/api/auth/google/callback";
+  };
+
+  const [redirectUri, setRedirectUri] = useState(getDefaultRedirectUri());
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const hasLoaded = useRef(false);
@@ -54,6 +64,17 @@ export default function GoogleOAuthAppConfig() {
       setIsLoading(true);
       const appConfig = await mcpApi.getGoogleOAuthAppConfig();
       setConfig(appConfig);
+
+      // CRITICAL FIX: Populate form fields from loaded config
+      if (appConfig.client_id) {
+        setClientId(appConfig.client_id);
+      }
+      if (appConfig.redirect_uri) {
+        setRedirectUri(appConfig.redirect_uri);
+      } else {
+        // Use production default if no stored redirect_uri
+        setRedirectUri(getDefaultRedirectUri());
+      }
     } catch (error) {
       console.error("Failed to load Google OAuth app config:", error);
     } finally {
@@ -62,17 +83,45 @@ export default function GoogleOAuthAppConfig() {
   };
 
   const handleSave = async () => {
-    if (!clientId || !clientSecret) {
-      toast.error("Please enter both Client ID and Client Secret");
-      return;
+    // When already configured, only require client_id and secret if they're being changed
+    if (!config.configured) {
+      if (!clientId || !clientSecret) {
+        toast.error("Please enter both Client ID and Client Secret");
+        return;
+      }
     }
 
     try {
       setIsSaving(true);
-      await mcpApi.configureGoogleOAuthApp({
-        client_id: clientId,
-        client_secret: clientSecret,
+
+      // Build the config object - only include fields that are set
+      const configToSave: {
+        client_id?: string;
+        client_secret?: string;
+        redirect_uri?: string;
+      } = {
         redirect_uri: redirectUri,
+      };
+
+      // Only include client credentials if they're provided
+      if (clientId && !clientId.includes("...")) {
+        configToSave.client_id = clientId;
+      }
+      if (clientSecret) {
+        configToSave.client_secret = clientSecret;
+      }
+
+      // For new configurations, both are required
+      if (!config.configured && (!configToSave.client_id || !configToSave.client_secret)) {
+        toast.error("Please enter both Client ID and Client Secret");
+        setIsSaving(false);
+        return;
+      }
+
+      await mcpApi.configureGoogleOAuthApp(configToSave as {
+        client_id: string;
+        client_secret: string;
+        redirect_uri?: string;
       });
       toast.success("Google OAuth app configured successfully!");
       await loadConfig();
@@ -83,6 +132,27 @@ export default function GoogleOAuthAppConfig() {
       const errorObj = error as { message?: string };
       const errorMessage =
         errorObj?.message || "Failed to configure Google OAuth app";
+      toast.error(errorMessage);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleUpdateRedirectUri = async () => {
+    try {
+      setIsSaving(true);
+      // Call a dedicated endpoint to update just the redirect URI
+      await mcpApi.configureGoogleOAuthApp({
+        client_id: "", // Backend should handle empty values as "don't update"
+        client_secret: "",
+        redirect_uri: redirectUri,
+      });
+      toast.success("Redirect URI updated successfully!");
+      await loadConfig();
+    } catch (error: unknown) {
+      console.error("Failed to update redirect URI:", error);
+      const errorObj = error as { message?: string };
+      const errorMessage = errorObj?.message || "Failed to update redirect URI";
       toast.error(errorMessage);
     } finally {
       setIsSaving(false);
@@ -195,7 +265,7 @@ export default function GoogleOAuthAppConfig() {
 
           <Button
             onClick={handleSave}
-            disabled={isSaving || !clientId || !clientSecret}
+            disabled={isSaving || (!config.configured && (!clientId || !clientSecret))}
             className="w-full"
           >
             {isSaving ? (
@@ -204,11 +274,29 @@ export default function GoogleOAuthAppConfig() {
                 Saving...
               </>
             ) : config.configured ? (
-              "Update Configuration"
+              "Update Full Configuration"
             ) : (
               "Save Configuration"
             )}
           </Button>
+
+          {config.configured && (
+            <Button
+              onClick={handleUpdateRedirectUri}
+              disabled={isSaving}
+              variant="outline"
+              className="w-full"
+            >
+              {isSaving ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Updating...
+                </>
+              ) : (
+                "Update Redirect URI Only"
+              )}
+            </Button>
+          )}
 
           {config.configured && (
             <div className="pt-2 border-t">
