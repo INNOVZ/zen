@@ -1190,9 +1190,13 @@
         if (!target.classList.contains('zaakiy-message-button')) return;
         const value = target.getAttribute('data-value') || target.textContent || '';
         if (!value) return;
+
+        // Use text content for display if available and different from value (e.g. time slots)
+        const display = target.textContent || value;
+
         const inputField = document.getElementById('zaakiy-input');
         if (inputField && inputField.disabled) return;
-        window.zaakiySendMessage(value);
+        window.zaakiySendMessage(value, display);
       });
     }
 
@@ -1586,7 +1590,7 @@
     return false;
   };
 
-  window.zaakiySendMessage = async function (messageOverride) {
+  window.zaakiySendMessage = async function (messageOverride, displayOverride = null) {
     const input = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
 
@@ -1603,8 +1607,8 @@
       return;
     }
 
-    // Add user message
-    zaakiyAddMessage(message, 'user', true); // Save to storage
+    // Add user message (use displayOverride if provided, otherwise message)
+    zaakiyAddMessage(displayOverride || message, 'user', true); // Save to storage
     if (!messageOverride && input) {
       input.value = '';
     }
