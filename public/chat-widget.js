@@ -92,6 +92,10 @@
     // If URL is already absolute (starts with http:// or https://), return as-is
     // Priority: Absolute URLs should be respected to prevent breaking valid direct links
     if (urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
+      // Robustness: If the current page is HTTPS, upgrading HTTP to HTTPS prevents Mixed Content blocking
+      if (window.location.protocol === 'https:' && urlStr.startsWith('http://')) {
+        return urlStr.replace('http://', 'https://');
+      }
       return urlStr;
     }
 
@@ -142,49 +146,21 @@
     img.className = isHeader ? 'zaakiy-avatar' : 'zaakiy-message-avatar';
     img.alt = botName || 'Bot';
 
-    // Track retry attempts as a property on the element to avoid closure issues
-    img.dataset.retryAttempted = 'false';
-
-    // Check if URL is from same origin - only set crossOrigin for cross-origin requests
-    // This prevents CORS issues in Chrome when server doesn't send proper headers
-    let needsCrossOrigin = false;
-    try {
-      const urlObj = new URL(convertedUrl, window.location.href);
-      const currentOrigin = window.location.origin;
-      // Only set crossOrigin if it's a different origin
-      if (urlObj.origin !== currentOrigin) {
-        needsCrossOrigin = true;
-        img.crossOrigin = 'anonymous';
-      }
-    } catch {
-      // If URL parsing fails, don't set crossOrigin
-      // This handles relative URLs and edge cases
-    }
+    // IMPORTANT: Do NOT set crossOrigin="anonymous" here.
+    // 1. We are only displaying the image, not manipulating it on a canvas.
+    // 2. Setting crossOrigin requires the server to send CORS headers. If they are missing, Chrome blocks the image completely.
+    // 3. By not setting it, we get a standard "opaque" image load which works fine for display even without CORS headers.
 
     // Add error handler to fallback to placeholder if image fails to load
-    // This handles network errors, CORS issues, 404s, etc.
     img.onerror = function () {
-      // Try once more without crossOrigin if it was set and we haven't retried (Chrome-specific fix)
-      if (needsCrossOrigin && img.dataset.retryAttempted === 'false' && img.crossOrigin) {
-        img.dataset.retryAttempted = 'true';
-        // Remove crossOrigin and retry
-        img.removeAttribute('crossorigin');
-        img.src = '';
-        // Use setTimeout to ensure the error handler is reset
-        setTimeout(function () {
-          img.src = convertedUrl;
-        }, 10);
-        return;
-      }
-
-      // If retry failed or crossOrigin wasn't set, show placeholder
+      // If image fails to load (404, network error, etc.), show placeholder
       const placeholder = createAvatarPlaceholder(isHeader);
       if (img.parentNode) {
         img.parentNode.replaceChild(placeholder, img);
       }
     };
 
-    // Set src after setting crossOrigin (if needed) and error handlers
+    // Set src immediately
     img.src = convertedUrl;
 
     return img;
