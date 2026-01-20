@@ -89,32 +89,57 @@
     const urlStr = String(url).trim();
     if (urlStr === 'null' || urlStr === 'undefined' || urlStr === '') return null;
 
-    // If URL is already absolute (starts with http:// or https://), return as-is
-    // Priority: Absolute URLs should be respected to prevent breaking valid direct links
-    if (urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
-      // Robustness: If the current page is HTTPS, upgrading HTTP to HTTPS prevents Mixed Content blocking
-      if (window.location.protocol === 'https:' && urlStr.startsWith('http://')) {
-        return urlStr.replace('http://', 'https://');
-      }
-      return urlStr;
-    }
+    // Clean API URL (remove trailing slash) used for construction
+    const apiBase = config.apiUrl.replace(/\/$/, '');
 
-    // Handle legacy Supabase storage URLs (only for relative paths or specific legacy format)
+    // 1. Handle legacy Supabase storage URLs (highest priority)
+    // This catches both relative paths AND absolute URLs (like http://localhost:8000/storage/...)
+    // and routes them through the reliable backend proxy.
     if (urlStr.includes('storage/v1/object/uploads/')) {
       const pathParts = urlStr.split('storage/v1/object/uploads/');
       if (pathParts.length > 1) {
         const filePath = pathParts[1];
-        return `${config.apiUrl}/api/uploads/avatar/legacy/${filePath}`;
+        // Ensure we don't carry over query params if they're already in the split part (split splits by string)
+        // safe way is to take the rest.
+        return `${apiBase}/api/uploads/avatar/legacy/${filePath}`;
       }
     }
 
-    // If URL is relative (starts with /), prepend the API base URL
-    if (urlStr.startsWith('/')) {
-      return `${config.apiUrl}${urlStr}`;
+    // 2. Handle Absolute URLs
+    if (urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
+      try {
+        const urlObj = new URL(urlStr);
+        const currentProtocol = window.location.protocol;
+        const isPageLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        // Fix: Detect "Localhost in Production"
+        // If the image pointed to localhost/127.0.0.1, but we are NOT on localhost,
+        // it means the DB has a dev URL. We should try to fetch it from the production API instead.
+        if (!isPageLocalhost && (urlObj.hostname === 'localhost' || urlObj.hostname === '127.0.0.1')) {
+          // Keep the path and query, but replace origin with apiBase
+          return `${apiBase}${urlObj.pathname}${urlObj.search}`;
+        }
+
+        // Fix: Mixed Content Prevention (HTTP image on HTTPS page)
+        // Only upgrade to HTTPS if we are on HTTPS.
+        if (currentProtocol === 'https:' && urlObj.protocol === 'http:') {
+          return urlStr.replace('http://', 'https://');
+        }
+
+        return urlStr;
+      } catch (e) {
+        // Fallback for parsing errors - just try simple HTTPS upgrade
+        if (window.location.protocol === 'https:' && urlStr.startsWith('http://')) {
+          return urlStr.replace('http://', 'https://');
+        }
+        return urlStr;
+      }
     }
 
-    // Otherwise, assume it's a relative path and prepend the API URL
-    return `${config.apiUrl}/${urlStr}`;
+    // 3. Handle Relative Paths
+    // Ensure we treat it as a path appended to API URL
+    const path = urlStr.startsWith('/') ? urlStr : `/${urlStr}`;
+    return `${apiBase}${path}`;
   }
 
   // Helper function to create avatar placeholder element
