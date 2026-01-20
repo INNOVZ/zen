@@ -1686,9 +1686,14 @@
                 contentDiv.innerHTML += `<br><em>Error: ${data.error}</em>`;
               }
 
-              if (data.session_id && !conversationId) {
-                conversationId = data.session_id;
-                localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+              if (data.session_id) {
+                // Always update session ID if backend provides one - this ensures we stay in sync
+                // This is critical for flows like Booking where state is tied to the conversation ID
+                if (conversationId !== data.session_id) {
+                  conversationId = data.session_id;
+                  localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+                  console.log('Zaakiy: Updated session ID to', conversationId);
+                }
               }
 
             } catch (e) {
