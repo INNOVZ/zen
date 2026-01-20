@@ -85,27 +85,32 @@
   function convertLegacyUrl(url) {
     if (!url) return null;
 
-    // Handle legacy Supabase storage URLs
-    if (url.includes('storage/v1/object/uploads/')) {
-      const pathParts = url.split('storage/v1/object/uploads/');
+    // Normalize input
+    const urlStr = String(url).trim();
+    if (urlStr === 'null' || urlStr === 'undefined' || urlStr === '') return null;
+
+    // If URL is already absolute (starts with http:// or https://), return as-is
+    // Priority: Absolute URLs should be respected to prevent breaking valid direct links
+    if (urlStr.startsWith('http://') || urlStr.startsWith('https://')) {
+      return urlStr;
+    }
+
+    // Handle legacy Supabase storage URLs (only for relative paths or specific legacy format)
+    if (urlStr.includes('storage/v1/object/uploads/')) {
+      const pathParts = urlStr.split('storage/v1/object/uploads/');
       if (pathParts.length > 1) {
         const filePath = pathParts[1];
         return `${config.apiUrl}/api/uploads/avatar/legacy/${filePath}`;
       }
     }
 
-    // If URL is already absolute (starts with http:// or https://), return as-is
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-      return url;
-    }
-
     // If URL is relative (starts with /), prepend the API base URL
-    if (url.startsWith('/')) {
-      return `${config.apiUrl}${url}`;
+    if (urlStr.startsWith('/')) {
+      return `${config.apiUrl}${urlStr}`;
     }
 
     // Otherwise, assume it's a relative path and prepend the API URL
-    return `${config.apiUrl}/${url}`;
+    return `${config.apiUrl}/${urlStr}`;
   }
 
   // Helper function to create avatar placeholder element
@@ -137,8 +142,8 @@
     img.className = isHeader ? 'zaakiy-avatar' : 'zaakiy-message-avatar';
     img.alt = botName || 'Bot';
 
-    // Track retry attempts to prevent infinite loops
-    let retryAttempted = false;
+    // Track retry attempts as a property on the element to avoid closure issues
+    img.dataset.retryAttempted = 'false';
 
     // Check if URL is from same origin - only set crossOrigin for cross-origin requests
     // This prevents CORS issues in Chrome when server doesn't send proper headers
@@ -160,8 +165,8 @@
     // This handles network errors, CORS issues, 404s, etc.
     img.onerror = function () {
       // Try once more without crossOrigin if it was set and we haven't retried (Chrome-specific fix)
-      if (needsCrossOrigin && !retryAttempted && img.crossOrigin) {
-        retryAttempted = true;
+      if (needsCrossOrigin && img.dataset.retryAttempted === 'false' && img.crossOrigin) {
+        img.dataset.retryAttempted = 'true';
         // Remove crossOrigin and retry
         img.removeAttribute('crossorigin');
         img.src = '';
