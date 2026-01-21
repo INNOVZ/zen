@@ -127,7 +127,7 @@
         }
 
         return urlStr;
-      } catch (e) {
+      } catch {
         // Fallback for parsing errors - just try simple HTTPS upgrade
         if (window.location.protocol === 'https:' && urlStr.startsWith('http://')) {
           return urlStr.replace('http://', 'https://');
@@ -1190,13 +1190,9 @@
         if (!target.classList.contains('zaakiy-message-button')) return;
         const value = target.getAttribute('data-value') || target.textContent || '';
         if (!value) return;
-
-        // Use text content for display if available and different from value (e.g. time slots)
-        const display = target.textContent || value;
-
         const inputField = document.getElementById('zaakiy-input');
         if (inputField && inputField.disabled) return;
-        window.zaakiySendMessage(value, display);
+        window.zaakiySendMessage(value);
       });
     }
 
@@ -1590,7 +1586,7 @@
     return false;
   };
 
-  window.zaakiySendMessage = async function (messageOverride, displayOverride = null) {
+  window.zaakiySendMessage = async function (messageOverride) {
     const input = document.getElementById('zaakiy-input');
     const sendButton = document.querySelector('.zaakiy-send-button');
 
@@ -1607,8 +1603,8 @@
       return;
     }
 
-    // Add user message (use displayOverride if provided, otherwise message)
-    zaakiyAddMessage(displayOverride || message, 'user', true); // Save to storage
+    // Add user message
+    zaakiyAddMessage(message, 'user', true); // Save to storage
     if (!messageOverride && input) {
       input.value = '';
     }
