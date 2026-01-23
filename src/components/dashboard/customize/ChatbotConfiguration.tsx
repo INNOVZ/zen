@@ -126,7 +126,7 @@ export default function ChatbotConfiguration() {
           temperature: 0.7,
           max_tokens: 1000,
         },
-        is_active: chatbot.chain_status === "ready",
+        is_active: chatbot.is_active ?? (chatbot.status === "active"),
       } satisfies ChatbotInfo);
       setUnsavedChanges(false);
       setValidationErrors([]);
@@ -292,8 +292,7 @@ export default function ChatbotConfiguration() {
       } catch (error) {
         console.error("Avatar upload error:", error);
         toast.error(
-          `Failed to upload image: ${
-            error instanceof Error ? error.message : "Unknown error"
+          `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"
           }`
         );
       }
@@ -487,9 +486,9 @@ export default function ChatbotConfiguration() {
                       {inputValues.avatar_url.includes(
                         "/api/uploads/avatar/"
                       ) ||
-                      inputValues.avatar_url.includes(
-                        "storage/v1/object/uploads"
-                      )
+                        inputValues.avatar_url.includes(
+                          "storage/v1/object/uploads"
+                        )
                         ? "Uploaded image"
                         : "External URL"}
                     </p>
@@ -580,11 +579,10 @@ export default function ChatbotConfiguration() {
                 {TONE_OPTIONS.map((option) => (
                   <div
                     key={option.value}
-                    className={`p-2 border rounded-lg cursor-pointer transition-all ${
-                      config.tone === option.value
+                    className={`p-2 border rounded-lg cursor-pointer transition-all ${config.tone === option.value
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-gray-300"
-                    }`}
+                      }`}
                     onClick={() => handleFieldChange("tone", option.value)}
                   >
                     <div className="flex items-center gap-3">
@@ -608,11 +606,10 @@ export default function ChatbotConfiguration() {
                   {COLOR_PRESETS.map((color) => (
                     <button
                       key={color}
-                      className={`w-6 h-6 rounded-full border-2 ${
-                        config.color_hex === color
+                      className={`w-6 h-6 rounded-full border-2 ${config.color_hex === color
                           ? "border-gray-900 scale-110"
                           : "border-gray-200 hover:border-gray-400"
-                      } transition-all`}
+                        } transition-all`}
                       style={{ backgroundColor: color }}
                       onClick={() => handleFieldChange("color_hex", color)}
                     />
