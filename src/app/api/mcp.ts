@@ -42,17 +42,25 @@ interface ToolExecuteResponse {
   result?: string | number | boolean | Record<string, unknown> | unknown[];
   error?: string;
   message?: string;
-  [key: string]: string | number | boolean | Record<string, unknown> | unknown[] | undefined;
+  [key: string]:
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | unknown[]
+    | undefined;
 }
 
 export const mcpApi = {
   /**
    * List all available MCP tools for the organization with multilingual descriptions
-   * 
+   *
    * @param language - Language code (en, es, fr, de, pt, ar, zh, ja). Defaults to 'en'
    * @returns Promise with tools array and metadata
    */
-  listTools: async (language: string = "en"): Promise<MCPToolsResponse & { language?: string }> => {
+  listTools: async (
+    language: string = "en",
+  ): Promise<MCPToolsResponse & { language?: string }> => {
     try {
       const params = new URLSearchParams();
       params.append("language", language);
@@ -71,7 +79,7 @@ export const mcpApi = {
    */
   executeTool: async (
     toolName: string,
-    parameters: Record<string, unknown> = {}
+    parameters: Record<string, unknown> = {},
   ): Promise<ToolExecuteResponse> => {
     return fetchWithAuth("/api/mcp/tools/execute", {
       method: "POST",
@@ -96,7 +104,14 @@ export const mcpApi = {
     } catch (error) {
       console.warn("Failed to get all integration statuses:", error);
       // Return default statuses for all providers
-      const providers = ["google", "hubspot", "salesforce", "pipedrive", "zoho", "shopify"];
+      const providers = [
+        "google",
+        "hubspot",
+        "salesforce",
+        "pipedrive",
+        "zoho",
+        "shopify",
+      ];
       return {
         statuses: providers.map((provider) => ({
           provider,
@@ -111,14 +126,14 @@ export const mcpApi = {
    * Get integration status for a single provider
    */
   getIntegrationStatus: async (
-    provider: string
+    provider: string,
   ): Promise<IntegrationStatus> => {
     try {
       const response = await fetchWithAuth(
         `/api/integrations/${provider}/status`,
         {
           method: "GET",
-        }
+        },
       );
       return response;
     } catch {
@@ -136,7 +151,7 @@ export const mcpApi = {
    */
   toggleIntegration: async (
     provider: string,
-    enabled: boolean
+    enabled: boolean,
   ): Promise<boolean> => {
     try {
       const response = await fetchWithAuth(
@@ -144,7 +159,7 @@ export const mcpApi = {
         {
           method: "POST",
           body: JSON.stringify({ enabled }),
-        }
+        },
       );
       return response.success || false;
     } catch (error) {
@@ -158,10 +173,13 @@ export const mcpApi = {
    */
   getGoogleOAuthUrl: async (scopes: string[]): Promise<GoogleOAuthResponse> => {
     try {
-      const response = await fetchWithAuth("/api/integrations/google/oauth/authorize", {
-        method: "POST",
-        body: JSON.stringify({ scopes }),
-      });
+      const response = await fetchWithAuth(
+        "/api/integrations/google/oauth/authorize",
+        {
+          method: "POST",
+          body: JSON.stringify({ scopes }),
+        },
+      );
       return response;
     } catch (error: unknown) {
       console.error("Google OAuth authorize error:", {
@@ -171,11 +189,11 @@ export const mcpApi = {
         status: (error as ApiErrorResponse)?.response?.status,
         data: (error as ApiErrorResponse)?.response?.data,
       });
-      
+
       // Extract detailed error from response
       let errorMessage = "Failed to get Google OAuth URL";
       const apiError = error as ApiErrorResponse;
-      
+
       if (apiError?.response?.data?.detail) {
         errorMessage = apiError.response.data.detail;
       } else if (apiError?.detail) {
@@ -183,17 +201,17 @@ export const mcpApi = {
       } else if (error instanceof Error && error.message) {
         errorMessage = error.message;
       }
-      
+
       // Create a more detailed error object
       const detailedError = new Error(errorMessage) as Error & {
-        response?: ApiErrorResponse['response'];
+        response?: ApiErrorResponse["response"];
         status?: number;
         originalError?: unknown;
       };
       detailedError.response = apiError?.response;
       detailedError.status = apiError?.response?.status;
       detailedError.originalError = error;
-      
+
       throw detailedError;
     }
   },
@@ -203,7 +221,7 @@ export const mcpApi = {
    */
   storeGoogleCredentials: async (
     code: string,
-    state: string
+    state: string,
   ): Promise<boolean> => {
     try {
       const response = await fetchWithAuth(
@@ -211,7 +229,7 @@ export const mcpApi = {
         {
           method: "POST",
           body: JSON.stringify({ code, state }),
-        }
+        },
       );
       return response.success || false;
     } catch (error) {
@@ -248,18 +266,23 @@ export const mcpApi = {
   /**
    * Get Zoho OAuth URL
    */
-  getZohoOAuthUrl: async (region: string = "com"): Promise<ZohoOAuthResponse> => {
+  getZohoOAuthUrl: async (
+    region: string = "com",
+  ): Promise<ZohoOAuthResponse> => {
     try {
-      const response = await fetchWithAuth("/api/integrations/zoho/oauth/authorize", {
-        method: "POST",
-        body: JSON.stringify({ region }),
-      });
+      const response = await fetchWithAuth(
+        "/api/integrations/zoho/oauth/authorize",
+        {
+          method: "POST",
+          body: JSON.stringify({ region }),
+        },
+      );
       return response;
     } catch (error: unknown) {
       console.error("Zoho OAuth authorize error:", error);
       let errorMessage = "Failed to get Zoho OAuth URL";
       const apiError = error as ApiErrorResponse;
-      
+
       if (apiError?.response?.data?.detail) {
         errorMessage = apiError.response.data.detail;
       } else if (apiError?.detail) {
@@ -267,16 +290,16 @@ export const mcpApi = {
       } else if (error instanceof Error && error.message) {
         errorMessage = error.message;
       }
-      
+
       const detailedError = new Error(errorMessage) as Error & {
-        response?: ApiErrorResponse['response'];
+        response?: ApiErrorResponse["response"];
         status?: number;
         originalError?: unknown;
       };
       detailedError.response = apiError?.response;
       detailedError.status = apiError?.response?.status;
       detailedError.originalError = error;
-      
+
       throw detailedError;
     }
   },
@@ -310,7 +333,7 @@ export const mcpApi = {
    * Configure Google Sheets for lead capture
    */
   configureGoogleSheets: async (
-    config: GoogleSheetsConfig
+    config: GoogleSheetsConfig,
   ): Promise<boolean> => {
     try {
       const response = await fetchWithAuth(
@@ -318,7 +341,7 @@ export const mcpApi = {
         {
           method: "POST",
           body: JSON.stringify(config),
-        }
+        },
       );
       return response.success || false;
     } catch (error) {
@@ -352,7 +375,7 @@ export const mcpApi = {
         "/api/integrations/lead-capture/config",
         {
           method: "GET",
-        }
+        },
       );
       return response;
     } catch {
@@ -369,7 +392,7 @@ export const mcpApi = {
    * Update lead capture configuration
    */
   updateLeadCaptureConfig: async (
-    config: LeadCaptureConfig
+    config: LeadCaptureConfig,
   ): Promise<boolean> => {
     try {
       const response = await fetchWithAuth(
@@ -377,7 +400,7 @@ export const mcpApi = {
         {
           method: "POST",
           body: JSON.stringify(config),
-        }
+        },
       );
       return response.success || false;
     } catch (error) {
@@ -422,6 +445,54 @@ export const mcpApi = {
     } catch (error) {
       console.error("Failed to test CRM connection:", error);
       return false;
+    }
+  },
+
+  // ============================================================================
+  // Shopify Integration API
+  // ============================================================================
+
+  /**
+   * Configure Shopify integration
+   */
+  configureShopify: async (config: {
+    store_url: string;
+    api_key: string;
+    enabled: boolean;
+  }): Promise<{ success: boolean; message?: string }> => {
+    try {
+      const response = await fetchWithAuth(
+        "/api/integrations/shopify/configure",
+        {
+          method: "POST",
+          body: JSON.stringify(config),
+        },
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to configure Shopify:", error);
+      return { success: false, message: "Failed to configure Shopify" };
+    }
+  },
+
+  /**
+   * Get Shopify configuration
+   */
+  getShopifyConfig: async (): Promise<{
+    success: boolean;
+    configured: boolean;
+    store_url?: string;
+    api_key?: string;
+    enabled?: boolean;
+  }> => {
+    try {
+      const response = await fetchWithAuth("/api/integrations/shopify/config", {
+        method: "GET",
+      });
+      return response;
+    } catch (error) {
+      console.error("Failed to get Shopify config:", error);
+      return { success: false, configured: false };
     }
   },
 
@@ -488,11 +559,13 @@ export const mcpApi = {
 
   /**
    * Get CTA buttons for active integrations with multilingual support
-   * 
+   *
    * @param language - Language code (en, es, fr, de, pt, ar, zh, ja). Defaults to 'en'
    * @returns Promise with buttons array and metadata
    */
-  getCTAButtons: async (language: string = "en"): Promise<{
+  getCTAButtons: async (
+    language: string = "en",
+  ): Promise<{
     buttons: Array<{
       id: string;
       label: string;
@@ -511,7 +584,7 @@ export const mcpApi = {
         `/api/integrations/cta-buttons?${params.toString()}`,
         {
           method: "GET",
-        }
+        },
       );
       return response;
     } catch (error) {
@@ -520,4 +593,3 @@ export const mcpApi = {
     }
   },
 };
-

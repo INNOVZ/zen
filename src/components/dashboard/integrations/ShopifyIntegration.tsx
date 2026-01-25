@@ -8,11 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import {
-  ShoppingCart,
-  Loader2,
-  Info,
-} from "lucide-react";
+import { ShoppingCart, Loader2, Info } from "lucide-react";
 
 export default function ShopifyIntegration() {
   const [storeUrl, setStoreUrl] = useState("");
@@ -28,9 +24,16 @@ export default function ShopifyIntegration() {
   const loadConfig = async () => {
     try {
       setIsLoading(true);
-      const status = await mcpApi.getIntegrationStatus("shopify");
-      setIsEnabled(status.enabled);
-      // Load actual config if available
+      const config = await mcpApi.getShopifyConfig();
+      if (config.success && config.configured) {
+        setStoreUrl(config.store_url || "");
+        setIsEnabled(config.enabled || false);
+        // Don't set API key from masked value - leave empty for re-entry
+      } else {
+        // Fallback to status check
+        const status = await mcpApi.getIntegrationStatus("shopify");
+        setIsEnabled(status.enabled);
+      }
     } catch (error) {
       console.error("Failed to load Shopify config:", error);
     } finally {
@@ -46,9 +49,20 @@ export default function ShopifyIntegration() {
 
     try {
       setIsSaving(true);
-      // Configure Shopify integration
-      // This would call a backend endpoint to store credentials
-      toast.success("Shopify configuration saved");
+      // Configure Shopify integration via backend API
+      const result = await mcpApi.configureShopify({
+        store_url: storeUrl,
+        api_key: apiKey,
+        enabled: isEnabled,
+      });
+
+      if (result.success) {
+        toast.success("Shopify configuration saved");
+        // Clear API key field after successful save (for security)
+        setApiKey("");
+      } else {
+        toast.error(result.message || "Failed to save configuration");
+      }
     } catch (error) {
       console.error("Failed to save Shopify config:", error);
       toast.error("Failed to save configuration");
@@ -81,10 +95,7 @@ export default function ShopifyIntegration() {
               Connect your Shopify store for live product data
             </p>
           </div>
-          <Switch
-            checked={isEnabled}
-            onCheckedChange={setIsEnabled}
-          />
+          <Switch checked={isEnabled} onCheckedChange={setIsEnabled} />
         </div>
 
         {isEnabled && (
@@ -109,7 +120,8 @@ export default function ShopifyIntegration() {
                 onChange={(e) => setApiKey(e.target.value)}
               />
               <p className="text-xs text-muted-foreground">
-                Create a private app in Shopify Admin → Settings → Apps and development → Develop apps
+                Create a private app in Shopify Admin → Settings → Apps and
+                development → Develop apps
               </p>
             </div>
 
@@ -136,4 +148,3 @@ export default function ShopifyIntegration() {
     </div>
   );
 }
-
