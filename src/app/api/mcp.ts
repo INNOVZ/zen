@@ -538,6 +538,54 @@ export const mcpApi = {
     }
   },
 
+  /**
+   * Save Shopify app credentials (Client ID and Secret) - multi-tenant
+   */
+  saveShopifyAppCredentials: async (
+    clientId: string,
+    clientSecret: string,
+  ): Promise<{ success: boolean; message?: string }> => {
+    try {
+      const response = await fetchWithAuth(
+        "/api/integrations/shopify/app-credentials",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            client_id: clientId,
+            client_secret: clientSecret,
+          }),
+        },
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to save Shopify app credentials:", error);
+      return { success: false, message: "Failed to save credentials" };
+    }
+  },
+
+  /**
+   * Get Shopify app credentials status - multi-tenant
+   */
+  getShopifyAppCredentials: async (): Promise<{
+    success: boolean;
+    configured: boolean;
+    client_id?: string;
+    has_secret?: boolean;
+  }> => {
+    try {
+      const response = await fetchWithAuth(
+        "/api/integrations/shopify/app-credentials",
+        {
+          method: "GET",
+        },
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to get Shopify app credentials:", error);
+      return { success: false, configured: false };
+    }
+  },
+
   // ============================================================================
   // Calendar Settings API
   // ============================================================================
