@@ -718,6 +718,7 @@
           gap: 5px;
           background: white;
           flex-shrink: 0;
+          box-shadow:none !important;
         }
         .zaakiy-cta-container { 
           width: 100%;
@@ -728,6 +729,7 @@
           flex-direction: row;
           align-items: center;
           gap: 10px;
+          box-shadow:none !important;
         } 
         
         /* Ensure uniform input padding on mobile */
@@ -751,6 +753,7 @@
         
         .zaakiy-input-field:focus {
           border-color: ${config.primaryColor};
+          box-shadow:none !important;
         }
         
         .zaakiy-input-field:disabled {
@@ -852,7 +855,7 @@
           position: absolute;
           bottom: 90px; /* above the chat button */
           ${config.position.includes('right') ? 'right: 0;' : 'left: 0;'}
-          max-width: min(430px, calc(100vw - 24px));
+          max-width: min(430px, calc(100vw - 24px)); 
           background: #ffffff;
           color: #0f172a;
           border: 1px solid #e2e8f0;
@@ -1403,6 +1406,7 @@
     styleElement.textContent = `
       .zaakiy-input-field:focus {
         border-color: ${config.primaryColor} !important;
+        box-shadow:none !important;
       }
     `;
     document.head.appendChild(styleElement);

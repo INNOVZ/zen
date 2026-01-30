@@ -1,38 +1,56 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { mcpApi } from "@/app/api/mcp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { ShoppingCart, Loader2, Info } from "lucide-react";
+import {
+  ShoppingCart,
+  Loader2,
+  Info,
+  CheckCircle,
+  XCircle,
+  ExternalLink,
+} from "lucide-react";
 
 export default function ShopifyIntegration() {
-  const [storeUrl, setStoreUrl] = useState("");
-  const [apiKey, setApiKey] = useState("");
-  const [isEnabled, setIsEnabled] = useState(false);
+  const searchParams = useSearchParams();
+  const [shopName, setShopName] = useState("");
+  const [isConnected, setIsConnected] = useState(false);
+  const [connectedShop, setConnectedShop] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [isDisconnecting, setIsDisconnecting] = useState(false);
 
   useEffect(() => {
     loadConfig();
-  }, []);
+
+    // Check for OAuth callback result
+    const shopifyStatus = searchParams.get("shopify");
+    if (shopifyStatus === "connected") {
+      toast.success("Shopify store connected successfully!");
+      loadConfig();
+    } else if (shopifyStatus === "error") {
+      const message =
+        searchParams.get("message") || "Failed to connect Shopify";
+      toast.error(message);
+    }
+  }, [searchParams]);
 
   const loadConfig = async () => {
     try {
       setIsLoading(true);
       const config = await mcpApi.getShopifyConfig();
-      if (config.success && config.configured) {
-        setStoreUrl(config.store_url || "");
-        setIsEnabled(config.enabled || false);
-        // Don't set API key from masked value - leave empty for re-entry
+      if (config.success && config.configured && config.enabled) {
+        setIsConnected(true);
+        setConnectedShop(config.store_url || "");
       } else {
-        // Fallback to status check
-        const status = await mcpApi.getIntegrationStatus("shopify");
-        setIsEnabled(status.enabled);
+        setIsConnected(false);
+        setConnectedShop("");
       }
     } catch (error) {
       console.error("Failed to load Shopify config:", error);
@@ -41,33 +59,48 @@ export default function ShopifyIntegration() {
     }
   };
 
-  const handleSave = async () => {
-    if (isEnabled && (!storeUrl || !apiKey)) {
-      toast.error("Please enter store URL and API key");
+  const handleConnect = async () => {
+    if (!shopName) {
+      toast.error("Please enter your Shopify store name");
       return;
     }
 
     try {
-      setIsSaving(true);
-      // Configure Shopify integration via backend API
-      const result = await mcpApi.configureShopify({
-        store_url: storeUrl,
-        api_key: apiKey,
-        enabled: isEnabled,
-      });
+      setIsConnecting(true);
+      const result = await mcpApi.initShopifyOAuth(shopName);
 
-      if (result.success) {
-        toast.success("Shopify configuration saved");
-        // Clear API key field after successful save (for security)
-        setApiKey("");
+      if (result.success && result.auth_url) {
+        // Redirect to Shopify OAuth
+        window.location.href = result.auth_url;
       } else {
-        toast.error(result.message || "Failed to save configuration");
+        toast.error(result.message || "Failed to start Shopify connection");
       }
     } catch (error) {
-      console.error("Failed to save Shopify config:", error);
-      toast.error("Failed to save configuration");
+      console.error("Failed to connect Shopify:", error);
+      toast.error("Failed to connect Shopify store");
     } finally {
-      setIsSaving(false);
+      setIsConnecting(false);
+    }
+  };
+
+  const handleDisconnect = async () => {
+    try {
+      setIsDisconnecting(true);
+      const result = await mcpApi.disconnectShopify();
+
+      if (result.success) {
+        toast.success("Shopify store disconnected");
+        setIsConnected(false);
+        setConnectedShop("");
+        setShopName("");
+      } else {
+        toast.error(result.message || "Failed to disconnect");
+      }
+    } catch (error) {
+      console.error("Failed to disconnect Shopify:", error);
+      toast.error("Failed to disconnect Shopify store");
+    } finally {
+      setIsDisconnecting(false);
     }
   };
 
@@ -87,64 +120,97 @@ export default function ShopifyIntegration() {
         <Label className="text-base font-semibold">Shopify Integration</Label>
       </div>
 
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <Label>Enable Shopify Integration</Label>
+      {isConnected ? (
+        // Connected State
+        <div className="space-y-4">
+          <Alert className="border-green-200 bg-green-50">
+            <CheckCircle className="h-4 w-4 text-green-600" />
+            <AlertDescription className="text-green-800">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="font-medium">Connected to Shopify</p>
+                  <p className="text-sm">{connectedShop}</p>
+                </div>
+              </div>
+            </AlertDescription>
+          </Alert>
+
+          <div className="text-sm text-muted-foreground">
+            <p>Your chatbot can now:</p>
+            <ul className="list-disc list-inside mt-1 space-y-1">
+              <li>Show live product information and prices</li>
+              <li>Check order status for customers</li>
+              <li>Display inventory availability</li>
+            </ul>
+          </div>
+
+          <Button
+            variant="destructive"
+            onClick={handleDisconnect}
+            disabled={isDisconnecting}
+            className="w-full"
+          >
+            {isDisconnecting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Disconnecting...
+              </>
+            ) : (
+              <>
+                <XCircle className="mr-2 h-4 w-4" />
+                Disconnect Shopify
+              </>
+            )}
+          </Button>
+        </div>
+      ) : (
+        // Not Connected State
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Connect your Shopify store to enable live product data, pricing, and
+            order tracking in your chatbot.
+          </p>
+
+          <div className="space-y-2">
+            <Label htmlFor="shop_name">Shopify Store Name</Label>
+            <Input
+              id="shop_name"
+              placeholder="your-store (without .myshopify.com)"
+              value={shopName}
+              onChange={(e) => setShopName(e.target.value)}
+            />
             <p className="text-xs text-muted-foreground">
-              Connect your Shopify store for live product data
+              Enter your store name from your-store.myshopify.com
             </p>
           </div>
-          <Switch checked={isEnabled} onCheckedChange={setIsEnabled} />
+
+          <Button
+            onClick={handleConnect}
+            disabled={isConnecting || !shopName}
+            className="w-full"
+          >
+            {isConnecting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Connecting...
+              </>
+            ) : (
+              <>
+                <ExternalLink className="mr-2 h-4 w-4" />
+                Connect with Shopify
+              </>
+            )}
+          </Button>
+
+          <Alert>
+            <Info className="h-4 w-4" />
+            <AlertDescription>
+              You&apos;ll be redirected to Shopify to authorize the connection.
+              Your credentials are never stored directly.
+            </AlertDescription>
+          </Alert>
         </div>
-
-        {isEnabled && (
-          <>
-            <div className="space-y-2">
-              <Label htmlFor="store_url">Store URL</Label>
-              <Input
-                id="store_url"
-                placeholder="your-store.myshopify.com"
-                value={storeUrl}
-                onChange={(e) => setStoreUrl(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="api_key">API Key</Label>
-              <Input
-                id="api_key"
-                type="password"
-                placeholder="Your Shopify API key"
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-              />
-              <p className="text-xs text-muted-foreground">
-                Create a private app in Shopify Admin → Settings → Apps and
-                development → Develop apps
-              </p>
-            </div>
-
-            <Alert>
-              <Info className="h-4 w-4" />
-              <AlertDescription>
-                Your Shopify API credentials are encrypted and stored securely.
-              </AlertDescription>
-            </Alert>
-          </>
-        )}
-
-        <Button onClick={handleSave} disabled={isSaving} className="w-full">
-          {isSaving ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
-            </>
-          ) : (
-            "Save Configuration"
-          )}
-        </Button>
-      </div>
+      )}
     </div>
   );
 }

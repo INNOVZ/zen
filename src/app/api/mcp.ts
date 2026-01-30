@@ -496,6 +496,48 @@ export const mcpApi = {
     }
   },
 
+  /**
+   * Initialize Shopify OAuth flow - returns authorization URL
+   */
+  initShopifyOAuth: async (
+    shop: string,
+  ): Promise<{ success: boolean; auth_url?: string; message?: string }> => {
+    try {
+      const response = await fetchWithAuth(
+        "/api/integrations/shopify/oauth/init",
+        {
+          method: "POST",
+          body: JSON.stringify({ shop }),
+        },
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to init Shopify OAuth:", error);
+      return { success: false, message: "Failed to start Shopify connection" };
+    }
+  },
+
+  /**
+   * Disconnect Shopify integration
+   */
+  disconnectShopify: async (): Promise<{
+    success: boolean;
+    message?: string;
+  }> => {
+    try {
+      const response = await fetchWithAuth(
+        "/api/integrations/shopify/disconnect",
+        {
+          method: "DELETE",
+        },
+      );
+      return response;
+    } catch (error) {
+      console.error("Failed to disconnect Shopify:", error);
+      return { success: false, message: "Failed to disconnect Shopify" };
+    }
+  },
+
   // ============================================================================
   // Calendar Settings API
   // ============================================================================
