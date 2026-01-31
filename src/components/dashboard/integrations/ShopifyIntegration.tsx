@@ -7,6 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 import {
   ShoppingCart,
@@ -17,7 +25,18 @@ import {
   ExternalLink,
   Settings,
   Key,
+  Package,
 } from "lucide-react";
+
+interface ShopifyCollection {
+  id: string | number;
+  title: string;
+  handle: string;
+  type: string;
+  products_count?: number;
+  url: string;
+  image?: string | null;
+}
 
 export default function ShopifyIntegration() {
   const searchParams = useSearchParams();
@@ -34,6 +53,18 @@ export default function ShopifyIntegration() {
   const [clientSecret, setClientSecret] = useState("");
   const [hasAppCredentials, setHasAppCredentials] = useState(false);
   const [isSavingCredentials, setIsSavingCredentials] = useState(false);
+
+  // CTA Settings state
+  const [collections, setCollections] = useState<ShopifyCollection[]>([]);
+  const [isLoadingCollections, setIsLoadingCollections] = useState(false);
+  const [selectedCollectionId, setSelectedCollectionId] = useState<
+    string | null
+  >(null);
+  const [selectedCollectionTitle, setSelectedCollectionTitle] = useState<
+    string | null
+  >(null);
+  const [orderLookupEnabled, setOrderLookupEnabled] = useState(false);
+  const [isSavingCtaSettings, setIsSavingCtaSettings] = useState(false);
 
   useEffect(() => {
     loadConfig();
@@ -63,6 +94,9 @@ export default function ShopifyIntegration() {
       if (config.success && config.configured && config.enabled) {
         setIsConnected(true);
         setConnectedShop(config.store_url || "");
+        // Load CTA settings and collections when connected
+        await loadCtaSettings();
+        await loadCollections();
       } else {
         setIsConnected(false);
         setConnectedShop("");
@@ -71,6 +105,68 @@ export default function ShopifyIntegration() {
       console.error("Failed to load Shopify config:", error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadCollections = async () => {
+    try {
+      setIsLoadingCollections(true);
+      const result = await mcpApi.getShopifyCollections();
+      if (result.success) {
+        setCollections(result.collections);
+      }
+    } catch (error) {
+      console.error("Failed to load collections:", error);
+    } finally {
+      setIsLoadingCollections(false);
+    }
+  };
+
+  const loadCtaSettings = async () => {
+    try {
+      const result = await mcpApi.getShopifyCtaSettings();
+      if (result.success) {
+        setSelectedCollectionId(result.cta_collection_id || null);
+        setSelectedCollectionTitle(result.cta_collection_title || null);
+        setOrderLookupEnabled(result.cta_order_lookup_enabled || false);
+      }
+    } catch (error) {
+      console.error("Failed to load CTA settings:", error);
+    }
+  };
+
+  const handleSaveCtaSettings = async () => {
+    try {
+      setIsSavingCtaSettings(true);
+      const result = await mcpApi.saveShopifyCtaSettings({
+        collection_id: selectedCollectionId,
+        collection_title: selectedCollectionTitle,
+        order_lookup_enabled: orderLookupEnabled,
+      });
+
+      if (result.success) {
+        toast.success("CTA button settings saved");
+      } else {
+        toast.error(result.message || "Failed to save settings");
+      }
+    } catch (error) {
+      console.error("Failed to save CTA settings:", error);
+      toast.error("Failed to save CTA settings");
+    } finally {
+      setIsSavingCtaSettings(false);
+    }
+  };
+
+  const handleCollectionChange = (value: string) => {
+    if (value === "all") {
+      setSelectedCollectionId(null);
+      setSelectedCollectionTitle(null);
+    } else {
+      const collection = collections.find((c) => String(c.id) === value);
+      if (collection) {
+        setSelectedCollectionId(String(collection.id));
+        setSelectedCollectionTitle(collection.title);
+      }
     }
   };
 
@@ -187,6 +283,85 @@ export default function ShopifyIntegration() {
               <li>Check order status for customers</li>
               <li>Display inventory availability</li>
             </ul>
+          </div>
+
+          {/* CTA Button Settings */}
+          <div className="space-y-4 p-4 border rounded-lg bg-muted/30">
+            <div className="flex items-center gap-2">
+              <Package className="h-4 w-4" />
+              <Label className="font-medium">Chat Button Settings</Label>
+            </div>
+
+            <p className="text-xs text-muted-foreground">
+              Configure which buttons appear in the chat widget for customers.
+            </p>
+
+            {/* Collection Selector */}
+            <div className="space-y-2">
+              <Label htmlFor="collection_select">Product Collection CTA</Label>
+              <Select
+                value={selectedCollectionId || "all"}
+                onValueChange={handleCollectionChange}
+                disabled={isLoadingCollections}
+              >
+                <SelectTrigger id="collection_select">
+                  <SelectValue placeholder="Select a collection" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">🛍️ All Products</SelectItem>
+                  {collections.map((collection) => (
+                    <SelectItem
+                      key={collection.id}
+                      value={String(collection.id)}
+                    >
+                      🛍️ {collection.title}
+                      {collection.products_count !== undefined && (
+                        <span className="text-muted-foreground ml-1">
+                          ({collection.products_count})
+                        </span>
+                      )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-muted-foreground">
+                Choose which collection to show when customers click the product
+                button.
+              </p>
+            </div>
+
+            {/* Order Lookup Toggle */}
+            <div className="flex items-center justify-between">
+              <div className="space-y-0.5">
+                <Label htmlFor="order_lookup">Order Tracking Button</Label>
+                <p className="text-xs text-muted-foreground">
+                  Allow customers to check their order status
+                </p>
+              </div>
+              <Switch
+                id="order_lookup"
+                checked={orderLookupEnabled}
+                onCheckedChange={setOrderLookupEnabled}
+              />
+            </div>
+
+            <Button
+              onClick={handleSaveCtaSettings}
+              disabled={isSavingCtaSettings}
+              className="w-full"
+            >
+              {isSavingCtaSettings ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Saving...
+                </>
+              ) : (
+                <>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Save Button Settings
+                </>
+              )}
+            </Button>
           </div>
 
           <Button

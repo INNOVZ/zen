@@ -682,4 +682,74 @@ export const mcpApi = {
       return { buttons: [], count: 0, language };
     }
   },
+
+  // ============================================================================
+  // Shopify Collections & CTA Settings API
+  // ============================================================================
+
+  /**
+   * Get all collections from connected Shopify store
+   */
+  getShopifyCollections: async (): Promise<{
+    success: boolean;
+    collections: Array<{
+      id: string | number;
+      title: string;
+      handle: string;
+      type: string;
+      products_count?: number;
+      url: string;
+      image?: string | null;
+    }>;
+    total: number;
+    error?: string;
+  }> => {
+    try {
+      return await fetchWithAuth("/api/integrations/shopify/collections", {
+        method: "GET",
+      });
+    } catch (error) {
+      console.error("Failed to get Shopify collections:", error);
+      return { success: false, collections: [], total: 0 };
+    }
+  },
+
+  /**
+   * Get Shopify CTA button settings
+   */
+  getShopifyCtaSettings: async (): Promise<{
+    success: boolean;
+    cta_collection_id?: string | null;
+    cta_collection_title?: string | null;
+    cta_order_lookup_enabled: boolean;
+    error?: string;
+  }> => {
+    try {
+      return await fetchWithAuth("/api/integrations/shopify/cta-settings", {
+        method: "GET",
+      });
+    } catch (error) {
+      console.error("Failed to get Shopify CTA settings:", error);
+      return { success: false, cta_order_lookup_enabled: false };
+    }
+  },
+
+  /**
+   * Save Shopify CTA button settings
+   */
+  saveShopifyCtaSettings: async (settings: {
+    collection_id?: string | null;
+    collection_title?: string | null;
+    order_lookup_enabled: boolean;
+  }): Promise<{ success: boolean; message?: string }> => {
+    try {
+      return await fetchWithAuth("/api/integrations/shopify/cta-settings", {
+        method: "POST",
+        body: JSON.stringify(settings),
+      });
+    } catch (error) {
+      console.error("Failed to save Shopify CTA settings:", error);
+      return { success: false, message: "Failed to save CTA settings" };
+    }
+  },
 };
