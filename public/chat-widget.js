@@ -629,6 +629,120 @@
           background: rgba(59, 130, 246, 0.08);
         }
 
+        /* Product Cards */
+        .zaakiy-product-cards {
+          margin-top: 10px;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        .zaakiy-product-card {
+          border: 1px solid #e5e7eb;
+          border-radius: 10px;
+          overflow: hidden;
+          background: #ffffff;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+          transition: all 0.2s ease;
+        }
+
+        .zaakiy-product-card:hover {
+          box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+          border-color: #d1d5db;
+        }
+
+        .zaakiy-product-card-inner {
+          display: flex;
+          align-items: stretch;
+        }
+
+        .zaakiy-product-image {
+          width: 72px;
+          height: 72px;
+          flex-shrink: 0;
+          background: #f3f4f6;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          overflow: hidden;
+        }
+
+        .zaakiy-product-image img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .zaakiy-product-image-placeholder {
+          color: #9ca3af;
+        }
+
+        .zaakiy-product-info {
+          flex: 1;
+          padding: 8px 10px;
+          min-width: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+        }
+
+        .zaakiy-product-name {
+          font-size: 13px;
+          font-weight: 600;
+          color: #1f2937;
+          margin: 0 0 2px 0;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+        }
+
+        .zaakiy-product-price {
+          font-size: 14px;
+          font-weight: 700;
+          color: #059669;
+          margin: 0 0 4px 0;
+        }
+
+        .zaakiy-product-stock {
+          font-size: 11px;
+          color: #6b7280;
+          margin: 0 0 4px 0;
+        }
+
+        .zaakiy-product-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 11px;
+          color: ${config.primaryColor};
+          text-decoration: none;
+          font-weight: 500;
+        }
+
+        .zaakiy-product-link:hover {
+          text-decoration: underline;
+        }
+
+        .zaakiy-product-link svg {
+          width: 12px;
+          height: 12px;
+        }
+
+        @media (max-width: 480px) {
+          .zaakiy-product-image {
+            width: 64px;
+            height: 64px;
+          }
+          
+          .zaakiy-product-name {
+            font-size: 12px;
+          }
+          
+          .zaakiy-product-price {
+            font-size: 13px;
+          }
+        }
+
         .zaakiy-cta-buttons {
           display: flex;
           flex-wrap: wrap;
@@ -1641,6 +1755,7 @@
       const { contentDiv, contentWrapper } = zaakiyAddMessage('', 'bot', false);
       let fullResponseText = '';
       let buttons = [];
+      let productLinks = [];
 
       // Setup stream reader
       const reader = response.body.getReader();
@@ -1679,6 +1794,12 @@
                 if (data.content && data.content.length > fullResponseText.length) {
                   fullResponseText = data.content;
                   contentDiv.innerHTML = parseMarkdown(fullResponseText);
+                }
+                // Handle product cards from Shopify
+                if (data.product_links && data.product_links.length > 0) {
+                  productLinks = data.product_links;
+                  const productCardsEl = createProductCards(productLinks);
+                  if (productCardsEl) contentWrapper.appendChild(productCardsEl);
                 }
                 if (data.buttons) {
                   buttons = data.buttons;
@@ -1845,6 +1966,111 @@
         buttonEl.setAttribute('data-value', value);
       }
       container.appendChild(buttonEl);
+    });
+
+    return container;
+  }
+
+  // Create product cards for Shopify products
+  function createProductCards(products) {
+    if (!products || !products.length) return null;
+
+    const container = document.createElement('div');
+    container.className = 'zaakiy-product-cards';
+
+    // Limit to 5 products
+    const displayProducts = products.slice(0, 5);
+
+    displayProducts.forEach((product) => {
+      const card = document.createElement('div');
+      card.className = 'zaakiy-product-card';
+
+      const inner = document.createElement('div');
+      inner.className = 'zaakiy-product-card-inner';
+
+      // Product image
+      const imageDiv = document.createElement('div');
+      imageDiv.className = 'zaakiy-product-image';
+      
+      if (product.image) {
+        const img = document.createElement('img');
+        img.src = product.image;
+        img.alt = product.name || 'Product';
+        img.onerror = function() {
+          // Replace with placeholder on error
+          imageDiv.innerHTML = `
+            <div class="zaakiy-product-image-placeholder">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+              </svg>
+            </div>
+          `;
+        };
+        imageDiv.appendChild(img);
+      } else {
+        imageDiv.innerHTML = `
+          <div class="zaakiy-product-image-placeholder">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/>
+            </svg>
+          </div>
+        `;
+      }
+      inner.appendChild(imageDiv);
+
+      // Product info
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'zaakiy-product-info';
+
+      // Product name
+      const nameEl = document.createElement('p');
+      nameEl.className = 'zaakiy-product-name';
+      nameEl.textContent = product.name || 'Product';
+      nameEl.title = product.name || 'Product'; // Tooltip for truncated names
+      infoDiv.appendChild(nameEl);
+
+      // Price
+      if (product.price) {
+        const priceEl = document.createElement('p');
+        priceEl.className = 'zaakiy-product-price';
+        priceEl.textContent = `${product.currency || ''} ${product.price}`.trim();
+        infoDiv.appendChild(priceEl);
+      }
+
+      // Stock
+      if (product.inventory !== undefined && product.inventory > 0) {
+        const stockEl = document.createElement('p');
+        stockEl.className = 'zaakiy-product-stock';
+        stockEl.textContent = `In stock: ${product.inventory}`;
+        infoDiv.appendChild(stockEl);
+      }
+
+      // View product link
+      if (product.url) {
+        const linkEl = document.createElement('a');
+        linkEl.className = 'zaakiy-product-link';
+        linkEl.href = product.url;
+        linkEl.target = '_blank';
+        linkEl.rel = 'noopener noreferrer';
+        linkEl.innerHTML = `
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+          View Product
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:10px;height:10px;">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        `;
+        infoDiv.appendChild(linkEl);
+      }
+
+      inner.appendChild(infoDiv);
+      card.appendChild(inner);
+      container.appendChild(card);
     });
 
     return container;

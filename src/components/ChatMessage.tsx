@@ -1,12 +1,26 @@
 "use client";
 
 import { memo } from "react";
-import { Bot, User } from "lucide-react";
+import { Bot, User, ShoppingCart, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 interface MessageButton {
   text: string;
   value: string;
+  type?: string;
+}
+
+interface ProductCard {
+  id?: string | number;
+  name: string;
+  price?: number;
+  currency?: string;
+  url?: string;
+  image?: string;
+  description?: string;
+  inventory?: number;
+  vendor?: string;
   type?: string;
 }
 
@@ -17,6 +31,7 @@ export interface ChatMessageProps {
   timestamp: Date;
   sources?: ({ title: string; url: string; content?: string } | string)[];
   buttons?: MessageButton[];
+  productCards?: ProductCard[];
   botColor?: string;
   onButtonClick?: (value: string) => void;
 }
@@ -31,6 +46,7 @@ export const ChatMessage = memo(
     content,
     sources,
     buttons,
+    productCards,
     botColor,
     onButtonClick,
   }: ChatMessageProps) {
@@ -39,8 +55,9 @@ export const ChatMessage = memo(
         className={`flex ${type === "user" ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`max-w-[85%] p-2 rounded-lg text-sm ${type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
-            }`}
+          className={`max-w-[85%] p-2 rounded-lg text-sm ${
+            type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
+          }`}
           style={{
             backgroundColor: type === "user" ? botColor : undefined,
           }}
@@ -55,13 +72,70 @@ export const ChatMessage = memo(
             <div className="flex-1">
               <p className="whitespace-pre-wrap">{content}</p>
 
+              {/* Product Cards */}
+              {productCards && productCards.length > 0 && (
+                <div className="mt-3 space-y-2">
+                  {productCards.map((product, index) => (
+                    <div
+                      key={product.id || index}
+                      className="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm hover:shadow-md transition-shadow"
+                    >
+                      <div className="flex">
+                        {product.image && (
+                          <div className="w-20 h-20 flex-shrink-0 bg-gray-100">
+                            <Image
+                              src={product.image}
+                              alt={product.name}
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-cover"
+                              unoptimized
+                            />
+                          </div>
+                        )}
+                        <div className="flex-1 p-2 min-w-0">
+                          <h4 className="font-medium text-gray-900 text-xs truncate">
+                            {product.name}
+                          </h4>
+                          {product.price && (
+                            <p className="text-sm font-semibold text-green-600 mt-0.5">
+                              {product.currency} {product.price}
+                            </p>
+                          )}
+                          {product.inventory !== undefined &&
+                            product.inventory > 0 && (
+                              <p className="text-xs text-gray-500 mt-0.5">
+                                In stock: {product.inventory}
+                              </p>
+                            )}
+                          {product.url && (
+                            <a
+                              href={product.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 text-xs text-blue-600 hover:underline mt-1"
+                            >
+                              <ShoppingCart className="h-3 w-3" />
+                              View Product
+                              <ExternalLink className="h-2.5 w-2.5" />
+                            </a>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {sources && sources.length > 0 && (
                 <div className="mt-2 text-xs text-gray-500 border-t pt-2 border-gray-200">
                   <div className="font-medium mb-1">Sources:</div>
                   <ul className="list-disc pl-4 space-y-0.5">
                     {sources.map((source, index) => {
                       const isString = typeof source === "string";
-                      const title = isString ? source : source.title || source.url;
+                      const title = isString
+                        ? source
+                        : source.title || source.url;
                       const url = isString ? source : source.url;
 
                       return (
@@ -112,13 +186,5 @@ export const ChatMessage = memo(
       prevProps.type === nextProps.type &&
       prevProps.botColor === nextProps.botColor
     );
-  }
+  },
 );
-
-
-
-
-
-
-
-

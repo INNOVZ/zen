@@ -24,13 +24,27 @@ interface CTAButton {
   message: string;
 }
 
+interface ProductCard {
+  id?: string | number;
+  name: string;
+  price?: number;
+  currency?: string;
+  url?: string;
+  image?: string;
+  description?: string;
+  inventory?: number;
+  vendor?: string;
+  type?: string;
+}
+
 interface Message {
   id: string;
   type: "user" | "bot";
   content: string;
   timestamp: Date;
   sources?: { title: string; url: string; content?: string }[] | string[];
-  buttons?: MessageButton[]; // Add buttons support
+  buttons?: MessageButton[];
+  productCards?: ProductCard[];
 }
 
 interface ChatWidgetProps {
@@ -58,15 +72,15 @@ const ChatWidget = memo(
     const [isTyping, setIsTyping] = useState(false);
     const [conversationId, setConversationId] = useState<string>();
     const [availableChatbots, setAvailableChatbots] = useState<ChatbotInfo[]>(
-      []
+      [],
     );
     const [selectedChatbot, setSelectedChatbot] = useState<ChatbotInfo | null>(
-      null
+      null,
     );
     const [loadingChatbots, setLoadingChatbots] = useState(true);
     const [showChatbotDropdown, setShowChatbotDropdown] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
-      null
+      null,
     );
     const [isClient, setIsClient] = useState(false);
     const [ctaButtons, setCtaButtons] = useState<CTAButton[]>([]);
@@ -224,7 +238,7 @@ const ChatWidget = memo(
           ) {
             setIsAuthenticated(false);
             const authErrorMessage = error.message.includes(
-              "Authentication service not available"
+              "Authentication service not available",
             )
               ? "Authentication service is not properly configured. Please contact support."
               : "Hello! To use the chat feature, please log in to your account first.";
@@ -319,7 +333,7 @@ const ChatWidget = memo(
           const response = await conversationApi.sendMessage(
             currentMessage,
             selectedChatbot?.id || chatbotId,
-            conversationId
+            conversationId,
           );
 
           console.log("Chat response received:", {
@@ -344,7 +358,7 @@ const ChatWidget = memo(
           // Check if this is a fallback response (indicates backend error)
           if (response.conversation_id?.startsWith("fallback-")) {
             console.warn(
-              "⚠️ Received fallback response from backend - chat service encountered an error"
+              "⚠️ Received fallback response from backend - chat service encountered an error",
             );
             console.warn("Backend error response:", response.response);
           }
@@ -363,7 +377,7 @@ const ChatWidget = memo(
             }
           } else {
             console.warn(
-              "⚠️ Response missing conversation_id - state may not persist"
+              "⚠️ Response missing conversation_id - state may not persist",
             );
           }
 
@@ -373,7 +387,8 @@ const ChatWidget = memo(
             content: response.response,
             timestamp: new Date(),
             sources: response.sources || [],
-            buttons: response.buttons || [], // Include buttons from response
+            buttons: response.buttons || [],
+            productCards: response.product_links || [], // Include product cards from Shopify
           };
 
           console.log("Bot response with buttons:", {
@@ -423,7 +438,7 @@ const ChatWidget = memo(
         chatbotId,
         conversationId,
         getErrorMessage,
-      ]
+      ],
     );
 
     const handleKeyDown = useCallback(
@@ -433,7 +448,7 @@ const ChatWidget = memo(
           handleSendMessage();
         }
       },
-      [handleSendMessage]
+      [handleSendMessage],
     );
 
     const positionClasses = {
@@ -489,11 +504,11 @@ const ChatWidget = memo(
                     <Image
                       src={
                         selectedChatbot.avatar_url.includes(
-                          "storage/v1/object/uploads/"
+                          "storage/v1/object/uploads/",
                         )
                           ? `${API_BASE_URL}/api/uploads/avatar/legacy/${
                               selectedChatbot.avatar_url.split(
-                                "storage/v1/object/uploads/"
+                                "storage/v1/object/uploads/",
                               )[1]
                             }`
                           : selectedChatbot.avatar_url
@@ -713,7 +728,7 @@ const ChatWidget = memo(
       prevProps.position === nextProps.position &&
       prevProps.showChatbotSelector === nextProps.showChatbotSelector
     );
-  }
+  },
 );
 
 export default ChatWidget;

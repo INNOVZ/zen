@@ -13,12 +13,26 @@ export interface TokenHandler {
   ) => Promise<T>;
 }
 
+export interface ProductCard {
+  id?: string | number;
+  name: string;
+  price?: number;
+  currency?: string;
+  url?: string;
+  image?: string;
+  description?: string;
+  inventory?: number;
+  vendor?: string;
+  type?: string;
+}
+
 export interface ChatResponse {
   response: string;
   conversation_id: string;
   message_id?: string;
   sources?: Source[];
   buttons?: Array<{ text: string; value: string; type?: string }>;
+  product_links?: ProductCard[];
   metadata?: Record<string, unknown>;
 }
 
