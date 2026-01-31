@@ -111,12 +111,21 @@ export default function ShopifyIntegration() {
   const loadCollections = async () => {
     try {
       setIsLoadingCollections(true);
+      console.log("Loading Shopify collections...");
       const result = await mcpApi.getShopifyCollections();
-      if (result.success) {
+      console.log("Collections API result:", result);
+      if (result.success && result.collections) {
         setCollections(result.collections);
+        console.log("Collections loaded:", result.collections.length);
+      } else {
+        console.warn("Failed to load collections:", result.error);
+        toast.error(
+          "Failed to load collections: " + (result.error || "Unknown error"),
+        );
       }
     } catch (error) {
       console.error("Failed to load collections:", error);
+      toast.error("Failed to load collections");
     } finally {
       setIsLoadingCollections(false);
     }
