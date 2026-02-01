@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Ubuntu } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { I18nProvider } from "@/contexts/I18nContext";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -26,8 +27,10 @@ export default function RootLayout({
   return (
     <html lang="en-IT">
       <body className={`${ubuntu.variable} antialiased`}>
-        <Toaster richColors position="top-center" />
-        {children}
+        <I18nProvider>
+          <Toaster richColors position="top-center" />
+          {children}
+        </I18nProvider>
       </body>
     </html>
   );

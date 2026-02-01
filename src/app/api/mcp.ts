@@ -43,12 +43,12 @@ interface ToolExecuteResponse {
   error?: string;
   message?: string;
   [key: string]:
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | unknown[]
-    | undefined;
+  | string
+  | number
+  | boolean
+  | Record<string, unknown>
+  | unknown[]
+  | undefined;
 }
 
 export const mcpApi = {
@@ -451,38 +451,20 @@ export const mcpApi = {
   // ============================================================================
   // Shopify Integration API
   // ============================================================================
+  // NOTE: The configureShopify endpoint has been REMOVED.
+  // Use the OAuth flow instead:
+  // 1. saveShopifyAppCredentials() - to save your app Client ID/Secret
+  // 2. initShopifyOAuth() - to start the OAuth flow
+
 
   /**
-   * Configure Shopify integration
-   */
-  configureShopify: async (config: {
-    store_url: string;
-    api_key: string;
-    enabled: boolean;
-  }): Promise<{ success: boolean; message?: string }> => {
-    try {
-      const response = await fetchWithAuth(
-        "/api/integrations/shopify/configure",
-        {
-          method: "POST",
-          body: JSON.stringify(config),
-        },
-      );
-      return response;
-    } catch (error) {
-      console.error("Failed to configure Shopify:", error);
-      return { success: false, message: "Failed to configure Shopify" };
-    }
-  },
-
-  /**
-   * Get Shopify configuration
+   * Get Shopify configuration status.
+   * Note: Does NOT return API keys or tokens for security.
    */
   getShopifyConfig: async (): Promise<{
     success: boolean;
     configured: boolean;
     store_url?: string;
-    api_key?: string;
     enabled?: boolean;
   }> => {
     try {

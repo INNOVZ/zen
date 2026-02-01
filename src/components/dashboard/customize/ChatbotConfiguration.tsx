@@ -24,6 +24,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "@/contexts/I18nContext";
 
 const debounce = <T extends (...args: never[]) => void>(
   func: T,
@@ -44,6 +45,14 @@ const TONE_OPTIONS = [
   { value: "casual", label: "Casual", icon: "💬" },
 ];
 
+const LANGUAGE_OPTIONS = [
+  { value: "en", label: "English", icon: "🇬🇧" },
+  { value: "es", label: "Spanish", icon: "🇪🇸" },
+  { value: "de", label: "German", icon: "🇩🇪" },
+  { value: "it", label: "Italian", icon: "🇮🇹" },
+  { value: "ar", label: "Arabic", icon: "🇸🇦" },
+];
+
 const COLOR_PRESETS = [
   "#6a8fff",
   "#10B981",
@@ -60,6 +69,7 @@ const COLOR_PRESETS = [
 ];
 
 export default function ChatbotConfiguration() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const router = useRouter();
   const chatbotId = searchParams?.get("id") ?? null;
@@ -105,6 +115,7 @@ export default function ChatbotConfiguration() {
     system_prompt: config.system_prompt || "",
     color_hex: config.color_hex || "#3B82F6",
     avatar_url: config.avatar_url || "",
+    language: config.language || "en",
   });
 
   const loadConfigFromChatbot = useCallback(
@@ -114,6 +125,7 @@ export default function ChatbotConfiguration() {
         description: chatbot.description || "",
         color_hex: chatbot.color_hex || "#6a8fff",
         tone: chatbot.tone || "helpful",
+        language: chatbot.language || "en",
         behavior: chatbot.behavior || "Be helpful and informative",
         system_prompt: chatbot.system_prompt || "",
         greeting_message:
@@ -199,6 +211,7 @@ export default function ChatbotConfiguration() {
       system_prompt: config.system_prompt || "",
       color_hex: config.color_hex || "#3B82F6",
       avatar_url: config.avatar_url || "",
+      language: config.language || "en",
     });
   }, [config, config.id, isEditMode, chatbotId]);
 
@@ -228,6 +241,7 @@ export default function ChatbotConfiguration() {
       avatar_url: createDebouncedUpdate("avatar_url"),
       is_active: createDebouncedUpdate("is_active"),
       tone: createDebouncedUpdate("tone"),
+      language: createDebouncedUpdate("language"),
     }),
     [createDebouncedUpdate]
   );
@@ -333,6 +347,7 @@ export default function ChatbotConfiguration() {
         description: config.description,
         color_hex: config.color_hex,
         tone: config.tone,
+        language: config.language,
         behavior: config.behavior,
         greeting_message: config.greeting_message,
         status: config.is_active ? "active" : "inactive",
@@ -408,10 +423,10 @@ export default function ChatbotConfiguration() {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
             <Bot className="w-5 h-5" />
-            Advanced Chatbot Configuration
+            {t("chatbot_config.advanced_config_title")}
             {unsavedChanges && (
               <Badge variant="secondary" className="ml-2">
-                Unsaved Changes
+                {t("common.unsaved_changes")}
               </Badge>
             )}
           </CardTitle>
@@ -422,7 +437,7 @@ export default function ChatbotConfiguration() {
                 handleFieldChange("is_active", checked)
               }
             />
-            <Label className="text-sm">Active</Label>
+            <Label className="text-sm">{t("common.active")}</Label>
           </div>
         </div>
       </CardHeader>
@@ -432,7 +447,7 @@ export default function ChatbotConfiguration() {
           <Alert className="mb-4 border-red-200 bg-red-50">
             <AlertTriangle className="h-4 w-4 text-red-600" />
             <AlertDescription>
-              <strong>Please fix the following errors:</strong>
+              <strong>{t("common.validation_errors_heading")}</strong>
               <ul className="mt-2 list-disc list-inside">
                 {validationErrors.map((error, index) => (
                   <li key={index} className="text-sm text-red-700">
@@ -448,19 +463,19 @@ export default function ChatbotConfiguration() {
           <div className="space-y-4">
             <div className="my-7 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="name">Chatbot Name</Label>
+                <Label htmlFor="name">{t("chatbot_config.name_label")}</Label>
                 <Input
                   id="name"
                   value={inputValues.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  placeholder="Enter chatbot name..."
+                  placeholder={t("chatbot_config.name_placeholder")}
                   className="mt-4"
                 />
               </div>
             </div>
 
             <div className="my-7">
-              <Label>Chatbot Avatar</Label>
+              <Label>{t("chatbot_config.avatar_label")}</Label>
               <div className="mt-4 space-y-4">
                 {inputValues.avatar_url && (
                   <div className="flex items-center gap-4">
@@ -477,7 +492,7 @@ export default function ChatbotConfiguration() {
                         type="button"
                         onClick={handleClearAvatar}
                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition-colors"
-                        title="Remove avatar"
+                        title={t("chatbot_config.remove_avatar_tooltip")}
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -489,15 +504,15 @@ export default function ChatbotConfiguration() {
                         inputValues.avatar_url.includes(
                           "storage/v1/object/uploads"
                         )
-                        ? "Uploaded image"
-                        : "External URL"}
+                        ? t("chatbot_config.uploaded_image")
+                        : t("chatbot_config.external_url")}
                     </p>
                   </div>
                 )}
 
                 <div className="space-y-2">
                   <Label htmlFor="avatar-url" className="text-sm text-gray-600">
-                    Enter Image URL
+                    {t("chatbot_config.enter_image_url_label")}
                   </Label>
                   <Input
                     id="avatar-url"
@@ -512,7 +527,7 @@ export default function ChatbotConfiguration() {
 
                 <div className="flex items-center gap-2">
                   <div className="flex-1 border-t border-gray-200"></div>
-                  <span className="text-sm text-gray-500">OR</span>
+                  <span className="text-sm text-gray-500">{t("common.or")}</span>
                   <div className="flex-1 border-t border-gray-200"></div>
                 </div>
 
@@ -521,7 +536,7 @@ export default function ChatbotConfiguration() {
                     htmlFor="avatar-file"
                     className="text-sm text-gray-600"
                   >
-                    Upload Image File
+                    {t("chatbot_config.upload_image_file_label")}
                   </Label>
                   <div className="flex items-center gap-2">
                     <Input
@@ -540,10 +555,10 @@ export default function ChatbotConfiguration() {
                       className="flex items-center gap-2"
                     >
                       <Upload className="w-4 h-4" />
-                      Choose Image
+                      {t("chatbot_config.choose_image_button")}
                     </Button>
                     <p className="text-xs text-gray-500">
-                      PNG, JPEG, GIF, WebP (max 1.5MB)
+                      {t("chatbot_config.image_file_types_size")}
                     </p>
                   </div>
                 </div>
@@ -552,7 +567,7 @@ export default function ChatbotConfiguration() {
                   <div className="flex items-center gap-2 p-3 bg-gray-50 rounded-md">
                     <ImageIcon className="w-5 h-5 text-gray-400" />
                     <p className="text-sm text-gray-600">
-                      No avatar set. Upload an image or enter a URL.
+                      {t("chatbot_config.no_avatar_set_message")}
                     </p>
                   </div>
                 )}
@@ -560,28 +575,28 @@ export default function ChatbotConfiguration() {
             </div>
 
             <div className="my-7">
-              <Label htmlFor="description">Description</Label>
+              <Label htmlFor="description">{t("chatbot_config.desc_label")}</Label>
               <Textarea
                 id="description"
                 value={inputValues.description}
                 onChange={(e) =>
                   handleInputChange("description", e.target.value)
                 }
-                placeholder="Describe what this chatbot does and its purpose..."
+                placeholder={t("chatbot_config.desc_placeholder")}
                 className="mt-4"
                 rows={3}
               />
             </div>
 
             <div className="my-7">
-              <Label>Personality & Tone</Label>
+              <Label>{t("chatbot_config.personality_tone_label")}</Label>
               <div className="mt-4 grid grid-cols-5 gap-3">
                 {TONE_OPTIONS.map((option) => (
                   <div
                     key={option.value}
                     className={`p-2 border rounded-lg cursor-pointer transition-all ${config.tone === option.value
-                        ? "border-blue-500 bg-blue-50"
-                        : "border-gray-200 hover:border-gray-300"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-gray-300"
                       }`}
                     onClick={() => handleFieldChange("tone", option.value)}
                   >
@@ -600,15 +615,15 @@ export default function ChatbotConfiguration() {
             </div>
 
             <div className="my-9">
-              <Label>Primary Color</Label>
+              <Label>{t("chatbot_config.primary_color_label")}</Label>
               <div className="mt-2">
                 <div className="flex gap-2 mb-3 flex-wrap">
                   {COLOR_PRESETS.map((color) => (
                     <button
                       key={color}
                       className={`w-6 h-6 rounded-full border-2 ${config.color_hex === color
-                          ? "border-gray-900 scale-110"
-                          : "border-gray-200 hover:border-gray-400"
+                        ? "border-gray-900 scale-110"
+                        : "border-gray-200 hover:border-gray-400"
                         } transition-all`}
                       style={{ backgroundColor: color }}
                       onClick={() => handleFieldChange("color_hex", color)}
@@ -628,27 +643,27 @@ export default function ChatbotConfiguration() {
 
             <div className="my-7 grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label htmlFor="greeting">Greeting Message</Label>
+                <Label htmlFor="greeting">{t("chatbot_config.greeting_label")}</Label>
                 <Textarea
                   id="greeting"
                   value={inputValues.greeting_message}
                   onChange={(e) =>
                     handleInputChange("greeting_message", e.target.value)
                   }
-                  placeholder="Hello! How can I help you today?"
+                  placeholder={t("chatbot_config.greeting_placeholder")}
                   className="mt-4"
                   rows={2}
                 />
               </div>
               <div>
-                <Label htmlFor="fallback">Fallback Message</Label>
+                <Label htmlFor="fallback">{t("chatbot_config.fallback_label")}</Label>
                 <Textarea
                   id="fallback"
                   value={inputValues.fallback_message}
                   onChange={(e) =>
                     handleInputChange("fallback_message", e.target.value)
                   }
-                  placeholder="I'm sorry, I don't have information about that..."
+                  placeholder={t("chatbot_config.fallback_placeholder")}
                   className="mt-4"
                   rows={2}
                 />
@@ -656,12 +671,12 @@ export default function ChatbotConfiguration() {
             </div>
 
             <div className="my-9">
-              <Label htmlFor="behavior">Behavior & Personality</Label>
+              <Label htmlFor="behavior">{t("chatbot_config.behavior_label")}</Label>
               <Textarea
                 id="behavior"
                 value={inputValues.behavior}
                 onChange={(e) => handleInputChange("behavior", e.target.value)}
-                placeholder="Describe how the chatbot should behave..."
+                placeholder={t("chatbot_config.behavior_placeholder")}
                 className="mt-4"
                 rows={4}
               />

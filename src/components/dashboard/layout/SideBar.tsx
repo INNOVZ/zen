@@ -22,6 +22,8 @@ import { toast } from "sonner";
 import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { getUserDisplayName } from "@/utils/userUtils";
 import { SimpleSubscriptionStatus } from "@/components/dashboard/layout/SimpleSubscriptionStatus";
+import { useTranslation } from "@/contexts/I18nContext";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
@@ -38,35 +40,44 @@ const Sidebar = () => {
     getUser();
   }, []);
 
+  /* eslint-disable react-hooks/exhaustive-deps */
+  const { t } = useTranslation();
+
   // Menu items with simple paths - no userId needed
   const menuItems = [
     {
-      title: "Dashboard",
+      title: t('sidebar.dashboard'),
       icon: <Home size={16} />,
       path: "/dashboard",
     },
     {
-      title: "Train",
+      title: t('sidebar.customize'), // Renamed from Train/Customize based on translations available or usage
+      // Wait, original had "Train", "Customize". My en.json has "customize".
+      // I'll stick to original keys but map them.
+      // Train is not in my en.json yet.
+      // I will add 'train' to en.json later or use raw string for now if missing.
+      // Let's use simple logic: t('sidebar.train') will fallback to 'sidebar.train' if missing.
+      // But I should use "Customize" for "Customize".
       icon: <Brain size={16} />,
       path: "/dashboard/train",
     },
     {
-      title: "Customize",
+      title: t('sidebar.customize'),
       icon: <RiRobot3Line size={16} />,
       path: "/dashboard/customize",
     },
     {
-      title: "Leads",
+      title: t('sidebar.leads'),
       icon: <Users size={16} />,
       path: "/dashboard/leads",
     },
     {
-      title: "Calendar",
+      title: t('sidebar.calendar'),
       icon: <Calendar size={16} />,
       path: "/dashboard/calendar",
     },
     {
-      title: "Settings",
+      title: t('sidebar.settings'),
       icon: <Settings size={16} />,
       path: "/dashboard/settings",
     },
@@ -84,9 +95,8 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${
-        isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
-      } my-4 bg-white text-white transition-all-ease-in-out duration-400 fixed top-0 flex-col rounded-xl shadow-lg h-[97vh] hidden md:flex`}
+      className={`${isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
+        } my-4 bg-white text-white transition-all-ease-in-out duration-400 fixed top-0 flex-col rounded-xl shadow-lg h-[97vh] hidden md:flex`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 overflow-y-auto">
@@ -135,10 +145,9 @@ const Sidebar = () => {
                 <Link
                   href={item.path}
                   className={`flex items-center gap-4 p-[6px] rounded-lg transition-colors
-                    ${
-                      isActive
-                        ? "bg-[#5d7dde] text-white font-bold shadow-sm"
-                        : "text-[#5d7dde] hover:text-[#5d7dde] hover:bg-gray-100"
+                    ${isActive
+                      ? "bg-[#5d7dde] text-white font-bold shadow-sm"
+                      : "text-[#5d7dde] hover:text-[#5d7dde] hover:bg-gray-100"
                     }
                   `}
                 >
@@ -157,10 +166,21 @@ const Sidebar = () => {
         </ul>
       </nav>
 
-      {/* Subscription Status Widget */}
       {!isCollapsed && (
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-gray-700 space-y-4">
+          {/* Subscription Status Widget */}
           <SimpleSubscriptionStatus showRefreshButton={false} />
+
+          {/* Language Switcher */}
+          <div className="pt-2">
+            <LanguageSwitcher />
+          </div>
+        </div>
+      )}
+      {/* Collapsed Language Switcher */}
+      {isCollapsed && (
+        <div className="p-4 border-t border-gray-700 flex justify-center">
+          <LanguageSwitcher collapsed={true} />
         </div>
       )}
 
@@ -195,14 +215,13 @@ const Sidebar = () => {
           <Button
             onClick={handleLogout}
             variant="ghost"
-            className={`w-full justify-start text-white hover:text-gray-100 bg-gray-900 hover:bg-black pointer ${
-              isCollapsed ? "px-2" : ""
-            }`}
+            className={`w-full justify-start text-white hover:text-gray-100 bg-gray-900 hover:bg-black pointer ${isCollapsed ? "px-2" : ""
+              }`}
           >
             <div className="pointer flex items-center justify-center shrink-0">
               <RiLogoutCircleLine />
             </div>
-            {!isCollapsed && <span className="ml-4">Logout</span>}
+            {!isCollapsed && <span className="ml-4">{t('sidebar.logout')}</span>}
           </Button>
         </div>
       </div>

@@ -1426,7 +1426,13 @@
     try {
       if (!config.chatbotId) return;
       const params = new URLSearchParams();
-      params.append('language', config.language || 'en');
+      // Use config.language if available, or default to 'en'
+      if (config.language) {
+        params.append('language', config.language);
+      } else {
+        params.append('language', 'en');
+      }
+
       const response = await fetch(
         `${config.apiUrl}/api/public/chatbot/${encodeURIComponent(config.chatbotId)}/cta-buttons?${params.toString()}`
       );
@@ -1733,7 +1739,8 @@
     const requestBody = {
       message: message,
       chatbot_id: selectedChatbot?.id || config.chatbotId,
-      session_id: conversationId || null
+      session_id: conversationId || null,
+      language: config.language || 'en'
     };
 
     try {
@@ -1991,12 +1998,12 @@
       // Product image
       const imageDiv = document.createElement('div');
       imageDiv.className = 'zaakiy-product-image';
-      
+
       if (product.image) {
         const img = document.createElement('img');
         img.src = product.image;
         img.alt = product.name || 'Product';
-        img.onerror = function() {
+        img.onerror = function () {
           // Replace with placeholder on error
           imageDiv.innerHTML = `
             <div class="zaakiy-product-image-placeholder">

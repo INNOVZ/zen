@@ -54,6 +54,7 @@ export interface ChatbotInfo extends BaseEntity, BaseEntityWithTimestamps, BaseO
   chain_status?: "pending" | "ready" | "training" | "failed";
   trainer_at?: string;
   deployment_config?: DeploymentConfig;
+  language?: string;
 }
 
 
