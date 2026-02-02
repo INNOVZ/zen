@@ -101,7 +101,10 @@
         "create_success": "¡Chatbot creado con éxito!",
         "update_chatbot": "Actualizar Chatbot",
         "create_chatbot": "Crear Chatbot",
-        "save_failed": "Error al guardar la configuración del chatbot"
+        "save_failed": "Error al guardar la configuración del chatbot",
+        "language_label": "Idioma del Bot",
+        "select_language_placeholder": "Seleccionar idioma principal",
+        "language_help_text": "Esto establece el idioma principal para el saludo inicial y los mensajes de reserva. Aún puede conversar en otros idiomas."
     },
     "dashboard": {
         "welcome_user": "Bienvenido de nuevo, {name}",

@@ -101,7 +101,10 @@
         "create_success": "تم إنشاء الشات بوت بنجاح!",
         "update_chatbot": "تحديث الشات بوت",
         "create_chatbot": "إنشاء شات بوت",
-        "save_failed": "فشل حفظ تكوين الشات بوت"
+        "save_failed": "فشل حفظ تكوين الشات بوت",
+        "language_label": "لغة الروبوت",
+        "select_language_placeholder": "اختر اللغة الأساسية",
+        "language_help_text": "يحدد هذا اللغة الأساسية للترحيب. لا يزال بإمكانه التحدث بلغات أخرى."
     },
     "dashboard": {
         "welcome_user": "أهلاً بك، {name}",

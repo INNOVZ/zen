@@ -24,7 +24,14 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { useTranslation } from "@/contexts/I18nContext";
+import { useTranslation, LANGUAGES } from "@/contexts/I18nContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const debounce = <T extends (...args: never[]) => void>(
   func: T,

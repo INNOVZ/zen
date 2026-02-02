@@ -101,7 +101,10 @@
         "create_success": "Chatbot created successfully!",
         "update_chatbot": "Update Chatbot",
         "create_chatbot": "Create Chatbot",
-        "save_failed": "Failed to save chatbot configuration"
+        "save_failed": "Failed to save chatbot configuration",
+        "language_label": "Bot Language",
+        "select_language_placeholder": "Select primary language",
+        "language_help_text": "This sets the primary language for the chatbot's initial greeting and fallback messages. It can still converse in other languages."
     },
     "dashboard": {
         "welcome_user": "Welcome back, {name}",
