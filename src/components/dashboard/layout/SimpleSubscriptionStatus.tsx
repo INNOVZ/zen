@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { Zap, Calendar, AlertTriangle, Loader2, RefreshCw } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface SimpleSubscriptionStatusProps {
   className?: string;
@@ -18,6 +19,7 @@ export const SimpleSubscriptionStatus: React.FC<
 > = ({ className, showRefreshButton = true }) => {
   const { subscription, isLoading, error, refreshSubscription } =
     useSubscription();
+  const { t, language } = useTranslation();
 
   const formatNumber = (num: number) => {
     return new Intl.NumberFormat().format(num);
@@ -33,7 +35,7 @@ export const SimpleSubscriptionStatus: React.FC<
         <CardContent className="p-6">
           <div className="flex items-center justify-center space-x-2">
             <Loader2 className="h-5 w-5 animate-spin" />
-            <span className="text-sm">Loading subscription...</span>
+            <span className="text-sm">{t('subscription.loading')}</span>
           </div>
         </CardContent>
       </Card>
@@ -67,9 +69,9 @@ export const SimpleSubscriptionStatus: React.FC<
         <CardContent className="p-6">
           <div className="text-center text-gray-500">
             <Zap className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-sm">No subscription found</p>
+            <p className="text-sm">{t('subscription.no_subscription')}</p>
             <p className="text-xs mt-1">
-              Please contact admin to set up your subscription
+              {t('subscription.contact_admin')}
             </p>
           </div>
         </CardContent>
@@ -83,12 +85,12 @@ export const SimpleSubscriptionStatus: React.FC<
 
   const getStatusBadge = () => {
     if (isAtLimit)
-      return <Badge className="bg-red-100 text-red-800">At Limit</Badge>;
+      return <Badge className="bg-red-100 text-red-800">{t('subscription.at_limit')}</Badge>;
     if (isNearLimit)
       return (
-        <Badge className="bg-yellow-100 text-yellow-800">Near Limit</Badge>
+        <Badge className="bg-yellow-100 text-yellow-800">{t('subscription.near_limit')}</Badge>
       );
-    return <Badge className="bg-green-100 text-green-800">Healthy</Badge>;
+    return <Badge className="bg-green-100 text-green-800">{t('subscription.healthy')}</Badge>;
   };
 
   return (
@@ -97,7 +99,7 @@ export const SimpleSubscriptionStatus: React.FC<
         <CardTitle className="flex items-center justify-between text-lg">
           <span className="flex items-center">
             <Zap className="h-5 w-5 mr-2 text-blue-500" />
-            Subscription Status
+            {t('subscription.status')}
           </span>
           {showRefreshButton && (
             <RefreshCw
@@ -111,7 +113,7 @@ export const SimpleSubscriptionStatus: React.FC<
         {/* Plan Information */}
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm text-gray-600">Current Plan</p>
+            <p className="text-sm text-gray-600">{t('subscription.current_plan')}</p>
             <p className="text-lg font-semibold">
               {subscription.plan_name || "Basic Plan"}
             </p>
@@ -122,7 +124,7 @@ export const SimpleSubscriptionStatus: React.FC<
         {/* Token Usage */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600">Token Usage</span>
+            <span className="text-gray-600">{t('subscription.usage')}</span>
             <span className="font-medium">
               {formatNumber(subscription.tokens_used_this_month)} /{" "}
               {formatNumber(subscription.monthly_limit)}
@@ -130,8 +132,8 @@ export const SimpleSubscriptionStatus: React.FC<
           </div>
           <Progress value={usagePercentage} className="h-2" />
           <div className="flex items-center justify-between text-xs text-gray-500">
-            <span>{formatPercentage(usagePercentage)} used</span>
-            <span>{formatNumber(subscription.tokens_remaining)} remaining</span>
+            <span>{formatPercentage(usagePercentage)} {t('subscription.used')}</span>
+            <span>{formatNumber(subscription.tokens_remaining)} {t('subscription.remaining')}</span>
           </div>
         </div>
 
@@ -139,10 +141,10 @@ export const SimpleSubscriptionStatus: React.FC<
         <div className="flex items-center justify-between text-sm">
           <div className="flex items-center text-gray-600">
             <Calendar className="h-4 w-4 mr-1" />
-            <span>Resets</span>
+            <span>{t('subscription.resets')}</span>
           </div>
           <span className="font-medium">
-            {new Date(subscription.reset_date).toLocaleDateString()}
+            {new Date(subscription.reset_date).toLocaleDateString(language)}
           </span>
         </div>
       </CardContent>

@@ -32,6 +32,7 @@
         "leads": "Clientes Potenciales",
         "calendar": "Calendario",
         "customize": "Personalizar",
+        "train": "Entrenar",
         "settings": "Configuración",
         "logout": "Cerrar Sesión"
     },
@@ -70,8 +71,6 @@
         "system_prompt_label": "Prompt del Sistema (Avanzado)",
         "system_prompt_placeholder": "Eres un asistente útil que...",
         "system_prompt_subtitle": "Defina instrucciones específicas para la IA. Esto anula la configuración de comportamiento predeterminada.",
-        "language_label": "Idioma del Chatbot",
-        "language_help": "Idioma predeterminado para las interacciones de su chatbot",
         "fallback_label": "Mensaje de Reserva",
         "fallback_placeholder": "Lo siento, no tengo información sobre eso...",
         "behavior_label": "Comportamiento y Personalidad",
@@ -122,7 +121,37 @@
         "loading_conversation_count_aria": "Cargando recuento de conversaciones",
         "conversations_count_aria": "{count} conversaciones",
         "no_conversations_aria": "Sin conversaciones",
-        "statistics_aria": "Estadísticas del panel"
+        "statistics_aria": "Estadísticas del panel",
+        "user_activity": "Actividad del Usuario",
+        "conversations_chart": "Conversaciones",
+        "leads_captured": "Leads Capturados",
+        "top_queries": "Top Consultas de Usuario",
+        "confidence_distribution": "Distribución de Confianza",
+        "quick_actions": "Acciones Rápidas",
+        "train_agent": "Entrenar su Agente",
+        "customize_ui": "Personalizar UI",
+        "test_chat": "Probar Chat",
+        "view_site": "Ver Sitio"
+    },
+    "intents": {
+        "greeting": "Saludo",
+        "contact": "Contacto",
+        "booking": "Reserva",
+        "product": "Producto",
+        "pricing": "Precios",
+        "support": "Soporte",
+        "comparison": "Comparación",
+        "recommendation": "Recomendación",
+        "information": "Información",
+        "feedback": "Feedback",
+        "account": "Cuenta",
+        "order": "Pedido",
+        "shipping": "Envío",
+        "return": "Devolución",
+        "partnership": "Asociación",
+        "enquiry": "Consulta",
+        "appointment": "Cita",
+        "unknown": "Desconocido"
     },
     "leads": {
         "title": "Leads Capturados",
@@ -373,5 +402,19 @@
         "lead_settings_saved": "Configuración de captura de leads guardada",
         "lead_settings_failed": "Error al guardar la configuración",
         "lead_config_load_error": "Error al cargar la configuración de captura de leads"
+    },
+    "subscription": {
+        "status": "Estado de Suscripción",
+        "current_plan": "Plan Actual",
+        "usage": "Uso de Tokens",
+        "used": "usados",
+        "remaining": "restantes",
+        "resets": "Se reinicia",
+        "loading": "Cargando suscripción...",
+        "no_subscription": "No se encontró suscripción",
+        "contact_admin": "Por favor contacte al admin para configurar su suscripción",
+        "healthy": "Saludable",
+        "at_limit": "Límite Alcanzado",
+        "near_limit": "Cerca del Límite"
     }
 }

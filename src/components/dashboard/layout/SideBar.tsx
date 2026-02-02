@@ -51,13 +51,7 @@ const Sidebar = () => {
       path: "/dashboard",
     },
     {
-      title: t('sidebar.customize'), // Renamed from Train/Customize based on translations available or usage
-      // Wait, original had "Train", "Customize". My en.json has "customize".
-      // I'll stick to original keys but map them.
-      // Train is not in my en.json yet.
-      // I will add 'train' to en.json later or use raw string for now if missing.
-      // Let's use simple logic: t('sidebar.train') will fallback to 'sidebar.train' if missing.
-      // But I should use "Customize" for "Customize".
+      title: t('sidebar.train'),
       icon: <Brain size={16} />,
       path: "/dashboard/train",
     },
@@ -132,7 +126,7 @@ const Sidebar = () => {
             // Simple active state logic for new URL structure without userId
             let isActive = false;
 
-            if (item.title === "Dashboard") {
+            if (item.path === "/dashboard") {
               // Dashboard is active only when we're exactly on /dashboard with no additional segments
               isActive = normalizedPathname === "/dashboard";
             } else {

@@ -32,6 +32,7 @@
         "leads": "Leads",
         "calendar": "Kalender",
         "customize": "Anpassen",
+        "train": "Trainieren",
         "settings": "Einstellungen",
         "logout": "Abmelden"
     },
@@ -70,8 +71,6 @@
         "system_prompt_label": "System-Prompt (Erweitert)",
         "system_prompt_placeholder": "Du bist ein hilfreicher Assistent, der...",
         "system_prompt_subtitle": "Definieren Sie spezifische Anweisungen für die KI. Dies überschreibt Standardverhalten.",
-        "language_label": "Chatbot-Sprache",
-        "language_help": "Standardsprache für Ihre Chatbot-Interaktionen",
         "fallback_label": "Fallback-Nachricht",
         "fallback_placeholder": "Tut mir leid, dazu habe ich keine Informationen...",
         "behavior_label": "Verhalten & Persönlichkeit",
@@ -122,7 +121,37 @@
         "loading_conversation_count_aria": "Lade Gesprächsanzahl",
         "conversations_count_aria": "{count} Gespräche",
         "no_conversations_aria": "Keine Gespräche",
-        "statistics_aria": "Dashboard-Statistiken"
+        "statistics_aria": "Dashboard-Statistiken",
+        "user_activity": "Benutzeraktivität",
+        "conversations_chart": "Gespräche",
+        "leads_captured": "Erfasste Leads",
+        "top_queries": "Häufigste Benutzeranfragen",
+        "confidence_distribution": "Konfidenzverteilung",
+        "quick_actions": "Schnellaktionen",
+        "train_agent": "Agenten Trainieren",
+        "customize_ui": "UI Anpassen",
+        "test_chat": "Chat Testen",
+        "view_site": "Seite Anzeigen"
+    },
+    "intents": {
+        "greeting": "Begrüßung",
+        "contact": "Kontakt",
+        "booking": "Buchung",
+        "product": "Produkt",
+        "pricing": "Preise",
+        "support": "Support",
+        "comparison": "Vergleich",
+        "recommendation": "Empfehlung",
+        "information": "Information",
+        "feedback": "Feedback",
+        "account": "Konto",
+        "order": "Bestellung",
+        "shipping": "Versand",
+        "return": "Rückgabe",
+        "partnership": "Partnerschaft",
+        "enquiry": "Anfrage",
+        "appointment": "Termin",
+        "unknown": "Unbekannt"
     },
     "leads": {
         "title": "Erfasste Leads",
@@ -373,5 +402,19 @@
         "lead_settings_saved": "Lead-Erfassungs Einstellungen gespeichert",
         "lead_settings_failed": "Fehler beim Speichern der Einstellungen",
         "lead_config_load_error": "Fehler beim Laden der Lead-Erfassungs Konfiguration"
+    },
+    "subscription": {
+        "status": "Abonnement Status",
+        "current_plan": "Aktueller Plan",
+        "usage": "Token-Nutzung",
+        "used": "genutzt",
+        "remaining": "verbleibend",
+        "resets": "Setzt zurück",
+        "loading": "Lade Abonnement...",
+        "no_subscription": "Kein Abonnement gefunden",
+        "contact_admin": "Bitte Admin kontaktieren zur Einrichtung",
+        "healthy": "Gut",
+        "at_limit": "Limit Erreicht",
+        "near_limit": "Nahe Limit"
     }
 }

@@ -32,6 +32,7 @@
         "leads": "العملاء المحتملين",
         "calendar": "التقويم",
         "customize": "تخصيص",
+        "train": "تدريب",
         "settings": "الإعدادات",
         "logout": "تسجيل الخروج"
     },
@@ -70,8 +71,6 @@
         "system_prompt_label": "موجه النظام (متقدم)",
         "system_prompt_placeholder": "أنت مساعد مفيد يقوم بـ...",
         "system_prompt_subtitle": "حدد تعليمات محددة للذكاء الاصطناعي. هذا يتجاوز إعدادات السلوك الافتراضية.",
-        "language_label": "لغة الشات بوت",
-        "language_help": "اللغة الافتراضية لتفاعلات الشات بوت الخاص بك",
         "fallback_label": "رسالة احتياطية",
         "fallback_placeholder": "آسف، ليس لدي معلومات حول ذلك...",
         "behavior_label": "السلوك والشخصية",
@@ -122,7 +121,37 @@
         "loading_conversation_count_aria": "جاري تحميل عدد المحادثات",
         "conversations_count_aria": "{count} محادثات",
         "no_conversations_aria": "لا توجد محادثات",
-        "statistics_aria": "إحصائيات لوحة التحكم"
+        "statistics_aria": "إحصائيات لوحة التحكم",
+        "user_activity": "نشاط المستخدم",
+        "conversations_chart": "المحادثات",
+        "leads_captured": "العملاء المحتملين",
+        "top_queries": "أهم استفسارات المستخدمين",
+        "confidence_distribution": "توزيع الثقة",
+        "quick_actions": "إجراءات سريعة",
+        "train_agent": "تدريب الوكيل",
+        "customize_ui": "تخصيص الواجهة",
+        "test_chat": "اختبار المحادثة",
+        "view_site": "عرض الموقع"
+    },
+    "intents": {
+        "greeting": "تحية",
+        "contact": "اتصال",
+        "booking": "حجز",
+        "product": "منتج",
+        "pricing": "تسعير",
+        "support": "دعم",
+        "comparison": "مقارنة",
+        "recommendation": "توصية",
+        "information": "معلومات",
+        "feedback": "ملاحظات",
+        "account": "حساب",
+        "order": "طلب",
+        "shipping": "شحن",
+        "return": "إرجاع",
+        "partnership": "شراكة",
+        "enquiry": "استفسار",
+        "appointment": "موعد",
+        "unknown": "غير معروف"
     },
     "leads": {
         "title": "العملاء المحتملين الملتقطين",
@@ -374,5 +403,19 @@
         "lead_settings_saved": "تم حفظ إعدادات التقاط العملاء المحتملين",
         "lead_settings_failed": "فشل حفظ الإعدادات",
         "lead_config_load_error": "فشل تحميل تكوين التقاط العملاء المحتملين"
+    },
+    "subscription": {
+        "status": "حالة الاشتراك",
+        "current_plan": "الخطة الحالية",
+        "usage": "استخدام الرموز",
+        "used": "مستخدم",
+        "remaining": "متبقي",
+        "resets": "إعادة تعيين",
+        "loading": "جاري تحميل الاشتراك...",
+        "no_subscription": "لم يتم العثور على اشتراك",
+        "contact_admin": "يرجى الاتصال بالمسؤول لإعداد اشتراكك",
+        "healthy": "جيد",
+        "at_limit": "الحد الأقصى",
+        "near_limit": "قريب من الحد"
     }
 }

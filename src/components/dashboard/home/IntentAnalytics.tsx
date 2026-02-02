@@ -16,6 +16,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart as PieChartIcon, BarChart3 } from "lucide-react";
 import type { IntentAnalytics } from "@/types";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface ModernIntentAnalyticsProps {
   analytics: IntentAnalytics;
@@ -48,17 +49,28 @@ const getIntentColor = (intent: string): string => {
 export function ModernIntentAnalytics({
   analytics,
 }: ModernIntentAnalyticsProps) {
+  const { t } = useTranslation();
+
   const chartData = useMemo(() => {
     if (!analytics.intent_distribution) return [];
     return Object.entries(analytics.intent_distribution)
-      .map(([name, value]) => ({
-        name: name.charAt(0).toUpperCase() + name.slice(1),
-        value,
-        originalName: name,
-      }))
+      .map(([name, value]) => {
+        const intentKey = `intents.${name.toLowerCase()}`;
+        const translated = t(intentKey);
+        // Fallback to capitalized name if translation is missing (returns key)
+        const displayName = translated === intentKey
+          ? name.charAt(0).toUpperCase() + name.slice(1)
+          : translated;
+
+        return {
+          name: displayName,
+          value,
+          originalName: name,
+        };
+      })
       .sort((a, b) => b.value - a.value)
       .slice(0, 8);
-  }, [analytics.intent_distribution]);
+  }, [analytics.intent_distribution, t]);
 
   if (chartData.length === 0) return null;
 
@@ -68,7 +80,7 @@ export function ModernIntentAnalytics({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <BarChart3 className="h-5 w-5 text-[#0a0a60]" />
-            Top User queries
+            {t("dashboard.top_queries")}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -119,7 +131,7 @@ export function ModernIntentAnalytics({
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <PieChartIcon className="h-5 w-5 text-[#5d7dde]" />
-            Confidence Distribution
+            {t("dashboard.confidence_distribution")}
           </CardTitle>
         </CardHeader>
         <CardContent>

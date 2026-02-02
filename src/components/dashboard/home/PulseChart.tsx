@@ -13,12 +13,15 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity } from "lucide-react";
 import type { IntentAnalytics } from "@/types";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface ModernPulseChartProps {
   intentAnalytics: IntentAnalytics;
 }
 
 export function ModernPulseChart({ intentAnalytics }: ModernPulseChartProps) {
+  const { t, language } = useTranslation();
+
   const chartData = useMemo(() => {
     if (!intentAnalytics.intent_trends) return [];
 
@@ -26,7 +29,7 @@ export function ModernPulseChart({ intentAnalytics }: ModernPulseChartProps) {
       .map((trend) => {
         const date = new Date(trend.date);
         return {
-          date: date.toLocaleDateString("en-US", {
+          date: date.toLocaleDateString(language, {
             month: "short",
             day: "numeric",
           }),
@@ -37,7 +40,7 @@ export function ModernPulseChart({ intentAnalytics }: ModernPulseChartProps) {
         };
       })
       .slice(-14); // Last 14 days
-  }, [intentAnalytics.intent_trends]);
+  }, [intentAnalytics.intent_trends, language]);
 
   if (chartData.length === 0) return null;
 
@@ -47,19 +50,19 @@ export function ModernPulseChart({ intentAnalytics }: ModernPulseChartProps) {
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2 text-lg font-semibold">
             <Activity className="h-5 w-5 text-[#0a0a60]" />
-            User Activity
+            {t("dashboard.user_activity")}
           </CardTitle>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-[#0a0a60]" />
               <span className="text-xs font-medium text-gray-600">
-                Conversations
+                {t("dashboard.conversations_chart")}
               </span>
             </div>
             <div className="flex items-center gap-1.5">
               <div className="w-3 h-3 rounded-full bg-[#5d7dde]" />
               <span className="text-xs font-medium text-gray-600">
-                Leads Captured
+                {t("dashboard.leads_captured")}
               </span>
             </div>
           </div>

@@ -32,6 +32,7 @@
         "leads": "Leads",
         "calendar": "Calendar",
         "customize": "Customize",
+        "train": "Train",
         "settings": "Settings",
         "logout": "Logout"
     },
@@ -70,8 +71,6 @@
         "system_prompt_label": "System Prompt (Advanced)",
         "system_prompt_placeholder": "You are a helpful assistant that...",
         "system_prompt_subtitle": "Define specific instructions for the AI. This overrides default behavior settings.",
-        "language_label": "Chatbot Language",
-        "language_help": "Default language for your chatbot interactions",
         "fallback_label": "Fallback Message",
         "fallback_placeholder": "I'm sorry, I don't have information about that...",
         "behavior_label": "Behavior & Personality",
@@ -122,7 +121,37 @@
         "loading_conversation_count_aria": "Loading conversation count",
         "conversations_count_aria": "{count} conversations",
         "no_conversations_aria": "No conversations",
-        "statistics_aria": "Dashboard Statistics"
+        "statistics_aria": "Dashboard Statistics",
+        "user_activity": "User Activity",
+        "conversations_chart": "Conversations",
+        "leads_captured": "Leads Captured",
+        "top_queries": "Top User Queries",
+        "confidence_distribution": "Confidence Distribution",
+        "quick_actions": "Quick Actions",
+        "train_agent": "Train Your Agent",
+        "customize_ui": "Customize UI",
+        "test_chat": "Test Chat",
+        "view_site": "View Site"
+    },
+    "intents": {
+        "greeting": "Greeting",
+        "contact": "Contact",
+        "booking": "Booking",
+        "product": "Product",
+        "pricing": "Pricing",
+        "support": "Support",
+        "comparison": "Comparison",
+        "recommendation": "Recommendation",
+        "information": "Information",
+        "feedback": "Feedback",
+        "account": "Account",
+        "order": "Order",
+        "shipping": "Shipping",
+        "return": "Return",
+        "partnership": "Partnership",
+        "enquiry": "Enquiry",
+        "appointment": "Appointment",
+        "unknown": "Unknown"
     },
     "leads": {
         "title": "Captured Leads",
@@ -373,5 +402,19 @@
         "lead_settings_saved": "Lead capture settings saved",
         "lead_settings_failed": "Failed to save settings",
         "lead_config_load_error": "Failed to load lead capture config"
+    },
+    "subscription": {
+        "status": "Subscription Status",
+        "current_plan": "Current Plan",
+        "usage": "Token Usage",
+        "used": "used",
+        "remaining": "remaining",
+        "resets": "Resets",
+        "loading": "Loading subscription...",
+        "no_subscription": "No subscription found",
+        "contact_admin": "Please contact admin to set up your subscription",
+        "healthy": "Healthy",
+        "at_limit": "At Limit",
+        "near_limit": "Near Limit"
     }
 }
