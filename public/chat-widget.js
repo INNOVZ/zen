@@ -1413,6 +1413,13 @@
         config.greeting = chatbot.greeting_message || config.greeting;
         config.avatarUrl = chatbot.avatar_url || null;
 
+        // CRITICAL: Set language from chatbot config for proper localization
+        if (chatbot.language) {
+          config.language = chatbot.language;
+          // Reload CTA buttons with the correct language
+          loadCTAButtons();
+        }
+
         // Update UI with new config
         updateWidgetAppearance();
       }
@@ -2272,15 +2279,20 @@
   }
 
   // Initialize widget
-  function initWidget() {
+  async function initWidget() {
     if (!document.body) {
       setTimeout(initWidget, 100);
       return;
     }
 
     createWidget();
-    loadChatbotConfig();
-    loadCTAButtons();
+    // CRITICAL: Wait for chatbot config to load first to get the correct language
+    await loadChatbotConfig();
+    // Only load CTA buttons if loadChatbotConfig didn't already load them
+    // (it will load them if chatbot has a language configured)
+    if (!config.language) {
+      loadCTAButtons();
+    }
   }
 
   // Start initialization
