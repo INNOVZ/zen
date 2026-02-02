@@ -617,6 +617,33 @@ export default function ChatbotConfiguration() {
               </div>
             </div>
 
+            <div className="my-7">
+              <Label>{t("chatbot_config.language_label")}</Label>
+              <div className="mt-4">
+                <Select
+                  value={inputValues.language}
+                  onValueChange={(value) => handleFieldChange("language", value)}
+                >
+                  <SelectTrigger className="w-full md:w-[300px]">
+                    <SelectValue placeholder={t("chatbot_config.select_language_placeholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Object.entries(LANGUAGES).map(([code, { label, icon }]) => (
+                      <SelectItem key={code} value={code}>
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg leading-none">{icon}</span>
+                          <span>{label}</span>
+                        </div>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-sm text-gray-500 mt-2">
+                  {t("chatbot_config.language_help_text")}
+                </p>
+              </div>
+            </div>
+
             <div className="my-9">
               <Label>{t("chatbot_config.primary_color_label")}</Label>
               <div className="mt-2">

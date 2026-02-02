@@ -3,13 +3,13 @@ import type { ConversationInfo } from "@/types";
 import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
-import type { 
-  ChatResponse, 
-  TokenHandler, 
-  FeedbackRequest, 
-  ContextConfig, 
-  PerformanceMetrics, 
-  ContextAnalytics, 
+import type {
+  ChatResponse,
+  TokenHandler,
+  FeedbackRequest,
+  ContextConfig,
+  PerformanceMetrics,
+  ContextAnalytics,
   HealthCheck,
   IntentAnalyticsResponse,
   IntentDetailsResponse,
@@ -20,7 +20,8 @@ export const conversationApi = {
   sendMessage: async (
     message: string,
     chatbotId?: string,
-    conversationId?: string
+    conversationId?: string,
+    language?: string
   ): Promise<ChatResponse> => {
     try {
       // Match backend parameter names exactly
@@ -28,6 +29,7 @@ export const conversationApi = {
         message,
         ...(chatbotId && { chatbot_id: chatbotId }),
         ...(conversationId && { conversation_id: conversationId }),
+        ...(language && { language }),
       };
 
       console.log("📤 Sending message with payload:", {
@@ -103,10 +105,10 @@ export const conversationApi = {
 
       // Get total count from pagination metadata (much more efficient)
       const data = await fetchWithAuth('/api/chat/conversations?page_size=1');
-      
+
       // Extract total count from pagination metadata
       const totalCount = data.pagination?.total_items || 0;
-      
+
       // Cache for 30 seconds
       apiCache.set(cacheKey, totalCount, 30 * 1000);
       return totalCount;

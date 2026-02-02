@@ -64,7 +64,7 @@ const ChatWidget = memo(
     chatbotId,
     showChatbotSelector = false,
   }: // orgId,
-  ChatWidgetProps) {
+    ChatWidgetProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [isMinimized, setIsMinimized] = useState(false);
     const [messages, setMessages] = useState<Message[]>([]);
@@ -201,6 +201,11 @@ const ChatWidget = memo(
               if (!mounted) return;
               setSelectedChatbot(fullChatbot);
 
+              // Set language from chatbot config if available and no local override exists
+              if (fullChatbot.language && typeof window !== "undefined" && !localStorage.getItem("chatbot_language")) {
+                setCurrentLanguage(fullChatbot.language);
+              }
+
               // Set initial greeting message
               setMessages([
                 {
@@ -334,6 +339,7 @@ const ChatWidget = memo(
             currentMessage,
             selectedChatbot?.id || chatbotId,
             conversationId,
+            currentLanguage,
           );
 
           console.log("Chat response received:", {
@@ -485,9 +491,8 @@ const ChatWidget = memo(
         className={`fixed ${positionClasses[position]} flex flex-col p-0 z-50`}
       >
         <div
-          className={`w-[25vw] flex flex-col shadow-2xl rounded-lg p-3 transition-all bg-white m-0 duration-300 ${
-            isMinimized ? "h-14" : "h-[70vh]"
-          }`}
+          className={`w-[25vw] flex flex-col shadow-2xl rounded-lg p-3 transition-all bg-white m-0 duration-300 ${isMinimized ? "h-14" : "h-[70vh]"
+            }`}
         >
           <div
             className="flex-row items-center justify-between space-y-0 p-3 text-white rounded-lg shadow-md"
@@ -506,11 +511,10 @@ const ChatWidget = memo(
                         selectedChatbot.avatar_url.includes(
                           "storage/v1/object/uploads/",
                         )
-                          ? `${API_BASE_URL}/api/uploads/avatar/legacy/${
-                              selectedChatbot.avatar_url.split(
-                                "storage/v1/object/uploads/",
-                              )[1]
-                            }`
+                          ? `${API_BASE_URL}/api/uploads/avatar/legacy/${selectedChatbot.avatar_url.split(
+                            "storage/v1/object/uploads/",
+                          )[1]
+                          }`
                           : selectedChatbot.avatar_url
                       }
                       alt={selectedChatbot.name}
