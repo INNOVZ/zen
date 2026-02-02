@@ -37,8 +37,10 @@ import ShopifyIntegration from "@/components/dashboard/integrations/ShopifyInteg
 import LeadCaptureSettings from "@/components/dashboard/integrations/LeadCaptureSettings";
 import WhatsAppConfiguration from "@/components/dashboard/settings/WhatsAppConfiguration";
 import PasswordChange from "@/components/dashboard/settings/PasswordChange";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function SettingsLayout() {
+  const { t } = useTranslation();
   const {
     organizationInfo,
     isLoading: isLoadingInfo,
@@ -116,7 +118,7 @@ export default function SettingsLayout() {
       {
         id: INTEGRATION_IDS.WHATSAPP,
         title: "WhatsApp",
-        description: "Connect via Twilio",
+        description: t("settings.whatsapp_desc"),
         icon: MessageSquare,
         iconColor: "text-green-600",
         iconBgColor: "bg-green-100",
@@ -133,8 +135,8 @@ export default function SettingsLayout() {
       },
       {
         id: INTEGRATION_IDS.GOOGLE,
-        title: "Google Services",
-        description: "Calendar & Sheets",
+        title: t("settings.google_services"),
+        description: t("settings.google_desc"),
         icon: Calendar,
         iconColor: "text-blue-600",
         iconBgColor: "bg-blue-100",
@@ -153,8 +155,8 @@ export default function SettingsLayout() {
       },
       {
         id: INTEGRATION_IDS.CRM,
-        title: "CRM",
-        description: "HubSpot, Salesforce, Zoho",
+        title: t("settings.crm"),
+        description: t("settings.crm_desc"),
         icon: Database,
         iconColor: "text-purple-600",
         iconBgColor: "bg-purple-100",
@@ -166,8 +168,8 @@ export default function SettingsLayout() {
       },
       {
         id: INTEGRATION_IDS.SHOPIFY,
-        title: "Shopify",
-        description: "E-commerce integration",
+        title: t("settings.shopify"),
+        description: t("settings.shopify_desc"),
         icon: ShoppingCart,
         iconColor: "text-green-600",
         iconBgColor: "bg-green-100",
@@ -179,8 +181,8 @@ export default function SettingsLayout() {
       },
       {
         id: INTEGRATION_IDS.LEAD_CAPTURE,
-        title: "Lead Capture",
-        description: "Auto-capture leads",
+        title: t("settings.lead_capture"),
+        description: t("settings.lead_capture_desc"),
         icon: Sheet,
         iconColor: "text-orange-600",
         iconBgColor: "bg-orange-100",
@@ -191,7 +193,7 @@ export default function SettingsLayout() {
         component: <LeadCaptureSettings />,
       },
     ],
-    [organizationPhone, handlePhoneNumberChange, integrationStatuses]
+    [organizationPhone, handlePhoneNumberChange, integrationStatuses, t]
   );
 
   if (!isMounted || isLoadingInfo) {
@@ -247,8 +249,8 @@ export default function SettingsLayout() {
           </div>
         ) : (
           <div className="text-white">
-            <h1 className="text-3xl font-bold">Settings</h1>
-            <p className="mt-1">Unable to load organization information</p>
+            <h1 className="text-3xl font-bold">{t("sidebar.settings")}</h1>
+            <p className="mt-1">{t("common.error_loading")}</p>
           </div>
         )}
       </header>
@@ -260,10 +262,9 @@ export default function SettingsLayout() {
           <div className="space-y-6">
             <Card className="border-0">
               <CardHeader>
-                <CardTitle>Integrations </CardTitle>
+                <CardTitle>{t("settings.integrations")} </CardTitle>
                 <CardDescription>
-                  Connect your chatbot with external services and messaging
-                  platforms
+                  {t("settings.integrations_subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -292,16 +293,15 @@ export default function SettingsLayout() {
           <div className="space-y-6">
             <Card className="border-0">
               <CardHeader>
-                <CardTitle>Update Organization</CardTitle>
+                <CardTitle>{t("settings.update_org")}</CardTitle>
                 <CardDescription>
-                  Update your organization details including name, email,
-                  contact phone, and business type
+                  {t("settings.update_org_subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="name">Organization Name</Label>
+                    <Label htmlFor="name">{t("settings.org_name")}</Label>
                     <Input
                       id="name"
                       type="text"
@@ -309,13 +309,13 @@ export default function SettingsLayout() {
                       onChange={(e) =>
                         setFormData({ ...formData, name: e.target.value })
                       }
-                      placeholder="Enter organization name"
+                      placeholder={t("settings.org_name")}
                       required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email">Organization Email</Label>
+                    <Label htmlFor="email">{t("settings.org_email")}</Label>
                     <Input
                       id="email"
                       type="email"
@@ -323,13 +323,13 @@ export default function SettingsLayout() {
                       onChange={(e) =>
                         setFormData({ ...formData, email: e.target.value })
                       }
-                      placeholder="Enter organization email address"
+                      placeholder={t("settings.org_email")}
                       required
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact_phone">Contact Phone</Label>
+                    <Label htmlFor="contact_phone">{t("settings.contact_phone")}</Label>
                     <Input
                       id="contact_phone"
                       type="tel"
@@ -340,12 +340,12 @@ export default function SettingsLayout() {
                           contact_phone: e.target.value,
                         })
                       }
-                      placeholder="Enter contact phone number"
+                      placeholder={t("settings.contact_phone")}
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="business_type">Business Type</Label>
+                    <Label htmlFor="business_type">{t("settings.business_type")}</Label>
                     <Input
                       id="business_type"
                       type="text"
@@ -356,13 +356,13 @@ export default function SettingsLayout() {
                           business_type: e.target.value,
                         })
                       }
-                      placeholder="Enter business type (e.g., SaaS, E-commerce, etc.)"
+                      placeholder={t("settings.business_type")}
                     />
                   </div>
 
                   <div className="flex gap-2">
                     <Button type="submit" disabled={isLoading}>
-                      {isLoading ? "Updating..." : "Update Organization"}
+                      {isLoading ? t("common.saving") : t("settings.update_org_btn")}
                     </Button>
                     <Button
                       type="button"
@@ -371,11 +371,10 @@ export default function SettingsLayout() {
                       disabled={isLoadingInfo}
                     >
                       <RefreshCw
-                        className={`h-4 w-4 mr-2 ${
-                          isLoadingInfo ? "animate-spin" : ""
-                        }`}
+                        className={`h-4 w-4 mr-2 ${isLoadingInfo ? "animate-spin" : ""
+                          }`}
                       />
-                      Refresh
+                      {t("common.refresh")}
                     </Button>
                   </div>
                 </form>

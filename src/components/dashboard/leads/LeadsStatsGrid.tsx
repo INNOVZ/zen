@@ -2,6 +2,7 @@ import { memo } from "react";
 import { LeadsStatsCard } from "./LeadsStatsCard";
 import { LeadsStats } from "@/app/api/leads";
 import { Users, TrendingUp, MessageSquare, Phone } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface LeadsStatsGridProps {
   stats: LeadsStats | null;
@@ -10,6 +11,7 @@ interface LeadsStatsGridProps {
 
 export const LeadsStatsGrid = memo<LeadsStatsGridProps>(
   ({ stats, isLoading = false }) => {
+    const { t } = useTranslation();
     if (!stats) return null;
 
     const computeThisMonthLeads = () => {
@@ -77,33 +79,33 @@ export const LeadsStatsGrid = memo<LeadsStatsGridProps>(
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <LeadsStatsCard
           icon={Users}
-          title="Total Leads"
+          title={t("leads.total_leads")}
           value={stats.total_leads}
-          description="All captured leads"
+          description={t("leads.all_captured_leads")}
           isLoading={isLoading}
         />
 
         <LeadsStatsCard
           icon={TrendingUp}
-          title="This Month"
+          title={t("leads.this_month")}
           value={thisMonthLeads}
-          description="Leads captured this month"
+          description={t("leads.leads_captured_month")}
           isLoading={isLoading}
         />
 
         <LeadsStatsCard
           icon={MessageSquare}
-          title="From Website"
+          title={t("leads.from_website")}
           value={stats.leads_by_channel.website || 0}
-          description="Website chat leads"
+          description={t("leads.website_chat_leads")}
           isLoading={isLoading}
         />
 
         <LeadsStatsCard
           icon={Phone}
-          title="From WhatsApp"
+          title={t("leads.from_whatsapp")}
           value={stats.leads_by_channel.whatsapp || 0}
-          description="WhatsApp leads"
+          description={t("leads.whatsapp_leads")}
           isLoading={isLoading}
         />
       </div>

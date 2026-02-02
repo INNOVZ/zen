@@ -13,9 +13,11 @@ import {
   Loader2,
   Info,
 } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 
 export default function LeadCaptureSettings() {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<LeadCaptureConfig>({
     enabled: false,
     google_sheets: {
@@ -51,13 +53,13 @@ export default function LeadCaptureSettings() {
       setIsSaving(true);
       const success = await mcpApi.updateLeadCaptureConfig(config);
       if (success) {
-        toast.success("Lead capture settings saved");
+        toast.success(t("integrations.lead_settings_saved"));
       } else {
-        toast.error("Failed to save settings");
+        toast.error(t("integrations.lead_settings_failed"));
       }
     } catch (error) {
       console.error("Failed to save lead capture config:", error);
-      toast.error("Failed to save settings");
+      toast.error(t("integrations.lead_settings_failed"));
     } finally {
       setIsSaving(false);
     }
@@ -67,7 +69,7 @@ export default function LeadCaptureSettings() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Loading...
+        {t("common.loading")}
       </div>
     );
   }
@@ -76,16 +78,16 @@ export default function LeadCaptureSettings() {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Sheet className="h-5 w-5 text-orange-600" />
-        <Label className="text-base font-semibold">Lead Capture Settings</Label>
+        <Label className="text-base font-semibold">{t("integrations.lead_capture_settings")}</Label>
       </div>
 
       <div className="space-y-4">
         {/* Enable Lead Capture */}
         <div className="flex items-center justify-between">
           <div>
-            <Label>Enable Lead Capture</Label>
+            <Label>{t("integrations.enable_lead_capture")}</Label>
             <p className="text-xs text-muted-foreground">
-              Automatically detect and capture leads from chat conversations
+              {t("integrations.enable_lead_capture_desc")}
             </p>
           </div>
           <Switch
@@ -98,13 +100,12 @@ export default function LeadCaptureSettings() {
 
         {config.enabled && (
           <>
-            {/* Google Sheets */}
             <div className="space-y-2 border-t pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Capture to Google Sheets</Label>
+                  <Label>{t("integrations.capture_sheets")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Automatically append leads to your Google Sheet
+                    {t("integrations.capture_sheets_desc")}
                   </p>
                 </div>
                 <Switch
@@ -122,13 +123,12 @@ export default function LeadCaptureSettings() {
               </div>
             </div>
 
-            {/* CRM */}
             <div className="space-y-2 border-t pt-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <Label>Capture to CRM</Label>
+                  <Label>{t("integrations.capture_crm")}</Label>
                   <p className="text-xs text-muted-foreground">
-                    Automatically create leads in your CRM system
+                    {t("integrations.capture_crm_desc")}
                   </p>
                 </div>
                 <Switch
@@ -146,10 +146,9 @@ export default function LeadCaptureSettings() {
               </div>
             </div>
 
-            {/* Minimum Confidence */}
             <div className="space-y-2 border-t pt-4">
               <div className="flex items-center justify-between">
-                <Label>Minimum Confidence Threshold</Label>
+                <Label>{t("integrations.min_confidence")}</Label>
                 <span className="text-sm font-medium">
                   {(config.min_confidence || 0.4).toFixed(1)}
                 </span>
@@ -165,16 +164,16 @@ export default function LeadCaptureSettings() {
                 className="w-full"
               />
               <p className="text-xs text-muted-foreground">
-                Higher values require stronger lead indicators (0.0 - 1.0)
+                {t("integrations.min_confidence_desc")}
               </p>
             </div>
 
             {/* Require Contact */}
             <div className="flex items-center justify-between border-t pt-4">
               <div>
-                <Label>Require Contact Information</Label>
+                <Label>{t("integrations.require_contact")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Only capture leads with email or phone number
+                  {t("integrations.require_contact_desc")}
                 </p>
               </div>
               <Switch
@@ -188,8 +187,7 @@ export default function LeadCaptureSettings() {
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
-                Lead capture will automatically detect potential leads based on:
-                interest keywords, purchase intent, contact information, and demo requests.
+                {t("integrations.lead_capture_info")}
               </AlertDescription>
             </Alert>
           </>
@@ -199,10 +197,10 @@ export default function LeadCaptureSettings() {
           {isSaving ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Saving...
+              {t("common.saving")}
             </>
           ) : (
-            "Save Settings"
+            t("integrations.save_settings")
           )}
         </Button>
       </div>

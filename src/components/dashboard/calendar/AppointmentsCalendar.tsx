@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface EventClickInfo {
   event: {
@@ -42,6 +43,7 @@ interface EventClickInfo {
 }
 
 export default function AppointmentsCalendar() {
+  const { t, language } = useTranslation();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -95,13 +97,12 @@ export default function AppointmentsCalendar() {
       if (isTokenExpiredError(err)) {
         setIsTokenExpired(true);
         setError(
-          "Your Google Calendar connection has expired. Please reconnect to continue viewing your calendar."
+          t("calendar.google_credentials_error")
         );
         return;
       }
 
-      let errorMessage =
-        "Failed to load calendar events. Please ensure Google Calendar is connected.";
+      let errorMessage = t("calendar.google_credentials_error");
 
       if (err && typeof err === "object") {
         const errorObj = err as {
@@ -122,7 +123,7 @@ export default function AppointmentsCalendar() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     const links = [
@@ -174,7 +175,7 @@ export default function AppointmentsCalendar() {
     }
 
     const confirmed = window.confirm(
-      "Delete this appointment? This action cannot be undone."
+      "Delete this appointment? This action cannot be undone." // TODO: add translation
     );
     if (!confirmed) {
       return;
@@ -203,14 +204,14 @@ export default function AppointmentsCalendar() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-blue-600" />
-            <CardTitle>Appointments Calendar</CardTitle>
+            <CardTitle>{t("calendar.appointments_calendar")}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-96">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              Loading calendar appointments...
+              {t("common.loading")}
             </p>
           </div>
         </CardContent>
@@ -224,7 +225,7 @@ export default function AppointmentsCalendar() {
         <CardHeader>
           <div className="flex items-center gap-2">
             <Calendar className="h-5 w-5 text-blue-600" />
-            <CardTitle>Appointments Calendar</CardTitle>
+            <CardTitle>{t("calendar.appointments_calendar")}</CardTitle>
           </div>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-96">
@@ -246,7 +247,7 @@ export default function AppointmentsCalendar() {
             ) : (
               <Button onClick={loadEvents} variant="outline">
                 <RefreshCw className="mr-2 h-4 w-4" />
-                Retry
+                {t("common.retry")}
               </Button>
             )}
           </div>
@@ -263,7 +264,7 @@ export default function AppointmentsCalendar() {
             <div className="flex items-center gap-2">
               <Calendar className="h-5 w-5 text-[#5d7dde]" />
               <div>
-                <CardTitle>Calendar</CardTitle>
+                <CardTitle>{t("sidebar.calendar")}</CardTitle>
                 <CardDescription>
                   View and manage your calendar events
                 </CardDescription>
@@ -280,7 +281,7 @@ export default function AppointmentsCalendar() {
               ) : (
                 <RefreshCw className="mr-2 h-4 w-4" />
               )}
-              Refresh
+              {t("common.refresh")}
             </Button>
           </div>
         </CardHeader>
@@ -289,6 +290,8 @@ export default function AppointmentsCalendar() {
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               initialView="dayGridMonth"
+              locale={language === "ar" ? "ar" : language}
+              direction="ltr"
               headerToolbar={{
                 left: "prev,next today",
                 center: "title",
@@ -327,7 +330,7 @@ export default function AppointmentsCalendar() {
             </DialogTitle>
             <DialogDescription>
               {selectedEvent?.start &&
-                selectedEvent.start.toLocaleString("en-US", {
+                selectedEvent.start.toLocaleString(language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US", {
                   weekday: "long",
                   year: "numeric",
                   month: "long",
@@ -336,7 +339,7 @@ export default function AppointmentsCalendar() {
                   minute: "2-digit",
                 })}
               {selectedEvent?.end &&
-                ` - ${selectedEvent.end.toLocaleString("en-US", {
+                ` - ${selectedEvent.end.toLocaleString(language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US", {
                   hour: "numeric",
                   minute: "2-digit",
                 })}`}
@@ -366,14 +369,14 @@ export default function AppointmentsCalendar() {
               onClick={() => setIsDialogOpen(false)}
               disabled={isDeleting}
             >
-              Close
+              {t("common.cancel")}
             </Button>
             <Button
               variant="destructive"
               onClick={handleDeleteEvent}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deleting..." : "Delete"}
+              {isDeleting ? "Deleting..." : t("leads.delete")}
             </Button>
           </div>
         </DialogContent>

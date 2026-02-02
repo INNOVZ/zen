@@ -27,6 +27,7 @@ import {
   Key,
   Package,
 } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface ShopifyCollection {
   id: string | number;
@@ -39,6 +40,7 @@ interface ShopifyCollection {
 }
 
 export default function ShopifyIntegration() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const [shopName, setShopName] = useState("");
   const [isConnected, setIsConnected] = useState(false);
@@ -72,7 +74,7 @@ export default function ShopifyIntegration() {
     // Check for OAuth callback result
     const shopifyStatus = searchParams.get("shopify");
     if (shopifyStatus === "connected") {
-      toast.success("Shopify store connected successfully!");
+      toast.success(t("integrations.shopify_connected_toast"));
       loadConfig();
     } else if (shopifyStatus === "error") {
       const message =
@@ -154,7 +156,7 @@ export default function ShopifyIntegration() {
       });
 
       if (result.success) {
-        toast.success("CTA button settings saved");
+        toast.success(t("integrations.cta_settings_saved"));
       } else {
         toast.error(result.message || "Failed to save settings");
       }
@@ -181,7 +183,7 @@ export default function ShopifyIntegration() {
 
   const handleSaveAppCredentials = async () => {
     if (!clientId || !clientSecret) {
-      toast.error("Please enter both Client ID and Client Secret");
+      toast.error(t("integrations.enter_both_creds"));
       return;
     }
 
@@ -193,7 +195,7 @@ export default function ShopifyIntegration() {
       );
 
       if (result.success) {
-        toast.success("Shopify app credentials saved");
+        toast.success(t("integrations.shopify_creds_saved"));
         setHasAppCredentials(true);
         setShowAppConfig(false);
         setClientId("");
@@ -211,7 +213,7 @@ export default function ShopifyIntegration() {
 
   const handleConnect = async () => {
     if (!shopName) {
-      toast.error("Please enter your Shopify store name");
+      toast.error(t("integrations.enter_store_name"));
       return;
     }
 
@@ -227,7 +229,7 @@ export default function ShopifyIntegration() {
       }
     } catch (error) {
       console.error("Failed to connect Shopify:", error);
-      toast.error("Failed to connect Shopify store");
+      toast.error(t("integrations.shopify_connect_fail"));
     } finally {
       setIsConnecting(false);
     }
@@ -239,7 +241,7 @@ export default function ShopifyIntegration() {
       const result = await mcpApi.disconnectShopify();
 
       if (result.success) {
-        toast.success("Shopify store disconnected");
+        toast.success(t("integrations.shopify_disconnected"));
         setIsConnected(false);
         setConnectedShop("");
         setShopName("");
@@ -258,7 +260,7 @@ export default function ShopifyIntegration() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Loading...
+        {t("common.loading")}
       </div>
     );
   }
@@ -267,7 +269,7 @@ export default function ShopifyIntegration() {
     <div className="space-y-4">
       <div className="flex items-center gap-2">
         <ShoppingCart className="h-5 w-5 text-green-600" />
-        <Label className="text-base font-semibold">Shopify Integration</Label>
+        <Label className="text-base font-semibold">{t("integrations.shopify_integration")}</Label>
       </div>
 
       {isConnected ? (
@@ -278,7 +280,7 @@ export default function ShopifyIntegration() {
             <AlertDescription className="text-green-800">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="font-medium">Connected to Shopify</p>
+                  <p className="font-medium">{t("integrations.shopify_connected_desc")}</p>
                   <p className="text-sm">{connectedShop}</p>
                 </div>
               </div>
@@ -286,11 +288,11 @@ export default function ShopifyIntegration() {
           </Alert>
 
           <div className="text-sm text-muted-foreground">
-            <p>Your chatbot can now:</p>
+            <p>{t("integrations.shopify_capabilities")}</p>
             <ul className="list-disc list-inside mt-1 space-y-1">
-              <li>Show live product information and prices</li>
-              <li>Check order status for customers</li>
-              <li>Display inventory availability</li>
+              <li>{t("integrations.shopify_cap_1")}</li>
+              <li>{t("integrations.shopify_cap_2")}</li>
+              <li>{t("integrations.shopify_cap_3")}</li>
             </ul>
           </div>
 
@@ -298,26 +300,26 @@ export default function ShopifyIntegration() {
           <div className="space-y-4 p-4 border rounded-lg bg-muted/30">
             <div className="flex items-center gap-2">
               <Package className="h-4 w-4" />
-              <Label className="font-medium">Chat Button Settings</Label>
+              <Label className="font-medium">{t("integrations.shopify_button_settings")}</Label>
             </div>
 
             <p className="text-xs text-muted-foreground">
-              Configure which buttons appear in the chat widget for customers.
+              {t("integrations.shopify_button_settings_desc")}
             </p>
 
             {/* Collection Selector */}
             <div className="space-y-2">
-              <Label htmlFor="collection_select">Product Collection CTA</Label>
+              <Label htmlFor="collection_select">{t("integrations.product_collection_cta")}</Label>
               <Select
                 value={selectedCollectionId || "all"}
                 onValueChange={handleCollectionChange}
                 disabled={isLoadingCollections}
               >
                 <SelectTrigger id="collection_select">
-                  <SelectValue placeholder="Select a collection" />
+                  <SelectValue placeholder={t("integrations.select_collection")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="all">🛍️ All Products</SelectItem>
+                  <SelectItem value="all">{t("integrations.all_products")}</SelectItem>
                   {collections.map((collection) => (
                     <SelectItem
                       key={collection.id}
@@ -334,17 +336,16 @@ export default function ShopifyIntegration() {
                 </SelectContent>
               </Select>
               <p className="text-xs text-muted-foreground">
-                Choose which collection to show when customers click the product
-                button.
+                {t("integrations.collection_hint")}
               </p>
             </div>
 
             {/* Order Lookup Toggle */}
             <div className="flex items-center justify-between">
               <div className="space-y-0.5">
-                <Label htmlFor="order_lookup">Order Tracking Button</Label>
+                <Label htmlFor="order_lookup">{t("integrations.order_tracking_btn")}</Label>
                 <p className="text-xs text-muted-foreground">
-                  Allow customers to check their order status
+                  {t("integrations.order_tracking_hint")}
                 </p>
               </div>
               <Switch
@@ -362,12 +363,12 @@ export default function ShopifyIntegration() {
               {isSavingCtaSettings ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t("common.saving")}
                 </>
               ) : (
                 <>
                   <Settings className="mr-2 h-4 w-4" />
-                  Save Button Settings
+                  {t("integrations.save_button_settings")}
                 </>
               )}
             </Button>
@@ -382,12 +383,12 @@ export default function ShopifyIntegration() {
             {isDisconnecting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Disconnecting...
+                {t("integrations.disconnecting")}
               </>
             ) : (
               <>
                 <XCircle className="mr-2 h-4 w-4" />
-                Disconnect Shopify
+                {t("integrations.disconnect_shopify")}
               </>
             )}
           </Button>
@@ -396,8 +397,7 @@ export default function ShopifyIntegration() {
         // Not Connected State
         <div className="space-y-4">
           <p className="text-sm text-muted-foreground">
-            Connect your Shopify store to enable live product data, pricing, and
-            order tracking in your chatbot.
+            {t("integrations.shopify_connect_desc")}
           </p>
 
           {/* Step 1: App Credentials Configuration */}
@@ -406,32 +406,30 @@ export default function ShopifyIntegration() {
               <div className="flex items-center gap-2">
                 <Key className="h-4 w-4" />
                 <Label className="font-medium">
-                  Step 1: Configure Shopify App
+                  {t("integrations.step_1_config")}
                 </Label>
               </div>
 
               <p className="text-xs text-muted-foreground">
-                Create a custom app in your Shopify store and enter the
-                credentials below. Go to Shopify Admin → Settings → Apps →
-                Develop apps → Create an app.
+                {t("integrations.step_1_desc")}
               </p>
 
               <div className="space-y-2">
-                <Label htmlFor="client_id">Client ID</Label>
+                <Label htmlFor="client_id">{t("integrations.shopify_client_id")}</Label>
                 <Input
                   id="client_id"
-                  placeholder="Your Shopify app Client ID"
+                  placeholder={t("integrations.shopify_client_id_placeholder")}
                   value={clientId}
                   onChange={(e) => setClientId(e.target.value)}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="client_secret">Client Secret</Label>
+                <Label htmlFor="client_secret">{t("integrations.shopify_client_secret")}</Label>
                 <Input
                   id="client_secret"
                   type="password"
-                  placeholder="Your Shopify app Client Secret"
+                  placeholder={t("integrations.shopify_client_secret_placeholder")}
                   value={clientSecret}
                   onChange={(e) => setClientSecret(e.target.value)}
                 />
@@ -445,12 +443,12 @@ export default function ShopifyIntegration() {
                 {isSavingCredentials ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Saving...
+                    {t("common.saving")}
                   </>
                 ) : (
                   <>
                     <Settings className="mr-2 h-4 w-4" />
-                    Save App Credentials
+                    {t("integrations.save_app_creds")}
                   </>
                 )}
               </Button>
@@ -463,7 +461,7 @@ export default function ShopifyIntegration() {
                   <div className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-green-600" />
                     <Label className="font-medium">
-                      Step 1: App Configured
+                      {t("integrations.step_1_configured")}
                     </Label>
                   </div>
                   <Button
@@ -476,15 +474,15 @@ export default function ShopifyIntegration() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="shop_name">Step 2: Enter Store Name</Label>
+                  <Label htmlFor="shop_name">{t("integrations.step_2_store")}</Label>
                   <Input
                     id="shop_name"
-                    placeholder="your-store (without .myshopify.com)"
+                    placeholder={t("integrations.step_2_placeholder")}
                     value={shopName}
                     onChange={(e) => setShopName(e.target.value)}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Enter your store name from your-store.myshopify.com
+                    {t("integrations.step_2_hint")}
                   </p>
                 </div>
 
@@ -496,12 +494,12 @@ export default function ShopifyIntegration() {
                   {isConnecting ? (
                     <>
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      Connecting...
+                      {t("integrations.connecting")}
                     </>
                   ) : (
                     <>
                       <ExternalLink className="mr-2 h-4 w-4" />
-                      Connect with Shopify
+                      {t("integrations.connect_shopify")}
                     </>
                   )}
                 </Button>
@@ -512,8 +510,7 @@ export default function ShopifyIntegration() {
           <Alert>
             <Info className="h-4 w-4" />
             <AlertDescription>
-              You&apos;ll be redirected to Shopify to authorize the connection.
-              Your credentials are encrypted and stored securely.
+              {t("integrations.shopify_redirect_info")}
             </AlertDescription>
           </Alert>
         </div>

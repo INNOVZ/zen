@@ -26,6 +26,7 @@ import {
   Edit2,
   X,
 } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 const CRM_TYPES: { value: CRMType; label: string }[] = [
   { value: "hubspot", label: "HubSpot" },
@@ -35,6 +36,7 @@ const CRM_TYPES: { value: CRMType; label: string }[] = [
 ];
 
 export default function CRMIntegration() {
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const [config, setConfig] = useState<CRMConfig>({
     enabled: false,
@@ -137,7 +139,7 @@ export default function CRMIntegration() {
 
     if (!isConfigured) {
       toast.error(
-        "Please configure Zoho OAuth app credentials (Client ID and Client Secret) first"
+        t("integrations.configure_oauth_first")
       );
       return;
     }
@@ -148,21 +150,21 @@ export default function CRMIntegration() {
         // Redirect to Zoho authorization page
         window.location.href = response.auth_url;
       } else {
-        throw new Error("No authorization URL received from Zoho");
+        throw new Error(t("integrations.no_auth_url"));
       }
     } catch (error) {
       console.error("Failed to initiate Zoho OAuth:", error);
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to initiate Zoho connection";
+          : t("integrations.failed_initiate_zoho");
       toast.error(errorMessage);
     }
   };
 
   const handleConfigureZohoOAuthApp = async () => {
     if (!credentials.client_id || !credentials.client_secret) {
-      toast.error("Please enter both Client ID and Client Secret");
+      toast.error(t("integrations.enter_client_id_secret"));
       return;
     }
 
@@ -173,7 +175,7 @@ export default function CRMIntegration() {
         client_secret: credentials.client_secret,
         redirect_uri: zohoOAuthAppConfig?.redirect_uri,
       });
-      toast.success("Zoho OAuth app configured successfully!");
+      toast.success(t("integrations.zoho_app_configured"));
       await checkZohoOAuthConfig();
       // Clear client secret from input for security
       setCredentials({
@@ -185,7 +187,7 @@ export default function CRMIntegration() {
       const errorMessage =
         error instanceof Error
           ? error.message
-          : "Failed to configure Zoho OAuth app";
+          : t("integrations.failed_configure_zoho");
       toast.error(errorMessage);
     } finally {
       setIsSaving(false);
@@ -347,7 +349,7 @@ export default function CRMIntegration() {
 
     if (success === "zoho_connected" && !zohoProcessedFlag) {
       sessionStorage.setItem("zoho_oauth_success_processed", "true");
-      toast.success("Zoho CRM connected successfully!");
+      toast.success(t("integrations.crm_saved"));
 
       // Refresh status with retries to ensure backend has processed
       const retryDelays = [1000, 2000, 4000];
@@ -368,17 +370,17 @@ export default function CRMIntegration() {
 
   const handleSave = async () => {
     if (!config.crm_type) {
-      toast.error("Please select a CRM type");
+      toast.error(t("integrations.select_crm_first"));
       return;
     }
 
     // Validate credentials based on CRM type
     if (config.crm_type === "hubspot" && !credentials.api_key) {
-      toast.error("Please enter HubSpot API key");
+      toast.error(t("integrations.enter_hubspot_key"));
       return;
     }
     if (config.crm_type === "pipedrive" && !credentials.api_key) {
-      toast.error("Please enter Pipedrive API token");
+      toast.error(t("integrations.enter_pipedrive_token"));
       return;
     }
     if (config.crm_type === "salesforce") {
@@ -387,7 +389,7 @@ export default function CRMIntegration() {
         !credentials.password ||
         !credentials.security_token
       ) {
-        toast.error("Please enter all Salesforce credentials");
+        toast.error(t("integrations.enter_salesforce_creds"));
         return;
       }
     }
@@ -404,7 +406,7 @@ export default function CRMIntegration() {
           !credentials.refresh_token
         ) {
           toast.error(
-            "Please connect with Zoho OAuth or enter all Zoho CRM credentials"
+            t("integrations.connect_zoho_error")
           );
           return;
         }
@@ -437,7 +439,7 @@ export default function CRMIntegration() {
 
       const success = await mcpApi.configureCRM(configToSave);
       if (success) {
-        toast.success("CRM configuration saved successfully!");
+        toast.success(t("integrations.crm_saved"));
         setIsEditing(false);
         setIsConnected(true);
         setConnectionStatus({ configured: true, testSuccess: null });
@@ -445,11 +447,11 @@ export default function CRMIntegration() {
         await loadConfig();
         await checkConnectionStatus();
       } else {
-        toast.error("Failed to save configuration");
+        toast.error(t("integrations.sheets_config_failed"));
       }
     } catch (error) {
       console.error("Failed to save CRM config:", error);
-      toast.error("Failed to save configuration");
+      toast.error(t("integrations.sheets_config_failed"));
     } finally {
       setIsSaving(false);
     }
@@ -457,7 +459,7 @@ export default function CRMIntegration() {
 
   const handleTest = async () => {
     if (!config.crm_type) {
-      toast.error("Please select a CRM type first");
+      toast.error(t("integrations.select_crm_first"));
       return;
     }
 
@@ -465,7 +467,7 @@ export default function CRMIntegration() {
     if (config.crm_type === "zoho") {
       const isOAuthConfigured = await checkZohoOAuthConfig();
       if (!isOAuthConfigured) {
-        toast.error("Please configure Zoho OAuth app credentials first");
+        toast.error(t("integrations.zoho_oauth_creds_missing"));
         return;
       }
 
@@ -473,7 +475,7 @@ export default function CRMIntegration() {
       const status = await mcpApi.getIntegrationStatus("zoho");
       if (!status.configured) {
         toast.error(
-          "Please complete OAuth authorization first. Click 'Connect with Zoho (OAuth)' to authorize.",
+          t("integrations.complete_oauth_first"),
           { duration: 5000 }
         );
         // Reset connection status
@@ -491,15 +493,15 @@ export default function CRMIntegration() {
         testSuccess: success,
       });
       if (success) {
-        toast.success("CRM connection test successful!");
+        toast.success(t("integrations.connection_test_success"));
         setIsConnected(true);
       } else {
-        toast.error("CRM connection test failed");
+        toast.error(t("integrations.connection_test_failed_toast"));
       }
     } catch (error) {
       console.error("Failed to test CRM connection:", error);
       const errorMessage =
-        error instanceof Error ? error.message : "Failed to test connection";
+        error instanceof Error ? error.message : t("integrations.connection_test_failed");
 
       // Provide helpful error message for Zoho OAuth
       if (config.crm_type === "zoho") {
@@ -509,7 +511,7 @@ export default function CRMIntegration() {
           errorMessage.includes("expired")
         ) {
           toast.error(
-            "Your Zoho connection has expired. Please click 'Connect with Zoho (OAuth)' to re-authenticate.",
+            t("integrations.zoho_expired"),
             { duration: 6000 }
           );
           // Reset connection status since token is invalid
@@ -533,11 +535,11 @@ export default function CRMIntegration() {
 
   const handleDisconnect = async () => {
     if (!config.crm_type) {
-      toast.error("No CRM type selected");
+      toast.error(t("integrations.select_crm_first"));
       return;
     }
 
-    if (!confirm("Are you sure you want to disconnect this CRM integration?")) {
+    if (!confirm(t("integrations.confirm_disconnect"))) {
       return;
     }
 
@@ -592,10 +594,10 @@ export default function CRMIntegration() {
       // Reload config to get fresh data
       await loadConfig(crmTypeToDisconnect);
 
-      toast.success("CRM integration disconnected");
+      toast.success(t("integrations.disconnected"));
     } catch (error) {
       console.error("Failed to disconnect CRM:", error);
-      toast.error("Failed to disconnect");
+      toast.error(t("integrations.failed_disconnect"));
       // Even on error, reset local state
       setIsConnected(false);
       setConnectionStatus({ configured: false, testSuccess: null });
@@ -606,7 +608,7 @@ export default function CRMIntegration() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Loading...
+        {t("common.loading")}
       </div>
     );
   }
@@ -616,7 +618,7 @@ export default function CRMIntegration() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Database className="h-5 w-5 text-purple-600" />
-          <Label className="text-base font-semibold">CRM Integration</Label>
+          <Label className="text-base font-semibold">{t("integrations.crm_integration")}</Label>
         </div>
         {config.crm_type && (
           <div className="flex items-center gap-2">
@@ -627,14 +629,14 @@ export default function CRMIntegration() {
                   variant="outline"
                   className="bg-green-50 text-green-700 border-green-200"
                 >
-                  Connected
+                  {t("integrations.connected")}
                 </Badge>
               </>
             ) : (
               <>
                 <XCircle className="h-4 w-4 text-gray-400" />
                 <Badge variant="outline" className="bg-gray-50 text-gray-600">
-                  Not Connected
+                  {t("integrations.not_connected")}
                 </Badge>
               </>
             )}
@@ -644,7 +646,7 @@ export default function CRMIntegration() {
 
       <div className="space-y-4">
         <div className="space-y-2">
-          <Label htmlFor="crm_type">CRM Type</Label>
+          <Label htmlFor="crm_type">{t("integrations.crm_type")}</Label>
           <Select
             value={config.crm_type || ""}
             onValueChange={(value) => {
@@ -675,7 +677,7 @@ export default function CRMIntegration() {
             }}
           >
             <SelectTrigger id="crm_type">
-              <SelectValue placeholder="Select CRM" />
+              <SelectValue placeholder={t("integrations.select_crm")} />
             </SelectTrigger>
             <SelectContent>
               {CRM_TYPES.map((crm) => (
@@ -697,11 +699,10 @@ export default function CRMIntegration() {
                     {config.crm_type === "zoho" && "Zoho CRM"}
                     {config.crm_type === "hubspot" && "HubSpot"}
                     {config.crm_type === "salesforce" && "Salesforce"}
-                    {config.crm_type === "pipedrive" && "Pipedrive"} is
-                    connected
+                    {config.crm_type === "pipedrive" && "Pipedrive"} {t("integrations.is_connected")}
                   </p>
                   <p className="text-sm text-green-700 mt-1">
-                    Your CRM integration is active and ready to capture leads.
+                    {t("integrations.crm_active_desc")}
                   </p>
                 </div>
                 <div className="flex gap-2">
@@ -711,7 +712,7 @@ export default function CRMIntegration() {
                     onClick={() => setIsEditing(true)}
                   >
                     <Edit2 className="h-3 w-3 mr-1" />
-                    Edit
+                    {t("integrations.edit")}
                   </Button>
                   <Button
                     variant="outline"
@@ -720,7 +721,7 @@ export default function CRMIntegration() {
                     className="text-red-600 hover:text-red-700"
                   >
                     <X className="h-3 w-3 mr-1" />
-                    Disconnect
+                    {t("integrations.disconnect")}
                   </Button>
                 </div>
               </div>
@@ -734,8 +735,7 @@ export default function CRMIntegration() {
               <Alert>
                 <AlertDescription>
                   <p className="text-sm text-muted-foreground">
-                    Editing CRM credentials. Changes will be saved when you
-                    click &quot;Save Configuration&quot;.
+                    {t("integrations.editing_credentials_desc")}
                   </p>
                 </AlertDescription>
               </Alert>
@@ -745,44 +745,40 @@ export default function CRMIntegration() {
                 {config.crm_type === "hubspot" && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">
-                      HubSpot Setup Instructions
+                      HubSpot {t("integrations.setup_instructions")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Go to HubSpot → Settings → Integrations → Private Apps →
-                      Create app
+                      {t("integrations.hubspot_instructions")}
                     </p>
                   </div>
                 )}
                 {config.crm_type === "salesforce" && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">
-                      Salesforce Setup Instructions
+                      Salesforce {t("integrations.setup_instructions")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Get your Security Token from Salesforce → My Settings →
-                      Personal → Reset My Security Token
+                      {t("integrations.salesforce_instructions")}
                     </p>
                   </div>
                 )}
                 {config.crm_type === "pipedrive" && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">
-                      Pipedrive Setup Instructions
+                      Pipedrive {t("integrations.setup_instructions")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Get your API token from Pipedrive → Settings → Personal →
-                      API
+                      {t("integrations.pipedrive_instructions")}
                     </p>
                   </div>
                 )}
                 {config.crm_type === "zoho" && (
                   <div className="space-y-2">
                     <p className="text-sm font-medium">
-                      Zoho CRM Setup Instructions
+                      Zoho CRM {t("integrations.setup_instructions")}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      Configure your Zoho OAuth app credentials, then connect
-                      using the OAuth flow for secure, one-click integration.
+                      {t("integrations.zoho_instructions")}
                     </p>
                   </div>
                 )}
@@ -792,7 +788,7 @@ export default function CRMIntegration() {
             {/* HubSpot Credentials */}
             {config.crm_type === "hubspot" && (
               <div className="space-y-2">
-                <Label htmlFor="hubspot_api_key">API Key *</Label>
+                <Label htmlFor="hubspot_api_key">{t("integrations.api_key")}</Label>
                 <Input
                   id="hubspot_api_key"
                   type="password"
@@ -809,7 +805,7 @@ export default function CRMIntegration() {
             {config.crm_type === "salesforce" && (
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="salesforce_username">Username *</Label>
+                  <Label htmlFor="salesforce_username">{t("integrations.username")}</Label>
                   <Input
                     id="salesforce_username"
                     type="text"
@@ -824,7 +820,7 @@ export default function CRMIntegration() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="salesforce_password">Password *</Label>
+                  <Label htmlFor="salesforce_password">{t("integrations.password")}</Label>
                   <Input
                     id="salesforce_password"
                     type="password"
@@ -840,7 +836,7 @@ export default function CRMIntegration() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="salesforce_security_token">
-                    Security Token *
+                    {t("integrations.security_token")}
                   </Label>
                   <Input
                     id="salesforce_security_token"
@@ -856,7 +852,7 @@ export default function CRMIntegration() {
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label htmlFor="salesforce_domain">Domain</Label>
+                  <Label htmlFor="salesforce_domain">{t("integrations.domain")}</Label>
                   <Select
                     value={credentials.domain}
                     onValueChange={(value) =>
@@ -882,7 +878,7 @@ export default function CRMIntegration() {
             {/* Pipedrive Credentials */}
             {config.crm_type === "pipedrive" && (
               <div className="space-y-2">
-                <Label htmlFor="pipedrive_api_token">API Token *</Label>
+                <Label htmlFor="pipedrive_api_token">{t("integrations.api_token")}</Label>
                 <Input
                   id="pipedrive_api_token"
                   type="password"
@@ -904,25 +900,24 @@ export default function CRMIntegration() {
                     <AlertDescription>
                       <div className="space-y-3">
                         <p className="font-medium">
-                          Zoho OAuth App Not Configured
+                          {t("integrations.zoho_oauth_not_configured")}
                         </p>
                         <p className="text-sm">
-                          Before connecting with OAuth, you need to configure
-                          your Zoho OAuth app credentials. Get them from{" "}
+                          {t("integrations.zoho_configure_desc")}{" "}
                           <a
                             href="https://api-console.zoho.com/"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
                           >
-                            Zoho Developer Console
+                            {t("integrations.zoho_developer_console")}
                           </a>
                           .
                         </p>
                         <div className="space-y-2 pt-2">
                           <div className="space-y-2">
                             <Label htmlFor="zoho_oauth_client_id">
-                              OAuth Client ID *
+                              {t("integrations.oauth_client_id")}
                             </Label>
                             <Input
                               id="zoho_oauth_client_id"
@@ -939,7 +934,7 @@ export default function CRMIntegration() {
                           </div>
                           <div className="space-y-2">
                             <Label htmlFor="zoho_oauth_client_secret">
-                              OAuth Client Secret *
+                              {t("integrations.oauth_client_secret")}
                             </Label>
                             <Input
                               id="zoho_oauth_client_secret"
@@ -962,10 +957,10 @@ export default function CRMIntegration() {
                             {isSaving ? (
                               <>
                                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                                Configuring...
+                                {t("integrations.configuring")}
                               </>
                             ) : (
-                              "Configure OAuth App"
+                              t("integrations.configure_oauth_app")
                             )}
                           </Button>
                         </div>
@@ -979,31 +974,31 @@ export default function CRMIntegration() {
                     <Alert className="bg-green-50 border-green-200">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
                       <AlertDescription className="text-green-800">
-                        <p className="font-medium">Zoho OAuth App Configured</p>
+                        <p className="font-medium">{t("integrations.zoho_oauth_configured")}</p>
                         {zohoOAuthAppConfig?.client_id &&
                           zohoOAuthAppConfig.client_id !== "N/A" && (
                             <p className="text-sm text-green-700">
-                              Client ID: {zohoOAuthAppConfig.client_id}
+                              {t("integrations.client_id")} {zohoOAuthAppConfig.client_id}
                             </p>
                           )}
                       </AlertDescription>
                     </Alert>
 
                     <div className="space-y-2">
-                      <Label>Zoho Region</Label>
+                      <Label>{t("integrations.zoho_region")}</Label>
                       <Select value={zohoRegion} onValueChange={setZohoRegion}>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select Zoho Region" />
+                          <SelectValue placeholder={t("integrations.select_region")} />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="com">United States</SelectItem>
-                          <SelectItem value="in">India</SelectItem>
-                          <SelectItem value="eu">Europe</SelectItem>
-                          <SelectItem value="com.au">Australia</SelectItem>
+                          <SelectItem value="com">{t("integrations.region_us")}</SelectItem>
+                          <SelectItem value="in">{t("integrations.region_in")}</SelectItem>
+                          <SelectItem value="eu">{t("integrations.region_eu")}</SelectItem>
+                          <SelectItem value="com.au">{t("integrations.region_au")}</SelectItem>
                         </SelectContent>
                       </Select>
                       <p className="text-xs text-muted-foreground">
-                        Select the region where your Zoho CRM account is located
+                        {t("integrations.region_hint")}
                       </p>
                     </div>
 
@@ -1014,10 +1009,10 @@ export default function CRMIntegration() {
                         variant="default"
                       >
                         <Database className="h-4 w-4 mr-2" />
-                        Connect with Zoho (OAuth)
+                        {t("integrations.connect_zoho")}
                       </Button>
                       <p className="text-xs text-muted-foreground text-center">
-                        Recommended: One-click secure connection via OAuth
+                        {t("integrations.connect_zoho_hint")}
                       </p>
                     </div>
                   </>
@@ -1038,12 +1033,12 @@ export default function CRMIntegration() {
               {isTesting ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Testing...
+                  {t("integrations.testing")}
                 </>
               ) : (
                 <>
                   <TestTube className="mr-2 h-4 w-4" />
-                  Test Connection
+                  {t("integrations.test_connection")}
                 </>
               )}
             </Button>
@@ -1051,10 +1046,10 @@ export default function CRMIntegration() {
               {isSaving ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
+                  {t("common.saving")}
                 </>
               ) : (
-                "Save Configuration"
+                t("integrations.save_configuration")
               )}
             </Button>
             {isEditing && (
@@ -1066,7 +1061,7 @@ export default function CRMIntegration() {
                   await loadConfig();
                 }}
               >
-                Cancel
+                {t("common.cancel")}
               </Button>
             )}
           </div>
@@ -1076,8 +1071,7 @@ export default function CRMIntegration() {
           <Alert variant="destructive">
             <XCircle className="h-4 w-4" />
             <AlertDescription>
-              Connection test failed. Please check your credentials and try
-              again.
+              {t("integrations.connection_test_failed")}
             </AlertDescription>
           </Alert>
         )}

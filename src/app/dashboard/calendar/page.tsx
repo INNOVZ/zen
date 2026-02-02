@@ -8,16 +8,18 @@ import ErrorBoundary, { SimpleErrorFallback } from "@/components/ErrorBoundary";
 import type { CalendarEvent } from "@/app/api/types/integration/calendar";
 import { DASHBOARD_CONFIG } from "@/types/dashboard";
 import { useAuth } from "@/hooks/useAuthGuard";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function CalendarPage() {
   const { user, isLoading: isAuthLoading } = useAuth();
+  const { t } = useTranslation();
 
   if (isAuthLoading) {
     return (
       <div className="container mx-auto py-6">
         <div className="text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-          <p className="text-muted-foreground">Loading calendar...</p>
+          <p className="text-muted-foreground">{t("common.loading")}</p>
         </div>
       </div>
     );

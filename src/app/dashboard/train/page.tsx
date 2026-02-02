@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuthGuard";
+import { useTranslation } from "@/contexts/I18nContext";
 
 type UploadItem = {
   id: string;
@@ -27,6 +28,7 @@ type UploadItem = {
 };
 
 export default function IngestPage() {
+  const { t, language } = useTranslation();
   const { isLoading: isAuthLoading } = useAuth();
   const [tab, setTab] = useState<"pdf" | "url" | "json">("pdf");
   const [file, setFile] = useState<File | null>(null);
@@ -41,7 +43,7 @@ export default function IngestPage() {
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isLoadingUploads, setIsLoadingUploads] = useState(true);
-  const [loadingMessage, setLoadingMessage] = useState("Loading uploads...");
+  const [loadingMessage, setLoadingMessage] = useState(t("common.loading"));
 
   const getAuthHeaders = async () => {
     const {
@@ -104,8 +106,7 @@ export default function IngestPage() {
         );
 
         setStatus(
-          `${tab.toUpperCase()} uploaded successfully! Upload ID: ${
-            response.data.upload_id || response.data.id
+          `${tab.toUpperCase()} uploaded successfully! Upload ID: ${response.data.upload_id || response.data.id
           }`
         );
       } else if (tab === "url") {
@@ -139,8 +140,7 @@ export default function IngestPage() {
           { headers, timeout: 30000 }
         );
         setStatus(
-          `URL registered for ingestion! Upload ID: ${
-            response.data.upload_id || response.data.id
+          `URL registered for ingestion! Upload ID: ${response.data.upload_id || response.data.id
           }`
         );
       }
@@ -184,7 +184,7 @@ export default function IngestPage() {
   };
 
   const handleDelete = async (uploadId: string) => {
-    if (!window.confirm("Are you sure you want to delete this upload?")) return;
+    if (!window.confirm(t("leads.confirm_delete"))) return; // Reusing confirm delete message or add new one
 
     setDeleteStatus((prev) => ({ ...prev, [uploadId]: "Deleting..." }));
 
@@ -231,7 +231,7 @@ export default function IngestPage() {
 
   const fetchUploads = useCallback(async () => {
     setIsLoadingUploads(true);
-    setLoadingMessage("Loading uploads...");
+    setLoadingMessage(t("common.loading"));
     try {
       const headers = await getAuthHeaders();
       const response = await axios.get(`${getApiBaseUrl()}/api/uploads/`, {
@@ -245,15 +245,14 @@ export default function IngestPage() {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ detail?: string }>;
         setStatus(
-          `Error fetching uploads: ${
-            axiosError.response?.data?.detail || axiosError.message
+          `Error fetching uploads: ${axiosError.response?.data?.detail || axiosError.message
           }`
         );
       }
     } finally {
       setIsLoadingUploads(false);
     }
-  }, []);
+  }, [t]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -291,7 +290,7 @@ export default function IngestPage() {
       <div className="mx-auto ml-[5.3vw] bg-white/80 rounded-xl p-8">
         <div className="flex items-center justify-center py-8">
           <RefreshCw className="h-6 w-6 animate-spin mr-2" />
-          Loading...
+          {t("common.loading")}
         </div>
       </div>
     );
@@ -305,7 +304,7 @@ export default function IngestPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Upload className="h-5 w-5" />
-                Data Ingestion
+                {t("train.data_ingestion")}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -345,10 +344,10 @@ export default function IngestPage() {
                       <Upload className="h-12 w-12 text-gray-400" />
                       <div className="space-y-1">
                         <p className="text-sm font-medium text-gray-900">
-                          Click to upload {tab.toUpperCase()} files
+                          {t("train.click_upload").replace("PDF", tab.toUpperCase())}
                         </p>
                         <p className="text-xs text-gray-500">
-                          Max file size: 10MB
+                          {t("train.max_file_size")}
                         </p>
                       </div>
                     </label>
@@ -408,7 +407,7 @@ export default function IngestPage() {
                         htmlFor="recursive-scrape"
                         className="text-sm font-medium text-gray-700 cursor-pointer"
                       >
-                        Scrape all sub-links (recursive)
+                        {t("train.recursive_scraping")}
                       </label>
                     </div>
                     {recursive && (
@@ -487,20 +486,19 @@ export default function IngestPage() {
                 ) : (
                   <>
                     <Upload className="h-4 w-4 mr-2" />
-                    Submit
+                    {t("train.submit")}
                   </>
                 )}
               </Button>
 
               {status && (
                 <div
-                  className={`p-3 rounded-lg text-sm ${
-                    status.includes("Error")
+                  className={`p-3 rounded-lg text-sm ${status.includes("Error")
                       ? "bg-red-50 text-red-800 border border-red-200"
                       : status.includes("successfully")
-                      ? "bg-green-50 text-green-800 border border-green-200"
-                      : "bg-blue-50 text-blue-800 border border-blue-200"
-                  }`}
+                        ? "bg-green-50 text-green-800 border border-green-200"
+                        : "bg-blue-50 text-blue-800 border border-blue-200"
+                    }`}
                 >
                   {status}
                 </div>
@@ -511,7 +509,7 @@ export default function IngestPage() {
           <Card>
             <CardHeader>
               <div className="flex justify-between items-center">
-                <CardTitle>Recent Uploads</CardTitle>
+                <CardTitle>{t("train.recent_uploads")}</CardTitle>
                 <Button
                   onClick={fetchUploads}
                   disabled={isLoadingUploads}
@@ -523,7 +521,7 @@ export default function IngestPage() {
                   ) : (
                     <RefreshCw className="h-4 w-4" />
                   )}
-                  Refresh
+                  {t("common.refresh")}
                 </Button>
               </div>
             </CardHeader>
@@ -544,19 +542,19 @@ export default function IngestPage() {
                     <thead>
                       <tr className="border-b">
                         <th className="text-left py-3 px-4 font-medium">
-                          Type
+                          {t("train.type")}
                         </th>
                         <th className="text-left py-3 px-4 font-medium">
-                          Source
+                          {t("train.source")}
                         </th>
                         <th className="text-left py-3 px-4 font-medium">
-                          Status
+                          {t("train.status")}
                         </th>
                         <th className="text-left py-3 px-4 font-medium">
-                          Created
+                          {t("train.created")}
                         </th>
                         <th className="text-left py-3 px-4 font-medium">
-                          Actions
+                          {t("train.actions")}
                         </th>
                       </tr>
                     </thead>
@@ -583,12 +581,14 @@ export default function IngestPage() {
                                 variant="outline"
                                 className={getStatusBadgeColor(upload.status)}
                               >
-                                {upload.status}
+                                {t(`train.${upload.status}`) || upload.status}
                               </Badge>
                             </div>
                           </td>
                           <td className="py-3 px-4 text-sm text-gray-600">
-                            {new Date(upload.created_at).toLocaleString()}
+                            {new Date(upload.created_at).toLocaleString(
+                              language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US"
+                            )}
                           </td>
                           <td className="py-3 px-4">
                             <Button
@@ -620,25 +620,22 @@ export default function IngestPage() {
           <Card className="bg-linear-to-r/shorter from-indigo-100 to-blue-100 py-4">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                📊 Upload Guidelines
+                📊 {t("train.upload_guidelines")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="text-sm text-gray-600 space-y-2">
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>PDF files up to 10MB
+                  <span className="text-cyan-600">•</span>{t("train.pdf_size")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>JSON files for
-                  structured data
+                  <span className="text-cyan-600">•</span>{t("train.json_structured")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>URLs for web content
-                  scraping
+                  <span className="text-cyan-600">•</span>{t("train.urls_scraping")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>Recursive scraping
-                  available
+                  <span className="text-cyan-600">•</span>{t("train.recursive_scraping")}
                 </li>
               </ul>
             </CardContent>

@@ -1,18 +1,32 @@
-import { memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Upload, Plus } from "lucide-react";
-import { DashboardHeaderProps } from "@/types/dashboard";
-import { getUserFirstName } from "@/utils/userUtils";
+import { getUserFirstName, type DisplayUser } from "@/utils/userUtils";
+import { useTranslation } from "@/contexts/I18nContext";
 
-export const DashboardHeader = memo<DashboardHeaderProps>(
-  ({ user, onTrainClick, onCustomizeClick }) => (
+interface DashboardHeaderProps {
+  user: any;
+  userId: string;
+  onTrainClick: () => void;
+  onCustomizeClick: () => void;
+}
+
+export function DashboardHeader({
+  user,
+  onTrainClick,
+  onCustomizeClick,
+}: DashboardHeaderProps) {
+
+  const firstName = getUserFirstName(user);
+  const { t } = useTranslation();
+
+  return (
     <header className="flex justify-between lg:flex-row flex-col items-center bg-[#5d7dde] p-8 rounded-2xl">
       <div>
         <h1 className="text-3xl text-white font-bold">
-          Welcome back, {getUserFirstName(user)}!
+          {t("dashboard.welcome_user", { name: firstName })}
         </h1>
         <p className="text-white mt-1">
-          Manage your customer experience with ease.
+          {t("dashboard.welcome_subtitle")}
         </p>
       </div>
       <div
@@ -27,7 +41,7 @@ export const DashboardHeader = memo<DashboardHeaderProps>(
           aria-label="Add training data"
         >
           <Upload className="h-4 w-4" aria-hidden="true" />
-          Add Training Data
+          {t("train.data_ingestion")}
         </Button>
         <Button
           onClick={onCustomizeClick}
@@ -35,11 +49,9 @@ export const DashboardHeader = memo<DashboardHeaderProps>(
           aria-label="Create new chatbot"
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
-          Create Chatbot
+          {t("dashboard.create_chatbot")}
         </Button>
       </div>
     </header>
-  )
-);
-
-DashboardHeader.displayName = "DashboardHeader";
+  );
+}

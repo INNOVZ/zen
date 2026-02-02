@@ -23,6 +23,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/contexts/I18nContext";
 
 interface UpcomingAppointmentsProps {
   onEventClick?: (event: CalendarEvent) => void;
@@ -31,6 +32,7 @@ interface UpcomingAppointmentsProps {
 export default function UpcomingAppointments({
   onEventClick,
 }: UpcomingAppointmentsProps) {
+  const { t, language } = useTranslation();
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -82,13 +84,12 @@ export default function UpcomingAppointments({
       if (isTokenExpiredError(err)) {
         setIsTokenExpired(true);
         setError(
-          "Your Google Calendar connection has expired. Please reconnect to continue viewing your appointments."
+          t("calendar.google_credentials_error")
         );
         return;
       }
 
-      let errorMessage =
-        "Failed to load calendar events. Please ensure Google Calendar is connected.";
+      let errorMessage = t("calendar.google_credentials_error");
 
       if (err && typeof err === "object") {
         const errorObj = err as {
@@ -109,7 +110,7 @@ export default function UpcomingAppointments({
     } finally {
       setIsLoading(false);
     }
-  }, [isTokenExpiredError]);
+  }, [isTokenExpiredError, t]);
 
   useEffect(() => {
     loadEvents();
@@ -145,13 +146,13 @@ export default function UpcomingAppointments({
     eventDate.setHours(0, 0, 0, 0);
 
     if (eventDate.getTime() === now.setHours(0, 0, 0, 0)) {
-      return "Today";
+      return t("calendar.today");
     } else if (eventDate.getTime() === tomorrow.getTime()) {
-      return "Tomorrow";
+      return t("calendar.tomorrow");
     } else if (eventDate.getTime() === dayAfterTomorrow.getTime()) {
-      return dayAfterTomorrow.toLocaleDateString("en-US", { weekday: "short" });
+      return dayAfterTomorrow.toLocaleDateString(language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US", { weekday: "short" });
     } else {
-      return date.toLocaleDateString("en-US", {
+      return date.toLocaleDateString(language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
@@ -161,7 +162,7 @@ export default function UpcomingAppointments({
 
   const formatTime = (dateString: string) => {
     const date = new Date(dateString);
-    return date.toLocaleTimeString("en-US", {
+    return date.toLocaleTimeString(language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US", {
       hour: "numeric",
       minute: "2-digit",
       hour12: true,
@@ -216,13 +217,13 @@ export default function UpcomingAppointments({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Upcoming Appointments</CardTitle>
+          <CardTitle>{t("calendar.upcoming_appointments")}</CardTitle>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-96">
           <div className="flex flex-col items-center gap-4">
             <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
             <p className="text-sm text-muted-foreground">
-              Loading calendar appointments...
+              {t("common.loading")}
             </p>
           </div>
         </CardContent>
@@ -234,7 +235,7 @@ export default function UpcomingAppointments({
     return (
       <Card>
         <CardHeader>
-          <CardTitle>Upcoming Appointments</CardTitle>
+          <CardTitle>{t("calendar.upcoming_appointments")}</CardTitle>
         </CardHeader>
         <CardContent>
           <Alert variant="destructive">
@@ -244,7 +245,7 @@ export default function UpcomingAppointments({
           {isTokenExpired ? (
             <Link href="/dashboard/settings">
               <Button variant="default" size="sm" className="mt-4 w-full">
-                Go to Settings to Reconnect
+                {t("calendar.go_to_settings")}
               </Button>
             </Link>
           ) : (
@@ -254,7 +255,7 @@ export default function UpcomingAppointments({
               size="sm"
               className="mt-4 w-full"
             >
-              <RefreshCw className="mr-2 h-4 w-4" /> Retry
+              <RefreshCw className="mr-2 h-4 w-4" /> {t("common.retry")}
             </Button>
           )}
         </CardContent>
@@ -267,12 +268,11 @@ export default function UpcomingAppointments({
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle>Upcoming Events</CardTitle>
+            <CardTitle>{t("calendar.upcoming_appointments")}</CardTitle>
             <CardDescription>
               {upcomingEvents.length > 0
-                ? `${upcomingEvents.length} upcoming event${upcomingEvents.length !== 1 ? "s" : ""
-                }`
-                : "No upcoming Calendar appointments"}
+                ? t("calendar.upcoming_count", { count: upcomingEvents.length.toString() })
+                : t("calendar.no_upcoming_desc")}
             </CardDescription>
           </div>
           <Button
@@ -293,7 +293,7 @@ export default function UpcomingAppointments({
         {upcomingEvents.length === 0 ? (
           <div className="text-center py-8 text-muted-foreground">
             <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-            <p className="text-sm">No upcoming appointments</p>
+            <p className="text-sm">{t("calendar.no_upcoming")}</p>
           </div>
         ) : (
           <div className="space-y-4 max-h-[calc(100vh-300px)] overflow-y-auto">

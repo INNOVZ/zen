@@ -14,7 +14,7 @@ export const LANGUAGES = {
     es: { label: "Español", dir: "ltr", icon: "🇪🇸", translation: es },
     de: { label: "Deutsch", dir: "ltr", icon: "🇩🇪", translation: de },
     it: { label: "Italiano", dir: "ltr", icon: "🇮🇹", translation: it },
-    ar: { label: "العربية", dir: "rtl", icon: "🇸🇦", translation: ar },
+    ar: { label: "العربية", dir: "ltr", icon: "🇸🇦", translation: ar },
 };
 
 export type LanguageCode = keyof typeof LANGUAGES;

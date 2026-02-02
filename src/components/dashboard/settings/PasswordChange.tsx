@@ -14,8 +14,10 @@ import {
 } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Eye, EyeOff, Lock } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function PasswordChange() {
+  const { t } = useTranslation();
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -26,16 +28,16 @@ export default function PasswordChange() {
 
   const validatePassword = (password: string): string | null => {
     if (password.length < 8) {
-      return "Password must be at least 8 characters long";
+      return t("settings.password_length_error");
     }
     if (!/[A-Z]/.test(password)) {
-      return "Password must contain at least one uppercase letter";
+      return t("settings.password_uppercase_error");
     }
     if (!/[a-z]/.test(password)) {
-      return "Password must contain at least one lowercase letter";
+      return t("settings.password_lowercase_error");
     }
     if (!/[0-9]/.test(password)) {
-      return "Password must contain at least one number";
+      return t("settings.password_number_error");
     }
     return null;
   };
@@ -45,17 +47,17 @@ export default function PasswordChange() {
 
     // Validation
     if (!currentPassword || !newPassword || !confirmPassword) {
-      toast.error("Please fill in all fields");
+      toast.error(t("settings.fill_all_fields"));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      toast.error("New passwords do not match");
+      toast.error(t("settings.passwords_mismatch"));
       return;
     }
 
     if (currentPassword === newPassword) {
-      toast.error("New password must be different from current password");
+      toast.error(t("settings.password_same_error"));
       return;
     }
 
@@ -73,7 +75,7 @@ export default function PasswordChange() {
         await supabase.auth.getUser();
 
       if (userError || !userData?.user?.email) {
-        toast.error("No active session found. Please log in again.");
+        toast.error(t("auth.session_expired"));
         setIsLoading(false);
         return;
       }
@@ -85,7 +87,7 @@ export default function PasswordChange() {
       });
 
       if (signInError) {
-        toast.error("Current password is incorrect");
+        toast.error(t("settings.current_password_incorrect"));
         setIsLoading(false);
         return;
       }
@@ -96,19 +98,19 @@ export default function PasswordChange() {
       });
 
       if (updateError) {
-        toast.error(`Failed to update password: ${updateError.message}`);
+        toast.error(`${t("settings.password_update_failed")}: ${updateError.message}`);
         setIsLoading(false);
         return;
       }
 
       // Success
-      toast.success("Password updated successfully!");
+      toast.success(t("settings.password_updated"));
       setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (error) {
       console.error("Error updating password:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error(t("common.error_occurred"));
     } finally {
       setIsLoading(false);
     }
@@ -119,23 +121,23 @@ export default function PasswordChange() {
       <CardHeader>
         <div className="flex items-center gap-2">
           <Lock className="h-5 w-5 text-gray-600" />
-          <CardTitle>Update Password</CardTitle>
+          <CardTitle>{t("settings.update_password")}</CardTitle>
         </div>
         <CardDescription>
-          Update your account password. Make sure to use a strong password.
+          {t("settings.update_password_desc")}
         </CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="currentPassword">Current Password</Label>
+            <Label htmlFor="currentPassword">{t("settings.current_password")}</Label>
             <div className="relative">
               <Input
                 id="currentPassword"
                 type={showCurrentPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                placeholder="Enter your current password"
+                placeholder={t("settings.enter_current_password")}
                 required
                 disabled={isLoading}
               />
@@ -151,14 +153,14 @@ export default function PasswordChange() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="newPassword">New Password</Label>
+            <Label htmlFor="newPassword">{t("settings.new_password")}</Label>
             <div className="relative">
               <Input
                 id="newPassword"
                 type={showNewPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Enter your new password"
+                placeholder={t("settings.enter_new_password")}
                 required
                 disabled={isLoading}
               />
@@ -172,20 +174,19 @@ export default function PasswordChange() {
               </button>
             </div>
             <p className="text-xs text-gray-500">
-              Must be at least 8 characters with uppercase, lowercase, and
-              numbers
+              {t("settings.password_requirements")}
             </p>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="confirmPassword">Confirm New Password</Label>
+            <Label htmlFor="confirmPassword">{t("settings.confirm_password")}</Label>
             <div className="relative">
               <Input
                 id="confirmPassword"
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                placeholder="Confirm your new password"
+                placeholder={t("settings.confirm_new_password")}
                 required
                 disabled={isLoading}
               />
@@ -201,7 +202,7 @@ export default function PasswordChange() {
           </div>
 
           <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Updating Password..." : "Update Password"}
+            {isLoading ? t("settings.updating_password") : t("settings.update_password_btn")}
           </Button>
         </form>
       </CardContent>

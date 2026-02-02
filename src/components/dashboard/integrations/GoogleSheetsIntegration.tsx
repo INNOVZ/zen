@@ -12,8 +12,10 @@ import {
   Loader2,
   Info,
 } from "lucide-react";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function GoogleSheetsIntegration() {
+  const { t } = useTranslation();
   const [config, setConfig] = useState<GoogleSheetsConfig>({
     spreadsheet_id: "",
     sheet_name: "Leads",
@@ -49,7 +51,7 @@ export default function GoogleSheetsIntegration() {
 
   const handleSave = async () => {
     if (!config.spreadsheet_id) {
-      toast.error("Please enter a Google Sheets spreadsheet ID");
+      toast.error(t("integrations.sheets_id_required"));
       return;
     }
 
@@ -57,13 +59,13 @@ export default function GoogleSheetsIntegration() {
       setIsSaving(true);
       const success = await mcpApi.configureGoogleSheets(config);
       if (success) {
-        toast.success("Google Sheets configuration saved");
+        toast.success(t("integrations.sheets_config_saved"));
       } else {
-        toast.error("Failed to save configuration");
+        toast.error(t("integrations.sheets_config_failed"));
       }
     } catch (error) {
       console.error("Failed to save Google Sheets config:", error);
-      toast.error("Failed to save configuration");
+      toast.error(t("integrations.sheets_config_failed"));
     } finally {
       setIsSaving(false);
     }
@@ -73,7 +75,7 @@ export default function GoogleSheetsIntegration() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Loading...
+        {t("common.loading")}
       </div>
     );
   }
@@ -82,14 +84,14 @@ export default function GoogleSheetsIntegration() {
     <div className="space-y-4 border-t pt-4">
       <div className="flex items-center gap-2">
         <Sheet className="h-5 w-5 text-green-600" />
-        <Label className="text-base font-semibold">Google Sheets (Lead Capture)</Label>
+        <Label className="text-base font-semibold">{t("integrations.google_sheets")}</Label>
       </div>
 
       {!isAuthenticated && (
         <Alert>
           <Info className="h-4 w-4" />
           <AlertDescription>
-            Please connect Google Calendar first (it includes Sheets access).
+            {t("integrations.connect_google_for_sheets")}
           </AlertDescription>
         </Alert>
       )}
@@ -97,7 +99,7 @@ export default function GoogleSheetsIntegration() {
       {isAuthenticated && (
         <div className="space-y-4">
           <div className="space-y-2">
-            <Label htmlFor="spreadsheet_id">Spreadsheet ID</Label>
+            <Label htmlFor="spreadsheet_id">{t("integrations.spreadsheet_id")}</Label>
             <Input
               id="spreadsheet_id"
               placeholder="1BxiMVs0XRA5nFMdKvBdBZjgmUUqptlbs74OgvE2upms"
@@ -107,7 +109,7 @@ export default function GoogleSheetsIntegration() {
               }
             />
             <p className="text-xs text-muted-foreground">
-              Get this from your Google Sheets URL:{" "}
+              {t("integrations.spreadsheet_id_hint")}{" "}
               <code className="text-xs bg-muted px-1 py-0.5 rounded">
                 docs.google.com/spreadsheets/d/[SPREADSHEET_ID]/edit
               </code>
@@ -115,7 +117,7 @@ export default function GoogleSheetsIntegration() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="sheet_name">Sheet Name</Label>
+            <Label htmlFor="sheet_name">{t("integrations.sheet_name")}</Label>
             <Input
               id="sheet_name"
               placeholder="Leads"
@@ -125,7 +127,7 @@ export default function GoogleSheetsIntegration() {
               }
             />
             <p className="text-xs text-muted-foreground">
-              Name of the sheet tab where leads will be captured (default: Leads)
+              {t("integrations.sheet_name_hint")}
             </p>
           </div>
 
@@ -133,10 +135,10 @@ export default function GoogleSheetsIntegration() {
             {isSaving ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
+                {t("common.saving")}
               </>
             ) : (
-              "Save Configuration"
+              t("integrations.save_configuration")
             )}
           </Button>
         </div>
@@ -144,4 +146,3 @@ export default function GoogleSheetsIntegration() {
     </div>
   );
 }
-

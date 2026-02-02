@@ -16,8 +16,10 @@ import {
 } from "lucide-react";
 import GoogleOAuthAppConfig from "./GoogleOAuthAppConfig";
 import CalendarSettings from "./CalendarSettings";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function GoogleCalendarIntegration() {
+  const { t } = useTranslation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -46,7 +48,7 @@ export default function GoogleCalendarIntegration() {
         console.log("✅ Google Calendar is connected!");
         if (!wasAuthenticated && hasLoaded.current) {
           // Only show toast if status changed from disconnected to connected (and not first load)
-          toast.success("Google Calendar connection verified!");
+          toast.success(t("integrations.google_connected_success"));
         }
       } else {
         console.log("❌ Google Calendar is not connected");
@@ -83,7 +85,7 @@ export default function GoogleCalendarIntegration() {
       setIsLoading(false);
       hasLoaded.current = true;
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, t]);
 
   // Initial load - check status once, but allow refresh on OAuth success
   useEffect(() => {
@@ -101,7 +103,7 @@ export default function GoogleCalendarIntegration() {
       !sessionProcessedFlag
     ) {
       console.log("✅ Detected Google OAuth success, refreshing status...");
-      toast.success("Google Calendar connected successfully!");
+      // toast handled by checkAuthStatus transition
       localStorage.removeItem("google_oauth_just_connected");
       sessionStorage.setItem("google_oauth_success_processed", "true");
 
@@ -230,7 +232,7 @@ export default function GoogleCalendarIntegration() {
     return (
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Loader2 className="h-4 w-4 animate-spin" />
-        Checking connection...
+        {t("common.checking_connection")}
       </div>
     );
   }
@@ -244,17 +246,17 @@ export default function GoogleCalendarIntegration() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Calendar className="h-5 w-5 text-blue-600" />
-          <Label className="text-base font-semibold">Google Calendar</Label>
+          <Label className="text-base font-semibold">{t("integrations.google_calendar")}</Label>
         </div>
         {isAuthenticated ? (
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-green-600" />
-            <span className="text-sm text-green-600">Connected</span>
+            <span className="text-sm text-green-600">{t("integrations.connected")}</span>
           </div>
         ) : (
           <div className="flex items-center gap-2">
             <XCircle className="h-4 w-4 text-gray-400" />
-            <span className="text-sm text-gray-500">Not Connected</span>
+            <span className="text-sm text-gray-500">{t("integrations.not_connected")}</span>
           </div>
         )}
       </div>
@@ -262,8 +264,7 @@ export default function GoogleCalendarIntegration() {
       {!isAuthenticated && (
         <div className="space-y-2">
           <p className="text-sm text-muted-foreground">
-            Connect your Google Calendar to enable appointment booking and
-            availability checking.
+            {t("integrations.google_calendar_desc")}
           </p>
           <Button
             onClick={handleConnect}
@@ -273,12 +274,12 @@ export default function GoogleCalendarIntegration() {
             {isConnecting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Connecting...
+                {t("integrations.connecting")}
               </>
             ) : (
               <>
                 <ExternalLink className="mr-2 h-4 w-4" />
-                Connect Google Calendar
+                {t("integrations.connect_google_calendar")}
               </>
             )}
           </Button>
@@ -290,8 +291,7 @@ export default function GoogleCalendarIntegration() {
           <Alert>
             <CheckCircle2 className="h-4 w-4" />
             <AlertDescription>
-              Google Calendar is connected. You can now use appointment booking
-              features.
+              {t("integrations.google_calendar_connected_desc")}
             </AlertDescription>
           </Alert>
 
@@ -308,12 +308,12 @@ export default function GoogleCalendarIntegration() {
             {isConnecting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Reconnecting...
+                {t("integrations.reconnecting")}
               </>
             ) : (
               <>
                 <ExternalLink className="mr-2 h-4 w-4" />
-                Reconnect Google Calendar
+                {t("integrations.reconnect_google_calendar")}
               </>
             )}
           </Button>
@@ -332,10 +332,10 @@ export default function GoogleCalendarIntegration() {
           {isLoading ? (
             <>
               <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-              Checking...
+              {t("common.checking")}
             </>
           ) : (
-            "Refresh Status"
+            t("common.refresh_status")
           )}
         </Button>
       </div>

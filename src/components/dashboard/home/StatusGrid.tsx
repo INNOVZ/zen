@@ -4,6 +4,7 @@ import { RiRobot3Line } from "react-icons/ri";
 import { StatusCard } from "./StatusCard";
 import { ConversationsCard } from "./ConversationsCard";
 import { StatusGridProps, DASHBOARD_CONFIG } from "@/types/dashboard";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export const StatusGrid = memo<StatusGridProps>(
   ({
@@ -15,37 +16,38 @@ export const StatusGrid = memo<StatusGridProps>(
     conversationCountLoading,
     onCreateConversation,
     resolutionRate,
-  }) => (
-    <section
-      aria-label="Dashboard Statistics"
-      className={DASHBOARD_CONFIG.STATS_GRID_CLASSES}
-    >
-      {/* <h2 className="text-gray-500 font-bold sr-only">Dashboard Statistics</h2> */}
+  }) => {
+    const { t } = useTranslation();
+    return (
+      <section
+        aria-label={t("dashboard.statistics_aria")}
+        className={DASHBOARD_CONFIG.STATS_GRID_CLASSES}
+      >
+        <ConversationsCard
+          conversationsLoaded={conversationsLoaded}
+          conversations={conversations}
+          totalConversations={stats?.totalConversations ?? 0}
+          loading={loading}
+          conversationCount={conversationCount}
+          conversationCountLoading={conversationCountLoading}
+          onCreateClick={onCreateConversation}
+        />
+        <StatusCard icon={Users} title={t("leads.total_leads")} value={stats?.totalLeads ?? 0} />
 
-      <ConversationsCard
-        conversationsLoaded={conversationsLoaded}
-        conversations={conversations}
-        totalConversations={stats.totalConversations}
-        loading={loading}
-        conversationCount={conversationCount}
-        conversationCountLoading={conversationCountLoading}
-        onCreateClick={onCreateConversation}
-      />
-      <StatusCard icon={Users} title="Total Leads" value={stats.totalLeads} />
+        <StatusCard
+          icon={CheckCircle2}
+          title={t("dashboard.resolution_rate") + " (%)"}
+          value={Math.round((resolutionRate ?? 0) * 10) / 10}
+        />
 
-      <StatusCard
-        icon={CheckCircle2}
-        title={"Resolution Rate (%)"}
-        value={Math.round((resolutionRate ?? 85.2) * 10) / 10}
-      />
-
-      <StatusCard
-        icon={RiRobot3Line}
-        title="Total Chatbots"
-        value={stats.totalChatbots}
-      />
-    </section>
-  )
+        <StatusCard
+          icon={RiRobot3Line}
+          title={t("dashboard.total_chatbots")}
+          value={stats?.totalChatbots ?? 0}
+        />
+      </section>
+    );
+  }
 );
 
 StatusGrid.displayName = "StatusGrid";

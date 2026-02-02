@@ -37,21 +37,8 @@ const debounce = <T extends (...args: never[]) => void>(
   };
 };
 
-const TONE_OPTIONS = [
-  { value: "professional", label: "Professional", icon: "👔" },
-  { value: "friendly", label: "Friendly", icon: "😊" },
-  { value: "helpful", label: "Helpful", icon: "🤝" },
-  { value: "technical", label: "Technical", icon: "🔧" },
-  { value: "casual", label: "Casual", icon: "💬" },
-];
-
-const LANGUAGE_OPTIONS = [
-  { value: "en", label: "English", icon: "🇬🇧" },
-  { value: "es", label: "Spanish", icon: "🇪🇸" },
-  { value: "de", label: "German", icon: "🇩🇪" },
-  { value: "it", label: "Italian", icon: "🇮🇹" },
-  { value: "ar", label: "Arabic", icon: "🇸🇦" },
-];
+// Moved options inside component or wrapped with hook to use translation
+// OR keep them here if keys are static and translated in render
 
 const COLOR_PRESETS = [
   "#6a8fff",
@@ -74,6 +61,14 @@ export default function ChatbotConfiguration() {
   const router = useRouter();
   const chatbotId = searchParams?.get("id") ?? null;
 
+  const TONE_OPTIONS = [
+    { value: "professional", label: t("chatbot_config.tone_professional"), icon: "👔" },
+    { value: "friendly", label: t("chatbot_config.tone_friendly"), icon: "😊" },
+    { value: "helpful", label: t("chatbot_config.tone_helpful"), icon: "🤝" },
+    { value: "technical", label: t("chatbot_config.tone_technical"), icon: "🔧" },
+    { value: "casual", label: t("chatbot_config.tone_casual"), icon: "💬" },
+  ];
+
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [unsavedChanges, setUnsavedChanges] = useState(false);
 
@@ -94,17 +89,17 @@ export default function ChatbotConfiguration() {
 
   const validateConfig = useCallback((config: ChatbotInfo): string[] => {
     const errors: string[] = [];
-    if (!config.name?.trim()) errors.push("Chatbot name is required");
+    if (!config.name?.trim()) errors.push(t("chatbot_config.validation_name_required"));
     if (config.name && config.name.length > 50)
-      errors.push("Name must be under 50 characters");
+      errors.push(t("chatbot_config.validation_name_length"));
     if (!config.greeting_message?.trim())
-      errors.push("Greeting message is required");
+      errors.push(t("chatbot_config.validation_greeting_required"));
     if (config.greeting_message && config.greeting_message.length > 200)
-      errors.push("Greeting message must be under 200 characters");
+      errors.push(t("chatbot_config.validation_greeting_length"));
     if (!config.fallback_message?.trim())
-      errors.push("Fallback message is required");
+      errors.push(t("chatbot_config.validation_fallback_required"));
     return errors;
-  }, []);
+  }, [t]);
 
   const [inputValues, setInputValues] = useState({
     name: config.name || "",
@@ -126,13 +121,13 @@ export default function ChatbotConfiguration() {
         color_hex: chatbot.color_hex || "#6a8fff",
         tone: chatbot.tone || "helpful",
         language: chatbot.language || "en",
-        behavior: chatbot.behavior || "Be helpful and informative",
+        behavior: chatbot.behavior || t("chatbot_config.default_behavior"),
         system_prompt: chatbot.system_prompt || "",
         greeting_message:
-          chatbot.greeting_message || "Hello! How can I help you today?",
+          chatbot.greeting_message || t("chatbot_config.default_greeting"),
         fallback_message:
           chatbot.fallback_message ||
-          "I'm sorry, I don't have information about that. Could you please rephrase your question?",
+          t("chatbot_config.default_fallback"),
         ai_model_config: {
           model: "gpt-3.5-turbo",
           temperature: 0.7,
@@ -143,7 +138,7 @@ export default function ChatbotConfiguration() {
       setUnsavedChanges(false);
       setValidationErrors([]);
     },
-    [setConfig]
+    [setConfig, t]
   );
 
   const loadOrgChatbots = useCallback(async () => {
@@ -159,7 +154,7 @@ export default function ChatbotConfiguration() {
           setIsEditMode(true);
           setShowCreateForm(false);
         } else {
-          toast.error("Chatbot not found");
+          toast.error(t("chatbot_config.not_found"));
           router.push(`/dashboard/customize`);
         }
       } else if (chatbots.length > 0) {
@@ -173,7 +168,7 @@ export default function ChatbotConfiguration() {
       }
     } catch (error) {
       console.error("Error loading organization chatbots:", error);
-      toast.error("Failed to load chatbots");
+      toast.error(t("chatbot_config.failed_load"));
     }
   }, [
     chatbotId,
@@ -183,6 +178,7 @@ export default function ChatbotConfiguration() {
     setShowCreateForm,
     router,
     loadConfigFromChatbot,
+    t,
   ]);
 
   useEffect(() => {
@@ -279,14 +275,14 @@ export default function ChatbotConfiguration() {
       ];
       if (!validTypes.includes(file.type)) {
         toast.error(
-          "Please upload a valid image file (PNG, JPEG, GIF, or WebP)"
+          t("chatbot_config.avatar_type_error")
         );
         return;
       }
 
       const maxSize = 2 * 1024 * 1024;
       if (file.size > maxSize) {
-        toast.error("Image size must be less than 2MB");
+        toast.error(t("chatbot_config.avatar_size_error"));
         return;
       }
 
@@ -299,19 +295,19 @@ export default function ChatbotConfiguration() {
             ? result.url
             : `${baseUrl}${result.url}`;
           handleInputChange("avatar_url", fullUrl);
-          toast.success("Avatar image uploaded successfully!");
+          toast.success(t("chatbot_config.avatar_upload_success"));
         } else {
           throw new Error("Upload failed - no URL returned");
         }
       } catch (error) {
         console.error("Avatar upload error:", error);
         toast.error(
-          `Failed to upload image: ${error instanceof Error ? error.message : "Unknown error"
+          `${t("chatbot_config.avatar_upload_failed")}: ${error instanceof Error ? error.message : "Unknown error"
           }`
         );
       }
     },
-    [handleInputChange]
+    [handleInputChange, t]
   );
 
   const convertLegacyUrl = useCallback((url: string): string => {
@@ -328,15 +324,15 @@ export default function ChatbotConfiguration() {
 
   const handleClearAvatar = useCallback(() => {
     handleInputChange("avatar_url", "");
-    toast.success("Avatar cleared");
-  }, [handleInputChange]);
+    toast.success(t("chatbot_config.avatar_cleared"));
+  }, [handleInputChange, t]);
 
   const handleSave = async () => {
     try {
       setSaving(true);
       const errors = validateConfig(config);
       if (errors.length > 0) {
-        toast.error(`Please fix validation errors: ${errors.join(", ")}`);
+        toast.error(`${t("chatbot_config.fix_errors")}: ${errors.join(", ")}`);
         setValidationErrors(errors);
         return;
       }
@@ -378,10 +374,10 @@ export default function ChatbotConfiguration() {
           selectedChatbot.id,
           chatbotData
         );
-        toast.success("Chatbot updated successfully!");
+        toast.success(t("chatbot_config.update_success"));
       } else {
         savedChatbot = await chatbotApi.createChatbot(chatbotData);
-        toast.success("Chatbot created successfully!");
+        toast.success(t("chatbot_config.create_success"));
         setIsEditMode(true);
         setShowCreateForm(false);
         setSelectedChatbot(savedChatbot);
@@ -393,22 +389,22 @@ export default function ChatbotConfiguration() {
       await loadOrgChatbots();
     } catch (error) {
       console.error("Error saving chatbot:", error);
-      let errorMessage = "Failed to save chatbot configuration";
+      let errorMessage = t("chatbot_config.save_failed");
       if (error instanceof Error) {
         if (
           error.message.includes("401") ||
           error.message.includes("Authentication")
         ) {
-          errorMessage = "Authentication failed. Please log in again.";
+          errorMessage = t("auth.session_expired");
         } else if (error.message.includes("403")) {
-          errorMessage = "Permission denied. Check your access rights.";
+          errorMessage = t("common.permission_denied");
         } else if (
           error.message.includes("Network") ||
           error.message.includes("fetch")
         ) {
-          errorMessage = "Cannot connect to server. Is the backend running?";
+          errorMessage = t("common.error_loading");
         } else {
-          errorMessage = `Save failed: ${error.message}`;
+          errorMessage = `${t("chatbot_config.save_failed")}: ${error.message}`;
         }
       }
       toast.error(errorMessage);
@@ -683,20 +679,19 @@ export default function ChatbotConfiguration() {
             </div>
 
             <div className="my-9">
-              <Label htmlFor="system-prompt">System Prompt (Advanced)</Label>
+              <Label htmlFor="system-prompt">{t("chatbot_config.system_prompt_label")}</Label>
               <Textarea
                 id="system-prompt"
                 value={inputValues.system_prompt}
                 onChange={(e) =>
                   handleInputChange("system_prompt", e.target.value)
                 }
-                placeholder="You are a helpful assistant that..."
+                placeholder={t("chatbot_config.system_prompt_placeholder")}
                 className="mt-1"
                 rows={6}
               />
               <p className="text-sm text-gray-500 mt-4">
-                Define specific instructions for the AI. This overrides default
-                behavior settings.
+                {t("chatbot_config.system_prompt_subtitle")}
               </p>
             </div>
           </div>
@@ -711,12 +706,12 @@ export default function ChatbotConfiguration() {
             {saving ? (
               <>
                 <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                Saving...
+                {t("common.saving")}
               </>
             ) : (
               <>
                 <Save className="w-4 h-4" />
-                {isEditMode ? "Update Chatbot" : "Create Chatbot"}
+                {isEditMode ? t("chatbot_config.update_chatbot") : t("chatbot_config.create_chatbot")}
               </>
             )}
           </Button>
