@@ -29,11 +29,13 @@ import { useCustomizeStore } from "@/stores/customizeStore";
 import { chatbotApi } from "@/app/api/routes";
 import type { ChatbotInfo } from "@/types";
 import ChatbotConfiguration from "@/components/dashboard/customize/ChatbotConfiguration";
+import { useTranslation } from "@/contexts/I18nContext";
 
 export default function EnhancedCustomizePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const chatbotId = searchParams?.get("id") ?? null;
+  const { t, language } = useTranslation();
 
   const { isLoading: authLoading, user: authUser } = useAuth();
 
@@ -227,11 +229,10 @@ export default function EnhancedCustomizePage() {
           <WifiOff className="h-4 w-4 text-red-600" />
           <AlertDescription className="flex items-center justify-between">
             <div>
-              <strong>Connection Lost:</strong> Unable to connect to the backend
-              services.
+              <strong>{t("dashboard.connection_lost")}:</strong> {t("dashboard.unable_connect")}
               {lastConnectionCheck && (
                 <span className="text-sm text-red-600 ml-2">
-                  Last checked: {lastConnectionCheck.toLocaleTimeString()}
+                  {t("dashboard.last_checked")} {lastConnectionCheck.toLocaleTimeString(language)}
                 </span>
               )}
             </div>
@@ -242,7 +243,7 @@ export default function EnhancedCustomizePage() {
               className="ml-4"
             >
               <RefreshCw className="w-4 h-4 mr-1" />
-              Retry ({retryCount}/3)
+              {t("dashboard.retry")} ({retryCount}/3)
             </Button>
           </AlertDescription>
         </Alert>
@@ -254,7 +255,7 @@ export default function EnhancedCustomizePage() {
           <AlertDescription>
             <div className="flex items-center justify-between">
               <div>
-                <strong>Error:</strong> {error}
+                <strong>{t("dashboard.error")}:</strong> {error}
               </div>
               {error.includes("Failed to initialize application") && (
                 <div className="flex gap-2 ml-4">
@@ -265,7 +266,7 @@ export default function EnhancedCustomizePage() {
                     className="text-orange-700 border-orange-300 hover:bg-orange-100"
                   >
                     <RefreshCw className="w-4 h-4 mr-1" />
-                    Retry
+                    {t("dashboard.retry")}
                   </Button>
                   <Button
                     size="sm"
@@ -277,7 +278,7 @@ export default function EnhancedCustomizePage() {
                     className="text-orange-700 border-orange-300 hover:bg-orange-100"
                   >
                     <RotateCcw className="w-4 h-4 mr-1" />
-                    Refresh
+                    {t("dashboard.refresh")}
                   </Button>
                 </div>
               )}
@@ -290,16 +291,16 @@ export default function EnhancedCustomizePage() {
         <div className="flex pb-3 items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="font text-3xl font-bold">AI Chatbot Management</h1>
+              <h1 className="font text-3xl font-bold">{t("dashboard.welcome_title")}</h1>
               {connectionStatus === "connected" && (
                 <div className="flex items-center gap-1 text-green-600">
                   <Wifi className="w-4 h-4" />
-                  <span className="text-sm">Connected</span>
+                  <span className="text-sm">{t("dashboard.connected")}</span>
                 </div>
               )}
             </div>
             <p className="text-gray-600 mt-1">
-              Create, configure, optimize, and monitor your AI assistants
+              {t("dashboard.welcome_subtitle")}
             </p>
           </div>
           <Button
@@ -308,7 +309,7 @@ export default function EnhancedCustomizePage() {
             disabled={connectionStatus === "disconnected"}
           >
             <Plus className="w-4 h-4" />
-            Create New Chatbot
+            {t("dashboard.create_chatbot")}
           </Button>
         </div>
 
@@ -317,7 +318,7 @@ export default function EnhancedCustomizePage() {
             <CardHeader>
               <CardTitle className="font text-lg flex items-center gap-2">
                 <Bot className="font w-5 h-5" />
-                Your Organization&apos;s Chatbots
+                {t("dashboard.your_chatbots")}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -325,11 +326,10 @@ export default function EnhancedCustomizePage() {
                 {orgChatbots.map((chatbot) => (
                   <div
                     key={chatbot.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${
-                      selectedChatbot?.id === chatbot.id
+                    className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${selectedChatbot?.id === chatbot.id
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-gray-300"
-                    }`}
+                      }`}
                     onClick={() => handleChatbotSelect(chatbot)}
                   >
                     <div className="flex items-start justify-between mb-2">
@@ -369,7 +369,7 @@ export default function EnhancedCustomizePage() {
                               "_blank"
                             );
                           }}
-                          title="Test Chatbot"
+                          title={t("dashboard.test_chat")}
                         >
                           <ExternalLink className="w-3 h-3" />
                         </Button>
@@ -382,7 +382,7 @@ export default function EnhancedCustomizePage() {
                           }}
                           disabled={deletingChatbotId === chatbot.id}
                           className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          title="Delete Chatbot"
+                          title={t("dashboard.delete_chatbot")}
                         >
                           {deletingChatbotId === chatbot.id ? (
                             <div className="w-3 h-3 animate-spin rounded-full border-2 border-red-600 border-t-transparent" />
@@ -403,10 +403,9 @@ export default function EnhancedCustomizePage() {
           <Card className="mb-6 border-dashed border-2">
             <CardContent className="text-center py-12">
               <Bot className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">No Chatbots Yet</h3>
+              <h3 className="text-lg font-medium mb-2">{t("dashboard.no_chatbots")}</h3>
               <p className="font mb-4">
-                Create your first chatbot to get started with AI-powered
-                customer support.
+                {t("dashboard.no_chatbots_desc")}
               </p>
               <Button
                 onClick={handleCreateNew}
@@ -414,7 +413,7 @@ export default function EnhancedCustomizePage() {
                 disabled={connectionStatus === "disconnected"}
               >
                 <Plus className="w-4 h-4" />
-                Create Your First Chatbot
+                {t("dashboard.create_first_chatbot")}
               </Button>
             </CardContent>
           </Card>
@@ -436,13 +435,13 @@ export default function EnhancedCustomizePage() {
                   className="pointer flex items-center gap-2 hover:bg-[#5D7DDE] hover:text-white"
                 >
                   <ArrowLeft className="w-4 h-4" />
-                  Back to List
+                  {t("dashboard.back_to_list")}
                 </Button>
               )}
               <h2 className="text-2xl font-bold">
                 {showCreateForm
-                  ? "Create New Chatbot"
-                  : `Edit: ${selectedChatbot?.name}`}
+                  ? t("dashboard.create_chatbot")
+                  : t("dashboard.edit_chatbot", { name: selectedChatbot?.name || "" })}
               </h2>
             </div>
 
@@ -459,7 +458,7 @@ export default function EnhancedCustomizePage() {
                   className="flex items-center gap-2"
                 >
                   <ExternalLink className="w-4 h-4" />
-                  Test Chatbot
+                  {t("dashboard.test_chat")}
                 </Button>
                 <Button
                   variant="outline"
@@ -477,7 +476,7 @@ export default function EnhancedCustomizePage() {
                   ) : (
                     <Trash2 className="w-4 h-4" />
                   )}
-                  Delete Chatbot
+                  {t("dashboard.delete_chatbot")}
                 </Button>
               </div>
             )}
@@ -492,20 +491,20 @@ export default function EnhancedCustomizePage() {
               <Card className="bg-linear-to-r/shorter from-indigo-100 to-blue-100 py-4">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    📊 Knowledge Base
+                    📊 {t("dashboard.kb_widget_title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">
-                        Total documents:
+                        {t("dashboard.total_documents")}
                       </span>
                       <Badge variant="outline">{uploads.length}</Badge>
                     </div>
                     <div className="flex justify-between items-center">
                       <span className="text-sm text-gray-600">
-                        Active sources:
+                        {t("dashboard.active_sources")}
                       </span>
                       <Badge
                         variant="outline"
@@ -530,7 +529,7 @@ export default function EnhancedCustomizePage() {
                       onClick={() => router.push(`/dashboard/train`)}
                     >
                       <Upload className="w-4 h-4 mr-2" />
-                      Manage Knowledge Base
+                      {t("dashboard.manage_kb")}
                     </Button>
                   </div>
                 </CardContent>
@@ -539,19 +538,19 @@ export default function EnhancedCustomizePage() {
               <Card className="bg-linear-to-r/shorter from-indigo-100 to-blue-100 py-4">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    🧠 Context Engine Status
+                    🧠 {t("dashboard.context_widget_title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Model Tier:</span>
+                      <span className="text-sm text-gray-600">{t("dashboard.model_tier")}</span>
                       <Badge variant="secondary" className="capitalize">
                         {contextConfig.model_tier}
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">Strategy:</span>
+                      <span className="text-sm text-gray-600">{t("dashboard.strategy")}</span>
                       <Badge variant="outline" className="capitalize">
                         {contextConfig.retrieval_strategy}
                       </Badge>
@@ -563,7 +562,7 @@ export default function EnhancedCustomizePage() {
                       onClick={() => router.push(`/dashboard/context-settings`)}
                     >
                       <Settings className="w-4 h-4 mr-2" />
-                      Configure Engine
+                      {t("dashboard.configure_engine")}
                     </Button>
                   </div>
                 </CardContent>
@@ -572,12 +571,12 @@ export default function EnhancedCustomizePage() {
               <Card className="bg-linear-to-r/shorter from-indigo-300 to-blue-300 py-4">
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
-                    🚀 Deployment
+                    🚀 {t("dashboard.deployment_widget_title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <p className="text-sm text-gray-600 mb-3">
-                    Your chatbot is optimized and ready for deployment.
+                    {t("dashboard.deployment_ready")}
                   </p>
                   <div className="space-y-2">
                     <Button
@@ -586,7 +585,7 @@ export default function EnhancedCustomizePage() {
                       onClick={handleGenerateEmbedCode}
                       disabled={!selectedChatbot?.id}
                     >
-                      Generate Embed Code
+                      {t("dashboard.generate_embed")}
                     </Button>
                     <Button
                       variant="outline"
@@ -595,7 +594,7 @@ export default function EnhancedCustomizePage() {
                       onClick={() => router.push(`/dashboard`)}
                     >
                       <BarChart3 className="w-4 h-4 mr-2" />
-                      View Analytics
+                      {t("dashboard.view_analytics")}
                     </Button>
                   </div>
                 </CardContent>
@@ -608,9 +607,9 @@ export default function EnhancedCustomizePage() {
       {showEmbedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">Embed Code</h3>
+            <h3 className="text-lg font-semibold mb-4">{t("dashboard.embed_modal_title")}</h3>
             <p className="text-sm text-gray-600 mb-3">
-              Copy this code and paste it into your website:
+              {t("dashboard.embed_modal_desc")}
             </p>
             <div className="bg-gray-100 p-4 rounded-lg mb-4">
               <pre className="text-sm overflow-x-auto whitespace-pre-wrap">
@@ -622,14 +621,14 @@ export default function EnhancedCustomizePage() {
                 variant="outline"
                 onClick={() => setShowEmbedModal(false)}
               >
-                Close
+                {t("dashboard.close")}
               </Button>
               <Button
                 onClick={copyEmbedCode}
                 className="flex items-center gap-2"
               >
                 <Copy className="w-4 h-4" />
-                Copy Code
+                {t("dashboard.copy_code")}
               </Button>
             </div>
           </div>
