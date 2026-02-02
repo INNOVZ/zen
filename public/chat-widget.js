@@ -756,6 +756,7 @@
           padding: 4px 8px;
           border-radius: 7px;
           font-size: 11px;
+          font-weight: 700;
           cursor: pointer;
           transition: all 0.2s ease;
         }
