@@ -29,10 +29,11 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute bottom-full mb-2 ${collapsed ? "left-0 origin-bottom-left" : "left-0 w-full origin-bottom"} bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1000]`}
-                        style={{ minWidth: collapsed ? "180px" : "100%" }}
+                        className={`absolute bottom-full mb-2 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1000] ${collapsed ? "left-0 w-12 flex flex-col items-center" : "left-0 w-full"
+                            }`}
+                        style={{ padding: collapsed ? "4px 0" : "4px" }}
                     >
-                        <div className="p-1 space-y-0.5">
+                        <div className={`space-y-0.5 ${collapsed ? "flex flex-col items-center w-full" : "p-1"}`}>
                             {Object.entries(LANGUAGES).map(([code, { label, icon }]) => (
                                 <button
                                     key={code}
@@ -40,14 +41,19 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
                                         setLanguage(code as LanguageCode);
                                         setIsOpen(false);
                                     }}
-                                    className={`w-full flex items-center gap-3 px-3 py-2 text-sm rounded-md transition-colors ${language === code
-                                            ? "bg-blue-50 text-blue-600 font-medium"
-                                            : "text-gray-700 hover:bg-gray-100"
-                                        }`}
+                                    className={`flex items-center gap-3 transition-colors ${collapsed
+                                        ? "p-2 rounded-md hover:bg-gray-100 justify-center w-10 h-10"
+                                        : "w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100"
+                                        } ${language === code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
+                                    title={label}
                                 >
-                                    <span className="text-lg leading-none">{icon}</span>
-                                    <span>{label}</span>
-                                    {language === code && <Check size={14} className="ml-auto" />}
+                                    <span className="text-xl leading-none">{icon}</span>
+                                    {!collapsed && (
+                                        <>
+                                            <span>{label}</span>
+                                            {language === code && <Check size={14} className="ml-auto" />}
+                                        </>
+                                    )}
                                 </button>
                             ))}
                         </div>
@@ -58,12 +64,16 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
             <button
                 onClick={() => setIsOpen(!isOpen)}
                 className={`flex items-center gap-2 p-2 rounded-lg transition-all duration-200 hover:bg-gray-100 ${collapsed
-                        ? "justify-center w-full aspect-square"
-                        : "w-full border border-gray-200 bg-white"
+                    ? "justify-center w-full aspect-square"
+                    : "w-full border border-gray-200 bg-white"
                     } ${isOpen ? "ring-2 ring-blue-100 border-blue-200" : ""}`}
-                title="Select Language"
+                title={LANGUAGES[language].label}
             >
-                <Globe size={collapsed ? 20 : 18} className="text-[#5d7dde]" />
+                {collapsed ? (
+                    <span className="text-xl leading-none">{LANGUAGES[language].icon}</span>
+                ) : (
+                    <Globe size={18} className="text-[#5d7dde]" />
+                )}
                 {!collapsed && (
                     <div className="flex flex-1 items-center justify-between min-w-0">
                         <span className="text-sm font-medium text-gray-700 truncate">

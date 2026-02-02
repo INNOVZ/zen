@@ -4,7 +4,7 @@ import { getUserFirstName, type DisplayUser } from "@/utils/userUtils";
 import { useTranslation } from "@/contexts/I18nContext";
 
 interface DashboardHeaderProps {
-  user: any;
+  user: DisplayUser | null;
   userId: string;
   onTrainClick: () => void;
   onCustomizeClick: () => void;
@@ -15,7 +15,6 @@ export function DashboardHeader({
   onTrainClick,
   onCustomizeClick,
 }: DashboardHeaderProps) {
-
   const firstName = getUserFirstName(user);
   const { t } = useTranslation();
 
@@ -25,9 +24,7 @@ export function DashboardHeader({
         <h1 className="text-3xl text-white font-bold">
           {t("dashboard.welcome_user", { name: firstName })}
         </h1>
-        <p className="text-white mt-1">
-          {t("dashboard.welcome_subtitle")}
-        </p>
+        <p className="text-white mt-1">{t("dashboard.welcome_subtitle")}</p>
       </div>
       <div
         className="flex gap-2 mt-5 lg:mt-0"
