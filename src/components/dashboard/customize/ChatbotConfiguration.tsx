@@ -122,12 +122,18 @@ export default function ChatbotConfiguration() {
 
   const loadConfigFromChatbot = useCallback(
     (chatbot: ChatbotInfo) => {
+      // Extract language from multiple possible locations (top level, ai_model_config, or model_config)
+      const language = chatbot.language
+        || (chatbot.ai_model_config as Record<string, unknown>)?.language as string
+        || (chatbot.model_config as Record<string, unknown>)?.language as string
+        || "en";
+
       setConfig({
         ...chatbot,
         description: chatbot.description || "",
         color_hex: chatbot.color_hex || "#6a8fff",
         tone: chatbot.tone || "helpful",
-        language: chatbot.language || "en",
+        language,
         behavior: chatbot.behavior || t("chatbot_config.default_behavior"),
         system_prompt: chatbot.system_prompt || "",
         greeting_message:
@@ -205,6 +211,12 @@ export default function ChatbotConfiguration() {
   }, [loadOrgChatbots]);
 
   useEffect(() => {
+    // Extract language from multiple possible locations
+    const language = config.language
+      || (config.ai_model_config as Record<string, unknown>)?.language as string
+      || (config.model_config as Record<string, unknown>)?.language as string
+      || "en";
+
     setInputValues({
       name: config.name || "",
       description: config.description || "",
@@ -214,7 +226,7 @@ export default function ChatbotConfiguration() {
       system_prompt: config.system_prompt || "",
       color_hex: config.color_hex || "#3B82F6",
       avatar_url: config.avatar_url || "",
-      language: config.language || "en",
+      language,
     });
   }, [config, config.id, isEditMode, chatbotId]);
 
