@@ -29,7 +29,7 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute bottom-full mb-2 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1000] ${collapsed
+                        className={`absolute bottom-full bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1001] ${collapsed
                                 ? "left-1/2 -translate-x-1/2 w-10 flex flex-col items-center"
                                 : "left-0 w-full"
                             }`}
@@ -44,8 +44,8 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
                                         setIsOpen(false);
                                     }}
                                     className={`flex items-center gap-3 transition-colors ${collapsed
-                                            ? "p-0 rounded-md hover:bg-gray-100 justify-center w-8 h-8"
-                                            : "w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100"
+                                        ? "p-0 rounded-md hover:bg-gray-100 justify-center w-8 h-8"
+                                        : "w-full px-3 py-2 text-sm rounded-md hover:bg-gray-100"
                                         } ${language === code ? "bg-blue-50 text-blue-600 font-medium" : "text-gray-700"}`}
                                     title={label}
                                 >
