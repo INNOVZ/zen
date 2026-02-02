@@ -29,9 +29,9 @@ export function LanguageSwitcher({ collapsed = false }: { collapsed?: boolean })
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         exit={{ opacity: 0, y: 10, scale: 0.95 }}
                         transition={{ duration: 0.2 }}
-                        className={`absolute bottom-full bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1001] ${collapsed
-                                ? "left-1/2 -translate-x-1/2 w-10 flex flex-col items-center"
-                                : "left-0 w-full"
+                        className={`absolute bottom-full mb-5 bg-white border border-gray-200 rounded-lg shadow-xl overflow-hidden z-[1000] ${collapsed
+                            ? "left-1/2 -translate-x-1/2 w-10 flex flex-col items-center"
+                            : "left-0 w-full"
                             }`}
                         style={{ padding: collapsed ? "4px 0" : "4px" }}
                     >
