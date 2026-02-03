@@ -294,6 +294,7 @@
         
         .zaakiy-chat-window {
           width: 380px !important;
+          padding: 2px !important;
           max-width: calc(100vw - 20px);
           height: 75vh;
           max-height: calc(100vh - 120px);
@@ -413,6 +414,7 @@
           color: white !important;
           padding: 20px 16px !important;
           display: flex;
+          border-radius: 16px !important;
           justify-content: space-between;
           align-items: center;
           flex-shrink: 0;
