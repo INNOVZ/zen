@@ -1594,6 +1594,26 @@
       const avatarElement = createAvatarImage(config.avatarUrl, config.botName, true);
       avatarContainer.appendChild(avatarElement);
     }
+
+    // Update all bot message avatars (fixes avatar not showing after page reload)
+    if (config.avatarUrl) {
+      const botMessages = document.querySelectorAll('.zaakiy-message.bot');
+      botMessages.forEach(msgEl => {
+        // Find existing avatar (either img or placeholder div)
+        const existingAvatar = msgEl.querySelector('.zaakiy-message-avatar, .zaakiy-message-avatar-placeholder');
+        if (existingAvatar) {
+          // Check if it's a placeholder and needs to be replaced with actual image
+          const isPlaceholder = existingAvatar.classList.contains('zaakiy-message-avatar-placeholder');
+          const isFailedImage = existingAvatar.tagName === 'IMG' && (!existingAvatar.complete || existingAvatar.naturalWidth === 0);
+
+          if (isPlaceholder || isFailedImage) {
+            // Replace with new avatar image
+            const newAvatar = createAvatarImage(config.avatarUrl, config.botName, false);
+            existingAvatar.parentNode.replaceChild(newAvatar, existingAvatar);
+          }
+        }
+      });
+    }
   }
 
   // Global functions
