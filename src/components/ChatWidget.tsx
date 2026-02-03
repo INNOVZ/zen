@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { API_BASE_URL } from "@/config/api";
-import { Send, Bot, MessageCircle, X, Minus, ChevronDown } from "lucide-react";
+import { Send, Bot, MessageCircle, X, Minus, ChevronDown, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { conversationApi, chatbotApi } from "@/app/api/routes";
@@ -315,6 +315,27 @@ const ChatWidget = memo(
       scrollToBottom();
     }, [messages, scrollToBottom]);
 
+    // Handle starting a new chat
+    const handleNewChat = useCallback(() => {
+      // Reset conversation ID
+      setConversationId(undefined);
+
+      // Reset messages to initial greeting
+      setMessages([
+        {
+          id: "greeting",
+          type: "bot",
+          content:
+            selectedChatbot?.greeting_message ||
+            `Hello! I'm ${selectedChatbot?.name || "Assistant"}. How can I help you today?`,
+          timestamp: new Date(),
+        },
+      ]);
+
+      // Clear input
+      setInputMessage("");
+    }, [selectedChatbot]);
+
     const handleSendMessage = useCallback(
       async (messageToSend?: string) => {
         const message = messageToSend || inputMessage;
@@ -577,7 +598,16 @@ const ChatWidget = memo(
 
                 <div className="w-2 h-2 bg-green-400 rounded-full"></div>
               </div>
-              <span className="flex items-center gap-3">
+              <span className="flex items-center gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleNewChat}
+                  className="pointer h-7 w-7 rounded-lg p-0 text-white bg-white/20"
+                  title="Start new conversation"
+                >
+                  <RotateCcw className="h-3 w-3" />
+                </Button>
                 <Button
                   variant="ghost"
                   size="sm"

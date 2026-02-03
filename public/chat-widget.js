@@ -934,6 +934,38 @@
           }
         }
         
+        .zaakiy-header-buttons {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-shrink: 0;
+        }
+        
+        .zaakiy-new-chat-button {
+          background: rgba(255, 255, 255, 0.87);
+          border: none;
+          color: ${config.primaryColor};
+          cursor: pointer;
+          font-size: 12px;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          flex-shrink: 0;
+        }
+        
+        .zaakiy-new-chat-button:hover {
+          background: rgb(255, 255, 255);
+          transform: scale(1.05);
+        }
+        
+        .zaakiy-new-chat-button:active {
+          transform: scale(0.95);
+        }
+        
         .zaakiy-close-button {
           background: rgba(255, 255, 255, 0.87);
           border: none;
@@ -960,10 +992,11 @@
         }
         
         @media (max-width: 480px) {
+          .zaakiy-new-chat-button,
           .zaakiy-close-button {
-            width: 36px;
-            height: 36px;
-            font-size: 18px;
+            width: 32px;
+            height: 32px;
+            font-size: 14px;
           }
         }
         
@@ -1209,7 +1242,15 @@
               <div style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; margin-bottom: 2px;"></div>
             </div>
           </div>
-          <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">X</button>
+          <div class="zaakiy-header-buttons">
+            <button class="zaakiy-new-chat-button" onclick="window.zaakiyNewChat()" title="Start new conversation">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 20h9"/>
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+              </svg>
+            </button>
+            <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">X</button>
+          </div>
         </div>
         
         <div class="zaakiy-chat-messages" id="zaakiy-messages">
@@ -1560,6 +1601,7 @@
     const header = document.querySelector('.zaakiy-chat-header');
     const sendButton = document.querySelector('.zaakiy-send-button');
     const closeButton = document.querySelector('.zaakiy-close-button');
+    const newChatButton = document.querySelector('.zaakiy-new-chat-button');
     const botNameElement = document.querySelector('#zaakiy-bot-name');
     const greetingMessage = document.querySelector('#zaakiy-greeting');
     const avatarContainer = document.querySelector('#zaakiy-avatar-container');
@@ -1570,6 +1612,7 @@
     if (header) header.style.setProperty('background', config.primaryColor, 'important');
     if (sendButton) sendButton.style.background = config.primaryColor;
     if (closeButton) closeButton.style.color = config.primaryColor;
+    if (newChatButton) newChatButton.style.color = config.primaryColor;
     const welcomeClose = document.querySelector('.zaakiy-welcome-close');
     if (welcomeClose) {
       welcomeClose.style.background = config.primaryColor;
@@ -1718,6 +1761,67 @@
         chatWindow.style.display = 'none';
         chatWindow.classList.remove('zaakiy-closing');
       }, 200);
+    }
+  };
+
+  // Start new chat - clear conversation and reset to initial state
+  window.zaakiyNewChat = function () {
+    // Clear saved session from localStorage
+    clearSavedSession();
+
+    // Reset conversation ID
+    conversationId = null;
+
+    // Clear messages container and show initial greeting
+    const messagesContainer = document.getElementById('zaakiy-messages');
+    if (messagesContainer) {
+      messagesContainer.innerHTML = '';
+
+      // Create new greeting message with avatar
+      const greetingMessage = document.createElement('div');
+      greetingMessage.className = 'zaakiy-message bot';
+
+      // Create avatar
+      const avatarElement = createAvatarImage(config.avatarUrl, config.botName, false);
+
+      // Create message content wrapper
+      const contentWrapper = document.createElement('div');
+      contentWrapper.className = 'zaakiy-message-content-wrapper';
+
+      // Create message content
+      const messageContent = document.createElement('div');
+      messageContent.className = 'zaakiy-message-content';
+      messageContent.innerHTML = parseMarkdown(config.greeting);
+
+      // Create timestamp
+      const timestamp = document.createElement('div');
+      timestamp.className = 'zaakiy-message-timestamp';
+      timestamp.textContent = formatTime(new Date());
+
+      contentWrapper.appendChild(messageContent);
+      contentWrapper.appendChild(timestamp);
+
+      greetingMessage.appendChild(avatarElement);
+      greetingMessage.appendChild(contentWrapper);
+
+      messagesContainer.appendChild(greetingMessage);
+
+      // Scroll to top
+      messagesContainer.scrollTop = 0;
+    }
+
+    // Clear input field
+    const input = document.getElementById('zaakiy-input');
+    if (input) {
+      input.value = '';
+      input.disabled = false;
+      input.focus();
+    }
+
+    // Enable send button
+    const sendButton = document.querySelector('.zaakiy-send-button');
+    if (sendButton) {
+      sendButton.disabled = false;
     }
   };
 
