@@ -1084,29 +1084,39 @@
         
         
         .zaakiy-typing {
-          display: flex;
-          gap: 4px;
-          padding: 10px 12px;
-          background: white;
-          border-radius: 12px;
-          border: 1px solid #e1e5e9;
-          max-width: 60px;
+          display: flex !important;
+          gap: 4px !important;
+          padding: 10px 12px !important;
+          background: white !important;
+          border-radius: 12px !important;
+          border: 1px solid #e1e5e9 !important;
+          max-width: 60px !important;
+          min-height: 30px !important;
+          visibility: visible !important;
+          opacity: 1 !important;
         }
         
-        .zaakiy-typing-dot {
-          width: 6px;
-          height: 6px;
-          background: #999;
-          border-radius: 50%;
-          animation: zaakiy-bounce 1.4s infinite ease-in-out both;
+        #zaakiy-chat-widget .zaakiy-typing-dot,
+        .zaakiy-typing .zaakiy-typing-dot {
+          width: 6px !important;
+          height: 6px !important;
+          min-width: 6px !important;
+          min-height: 6px !important;
+          background: #999 !important;
+          border-radius: 50% !important;
+          animation: zaakiy-bounce 1.4s infinite ease-in-out both !important;
+          display: block !important;
+          visibility: visible !important;
+          opacity: 1 !important;
         }
         
-        .zaakiy-typing-dot:nth-child(1) { animation-delay: -0.32s; }
-        .zaakiy-typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        #zaakiy-chat-widget .zaakiy-typing-dot:nth-child(1) { animation-delay: -0.32s !important; }
+        #zaakiy-chat-widget .zaakiy-typing-dot:nth-child(2) { animation-delay: -0.16s !important; }
+        #zaakiy-chat-widget .zaakiy-typing-dot:nth-child(3) { animation-delay: 0s !important; }
         
         @keyframes zaakiy-bounce {
-          0%, 80%, 100% { transform: scale(0); }
-          40% { transform: scale(1); }
+          0%, 80%, 100% { transform: scale(0); opacity: 0.3; }
+          40% { transform: scale(1); opacity: 1; }
         }
         
         @keyframes zaakiy-slideIn {
@@ -1373,7 +1383,8 @@
             false,
             msg.isHtml || false,
             timestamp,
-            msg.buttons || []
+            msg.buttons || [],
+            msg.productCards || []
           );
         });
       }
@@ -2091,7 +2102,7 @@
     return container;
   }
 
-  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null, buttons = []) {
+  function zaakiyAddMessage(content, type, saveToStorage = true, isHtml = false, timestamp = null, buttons = [], productCards = []) {
     const messagesContainer = document.getElementById('zaakiy-messages');
     if (!messagesContainer) return;
 
@@ -2136,6 +2147,10 @@
     timestampDiv.textContent = timestampDisplay;
 
     contentWrapper.appendChild(contentDiv);
+    if (type === 'bot' && productCards && productCards.length) {
+      const productCardsEl = createProductCards(productCards);
+      if (productCardsEl) contentWrapper.appendChild(productCardsEl);
+    }
     if (type === 'bot' && buttons && buttons.length) {
       const buttonsEl = createMessageButtons(buttons);
       if (buttonsEl) contentWrapper.appendChild(buttonsEl);
@@ -2175,15 +2190,40 @@
         // For user messages, save plain text
         const content = type === 'bot' ? contentEl.innerHTML : contentEl.textContent;
         let buttons = [];
+        let productCards = [];
         if (type === 'bot') {
+          // Extract buttons
           const buttonEls = msgEl.querySelectorAll('.zaakiy-message-button');
           buttonEls.forEach((buttonEl) => {
             const text = buttonEl.textContent || '';
             const value = buttonEl.getAttribute('data-value') || text;
             buttons.push({ text, value });
           });
+
+          // Extract product cards data from DOM
+          const productCardEls = msgEl.querySelectorAll('.zaakiy-product-card');
+          productCardEls.forEach((cardEl) => {
+            const nameEl = cardEl.querySelector('.zaakiy-product-name');
+            const priceEl = cardEl.querySelector('.zaakiy-product-price');
+            const imageEl = cardEl.querySelector('.zaakiy-product-image img');
+            const linkEl = cardEl.querySelector('.zaakiy-product-link');
+            const stockEl = cardEl.querySelector('.zaakiy-product-stock');
+
+            const productCard = {
+              name: nameEl ? nameEl.textContent : '',
+              price: priceEl ? parseFloat(priceEl.textContent.replace(/[^\d.]/g, '')) : null,
+              currency: priceEl ? priceEl.textContent.replace(/[\d.,]/g, '').trim() : '',
+              image: imageEl ? imageEl.src : null,
+              url: linkEl ? linkEl.href : null,
+              inventory: stockEl ? parseInt(stockEl.textContent.replace(/\D/g, '')) : null
+            };
+
+            if (productCard.name) {
+              productCards.push(productCard);
+            }
+          });
         }
-        messages.push({ content, type, isHtml: type === 'bot', timestamp, buttons });
+        messages.push({ content, type, isHtml: type === 'bot', timestamp, buttons, productCards });
       }
     });
 
