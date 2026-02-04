@@ -296,7 +296,7 @@
           width: 380px !important;
           padding: 2px !important;
           max-width: calc(100vw - 20px);
-          height: 76vh;
+          height: 78vh;
           max-height: calc(100vh - 110px);
           background: white;
           border-radius: 16px;
@@ -490,9 +490,8 @@
           right: -2px;
           width: 10px;
           height: 10px;
-          background: #4ade80;
+          background: #3fca72ff;
           border-radius: 50%;
-          border: 2px solid ${config.primaryColor};
           z-index: 1;
         }
         
