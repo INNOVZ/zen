@@ -477,7 +477,7 @@
           .zaakiy-chat-header-info {
             gap: 10px;
           }
-        }
+        } 
         
         #zaakiy-avatar-container {
           position: relative;
@@ -488,8 +488,8 @@
           position: absolute;
           top: -2px;
           right: -2px;
-          width: 10px;
-          height: 10px;
+          width: 8px;
+          height: 8px;
           background: #3fca72ff;
           border-radius: 50%;
           z-index: 1;
