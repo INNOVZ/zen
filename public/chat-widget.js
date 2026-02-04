@@ -296,8 +296,8 @@
           width: 380px !important;
           padding: 2px !important;
           max-width: calc(100vw - 20px);
-          height: 80vh;
-          max-height: calc(100vh - 100px);
+          height: 76vh;
+          max-height: calc(100vh - 110px);
           background: white;
           border-radius: 16px;
           box-shadow: 0 8px 30px rgba(0,0,0,0.2);
@@ -1654,6 +1654,10 @@
       while (avatarContainer.firstChild) avatarContainer.removeChild(avatarContainer.firstChild);
       const avatarElement = createAvatarImage(config.avatarUrl, config.botName, true);
       avatarContainer.appendChild(avatarElement);
+      // Re-add the status indicator (online dot)
+      const statusIndicator = document.createElement('div');
+      statusIndicator.className = 'zaakiy-status-indicator';
+      avatarContainer.appendChild(statusIndicator);
     }
 
     // Update all bot message avatars (fixes avatar not showing after page reload)
