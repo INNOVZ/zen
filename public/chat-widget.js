@@ -618,6 +618,7 @@
           padding: 10px 14px;
           border-radius: 12px;
           font-size: 14px !important;
+          font-weight: 400 !important;
           line-height: 1.45 !important;
           word-wrap: break-word !important;
           overflow-wrap: break-word;
@@ -657,6 +658,7 @@
         .zaakiy-product-card {
           border: 1px solid #e5e7eb;
           border-radius: 10px;
+          gap: 3px;
           overflow: hidden;
           background: #ffffff;
           box-shadow: 0 1px 3px rgba(0,0,0,0.08);
@@ -674,14 +676,15 @@
         }
 
         .zaakiy-product-image {
-          width: 72px;
-          height: 72px;
+          width: 90px;
+          height: 90px;
           flex-shrink: 0;
           background: #f3f4f6;
           display: flex;
           align-items: center;
           justify-content: center;
           overflow: hidden;
+          border-radius: 8px;
         }
 
         .zaakiy-product-image img {
@@ -704,7 +707,7 @@
         }
 
         .zaakiy-product-name {
-          font-size: 13px;
+          font-size: 12px;
           font-weight: 600;
           color: #1f2937;
           margin: 0 0 2px 0;
@@ -731,7 +734,7 @@
           align-items: center;
           gap: 4px;
           font-size: 11px;
-          color: ${config.primaryColor};
+          color: ${config.primaryColor} !important;
           text-decoration: none;
           font-weight: 500;
         }
@@ -1541,7 +1544,10 @@
     const icons = {
       calendar: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>`,
       clipboard: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>`,
-      default: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" x2="12" y1="8" y2="12"/><line x1="12" x2="12.01" y1="16" y2="16"/></svg>`
+      shoppingBag: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+      package: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 9.4 7.55 4.24"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" x2="12" y1="22" y2="12"/></svg>`,
+      sparkles: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>`,
+      default: `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .963 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.963 0z"/></svg>`
     };
 
     container.style.display = 'flex';
@@ -1555,12 +1561,19 @@
       let label = button.label || button.id || 'Action';
 
       // Sanitize label (remove emojis if present) and select icon
-      if (button.id === 'book_appointment' || label.toLowerCase().includes('book')) {
+      const labelLower = label.toLowerCase();
+      if (button.id === 'book_appointment' || labelLower.includes('book') || labelLower.includes('appointment')) {
         icon = icons.calendar;
         label = label.replace(/📅|🗓️/g, '').trim();
-      } else if (button.id === 'enquiry' || label.toLowerCase().includes('enquiry')) {
+      } else if (button.id === 'enquiry' || labelLower.includes('enquiry') || labelLower.includes('submit')) {
         icon = icons.clipboard;
         label = label.replace(/📋|📝/g, '').trim();
+      } else if (button.id === 'shopify_collection' || labelLower.includes('best seller') || labelLower.includes('product') || labelLower.includes('collection') || labelLower.includes('shop')) {
+        icon = icons.shoppingBag;
+        label = label.replace(/🛍️|🛒|🏷️/g, '').trim();
+      } else if (button.id === 'shopify_order' || labelLower.includes('order') || labelLower.includes('track') || labelLower.includes('shipping')) {
+        icon = icons.package;
+        label = label.replace(/�|�/g, '').trim();
       }
 
       // Structure with Icon
