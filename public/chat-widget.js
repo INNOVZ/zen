@@ -2222,11 +2222,24 @@
         infoDiv.appendChild(priceEl);
       }
 
-      // Stock
-      if (product.inventory !== undefined && product.inventory > 0) {
-        const stockEl = document.createElement('p');
-        stockEl.className = 'zaakiy-product-stock';
+      // Stock - handle tracked vs untracked inventory
+      const stockEl = document.createElement('p');
+      stockEl.className = 'zaakiy-product-stock';
+      
+      if (product.inventory_tracked === false || product.inventory === null || product.inventory === undefined) {
+        // Inventory not tracked - show as available
+        stockEl.textContent = 'Available';
+        stockEl.style.color = '#059669'; // Green
+        infoDiv.appendChild(stockEl);
+      } else if (product.inventory > 0) {
+        // Inventory tracked and in stock
         stockEl.textContent = `In stock: ${product.inventory}`;
+        stockEl.style.color = '#059669'; // Green
+        infoDiv.appendChild(stockEl);
+      } else if (product.inventory === 0) {
+        // Inventory tracked but out of stock
+        stockEl.textContent = 'Out of stock';
+        stockEl.style.color = '#dc2626'; // Red
         infoDiv.appendChild(stockEl);
       }
 
