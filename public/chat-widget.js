@@ -657,6 +657,7 @@
 
         .zaakiy-product-card {
           border: 1px solid #e5e7eb;
+          padding: 5px;
           border-radius: 10px;
           gap: 3px;
           overflow: hidden;
@@ -699,7 +700,6 @@
 
         .zaakiy-product-info {
           flex: 1;
-          padding: 8px 10px;
           min-width: 0;
           display: flex;
           flex-direction: column;
