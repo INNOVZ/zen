@@ -700,6 +700,7 @@
 
         .zaakiy-product-info {
           flex: 1;
+          padding: 10px;
           min-width: 0;
           display: flex;
           flex-direction: column;
