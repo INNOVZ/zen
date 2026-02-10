@@ -197,6 +197,7 @@
         "table_name": "Name",
         "table_contact": "Contact",
         "table_notes": "Enquiry",
+        "table_company": "Company",
         "table_channel": "Channel",
         "table_captured_to": "Captured To",
         "table_captured_at": "Captured At",

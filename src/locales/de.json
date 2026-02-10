@@ -197,6 +197,7 @@
         "table_name": "Name",
         "table_contact": "Kontakt",
         "table_notes": "Anfrage",
+        "table_company": "Firma",
         "table_channel": "Kanal",
         "table_captured_to": "Erfasst In",
         "table_captured_at": "Erfasst Am",

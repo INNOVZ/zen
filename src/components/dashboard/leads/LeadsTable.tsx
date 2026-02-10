@@ -48,7 +48,6 @@ export const LeadsTable = memo<LeadsTableProps>(
               <TableHead>{t("leads.table_name")}</TableHead>
               <TableHead>{t("leads.table_contact")}</TableHead>
               <TableHead>{t("leads.table_notes")}</TableHead>
-              <TableHead>{t("leads.table_company")}</TableHead>
               <TableHead>{t("leads.table_channel")}</TableHead>
               <TableHead>{t("leads.table_captured_to")}</TableHead>
               <TableHead>{t("leads.table_captured_at")}</TableHead>
@@ -97,11 +96,6 @@ export const LeadsTable = memo<LeadsTableProps>(
                       </span>
                     </div>
                   ) : (
-                    <span className="text-muted-foreground">-</span>
-                  )}
-                </TableCell>
-                <TableCell>
-                  {lead.company || (
                     <span className="text-muted-foreground">-</span>
                   )}
                 </TableCell>
