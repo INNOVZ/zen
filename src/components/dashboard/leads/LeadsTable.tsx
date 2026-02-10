@@ -17,7 +17,6 @@ import {
   Calendar,
   CheckCircle2,
   Trash2,
-  MessageSquare,
 } from "lucide-react";
 import { useTranslation } from "@/contexts/I18nContext";
 
@@ -89,11 +88,8 @@ export const LeadsTable = memo<LeadsTableProps>(
                 </TableCell>
                 <TableCell>
                   {lead.notes ? (
-                    <div className="flex items-start gap-1 text-sm min-w-[200px]">
-                      <MessageSquare className="h-3 w-3 text-muted-foreground mt-0.5 flex-shrink-0" />
-                      <span>
-                        {lead.notes}
-                      </span>
+                    <div className="text-sm min-w-[200px]">
+                      {lead.notes}
                     </div>
                   ) : (
                     <span className="text-muted-foreground">-</span>
