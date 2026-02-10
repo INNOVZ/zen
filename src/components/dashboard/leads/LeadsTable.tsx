@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Users, Mail, Phone, Calendar, CheckCircle2, Trash2 } from "lucide-react";
+import {
+  Users,
+  Mail,
+  Phone,
+  Calendar,
+  CheckCircle2,
+  Trash2,
+  MessageSquare,
+} from "lucide-react";
 import { useTranslation } from "@/contexts/I18nContext";
 
 interface LeadsTableProps {
@@ -39,11 +47,14 @@ export const LeadsTable = memo<LeadsTableProps>(
             <TableRow>
               <TableHead>{t("leads.table_name")}</TableHead>
               <TableHead>{t("leads.table_contact")}</TableHead>
+              <TableHead>{t("leads.table_notes")}</TableHead>
               <TableHead>{t("leads.table_company")}</TableHead>
               <TableHead>{t("leads.table_channel")}</TableHead>
               <TableHead>{t("leads.table_captured_to")}</TableHead>
               <TableHead>{t("leads.table_captured_at")}</TableHead>
-              <TableHead className="text-right">{t("leads.table_actions")}</TableHead>
+              <TableHead className="text-right">
+                {t("leads.table_actions")}
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -51,7 +62,9 @@ export const LeadsTable = memo<LeadsTableProps>(
               <TableRow key={lead.id}>
                 <TableCell className="font-medium">
                   {lead.name || (
-                    <span className="text-muted-foreground">{t("leads.unknown_name")}</span>
+                    <span className="text-muted-foreground">
+                      {t("leads.unknown_name")}
+                    </span>
                   )}
                 </TableCell>
                 <TableCell>
@@ -76,12 +89,26 @@ export const LeadsTable = memo<LeadsTableProps>(
                   </div>
                 </TableCell>
                 <TableCell>
+                  {lead.notes ? (
+                    <div className="flex items-start gap-1 text-sm max-w-[200px]">
+                      <MessageSquare className="h-3 w-3 text-muted-foreground mt-0.5 flex-shrink-0" />
+                      <span className="line-clamp-2" title={lead.notes}>
+                        {lead.notes}
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-muted-foreground">-</span>
+                  )}
+                </TableCell>
+                <TableCell>
                   {lead.company || (
                     <span className="text-muted-foreground">-</span>
                   )}
                 </TableCell>
                 <TableCell>
-                  <Badge variant="outline">{lead.channel || t("leads.channel_website")}</Badge>
+                  <Badge variant="outline">
+                    {lead.channel || t("leads.channel_website")}
+                  </Badge>
                 </TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-1">
@@ -90,9 +117,7 @@ export const LeadsTable = memo<LeadsTableProps>(
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         {dest}
                       </Badge>
-                    )) || (
-                        <span className="text-muted-foreground">-</span>
-                      )}
+                    )) || <span className="text-muted-foreground">-</span>}
                   </div>
                 </TableCell>
                 <TableCell>
@@ -117,7 +142,7 @@ export const LeadsTable = memo<LeadsTableProps>(
         </Table>
       </div>
     );
-  }
+  },
 );
 
 LeadsTable.displayName = "LeadsTable";

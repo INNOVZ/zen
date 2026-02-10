@@ -55,9 +55,8 @@ export const ChatMessage = memo(
         className={`flex ${type === "user" ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`max-w-[85%] p-2 rounded-lg text-sm ${
-            type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
-          }`}
+          className={`max-w-[85%] p-2 rounded-lg text-sm ${type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
+            }`}
           style={{
             backgroundColor: type === "user" ? botColor : undefined,
           }}
@@ -97,6 +96,14 @@ export const ChatMessage = memo(
                           <h4 className="font-medium text-gray-900 text-xs truncate">
                             {product.name}
                           </h4>
+                          {product.description && (
+                            <p
+                              className="text-xs text-gray-500 mt-0.5 line-clamp-2"
+                              title={product.description}
+                            >
+                              {product.description}
+                            </p>
+                          )}
                           {product.price && (
                             <p className="text-sm font-semibold text-green-600 mt-0.5">
                               {product.currency} {product.price}

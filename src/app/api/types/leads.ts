@@ -12,6 +12,7 @@ export interface LeadInfo {
   email?: string;
   phone?: string;
   company?: string;
+  notes?: string;
   source: LeadSource;
   status?: LeadStatus;
   captured_at: string;

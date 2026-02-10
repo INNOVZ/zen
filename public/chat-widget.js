@@ -678,7 +678,7 @@
 
         .zaakiy-product-image {
           width: 90px;
-          height: 90px;
+          min-height: 90px;
           flex-shrink: 0;
           background: #f3f4f6;
           display: flex;
@@ -722,6 +722,18 @@
           font-weight: 700;
           color: #059669;
           margin: 0 0 4px 0;
+        }
+
+        .zaakiy-product-description {
+          font-size: 11px;
+          color: #6b7280;
+          margin: 0 0 4px 0;
+          line-height: 1.35;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .zaakiy-product-stock {
@@ -2214,6 +2226,15 @@
       nameEl.title = product.name || 'Product'; // Tooltip for truncated names
       infoDiv.appendChild(nameEl);
 
+      // Description (sales-agent summary)
+      if (product.description) {
+        const descEl = document.createElement('p');
+        descEl.className = 'zaakiy-product-description';
+        descEl.textContent = product.description;
+        descEl.title = product.description; // Full text on hover
+        infoDiv.appendChild(descEl);
+      }
+
       // Price
       if (product.price) {
         const priceEl = document.createElement('p');
@@ -2225,7 +2246,7 @@
       // Stock - handle tracked vs untracked inventory
       const stockEl = document.createElement('p');
       stockEl.className = 'zaakiy-product-stock';
-      
+
       if (product.inventory_tracked === false || product.inventory === null || product.inventory === undefined) {
         // Inventory not tracked - show as available
         stockEl.textContent = 'Available';
@@ -2376,6 +2397,7 @@
           const productCardEls = msgEl.querySelectorAll('.zaakiy-product-card');
           productCardEls.forEach((cardEl) => {
             const nameEl = cardEl.querySelector('.zaakiy-product-name');
+            const descEl = cardEl.querySelector('.zaakiy-product-description');
             const priceEl = cardEl.querySelector('.zaakiy-product-price');
             const imageEl = cardEl.querySelector('.zaakiy-product-image img');
             const linkEl = cardEl.querySelector('.zaakiy-product-link');
@@ -2383,6 +2405,7 @@
 
             const productCard = {
               name: nameEl ? nameEl.textContent : '',
+              description: descEl ? descEl.textContent : null,
               price: priceEl ? parseFloat(priceEl.textContent.replace(/[^\d.]/g, '')) : null,
               currency: priceEl ? priceEl.textContent.replace(/[\d.,]/g, '').trim() : '',
               image: imageEl ? imageEl.src : null,
