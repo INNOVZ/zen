@@ -1907,7 +1907,7 @@
       // Create timestamp
       const timestamp = document.createElement('div');
       timestamp.className = 'zaakiy-message-timestamp';
-      timestamp.textContent = formatTime(new Date());
+      timestamp.textContent = formatTimestamp(new Date());
 
       contentWrapper.appendChild(messageContent);
       contentWrapper.appendChild(timestamp);
