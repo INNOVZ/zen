@@ -8,13 +8,8 @@ import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import {
-  Sheet,
-  Loader2,
-  Info,
-} from "lucide-react";
+import { Sheet, Loader2, Info } from "lucide-react";
 import { useTranslation } from "@/contexts/I18nContext";
-
 
 export default function LeadCaptureSettings() {
   const { t } = useTranslation();
@@ -78,7 +73,9 @@ export default function LeadCaptureSettings() {
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <Sheet className="h-5 w-5 text-orange-600" />
-        <Label className="text-base font-semibold">{t("integrations.lead_capture_settings")}</Label>
+        <Label className="text-base font-semibold">
+          {t("integrations.lead_capture_settings")}
+        </Label>
       </div>
 
       <div className="space-y-4">
@@ -92,9 +89,7 @@ export default function LeadCaptureSettings() {
           </div>
           <Switch
             checked={config.enabled}
-            onCheckedChange={(enabled) =>
-              setConfig({ ...config, enabled })
-            }
+            onCheckedChange={(enabled) => setConfig({ ...config, enabled })}
           />
         </div>
 
@@ -184,6 +179,62 @@ export default function LeadCaptureSettings() {
               />
             </div>
 
+            {/* CTA Visibility Settings */}
+            <div className="space-y-4 border-t pt-4">
+              <div className="flex items-center gap-2">
+                <Label className="text-sm font-semibold">
+                  {t("integrations.cta_visibility")}
+                </Label>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                {t("integrations.cta_visibility_desc")}
+              </p>
+
+              {/* Show Enquiry CTA */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>{t("integrations.show_enquiry_cta")}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {t("integrations.show_enquiry_cta_desc")}
+                  </p>
+                </div>
+                <Switch
+                  checked={config.cta_visibility?.show_enquiry_cta === true}
+                  onCheckedChange={(enabled) =>
+                    setConfig({
+                      ...config,
+                      cta_visibility: {
+                        ...config.cta_visibility,
+                        show_enquiry_cta: enabled,
+                      },
+                    })
+                  }
+                />
+              </div>
+
+              {/* Show Booking CTA */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <Label>{t("integrations.show_booking_cta")}</Label>
+                  <p className="text-xs text-muted-foreground">
+                    {t("integrations.show_booking_cta_desc")}
+                  </p>
+                </div>
+                <Switch
+                  checked={config.cta_visibility?.show_booking_cta !== false}
+                  onCheckedChange={(enabled) =>
+                    setConfig({
+                      ...config,
+                      cta_visibility: {
+                        ...config.cta_visibility,
+                        show_booking_cta: enabled,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+
             <Alert>
               <Info className="h-4 w-4" />
               <AlertDescription>
@@ -207,4 +258,3 @@ export default function LeadCaptureSettings() {
     </div>
   );
 }
-

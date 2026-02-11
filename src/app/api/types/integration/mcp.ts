@@ -152,4 +152,8 @@ export interface LeadCaptureConfig {
   };
   min_confidence?: number;
   require_contact?: boolean;
+  cta_visibility?: {
+    show_enquiry_cta?: boolean | null;  // null = auto (based on integrations)
+    show_booking_cta?: boolean | null;  // null = auto (based on integrations)
+  };
 }
