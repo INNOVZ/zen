@@ -264,7 +264,7 @@
           position: fixed;
           ${config.position.includes('right') ? 'right: 33px;' : 'left: 33px;'}
           bottom: 33px;
-          z-index: 999999;
+          z-index: 2147483647 !important;
           font-family: "Poppins", sans-serif !important;
           display: flex;
           flex-direction: column;
@@ -366,7 +366,7 @@
             position: absolute;
             bottom: 0;
             ${config.position.includes('right') ? 'right: 10px;' : 'left: 10px;'}
-            z-index: 1000001;
+            z-index: 2147483647 !important;
             pointer-events: auto; /* Ensure button is clickable */
             transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
           }
@@ -1060,7 +1060,7 @@
           border-radius: 9999px;
           box-shadow: 0 8px 20px rgba(2, 6, 23, 0.12);
           padding: 8px 12px; /* even left/right so no extra right whitespace */
-          z-index: 1000000;
+          z-index: 2147483647 !important;
           display: inline-flex;
           align-items: center;
           gap: 0; /* no internal gap since close button is outside */
