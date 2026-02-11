@@ -2545,7 +2545,7 @@
     const sendButton = document.querySelector('.zaakiy-send-button');
     if (inputField) {
       inputField.disabled = true;
-      inputField.placeholder = 'Bot is typing...';
+      inputField.placeholder = `${config.botName} is typing...`;
     }
     if (sendButton) {
       sendButton.disabled = true;
@@ -2558,7 +2558,7 @@
     typingTimer = setInterval(() => {
       elapsedSeconds++;
       if (inputField && elapsedSeconds > 3) {
-        inputField.placeholder = `Bot is typing... (${elapsedSeconds}s)`;
+        inputField.placeholder = `${config.botName} is typing... (${elapsedSeconds}s)`;
       }
 
       // Show warning if taking too long
