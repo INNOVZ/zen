@@ -720,7 +720,7 @@
         .zaakiy-product-price {
           font-size: 14px;
           font-weight: 700;
-          color: #059669;
+          color: ${config.primaryColor};
           margin: 0 0 4px 0;
         }
 
@@ -798,17 +798,29 @@
           background: rgba(59, 130, 246, 0.08);
         }
         
-        .zaakiy-message-content a {
+        .zaakiy-message-content a,
+        .zaakiy-message-content a:link,
+        .zaakiy-message-content a:visited,
+        .zaakiy-message-content a:active {
           color: ${config.primaryColor} !important;
           font-weight: 600 !important;
           text-decoration: none !important;
           transition: all 0.2s ease;
-          border-bottom: 1px solid ${config.primaryColor};
+          border-bottom: 1px solid ${config.primaryColor} !important;
         }
         
         .zaakiy-message-content a:hover {
           opacity: 0.8;
-          border-bottom: 2px solid ${config.primaryColor};
+          border-bottom: 2px solid ${config.primaryColor} !important;
+        }
+
+        .zaakiy-link,
+        .zaakiy-link:link,
+        .zaakiy-link:visited,
+        .zaakiy-link:active {
+          color: ${config.primaryColor} !important;
+          text-decoration: none !important;
+          border-bottom: 1px solid ${config.primaryColor} !important;
         }
         
         .zaakiy-message-content strong {
@@ -835,8 +847,13 @@
         }
         
         /* Links in bot messages should use primary color (override the general rule) */
-        .zaakiy-message.bot .zaakiy-message-content a {
+        .zaakiy-message.bot .zaakiy-message-content a,
+        .zaakiy-message.bot .zaakiy-message-content a:link,
+        .zaakiy-message.bot .zaakiy-message-content a:visited,
+        .zaakiy-message.bot .zaakiy-message-content a:active {
           color: ${config.primaryColor} !important;
+          text-decoration: none !important;
+          border-bottom: 1px solid ${config.primaryColor} !important;
         }
         
         /* Strong text in bot messages */
@@ -1577,17 +1594,15 @@
       const labelLower = label.toLowerCase();
       if (button.id === 'book_appointment' || labelLower.includes('book') || labelLower.includes('appointment')) {
         icon = icons.calendar;
-        label = label.replace(/📅|🗓️/g, '').trim();
       } else if (button.id === 'enquiry' || labelLower.includes('enquiry') || labelLower.includes('submit')) {
         icon = icons.clipboard;
-        label = label.replace(/📋|📝/g, '').trim();
       } else if (button.id === 'shopify_collection' || labelLower.includes('best seller') || labelLower.includes('product') || labelLower.includes('collection') || labelLower.includes('shop')) {
         icon = icons.shoppingBag;
-        label = label.replace(/🛍️|🛒|🏷️/g, '').trim();
       } else if (button.id === 'shopify_order' || labelLower.includes('order') || labelLower.includes('track') || labelLower.includes('shipping')) {
         icon = icons.package;
-        label = label.replace(/�|�/g, '').trim();
       }
+      // Strip ALL emojis from label — keep only text
+      label = label.replace(/[\u{1F300}-\u{1F9FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}\u{20E3}\u{E0020}-\u{E007F}]/gu, '').trim();
 
       // Structure with Icon
       buttonEl.innerHTML = `<span style="display:flex; align-items:center; gap:6px;">${icon} <span>${label}</span></span>`;
@@ -1959,10 +1974,90 @@
       const decoder = new TextDecoder();
       let buffer = '';
 
+      // Helper to process a single SSE line
+      const processSSELine = (line) => {
+        if (!line.startsWith('data: ')) return;
+        const jsonStr = line.slice(6);
+        if (!jsonStr) return;
+
+        try {
+          const data = JSON.parse(jsonStr);
+
+          if (data.type === 'token' && data.content) {
+            fullResponseText += data.content;
+            contentDiv.innerHTML = parseMarkdown(fullResponseText);
+            // Auto-scroll
+            const messagesContainer = document.getElementById('zaakiy-messages');
+            if (messagesContainer) {
+              messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }
+          }
+          else if (data.type === 'complete') {
+            if (data.content && data.content.length > fullResponseText.length) {
+              fullResponseText = data.content;
+              contentDiv.innerHTML = parseMarkdown(fullResponseText);
+            }
+            // Handle product cards from Shopify
+            if (data.product_links && data.product_links.length > 0) {
+              productLinks = data.product_links;
+              const productCardsEl = createProductCards(productLinks);
+              if (productCardsEl) {
+                // Insert before timestamp div so cards appear between text and timestamp
+                const timestampDiv = contentWrapper.querySelector('.zaakiy-message-timestamp');
+                if (timestampDiv) {
+                  contentWrapper.insertBefore(productCardsEl, timestampDiv);
+                } else {
+                  contentWrapper.appendChild(productCardsEl);
+                }
+              }
+            }
+            if (data.buttons) {
+              buttons = data.buttons;
+              const buttonsEl = createMessageButtons(buttons);
+              if (buttonsEl) {
+                const timestampDiv = contentWrapper.querySelector('.zaakiy-message-timestamp');
+                if (timestampDiv) {
+                  contentWrapper.insertBefore(buttonsEl, timestampDiv);
+                } else {
+                  contentWrapper.appendChild(buttonsEl);
+                }
+              }
+            }
+          }
+          else if (data.type === 'error') {
+            contentDiv.innerHTML += `<br><em>Error: ${data.error}</em>`;
+          }
+
+          if (data.session_id) {
+            // Always update session ID if backend provides one - this ensures we stay in sync
+            // This is critical for flows like Booking where state is tied to the conversation ID
+            if (conversationId !== data.session_id) {
+              conversationId = data.session_id;
+              localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
+              console.log('Zaakiy: Updated session ID to', conversationId);
+            }
+          }
+
+        } catch (e) {
+          console.error('Error parsing stream data', e);
+        }
+      };
+
       while (true) {
         const { done, value } = await reader.read();
 
-        if (done) break;
+        if (done) {
+          // CRITICAL: Flush remaining buffer when stream ends.
+          // The 'complete' chunk (containing product_links) is the last SSE event
+          // and may still be sitting in the buffer when done=true.
+          if (buffer.trim()) {
+            const remainingLines = buffer.split('\n\n');
+            for (const line of remainingLines) {
+              if (line.trim()) processSSELine(line.trim());
+            }
+          }
+          break;
+        }
 
         const chunk = decoder.decode(value, { stream: true });
         buffer += chunk;
@@ -1971,57 +2066,7 @@
         buffer = lines.pop() || ''; // Keep the last incomplete line in buffer
 
         for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            const jsonStr = line.slice(6);
-            if (!jsonStr) continue;
-
-            try {
-              const data = JSON.parse(jsonStr);
-
-              if (data.type === 'token' && data.content) {
-                fullResponseText += data.content;
-                contentDiv.innerHTML = parseMarkdown(fullResponseText);
-                // Auto-scroll
-                const messagesContainer = document.getElementById('zaakiy-messages');
-                if (messagesContainer) {
-                  messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
-              }
-              else if (data.type === 'complete') {
-                if (data.content && data.content.length > fullResponseText.length) {
-                  fullResponseText = data.content;
-                  contentDiv.innerHTML = parseMarkdown(fullResponseText);
-                }
-                // Handle product cards from Shopify
-                if (data.product_links && data.product_links.length > 0) {
-                  productLinks = data.product_links;
-                  const productCardsEl = createProductCards(productLinks);
-                  if (productCardsEl) contentWrapper.appendChild(productCardsEl);
-                }
-                if (data.buttons) {
-                  buttons = data.buttons;
-                  const buttonsEl = createMessageButtons(buttons);
-                  if (buttonsEl) contentWrapper.appendChild(buttonsEl);
-                }
-              }
-              else if (data.type === 'error') {
-                contentDiv.innerHTML += `<br><em>Error: ${data.error}</em>`;
-              }
-
-              if (data.session_id) {
-                // Always update session ID if backend provides one - this ensures we stay in sync
-                // This is critical for flows like Booking where state is tied to the conversation ID
-                if (conversationId !== data.session_id) {
-                  conversationId = data.session_id;
-                  localStorage.setItem(CONVERSATION_ID_KEY, conversationId);
-                  console.log('Zaakiy: Updated session ID to', conversationId);
-                }
-              }
-
-            } catch (e) {
-              console.error('Error parsing stream data', e);
-            }
-          }
+          processSSELine(line);
         }
       }
 
@@ -2134,7 +2179,7 @@
         .replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700;">$1</strong>')
         .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
 
-      const linkHtml = `<a href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor}; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none; transition: all 0.2s;">${formattedLinkText}</a>`;
+      const linkHtml = `<a class="zaakiy-link" href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor} !important; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none !important; transition: all 0.2s;">${formattedLinkText}</a>`;
       processedText = processedText.replace(placeholder, linkHtml);
     });
 

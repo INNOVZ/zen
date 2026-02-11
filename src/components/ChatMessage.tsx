@@ -55,8 +55,9 @@ export const ChatMessage = memo(
         className={`flex ${type === "user" ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`max-w-[85%] p-2 rounded-lg text-sm ${type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
-            }`}
+          className={`max-w-[85%] p-2 rounded-lg text-sm ${
+            type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
+          }`}
           style={{
             backgroundColor: type === "user" ? botColor : undefined,
           }}
@@ -190,6 +191,7 @@ export const ChatMessage = memo(
       prevProps.content === nextProps.content &&
       prevProps.buttons?.length === nextProps.buttons?.length &&
       prevProps.sources?.length === nextProps.sources?.length &&
+      prevProps.productCards?.length === nextProps.productCards?.length &&
       prevProps.type === nextProps.type &&
       prevProps.botColor === nextProps.botColor
     );
