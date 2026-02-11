@@ -1734,6 +1734,49 @@
     }
   };
 
+  // Hide/show third-party floating widgets on mobile to prevent overlap
+  // Common widgets: WhatsApp, Tidio, Crisp, Tawk, Drift, Intercom, LiveChat, HubSpot, etc.
+  const THIRD_PARTY_WIDGET_SELECTORS = [
+    // WhatsApp widgets (multiple providers)
+    '[id*="whatsapp"]', '[class*="whatsapp"]', '[id*="wa-widget"]', '[class*="wa-widget"]',
+    '[id*="wh-widget"]', '[class*="wh-widget"]',
+    // Common chat/support widgets
+    '#tidio-chat', '#crisp-chatbox', '#tawk-bubble-container', '#tawk-min-container',
+    '#drift-widget', '#intercom-container', '#intercom-lightweight-app',
+    '#hubspot-messages-iframe-container', '#livechat-compact-container',
+    '#fc_frame', '#freshworks-container', // Freshchat/Freshdesk
+    '[id*="zopim"]', // Zendesk/Zopim
+    // Generic floating button patterns (bottom-right/left fixed elements)
+    '.wh-api', '.wh-widget-send-button-wrapper',
+  ];
+
+  function hideThirdPartyWidgets() {
+    if (window.innerWidth > 768) return; // Only on mobile
+    THIRD_PARTY_WIDGET_SELECTORS.forEach((selector) => {
+      try {
+        document.querySelectorAll(selector).forEach((el) => {
+          // Don't hide our own widget
+          if (el.closest('#zaakiy-chat-widget')) return;
+          el.dataset.zaakiyHidden = el.style.display || '';
+          el.style.setProperty('display', 'none', 'important');
+        });
+      } catch { /* ignore invalid selectors */ }
+    });
+  }
+
+  function showThirdPartyWidgets() {
+    THIRD_PARTY_WIDGET_SELECTORS.forEach((selector) => {
+      try {
+        document.querySelectorAll(selector).forEach((el) => {
+          if (el.dataset.zaakiyHidden !== undefined) {
+            el.style.display = el.dataset.zaakiyHidden || '';
+            delete el.dataset.zaakiyHidden;
+          }
+        });
+      } catch { /* ignore invalid selectors */ }
+    });
+  }
+
   window.zaakiyOpenChat = function () {
     const chatWindow = document.getElementById('zaakiy-chat-window');
     const widgetContainer = document.getElementById('zaakiy-chat-widget');
@@ -1746,6 +1789,9 @@
       if (window.innerWidth <= 768) {
         // Add mobile class for additional styling
         chatWindow.classList.add('zaakiy-mobile-open');
+
+        // Hide third-party floating widgets (WhatsApp, etc.) to prevent overlap
+        hideThirdPartyWidgets();
 
         // Hide chat button when chat window is open on mobile
         if (chatButton) {
@@ -1799,21 +1845,26 @@
       chatWindow.classList.remove('zaakiy-mobile-open'); // Remove mobile class
       chatWindow.classList.add('zaakiy-closing');
 
-      // Show chat button when chat window is closed on mobile
-      if (window.innerWidth <= 768 && chatButton) {
-        // Show button after a short delay for smooth transition
-        setTimeout(() => {
-          chatButton.style.opacity = '1';
-          chatButton.style.visibility = 'visible';
-          chatButton.style.pointerEvents = 'auto';
-          chatButton.style.transform = 'scale(1)';
-        }, 200); // Match the closing animation duration
-      }
+      // Show chat button and restore third-party widgets on mobile
+      if (window.innerWidth <= 768) {
+        // Restore third-party floating widgets (WhatsApp, etc.)
+        showThirdPartyWidgets();
 
-      // Reset widget container height on mobile when closing
-      if (window.innerWidth <= 768 && widgetContainer) {
-        widgetContainer.style.height = '';
-        widgetContainer.style.maxHeight = '';
+        if (chatButton) {
+          // Show button after a short delay for smooth transition
+          setTimeout(() => {
+            chatButton.style.opacity = '1';
+            chatButton.style.visibility = 'visible';
+            chatButton.style.pointerEvents = 'auto';
+            chatButton.style.transform = 'scale(1)';
+          }, 200); // Match the closing animation duration
+        }
+
+        // Reset widget container height
+        if (widgetContainer) {
+          widgetContainer.style.height = '';
+          widgetContainer.style.maxHeight = '';
+        }
       }
 
       // Hide after animation completes
@@ -2284,6 +2335,7 @@
       if (product.price) {
         const priceEl = document.createElement('p');
         priceEl.className = 'zaakiy-product-price';
+        priceEl.style.cssText = `font-size:14px;font-weight:700;color:${config.primaryColor} !important;margin:0 0 4px 0;`;
         priceEl.textContent = `${product.currency || ''} ${product.price}`.trim();
         infoDiv.appendChild(priceEl);
       }
@@ -2316,6 +2368,7 @@
         linkEl.href = product.url;
         linkEl.target = '_blank';
         linkEl.rel = 'noopener noreferrer';
+        linkEl.style.cssText = `display:inline-flex;align-items:center;gap:4px;font-size:11px;color:${config.primaryColor} !important;text-decoration:none !important;font-weight:500;`;
         linkEl.innerHTML = `
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="9" cy="21" r="1"/>
