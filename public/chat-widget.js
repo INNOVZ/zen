@@ -1326,7 +1326,7 @@
           </button>
           </div>
         </div>
-        <p class="zaakiy-powered-by">Conversations powered by Zaakiy AI</p>
+        <p class="zaakiy-powered-by">Conversations powered by <a href="https://zaakiy.io" target="_blank">Zaakiy AI</a></p>
       </div>
       
       
