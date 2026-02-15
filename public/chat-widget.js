@@ -448,7 +448,7 @@
             display: flex;
             flex-direction: column;
             // align-items: center;
-            gap: 3px !important;
+            gap: 2px !important;
             min-width: 0;
           }
         
@@ -489,11 +489,16 @@
           position: relative;
           display: inline-block;
         }
-        
+        .zaakiy-status{
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          gap: 2px;
+        }
         .zaakiy-status-indicator {
-          position: absolute;
-          top: -2px;
-          right: -2px;
+          // position: absolute;
+          // top: -2px;
+          // right: -2px;
           width: 8px;
           height: 8px;
           background: #3fca72ff;
@@ -1290,11 +1295,14 @@
                   <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
                 </svg>
               </div>
-              <div class="zaakiy-status-indicator"></div>
+              
             </div>
             <div class="zaakiy-bot-name-container">
               <span id="zaakiy-bot-name">${config.botName}</span>
-              <p class="zaakiy-bot-status">Live</p>
+              <div class="zaakiy-status">
+                <div class="zaakiy-status-indicator"></div>
+                <p class="zaakiy-bot-status">Live</p>
+              </div>
             </div>
           </div>
           <div class="zaakiy-header-buttons">
