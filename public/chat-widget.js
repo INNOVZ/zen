@@ -1295,7 +1295,6 @@
                   <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2ZM21 9V7L15 7.5V9.5C15 10.3 14.3 11 13.5 11H10.5C9.7 11 9 10.3 9 9.5V7.5L3 7V9C3 10.1 3.9 11 5 11V20C5 21.1 5.9 22 7 22H17C18.1 22 19 21.1 19 20V11C20.1 11 21 10.1 21 9Z"/>
                 </svg>
               </div>
-              
             </div>
             <div class="zaakiy-bot-name-container">
               <span id="zaakiy-bot-name">${config.botName}</span>
@@ -1714,7 +1713,7 @@
       avatarContainer.appendChild(avatarElement);
       // Re-add the status indicator (online dot)
       const statusIndicator = document.createElement('div');
-      statusIndicator.className = 'zaakiy-status-indicator';
+      // statusIndicator.className = 'zaakiy-status-indicator';
       avatarContainer.appendChild(statusIndicator);
     }
 
