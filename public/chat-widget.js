@@ -447,8 +447,8 @@
           .zaakiy-bot-name-container {
             display: flex;
             flex-direction: column;
-            align-items: center;
-            gap: 6px !important;
+            // align-items: center;
+            gap: 3px !important;
             min-width: 0;
           }
         
