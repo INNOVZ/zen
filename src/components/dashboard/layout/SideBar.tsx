@@ -46,32 +46,32 @@ const Sidebar = () => {
   // Menu items with simple paths - no userId needed
   const menuItems = [
     {
-      title: t('sidebar.dashboard'),
+      title: t("sidebar.dashboard"),
       icon: <Home size={16} />,
       path: "/dashboard",
     },
     {
-      title: t('sidebar.train'),
+      title: t("sidebar.train"),
       icon: <Brain size={16} />,
       path: "/dashboard/train",
     },
     {
-      title: t('sidebar.customize'),
+      title: t("sidebar.customize"),
       icon: <RiRobot3Line size={16} />,
       path: "/dashboard/customize",
     },
     {
-      title: t('sidebar.leads'),
+      title: t("sidebar.leads"),
       icon: <Users size={16} />,
       path: "/dashboard/leads",
     },
     {
-      title: t('sidebar.calendar'),
+      title: t("sidebar.calendar"),
       icon: <Calendar size={16} />,
       path: "/dashboard/calendar",
     },
     {
-      title: t('sidebar.settings'),
+      title: t("sidebar.settings"),
       icon: <Settings size={16} />,
       path: "/dashboard/settings",
     },
@@ -89,8 +89,9 @@ const Sidebar = () => {
 
   return (
     <div
-      className={`${isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
-        } my-4 bg-white text-white transition-all-ease-in-out duration-400 fixed top-0 flex-col rounded-xl shadow-lg h-[97vh] hidden md:flex`}
+      className={`${
+        isCollapsed ? "w-16" : "sm:w-60 w-60 z-[999]"
+      } my-4 bg-white text-white transition-all-ease-in-out duration-400 fixed top-0 flex-col rounded-xl shadow-lg h-[97vh] hidden md:flex`}
     >
       {/* Header */}
       <div className="flex items-center justify-between p-4 overflow-y-auto">
@@ -119,18 +120,14 @@ const Sidebar = () => {
       <nav className="p-4 flex-1 overflow-y-auto">
         <ul className="space-y-2">
           {menuItems.map((item, index) => {
-            // Normalize paths by removing trailing slashes
             const normalizedItemPath = item.path.replace(/\/$/, "");
             const normalizedPathname = pathname.replace(/\/$/, "");
 
-            // Simple active state logic for new URL structure without userId
             let isActive = false;
 
             if (item.path === "/dashboard") {
-              // Dashboard is active only when we're exactly on /dashboard with no additional segments
               isActive = normalizedPathname === "/dashboard";
             } else {
-              // For other items, check exact path match
               isActive = normalizedPathname === normalizedItemPath;
             }
 
@@ -139,9 +136,10 @@ const Sidebar = () => {
                 <Link
                   href={item.path}
                   className={`flex items-center gap-4 p-[6px] rounded-lg transition-colors
-                    ${isActive
-                      ? "bg-[#5d7dde] text-white font-bold shadow-sm"
-                      : "text-[#5d7dde] hover:text-[#5d7dde] hover:bg-gray-100"
+                    ${
+                      isActive
+                        ? "bg-[#5d7dde] text-white font-bold shadow-sm"
+                        : "text-[#5d7dde] hover:text-[#5d7dde] hover:bg-gray-100"
                     }
                   `}
                 >
@@ -180,7 +178,6 @@ const Sidebar = () => {
 
       {/* User Info and Logout Section */}
       <div className="mt-auto border-t border-gray-700">
-        {/* User Info */}
         {!isCollapsed && user && (
           <div className="p-4">
             <div className="flex items-center gap-3">
@@ -204,18 +201,20 @@ const Sidebar = () => {
           </div>
         )}
 
-        {/* Logout Button */}
         <div className="p-4">
           <Button
             onClick={handleLogout}
             variant="ghost"
-            className={`w-full justify-start text-white hover:text-gray-100 bg-gray-900 hover:bg-black pointer ${isCollapsed ? "px-2" : ""
-              }`}
+            className={`w-full justify-start text-white hover:text-gray-100 bg-gray-900 hover:bg-black pointer ${
+              isCollapsed ? "px-2" : ""
+            }`}
           >
             <div className="pointer flex items-center justify-center shrink-0">
               <RiLogoutCircleLine />
             </div>
-            {!isCollapsed && <span className="ml-4">{t('sidebar.logout')}</span>}
+            {!isCollapsed && (
+              <span className="ml-4">{t("sidebar.logout")}</span>
+            )}
           </Button>
         </div>
       </div>

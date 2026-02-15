@@ -446,6 +446,7 @@
         }
           .zaakiy-bot-name-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
             gap: 6px !important;
             min-width: 0;
@@ -460,6 +461,11 @@
         #zaakiy-bot-name {
          font-family: "Ubuntu", sans-serif;
          font-weight: 700 !important;
+        }
+         .zaakiy-bot-status {
+          font-size: 11px;
+          color: #f2f2f2 !important;
+          font-weight: 500;
         }
         
         @media (max-width: 480px) {
@@ -1288,16 +1294,17 @@
             </div>
             <div class="zaakiy-bot-name-container">
               <span id="zaakiy-bot-name">${config.botName}</span>
+              <p class="zaakiy-bot-status">Live</p>
             </div>
           </div>
           <div class="zaakiy-header-buttons">
-            <button class="zaakiy-new-chat-button" onclick="window.zaakiyNewChat()" title="Start new conversation">
+            <button class="zaakiy-new-chat-button" onclick="window.zaakiyNewChat()" title="Start new conversation" aria-label="Start new conversation">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 20h9"/>
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
               </svg>
             </button>
-            <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()">X</button>
+            <button class="zaakiy-close-button" onclick="window.zaakiyCloseChat()" aria-label="Close chat">X</button>
           </div>
         </div>
         
@@ -1319,7 +1326,7 @@
             placeholder="Type your message..."
             onkeypress="if(event.key==='Enter') window.zaakiySendMessage()"
           />
-          <button class="zaakiy-send-button" onclick="window.zaakiySendMessage()">
+          <button class="zaakiy-send-button" onclick="window.zaakiySendMessage()" aria-label="Send message">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
             </svg>
@@ -1330,7 +1337,7 @@
       </div>
       
       
-      <button class="zaakiy-chat-button" onclick="window.zaakiyToggleChat()">
+      <button class="zaakiy-chat-button" onclick="window.zaakiyToggleChat()" aria-label="Open chat">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
           <path d="M20 2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h4l4 4 4-4h4c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
         </svg>
@@ -1525,6 +1532,9 @@
 
         // Update UI with new config
         updateWidgetAppearance();
+
+        // Inject SEO Schema
+        injectSEOSchema(chatbot);
       }
     } catch {
       // Silently fail and use default config
@@ -1718,6 +1728,55 @@
           }
         }
       });
+    }
+  }
+
+  // Inject SEO Schema (JSON-LD) for Generative Engine Optimization (GEO) & SEO
+  function injectSEOSchema(chatbotConfig) {
+    try {
+      const scriptId = 'zaakiy-seo-schema';
+      if (document.getElementById(scriptId)) return;
+
+      // Construct Schema.org JSON-LD
+      const schema = {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": chatbotConfig.name || config.botName,
+        "description": chatbotConfig.seo_description || chatbotConfig.description || config.greeting,
+        "applicationCategory": "BusinessApplication",
+        "applicationSubCategory": "Chatbot",
+        "operatingSystem": "Web",
+        "browserRequirements": "Requires JavaScript",
+        "softwareVersion": "3.0",
+        "url": window.location.href,
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "author": {
+          "@type": "Organization",
+          "name": "ZaaKy AI",
+          "url": "https://zaakiy.io"
+        }
+      };
+
+      if (chatbotConfig.seo_keywords && Array.isArray(chatbotConfig.seo_keywords) && chatbotConfig.seo_keywords.length > 0) {
+        schema.keywords = chatbotConfig.seo_keywords.join(', ');
+      }
+
+      if (chatbotConfig.avatar_url || config.avatarUrl) {
+        schema.image = chatbotConfig.avatar_url || config.avatarUrl;
+      }
+
+      // Inject into head
+      const script = document.createElement('script');
+      script.id = scriptId;
+      script.type = 'application/ld+json';
+      script.text = JSON.stringify(schema);
+      document.head.appendChild(script);
+    } catch {
+      // Silently fail to not disrupt widget
     }
   }
 
