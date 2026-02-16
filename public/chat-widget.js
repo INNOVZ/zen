@@ -445,11 +445,14 @@
           min-width: 0;
         }
           .zaakiy-bot-name-container {
-            display: flex;
-            flex-direction: column;
-            // align-items: center;
-            gap: 2px !important;
-            min-width: 0;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0px !important;
+            min-width: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            line-height: 1.2 !important;
           }
         
         .zaakiy-bot-name-wrapper {
@@ -492,20 +495,31 @@
           position: relative;
           display: inline-block;
         }
-        .zaakiy-status{
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-          gap: 2px;
+        .zaakiy-status {
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          gap: 6px !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          width: auto !important;
+          height: auto !important;
         }
         .zaakiy-status-indicator {
-          display: block;
+          display: inline-block !important;
           width: 8px !important;
           height: 8px !important;
-          background: #3fca72ff !important;
-          border-radius: 50%;
-          flex-shrink: 0;
-          z-index: 1;
+          min-width: 8px !important;
+          min-height: 8px !important;
+          background-color: #3fca72 !important;
+          border-radius: 50% !important;
+          flex-shrink: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          border: none !important;
+          opacity: 1 !important;
+          visibility: visible !important;
         }
         
         .zaakiy-avatar {
@@ -1301,7 +1315,7 @@
             <div class="zaakiy-bot-name-container">
               <span id="zaakiy-bot-name">${config.botName}</span>
               <div class="zaakiy-status">
-                <div class="zaakiy-status-indicator"></div>
+                <span class="zaakiy-status-indicator"></span>
                 <span class="zaakiy-bot-status">Live</span>
               </div>
             </div>
