@@ -466,6 +466,9 @@
           font-size: 11px;
           color: #f2f2f2 !important;
           font-weight: 500;
+          margin: 0 !important;
+          padding: 0 !important;
+          line-height: normal !important;
         }
         
         @media (max-width: 480px) {
@@ -496,13 +499,12 @@
           gap: 2px;
         }
         .zaakiy-status-indicator {
-          // position: absolute;
-          // top: -2px;
-          // right: -2px;
-          width: 8px;
-          height: 8px;
-          background: #3fca72ff;
+          display: block;
+          width: 8px !important;
+          height: 8px !important;
+          background: #3fca72ff !important;
           border-radius: 50%;
+          flex-shrink: 0;
           z-index: 1;
         }
         
@@ -1300,7 +1302,7 @@
               <span id="zaakiy-bot-name">${config.botName}</span>
               <div class="zaakiy-status">
                 <div class="zaakiy-status-indicator"></div>
-                <p class="zaakiy-bot-status">Live</p>
+                <span class="zaakiy-bot-status">Live</span>
               </div>
             </div>
           </div>
@@ -1712,9 +1714,9 @@
       const avatarElement = createAvatarImage(config.avatarUrl, config.botName, true);
       avatarContainer.appendChild(avatarElement);
       // Re-add the status indicator (online dot)
-      const statusIndicator = document.createElement('div');
+      // const statusIndicator = document.createElement('div');
       // statusIndicator.className = 'zaakiy-status-indicator';
-      avatarContainer.appendChild(statusIndicator);
+      // avatarContainer.appendChild(statusIndicator);
     }
 
     // Update all bot message avatars (fixes avatar not showing after page reload)
