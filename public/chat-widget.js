@@ -413,20 +413,25 @@
           background: ${config.primaryColor} !important;
           color: white !important;
           padding: 20px 16px !important;
-          display: flex;
+          display: flex !important;
+          flex-direction: row !important;
           border-radius: 16px !important;
-          justify-content: space-between;
-          align-items: center;
-          flex-shrink: 0;
+          justify-content: space-between !important;
+          align-items: center !important;
+          flex-shrink: 0 !important;
           /* Ensure header stays visible and not cut off */
-          position: sticky;
-          top: 0;
-          z-index: 10;
+          position: sticky !important;
+          top: 0 !important;
+          z-index: 10 !important;
           /* Add safe area padding for mobile devices with notches */
           padding-top: calc(20px + env(safe-area-inset-top, 0px)) !important;
           /* Use consistent horizontal padding - ignore safe-area-inset for uniformity */
           padding-left: 16px !important;
           padding-right: 16px !important;
+          box-sizing: border-box !important;
+          margin: 0 !important;
+          height: auto !important;
+          text-align: left !important;
         }
         
         /* Mobile-specific: Ensure uniform header padding */
@@ -438,11 +443,14 @@
         }
         
         .zaakiy-chat-header-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          flex: 1;
-          min-width: 0;
+          display: flex !important;
+          flex-direction: row !important;
+          align-items: center !important;
+          gap: 12px !important;
+          flex: 1 !important;
+          min-width: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
           .zaakiy-bot-name-container {
             display: flex !important;
@@ -456,14 +464,23 @@
           }
         
         .zaakiy-bot-name-wrapper {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          min-width: 0;
+          display: flex !important;
+          align-items: center !important;
+          gap: 6px !important;
+          min-width: 0 !important;
+          margin: 0 !important;
         }
         #zaakiy-bot-name {
-         font-family: "Ubuntu", sans-serif;
+         font-family: "Ubuntu", sans-serif !important;
          font-weight: 700 !important;
+         font-size: 16px !important;
+         line-height: 1.3 !important;
+         color: white !important;
+         margin: 0 !important;
+         padding: 0 !important;
+         text-transform: none !important;
+         letter-spacing: normal !important;
+         display: block !important;
         }
          .zaakiy-bot-status {
           font-size: 11px;
@@ -523,10 +540,17 @@
         }
         
         .zaakiy-avatar {
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          object-fit: cover;
+          width: 32px !important;
+          height: 32px !important;
+          min-width: 32px !important;
+          min-height: 32px !important;
+          border-radius: 50% !important;
+          object-fit: cover !important;
+          margin: 0 !important;
+          padding: 0 !important;
+          display: block !important;
+          border: none !important;
+          background: transparent !important;
         }
         
         .zaakiy-avatar-placeholder {
@@ -1010,51 +1034,75 @@
         }
         
         .zaakiy-header-buttons {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          flex-shrink: 0;
+          display: flex !important;
+          align-items: center !important;
+          gap: 8px !important;
+          flex-shrink: 0 !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
         
         .zaakiy-new-chat-button {
-          background: rgba(255, 255, 255, 0.87);
-          border: none;
-          color: ${config.primaryColor};
-          cursor: pointer;
-          font-size: 12px;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s ease;
-          flex-shrink: 0;
+          background: rgba(255, 255, 255, 0.87) !important;
+          border: none !important;
+          color: ${config.primaryColor} !important;
+          cursor: pointer !important;
+          font-size: 12px !important;
+          width: 24px !important;
+          height: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
+          border-radius: 50% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          transition: all 0.2s ease !important;
+          flex-shrink: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          line-height: 1 !important;
+          box-shadow: none !important;
+          text-transform: none !important;
+        }
+        
+        .zaakiy-new-chat-button svg {
+           width: 14px !important;
+           height: 14px !important;
+           display: block !important;
+           margin: 0 !important;
         }
         
         .zaakiy-new-chat-button:hover {
-          background: rgb(255, 255, 255);
-          transform: scale(1.05);
+          background: rgb(255, 255, 255) !important;
+          transform: scale(1.05) !important;
         }
         
         .zaakiy-new-chat-button:active {
-          transform: scale(0.95);
+          transform: scale(0.95) !important;
         }
         
         .zaakiy-close-button {
-          background: rgba(255, 255, 255, 0.87);
-          border: none;
-          color:${config.primaryColor};
-          cursor: pointer;
-          font-size: 12px;
-          width: 24px;
-          height: 24px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          transition: all 0.2s ease;
-          flex-shrink: 0;
+          background: rgba(255, 255, 255, 0.87) !important;
+          border: none !important;
+          color:${config.primaryColor} !important;
+          cursor: pointer !important;
+          font-size: 12px !important;
+          width: 24px !important;
+          height: 24px !important;
+          min-width: 24px !important;
+          min-height: 24px !important;
+          border-radius: 50% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          transition: all 0.2s ease !important;
+          flex-shrink: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          line-height: 1 !important;
+          box-shadow: none !important;
+          text-transform: none !important;
+          font-family: Arial, sans-serif !important; /* Ensure X renders consistently */
         }
         
         .zaakiy-close-button:hover {
