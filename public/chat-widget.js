@@ -1364,7 +1364,7 @@
               <span id="zaakiy-bot-name">${config.botName}</span>
               <div class="zaakiy-status">
                 <span class="zaakiy-status-indicator"></span>
-                <span class="zaakiy-bot-status">Live</span>
+                <span class="zaakiy-bot-status">Online</span>
               </div>
             </div>
           </div>
