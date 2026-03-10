@@ -2320,7 +2320,7 @@
       date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   }
 
-  // Enhanced markdown parser with link highlighting
+  // Enhanced markdown parser with rich formatting support
   function parseMarkdown(text) {
     if (!text) return '';
 
@@ -2348,8 +2348,19 @@
     // Parse italic *text* (single asterisks, but not part of **)
     processedText = processedText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic; opacity: 0.95;">$1</em>');
 
-    // Parse bullet points (- item)
-    processedText = processedText.replace(/^- (.+)$/gm, '<div style="margin-left: 12px; margin-bottom: 2px; margin-top: 1px;">• $1</div>');
+    // Parse headings (## heading or ### heading) - convert to bold styled divs for chat context
+    processedText = processedText.replace(/^#{3,}\s+(.+)$/gm, '<div style="font-weight: 600; font-size: 13px; margin: 6px 0 3px 0; color: #1a1a1a;">$1</div>');
+    processedText = processedText.replace(/^#{2}\s+(.+)$/gm, '<div style="font-weight: 700; font-size: 14px; margin: 8px 0 4px 0; color: #1a1a1a;">$1</div>');
+    processedText = processedText.replace(/^#{1}\s+(.+)$/gm, '<div style="font-weight: 700; font-size: 14px; margin: 8px 0 4px 0; color: #1a1a1a;">$1</div>');
+
+    // Parse horizontal rules (---) 
+    processedText = processedText.replace(/^-{3,}$/gm, '<hr style="border: none; border-top: 1px solid #e5e7eb; margin: 8px 0;">');
+
+    // Parse numbered lists (1. item, 2. item, etc.)
+    processedText = processedText.replace(/^(\d+)\.\s+(.+)$/gm, '<div style="margin-left: 8px; margin-bottom: 3px; margin-top: 2px;"><strong style="font-weight:600; color:#1a1a1a;">$1.</strong> $2</div>');
+
+    // Parse bullet points (- item or • item)
+    processedText = processedText.replace(/^[-•]\s+(.+)$/gm, '<div style="margin-left: 12px; margin-bottom: 2px; margin-top: 1px; display: flex; gap: 6px;"><span style="color: #6b7280;">•</span><span>$1</span></div>');
 
     // Restore links with proper HTML and parse any markdown within link text
     linkPlaceholders.forEach((link, index) => {

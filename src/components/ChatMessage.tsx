@@ -4,6 +4,8 @@ import { memo } from "react";
 import { Bot, User, ShoppingCart, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface MessageButton {
   text: string;
@@ -38,7 +40,8 @@ export interface ChatMessageProps {
 
 /**
  * Memoized Chat Message Component
- * Only re-renders when message content, buttons, or sources change
+ * Renders markdown-rich bot responses and plain text user messages.
+ * Only re-renders when message content, buttons, or sources change.
  */
 export const ChatMessage = memo(
   function ChatMessage({
@@ -55,9 +58,8 @@ export const ChatMessage = memo(
         className={`flex ${type === "user" ? "justify-end" : "justify-start"}`}
       >
         <div
-          className={`max-w-[85%] p-2 rounded-lg text-sm ${
-            type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
-          }`}
+          className={`max-w-[85%] p-2 rounded-lg text-sm ${type === "user" ? "text-white ml-2" : "bg-gray-100 mr-2"
+            }`}
           style={{
             backgroundColor: type === "user" ? botColor : undefined,
           }}
@@ -70,7 +72,78 @@ export const ChatMessage = memo(
               <User className="h-3 w-3 text-white mt-0.5 flex-shrink-0" />
             )}
             <div className="flex-1">
-              <p className="whitespace-pre-wrap">{content}</p>
+              {type === "user" ? (
+                <p className="whitespace-pre-wrap">{content}</p>
+              ) : (
+                <div className="chat-markdown prose prose-sm max-w-none">
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    components={{
+                      // Headings: compact for chat context
+                      h1: ({ children }) => (
+                        <h3 className="text-sm font-bold mt-2 mb-1">{children}</h3>
+                      ),
+                      h2: ({ children }) => (
+                        <h4 className="text-sm font-bold mt-2 mb-1">{children}</h4>
+                      ),
+                      h3: ({ children }) => (
+                        <h5 className="text-sm font-semibold mt-1.5 mb-0.5">{children}</h5>
+                      ),
+                      // Paragraphs: tight spacing for chat
+                      p: ({ children }) => (
+                        <p className="mb-1.5 last:mb-0 leading-relaxed">{children}</p>
+                      ),
+                      // Bold
+                      strong: ({ children }) => (
+                        <strong className="font-semibold">{children}</strong>
+                      ),
+                      // Italic
+                      em: ({ children }) => (
+                        <em className="italic">{children}</em>
+                      ),
+                      // Links: styled and open in new tab
+                      a: ({ href, children }) => (
+                        <a
+                          href={href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 underline underline-offset-2 font-medium"
+                        >
+                          {children}
+                        </a>
+                      ),
+                      // Unordered lists
+                      ul: ({ children }) => (
+                        <ul className="list-disc pl-4 my-1 space-y-0.5">{children}</ul>
+                      ),
+                      // Ordered lists
+                      ol: ({ children }) => (
+                        <ol className="list-decimal pl-4 my-1 space-y-0.5">{children}</ol>
+                      ),
+                      // List items
+                      li: ({ children }) => (
+                        <li className="leading-relaxed">{children}</li>
+                      ),
+                      // Line breaks / horizontal rule
+                      hr: () => <hr className="my-2 border-gray-300" />,
+                      // Code (inline)
+                      code: ({ children }) => (
+                        <code className="bg-gray-200 text-gray-800 px-1 py-0.5 rounded text-xs font-mono">
+                          {children}
+                        </code>
+                      ),
+                      // Blockquote
+                      blockquote: ({ children }) => (
+                        <blockquote className="border-l-2 border-blue-400 pl-2 my-1 italic text-gray-600">
+                          {children}
+                        </blockquote>
+                      ),
+                    }}
+                  >
+                    {content}
+                  </ReactMarkdown>
+                </div>
+              )}
 
               {/* Product Cards */}
               {productCards && productCards.length > 0 && (

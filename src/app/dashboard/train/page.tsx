@@ -39,7 +39,7 @@ export default function IngestPage() {
   const [status, setStatus] = useState("");
   const [uploads, setUploads] = useState<UploadItem[]>([]);
   const [deleteStatus, setDeleteStatus] = useState<{ [key: string]: string }>(
-    {}
+    {},
   );
   const [isUploading, setIsUploading] = useState(false);
   const [isLoadingUploads, setIsLoadingUploads] = useState(true);
@@ -82,7 +82,7 @@ export default function IngestPage() {
 
         if (!allowedTypes[tab].includes(file.type)) {
           setStatus(
-            `Invalid file type. Please select a ${tab.toUpperCase()} file.`
+            `Invalid file type. Please select a ${tab.toUpperCase()} file.`,
           );
           return;
         }
@@ -98,16 +98,17 @@ export default function IngestPage() {
             timeout: 60000,
             onUploadProgress: (progressEvent) => {
               const percentCompleted = Math.round(
-                (progressEvent.loaded * 100) / (progressEvent.total || 1)
+                (progressEvent.loaded * 100) / (progressEvent.total || 1),
               );
               setStatus(`Uploading... ${percentCompleted}%`);
             },
-          }
+          },
         );
 
         setStatus(
-          `${tab.toUpperCase()} uploaded successfully! Upload ID: ${response.data.upload_id || response.data.id
-          }`
+          `${tab.toUpperCase()} uploaded successfully! Upload ID: ${
+            response.data.upload_id || response.data.id
+          }`,
         );
       } else if (tab === "url") {
         if (!url.trim()) {
@@ -137,11 +138,12 @@ export default function IngestPage() {
         const response = await axios.post(
           `${getApiBaseUrl()}/api/uploads/url`,
           payload,
-          { headers, timeout: 30000 }
+          { headers, timeout: 30000 },
         );
         setStatus(
-          `URL registered for ingestion! Upload ID: ${response.data.upload_id || response.data.id
-          }`
+          `URL registered for ingestion! Upload ID: ${
+            response.data.upload_id || response.data.id
+          }`,
         );
       }
 
@@ -152,7 +154,7 @@ export default function IngestPage() {
       setMaxDepth(null);
 
       const fileInput = document.getElementById(
-        "file-upload"
+        "file-upload",
       ) as HTMLInputElement;
       if (fileInput) fileInput.value = "";
 
@@ -184,7 +186,7 @@ export default function IngestPage() {
   };
 
   const handleDelete = async (uploadId: string) => {
-    if (!window.confirm(t("leads.confirm_delete"))) return; // Reusing confirm delete message or add new one
+    if (!window.confirm(t("leads.confirm_delete"))) return;
 
     setDeleteStatus((prev) => ({ ...prev, [uploadId]: "Deleting..." }));
 
@@ -245,8 +247,9 @@ export default function IngestPage() {
       if (axios.isAxiosError(error)) {
         const axiosError = error as AxiosError<{ detail?: string }>;
         setStatus(
-          `Error fetching uploads: ${axiosError.response?.data?.detail || axiosError.message
-          }`
+          `Error fetching uploads: ${
+            axiosError.response?.data?.detail || axiosError.message
+          }`,
         );
       }
     } finally {
@@ -344,7 +347,10 @@ export default function IngestPage() {
                       <Upload className="h-12 w-12 text-gray-400" />
                       <div className="space-y-1">
                         <p className="text-sm font-medium text-gray-900">
-                          {t("train.click_upload").replace("PDF", tab.toUpperCase())}
+                          {t("train.click_upload").replace(
+                            "PDF",
+                            tab.toUpperCase(),
+                          )}
                         </p>
                         <p className="text-xs text-gray-500">
                           {t("train.max_file_size")}
@@ -369,7 +375,7 @@ export default function IngestPage() {
                           onClick={() => {
                             setFile(null);
                             const input = document.getElementById(
-                              "file-upload"
+                              "file-upload",
                             ) as HTMLInputElement;
                             if (input) input.value = "";
                           }}
@@ -432,7 +438,7 @@ export default function IngestPage() {
                                 setMaxPages(
                                   e.target.value
                                     ? parseInt(e.target.value, 10)
-                                    : null
+                                    : null,
                                 )
                               }
                             />
@@ -456,7 +462,7 @@ export default function IngestPage() {
                                 setMaxDepth(
                                   e.target.value
                                     ? parseInt(e.target.value, 10)
-                                    : null
+                                    : null,
                                 )
                               }
                             />
@@ -493,12 +499,13 @@ export default function IngestPage() {
 
               {status && (
                 <div
-                  className={`p-3 rounded-lg text-sm ${status.includes("Error")
+                  className={`p-3 rounded-lg text-sm ${
+                    status.includes("Error")
                       ? "bg-red-50 text-red-800 border border-red-200"
                       : status.includes("successfully")
                         ? "bg-green-50 text-green-800 border border-green-200"
                         : "bg-blue-50 text-blue-800 border border-blue-200"
-                    }`}
+                  }`}
                 >
                   {status}
                 </div>
@@ -587,14 +594,18 @@ export default function IngestPage() {
                           </td>
                           <td className="py-3 px-4 text-sm text-gray-600">
                             {new Date(upload.created_at).toLocaleString(
-                              language === "ar" ? "ar-EG" : language === "es" ? "es-ES" : "en-US"
+                              language === "ar"
+                                ? "ar-EG"
+                                : language === "es"
+                                  ? "es-ES"
+                                  : "en-US",
                             )}
                           </td>
                           <td className="py-3 px-4">
                             <Button
                               onClick={() => handleDelete(upload.id)}
                               disabled={deleteStatus[upload.id]?.includes(
-                                "Deleting"
+                                "Deleting",
                               )}
                               variant="destructive"
                               size="sm"
@@ -620,22 +631,26 @@ export default function IngestPage() {
           <Card className="bg-linear-to-r/shorter from-indigo-100 to-blue-100 py-4">
             <CardHeader>
               <CardTitle className="text-lg flex items-center gap-2">
-                📊 {t("train.upload_guidelines")}
+                {t("train.upload_guidelines")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="text-sm text-gray-600 space-y-2">
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>{t("train.pdf_size")}
+                  <span className="text-cyan-600">•</span>
+                  {t("train.pdf_size")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>{t("train.json_structured")}
+                  <span className="text-cyan-600">•</span>
+                  {t("train.json_structured")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>{t("train.urls_scraping")}
+                  <span className="text-cyan-600">•</span>
+                  {t("train.urls_scraping")}
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>{t("train.recursive_scraping")}
+                  <span className="text-cyan-600">•</span>
+                  {t("train.recursive_scraping")}
                 </li>
               </ul>
             </CardContent>

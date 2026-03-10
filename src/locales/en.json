@@ -227,7 +227,7 @@
         "go_to_settings": "Go to Settings to Reconnect"
     },
     "train": {
-        "data_ingestion": "Data Ingestion",
+        "data_ingestion": "Train your Chatbot",
         "upload_guidelines": "Upload Guidelines",
         "pdf_size": "PDF files up to 10MB",
         "json_structured": "JSON files for structured data",
