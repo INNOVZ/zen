@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -13,32 +14,116 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { subscriptionApi } from "@/app/api/subscription";
 import { toast } from "sonner";
-import { Users, Building, Plus } from "lucide-react";
+import { Users, Building, Plus, RefreshCw } from "lucide-react";
 import type {
   OrganizationSignupRequest,
   SignupRequest,
 } from "@/app/api/types/subscription";
 
-// interface User {
-//   id: string;
-//   full_name: string;
-//   email: string;
-//   entity_type: "user" | "organization";
-//   organization_name?: string;
-//   plan: string;
-//   created_at: string;
-//   status: "active" | "inactive";
-// }
+type RecentOnboardingRecord = {
+  subscription_id: string;
+  entity_id: string;
+  entity_type: "user" | "organization";
+  display_name: string;
+  email: string;
+  organization_name?: string | null;
+  plan: string;
+  status: string;
+  created_at: string;
+  billing_cycle_end?: string | null;
+  tokens_used_this_month: number;
+  monthly_token_limit: number;
+  usage_percentage: number;
+  contact_phone?: string | null;
+  business_type?: string | null;
+  last_login?: string | null;
+};
 
-export const AdminUserManagement = () => {
+interface AdminUserManagementProps {
+  recentOnboarding: RecentOnboardingRecord[];
+  isRefreshing: boolean;
+  onRefresh: () => Promise<void>;
+}
+
+const formatDate = (value?: string | null) => {
+  if (!value) return "Never";
+
+  try {
+    return new Intl.DateTimeFormat("en", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }).format(new Date(value));
+  } catch {
+    return value;
+  }
+};
+
+const statusVariantClass = (status: string) => {
+  switch (status.toLowerCase()) {
+    case "active":
+      return "bg-green-50 text-green-700 border-green-200";
+    case "cancelled":
+      return "bg-red-50 text-red-700 border-red-200";
+    case "past_due":
+      return "bg-amber-50 text-amber-700 border-amber-200";
+    default:
+      return "bg-slate-50 text-slate-700 border-slate-200";
+  }
+};
+
+export const AdminUserManagement = ({
+  recentOnboarding,
+  isRefreshing,
+  onRefresh,
+}: AdminUserManagementProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [formData, setFormData] = useState<Partial<SignupRequest | OrganizationSignupRequest>>({
     entity_type: "user",
     selected_plan: "basic",
   });
+  const [selectedPlans, setSelectedPlans] = useState<Record<string, "basic" | "professional" | "enterprise">>({});
+  const [actionLoading, setActionLoading] = useState<Record<string, string | null>>({});
+
+  const userRecords = recentOnboarding.filter((record) => record.entity_type === "user");
+  const organizationRecords = recentOnboarding.filter(
+    (record) => record.entity_type === "organization"
+  );
+
+  const resolveSelectedPlan = (record: RecentOnboardingRecord) =>
+    selectedPlans[record.subscription_id] ||
+    (record.plan as "basic" | "professional" | "enterprise");
+
+  const runSubscriptionAction = async (
+    subscriptionId: string,
+    action: string,
+    handler: () => Promise<unknown>,
+    successMessage: string
+  ) => {
+    setActionLoading((current) => ({ ...current, [subscriptionId]: action }));
+    try {
+      await handler();
+      toast.success(successMessage);
+      await onRefresh();
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Subscription action failed.";
+      toast.error(message);
+    } finally {
+      setActionLoading((current) => ({ ...current, [subscriptionId]: null }));
+    }
+  };
 
   const handleCreateUser = async () => {
     if (!formData.full_name || !formData.email || !formData.password) {
@@ -127,8 +212,7 @@ export const AdminUserManagement = () => {
         selected_plan: "basic",
       });
 
-      // Refresh users list
-      // await loadUsers();
+      await onRefresh();
     } catch (error) {
       console.error("Failed to create user:", error);
 
@@ -189,16 +273,24 @@ export const AdminUserManagement = () => {
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">User Management</h1>
-          <p className="text-gray-600">Manage users and organizations</p>
+          <h1 className="text-3xl font-bold">Onboarding Operations</h1>
+          <p className="text-gray-600">
+            Create new accounts and review the most recent user, organization, and subscription records.
+          </p>
         </div>
-        <Button
-          onClick={() => setShowCreateForm(true)}
-          className="bg-blue-600 hover:bg-blue-700"
-        >
-          <Plus className="w-4 h-4 mr-2" />
-          Create User
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={onRefresh} disabled={isRefreshing}>
+            <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+            Refresh
+          </Button>
+          <Button
+            onClick={() => setShowCreateForm(true)}
+            className="bg-blue-600 hover:bg-blue-700"
+          >
+            <Plus className="w-4 h-4 mr-2" />
+            Create Account
+          </Button>
+        </div>
       </div>
 
       {/* Create User Form Modal */}
@@ -387,7 +479,7 @@ export const AdminUserManagement = () => {
       {/* Users List */}
       <Card>
         <CardHeader>
-          <CardTitle>All Users & Organizations</CardTitle>
+          <CardTitle>Recent Onboarding Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="all" className="w-full">
@@ -398,26 +490,238 @@ export const AdminUserManagement = () => {
             </TabsList>
 
             <TabsContent value="all" className="space-y-4">
-              <div className="text-center py-8 text-gray-500">
-                <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>
-                  No users found. Create your first user or organization above.
-                </p>
-              </div>
+              {recentOnboarding.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>
+                    No onboarding records yet. Create your first user or organization above.
+                  </p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Account</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Plan</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Usage</TableHead>
+                      <TableHead>Created</TableHead>
+                      <TableHead>Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {recentOnboarding.map((record) => (
+                      <TableRow key={record.subscription_id}>
+                        <TableCell>
+                          <div className="font-medium">{record.display_name}</div>
+                          <div className="text-xs text-gray-500">{record.email}</div>
+                          {record.organization_name ? (
+                            <div className="text-xs text-gray-500">
+                              Org: {record.organization_name}
+                            </div>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className="capitalize">
+                            {record.entity_type}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="capitalize">{record.plan}</div>
+                          {record.business_type ? (
+                            <div className="text-xs text-gray-500">{record.business_type}</div>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                            {record.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className="font-medium">
+                            {record.tokens_used_this_month.toLocaleString()} /{" "}
+                            {record.monthly_token_limit.toLocaleString()}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {record.usage_percentage}% used
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          <div>{formatDate(record.created_at)}</div>
+                          {record.last_login ? (
+                            <div className="text-xs text-gray-500">
+                              Last login {formatDate(record.last_login)}
+                            </div>
+                          ) : null}
+                        </TableCell>
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Select
+                              value={resolveSelectedPlan(record)}
+                              onValueChange={(value) =>
+                                setSelectedPlans((current) => ({
+                                  ...current,
+                                  [record.subscription_id]: value as
+                                    | "basic"
+                                    | "professional"
+                                    | "enterprise",
+                                }))
+                              }
+                            >
+                              <SelectTrigger size="sm" className="w-[136px]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="basic">Basic</SelectItem>
+                                <SelectItem value="professional">Professional</SelectItem>
+                                <SelectItem value="enterprise">Enterprise</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={actionLoading[record.subscription_id] !== null}
+                              onClick={() =>
+                                runSubscriptionAction(
+                                  record.subscription_id,
+                                  "plan",
+                                  () =>
+                                    subscriptionApi.adminChangeSubscriptionPlan(
+                                      record.subscription_id,
+                                      resolveSelectedPlan(record)
+                                    ),
+                                  `Plan updated for ${record.display_name}.`
+                                )
+                              }
+                            >
+                              Apply
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              disabled={actionLoading[record.subscription_id] !== null}
+                              onClick={() =>
+                                runSubscriptionAction(
+                                  record.subscription_id,
+                                  "reset",
+                                  () =>
+                                    subscriptionApi.adminResetSubscriptionCycle(
+                                      record.subscription_id
+                                    ),
+                                  `Billing cycle reset for ${record.display_name}.`
+                                )
+                              }
+                            >
+                              Reset
+                            </Button>
+                            <Button
+                              size="sm"
+                              variant="destructive"
+                              disabled={
+                                actionLoading[record.subscription_id] !== null ||
+                                record.status.toLowerCase() === "cancelled"
+                              }
+                              onClick={() =>
+                                runSubscriptionAction(
+                                  record.subscription_id,
+                                  "cancel",
+                                  () =>
+                                    subscriptionApi.adminCancelSubscription(
+                                      record.subscription_id
+                                    ),
+                                  `Subscription cancelled for ${record.display_name}.`
+                                )
+                              }
+                            >
+                              Cancel
+                            </Button>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </TabsContent>
 
             <TabsContent value="users" className="space-y-4">
-              <div className="text-center py-8 text-gray-500">
-                <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>No individual users found.</p>
-              </div>
+              {userRecords.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No individual users found.</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>User</TableHead>
+                      <TableHead>Plan</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Last Login</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {userRecords.map((record) => (
+                      <TableRow key={record.subscription_id}>
+                        <TableCell>
+                          <div className="font-medium">{record.display_name}</div>
+                          <div className="text-xs text-gray-500">{record.email}</div>
+                        </TableCell>
+                        <TableCell className="capitalize">{record.plan}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                            {record.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>{formatDate(record.last_login)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </TabsContent>
 
             <TabsContent value="organizations" className="space-y-4">
-              <div className="text-center py-8 text-gray-500">
-                <Building className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>No organizations found.</p>
-              </div>
+              {organizationRecords.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Building className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                  <p>No organizations found.</p>
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Organization</TableHead>
+                      <TableHead>Contact</TableHead>
+                      <TableHead>Plan</TableHead>
+                      <TableHead>Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {organizationRecords.map((record) => (
+                      <TableRow key={record.subscription_id}>
+                        <TableCell>
+                          <div className="font-medium">{record.display_name}</div>
+                          <div className="text-xs text-gray-500">{record.email}</div>
+                        </TableCell>
+                        <TableCell>
+                          <div>{record.contact_phone || "No phone"}</div>
+                          <div className="text-xs text-gray-500">
+                            {record.business_type || "No business type"}
+                          </div>
+                        </TableCell>
+                        <TableCell className="capitalize">{record.plan}</TableCell>
+                        <TableCell>
+                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                            {record.status}
+                          </Badge>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
             </TabsContent>
           </Tabs>
         </CardContent>

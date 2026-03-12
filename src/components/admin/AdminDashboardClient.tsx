@@ -2,17 +2,73 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminUserManagement from "@/components/admin/AdminUserManagement";
-import { getAdminStatus } from "@/app/api/auth";
+import { getAdminStatus, fetchWithAuth } from "@/app/api/auth";
 import { toast } from "sonner";
-import { Users, Building, BarChart3, Settings, Activity } from "lucide-react";
+import {
+  Users,
+  Building,
+  BarChart3,
+  ShieldCheck,
+  RefreshCw,
+  UserPlus,
+} from "lucide-react";
+
+type AdminDashboardData = {
+  overview: {
+    total_users: number;
+    total_organizations: number;
+    active_subscriptions: number;
+    onboardings_this_month: number;
+    active_admins: number;
+  };
+  recent_onboarding: Array<{
+    subscription_id: string;
+    entity_id: string;
+    entity_type: "user" | "organization";
+    display_name: string;
+    email: string;
+    organization_name?: string | null;
+    plan: string;
+    status: string;
+    created_at: string;
+    billing_cycle_end?: string | null;
+    tokens_used_this_month: number;
+    monthly_token_limit: number;
+    usage_percentage: number;
+    contact_phone?: string | null;
+    business_type?: string | null;
+    last_login?: string | null;
+  }>;
+  summary: {
+    plans: Record<string, number>;
+    statuses: Record<string, number>;
+  };
+};
 
 const AdminDashboardClient = () => {
   const router = useRouter();
   const [isCheckingAccess, setIsCheckingAccess] = useState(true);
   const [isAuthorized, setIsAuthorized] = useState(false);
+  const [dashboard, setDashboard] = useState<AdminDashboardData | null>(null);
+  const [isLoadingDashboard, setIsLoadingDashboard] = useState(false);
+
+  const loadDashboard = async () => {
+    setIsLoadingDashboard(true);
+    try {
+      const data = await fetchWithAuth("/api/admin/dashboard");
+      setDashboard(data as AdminDashboardData);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Failed to load admin dashboard.";
+      toast.error(message);
+    } finally {
+      setIsLoadingDashboard(false);
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -32,6 +88,7 @@ const AdminDashboardClient = () => {
         }
 
         setIsAuthorized(true);
+        await loadDashboard();
       } catch (error) {
         if (!active) {
           return;
@@ -83,19 +140,36 @@ const AdminDashboardClient = () => {
     return null;
   }
 
+  const overview = dashboard?.overview;
+  const statusEntries = Object.entries(dashboard?.summary?.statuses || {});
+  const planEntries = Object.entries(dashboard?.summary?.plans || {});
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-          <p className="text-gray-600 mt-2">
-            Manage users, organizations, and system settings
-          </p>
+        <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p className="text-gray-600 mt-2">
+              Live onboarding operations, recent account creation, and subscription health.
+            </p>
+          </div>
+          <div className="flex items-center gap-3">
+            <Badge variant="outline" className="bg-white px-3 py-1 text-sm">
+              {overview?.active_admins ?? 0} active admins
+            </Badge>
+            <Button
+              variant="outline"
+              onClick={loadDashboard}
+              disabled={isLoadingDashboard}
+            >
+              <RefreshCw className={`mr-2 h-4 w-4 ${isLoadingDashboard ? "animate-spin" : ""}`} />
+              Refresh
+            </Button>
+          </div>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5 mb-8">
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
@@ -104,7 +178,9 @@ const AdminDashboardClient = () => {
                   <p className="text-sm font-medium text-gray-600">
                     Total Users
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">0</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {overview?.total_users ?? 0}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -118,7 +194,9 @@ const AdminDashboardClient = () => {
                   <p className="text-sm font-medium text-gray-600">
                     Organizations
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">0</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {overview?.total_organizations ?? 0}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -132,7 +210,9 @@ const AdminDashboardClient = () => {
                   <p className="text-sm font-medium text-gray-600">
                     Active Subscriptions
                   </p>
-                  <p className="text-2xl font-bold text-gray-900">0</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {overview?.active_subscriptions ?? 0}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -141,88 +221,83 @@ const AdminDashboardClient = () => {
           <Card>
             <CardContent className="p-6">
               <div className="flex items-center">
-                <Settings className="h-8 w-8 text-orange-600" />
+                <UserPlus className="h-8 w-8 text-orange-600" />
                 <div className="ml-4">
                   <p className="text-sm font-medium text-gray-600">
-                    System Status
+                    Onboarded This Month
                   </p>
-                  <p className="text-sm font-bold text-green-600">Healthy</p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {overview?.onboardings_this_month ?? 0}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardContent className="p-6">
+              <div className="flex items-center">
+                <ShieldCheck className="h-8 w-8 text-emerald-600" />
+                <div className="ml-4">
+                  <p className="text-sm font-medium text-gray-600">
+                    Dashboard Health
+                  </p>
+                  <p className="text-sm font-bold text-emerald-600">Live data connected</p>
                 </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        {/* Main Content */}
-        <Tabs defaultValue="users" className="w-full">
-          <TabsList className="grid w-full grid-cols-5">
-            <TabsTrigger value="users">User Management</TabsTrigger>
-            <TabsTrigger value="monitoring">Monitoring</TabsTrigger>
-            <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            <TabsTrigger value="subscriptions">Subscriptions</TabsTrigger>
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-          </TabsList>
+        <div className="grid gap-6 xl:grid-cols-[2fr_1fr] mb-8">
+          <AdminUserManagement
+            recentOnboarding={dashboard?.recent_onboarding || []}
+            onRefresh={loadDashboard}
+            isRefreshing={isLoadingDashboard}
+          />
 
-          <TabsContent value="users" className="mt-6">
-            <AdminUserManagement />
-          </TabsContent>
-
-          <TabsContent value="monitoring" className="mt-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>System Monitoring</CardTitle>
+                <CardTitle>Subscription Status Mix</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Activity className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <p>System monitoring dashboard coming soon...</p>
-                </div>
+              <CardContent className="space-y-3">
+                {statusEntries.length === 0 ? (
+                  <p className="text-sm text-gray-500">No subscription activity yet.</p>
+                ) : (
+                  statusEntries.map(([statusName, count]) => (
+                    <div key={statusName} className="flex items-center justify-between rounded-lg border bg-white px-3 py-2">
+                      <span className="text-sm font-medium capitalize text-gray-700">
+                        {statusName}
+                      </span>
+                      <Badge variant="outline">{count}</Badge>
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
-          </TabsContent>
 
-          <TabsContent value="analytics" className="mt-6">
             <Card>
               <CardHeader>
-                <CardTitle>Analytics Dashboard</CardTitle>
+                <CardTitle>Plan Distribution</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <BarChart3 className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <p>Analytics dashboard coming soon...</p>
-                </div>
+              <CardContent className="space-y-3">
+                {planEntries.length === 0 ? (
+                  <p className="text-sm text-gray-500">No plan data yet.</p>
+                ) : (
+                  planEntries.map(([planName, count]) => (
+                    <div key={planName} className="flex items-center justify-between rounded-lg border bg-white px-3 py-2">
+                      <span className="text-sm font-medium capitalize text-gray-700">
+                        {planName}
+                      </span>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
-          </TabsContent>
-
-          <TabsContent value="subscriptions" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Subscription Management</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Building className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <p>Subscription management coming soon...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="settings" className="mt-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>System Settings</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-center py-12 text-gray-500">
-                  <Settings className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                  <p>System settings coming soon...</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
+          </div>
+        </div>
       </div>
     </div>
   );

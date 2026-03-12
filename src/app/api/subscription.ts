@@ -153,6 +153,29 @@ export const subscriptionApi = {
     }
   },
 
+  adminCancelSubscription: async (subscriptionId: string) => {
+    return fetchWithAuth(`/api/admin/subscriptions/${subscriptionId}/status`, {
+      method: "PATCH",
+      body: JSON.stringify({ status: "cancelled" }),
+    });
+  },
+
+  adminChangeSubscriptionPlan: async (
+    subscriptionId: string,
+    plan: "basic" | "professional" | "enterprise"
+  ) => {
+    return fetchWithAuth(`/api/admin/subscriptions/${subscriptionId}/plan`, {
+      method: "PATCH",
+      body: JSON.stringify({ plan }),
+    });
+  },
+
+  adminResetSubscriptionCycle: async (subscriptionId: string) => {
+    return fetchWithAuth(`/api/admin/subscriptions/${subscriptionId}/reset-cycle`, {
+      method: "POST",
+    });
+  },
+
   // ==========================================
   // SUBSCRIPTION STATUS
   // ==========================================
