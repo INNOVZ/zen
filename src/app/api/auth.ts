@@ -372,3 +372,8 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
     throw error;
   }
 };
+
+export const getAdminStatus = async (): Promise<{ is_admin: boolean; user_id: string; email?: string }> => {
+  const data = await fetchWithAuth("/api/auth/admin-status");
+  return data as { is_admin: boolean; user_id: string; email?: string };
+};

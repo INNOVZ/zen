@@ -1,12 +1,88 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import AdminUserManagement from "@/components/admin/AdminUserManagement";
+import { getAdminStatus } from "@/app/api/auth";
+import { toast } from "sonner";
 import { Users, Building, BarChart3, Settings, Activity } from "lucide-react";
 
 const AdminDashboardClient = () => {
+  const router = useRouter();
+  const [isCheckingAccess, setIsCheckingAccess] = useState(true);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    const verifyAdminAccess = async () => {
+      try {
+        const status = await getAdminStatus();
+
+        if (!active) {
+          return;
+        }
+
+        if (!status.is_admin) {
+          toast.error("Admin access is required to use this page.");
+          router.replace("/dashboard");
+          return;
+        }
+
+        setIsAuthorized(true);
+      } catch (error) {
+        if (!active) {
+          return;
+        }
+
+        const message =
+          error instanceof Error ? error.message : "Authentication required.";
+
+        if (
+          message.includes("Authentication expired") ||
+          message.includes("Not authenticated")
+        ) {
+          router.replace("/auth/login");
+          return;
+        }
+
+        toast.error(message);
+        router.replace("/dashboard");
+      } finally {
+        if (active) {
+          setIsCheckingAccess(false);
+        }
+      }
+    };
+
+    verifyAdminAccess();
+
+    return () => {
+      active = false;
+    };
+  }, [router]);
+
+  if (isCheckingAccess) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Verifying admin access
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Please wait while your permissions are checked.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isAuthorized) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">

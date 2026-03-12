@@ -77,7 +77,7 @@ export const useUserAuth = (userId: string,
         // Fetch extended user info from the database
         const { data: dbUser, error: dbError } = await supabase
           .from("users")
-          .select("org_id, role, full_name, display_name")
+          .select("org_id, full_name, display_name")
           .eq("id", authedUser.id)
           .single();
 
@@ -98,7 +98,7 @@ export const useUserAuth = (userId: string,
           // UserInfo specific
           user_id: authedUser.id,
           email: authedUser.email || "",
-          role: dbUser?.role || "user",
+          role: "user",
           name:
             dbUser?.full_name ||
             authedUser.user_metadata?.name ||
