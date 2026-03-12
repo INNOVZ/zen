@@ -249,25 +249,32 @@ const AdminDashboardClient = () => {
           </Card>
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[2fr_1fr] mb-8">
-          <AdminUserManagement
-            recentOnboarding={dashboard?.recent_onboarding || []}
-            onRefresh={loadDashboard}
-            isRefreshing={isLoadingDashboard}
-          />
+        <div className="mb-8 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+          <div className="min-w-0">
+            <AdminUserManagement
+              recentOnboarding={dashboard?.recent_onboarding || []}
+              onRefresh={loadDashboard}
+              isRefreshing={isLoadingDashboard}
+            />
+          </div>
 
-          <div className="space-y-6">
+          <div className="min-w-0 space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle>Subscription Status Mix</CardTitle>
+                <CardTitle className="break-words text-lg leading-snug">
+                  Subscription Status Mix
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {statusEntries.length === 0 ? (
                   <p className="text-sm text-gray-500">No subscription activity yet.</p>
                 ) : (
                   statusEntries.map(([statusName, count]) => (
-                    <div key={statusName} className="flex items-center justify-between rounded-lg border bg-white px-3 py-2">
-                      <span className="text-sm font-medium capitalize text-gray-700">
+                    <div
+                      key={statusName}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2"
+                    >
+                      <span className="min-w-0 text-sm font-medium capitalize text-gray-700">
                         {statusName}
                       </span>
                       <Badge variant="outline">{count}</Badge>
@@ -279,15 +286,20 @@ const AdminDashboardClient = () => {
 
             <Card>
               <CardHeader>
-                <CardTitle>Plan Distribution</CardTitle>
+                <CardTitle className="break-words text-lg leading-snug">
+                  Plan Distribution
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 {planEntries.length === 0 ? (
                   <p className="text-sm text-gray-500">No plan data yet.</p>
                 ) : (
                   planEntries.map(([planName, count]) => (
-                    <div key={planName} className="flex items-center justify-between rounded-lg border bg-white px-3 py-2">
-                      <span className="text-sm font-medium capitalize text-gray-700">
+                    <div
+                      key={planName}
+                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2"
+                    >
+                      <span className="min-w-0 text-sm font-medium capitalize text-gray-700">
                         {planName}
                       </span>
                       <Badge variant="secondary">{count}</Badge>

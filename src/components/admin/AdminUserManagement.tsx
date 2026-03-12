@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { subscriptionApi } from "@/app/api/subscription";
 import { toast } from "sonner";
-import { Users, Building, Plus, RefreshCw } from "lucide-react";
+import { Users, Building, Plus, RefreshCw, Info, Building2, Database } from "lucide-react";
 import type {
   OrganizationSignupRequest,
   SignupRequest,
@@ -88,9 +88,9 @@ export const AdminUserManagement = ({
   onRefresh,
 }: AdminUserManagementProps) => {
   const [isCreating, setIsCreating] = useState(false);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const [showCreateForm, setShowCreateForm] = useState(true);
   const [formData, setFormData] = useState<Partial<SignupRequest | OrganizationSignupRequest>>({
-    entity_type: "user",
+    entity_type: "organization",
     selected_plan: "basic",
   });
   const [selectedPlans, setSelectedPlans] = useState<Record<string, "basic" | "professional" | "enterprise">>({});
@@ -104,6 +104,9 @@ export const AdminUserManagement = ({
   const resolveSelectedPlan = (record: RecentOnboardingRecord) =>
     selectedPlans[record.subscription_id] ||
     (record.plan as "basic" | "professional" | "enterprise");
+
+  const getActiveAction = (subscriptionId: string) =>
+    actionLoading[subscriptionId] ?? null;
 
   const runSubscriptionAction = async (
     subscriptionId: string,
@@ -128,6 +131,14 @@ export const AdminUserManagement = ({
   const handleCreateUser = async () => {
     if (!formData.full_name || !formData.email || !formData.password) {
       toast.error("Please fill in all required fields");
+      return;
+    }
+
+    if (
+      formData.entity_type === "organization" &&
+      !(formData as Partial<OrganizationSignupRequest>).organization_name?.trim()
+    ) {
+      toast.error("Organization name is required for organization onboarding");
       return;
     }
 
@@ -206,9 +217,8 @@ export const AdminUserManagement = ({
         toast.success(`Successfully created ${formData.entity_type} account!`);
       }
 
-      setShowCreateForm(false);
       setFormData({
-        entity_type: "user",
+        entity_type: "organization",
         selected_plan: "basic",
       });
 
@@ -277,6 +287,20 @@ export const AdminUserManagement = ({
           <p className="text-gray-600">
             Create new accounts and review the most recent user, organization, and subscription records.
           </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+              <Info className="mr-1 h-3.5 w-3.5" />
+              Admin-only onboarding
+            </Badge>
+            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
+              <Building2 className="mr-1 h-3.5 w-3.5" />
+              Organization profile stored
+            </Badge>
+            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+              <Database className="mr-1 h-3.5 w-3.5" />
+              Feeds chatbot and dashboard data
+            </Badge>
+          </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={onRefresh} disabled={isRefreshing}>
@@ -284,11 +308,11 @@ export const AdminUserManagement = ({
             Refresh
           </Button>
           <Button
-            onClick={() => setShowCreateForm(true)}
+            onClick={() => setShowCreateForm((current) => !current)}
             className="bg-blue-600 hover:bg-blue-700"
           >
             <Plus className="w-4 h-4 mr-2" />
-            Create Account
+            {showCreateForm ? "Hide Form" : "Open Onboarding Form"}
           </Button>
         </div>
       </div>
@@ -316,10 +340,13 @@ export const AdminUserManagement = ({
                     <SelectValue placeholder="Select account type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="user">Individual User</SelectItem>
                     <SelectItem value="organization">Organization</SelectItem>
+                    <SelectItem value="user">Individual User</SelectItem>
                   </SelectContent>
                 </Select>
+                <p className="text-xs text-gray-500">
+                  Organization onboarding includes the business profile used across the dashboard and chatbot setup.
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -396,6 +423,10 @@ export const AdminUserManagement = ({
 
             {formData.entity_type === "organization" && (
               <>
+                <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+                  Organization name, contact number, and business type are stored with the organization record and reused by downstream chatbot and dashboard views.
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="organization_name">
@@ -581,7 +612,7 @@ export const AdminUserManagement = ({
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={actionLoading[record.subscription_id] !== null}
+                              disabled={getActiveAction(record.subscription_id) !== null}
                               onClick={() =>
                                 runSubscriptionAction(
                                   record.subscription_id,
@@ -600,7 +631,7 @@ export const AdminUserManagement = ({
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={actionLoading[record.subscription_id] !== null}
+                              disabled={getActiveAction(record.subscription_id) !== null}
                               onClick={() =>
                                 runSubscriptionAction(
                                   record.subscription_id,
@@ -619,7 +650,7 @@ export const AdminUserManagement = ({
                               size="sm"
                               variant="destructive"
                               disabled={
-                                actionLoading[record.subscription_id] !== null ||
+                                getActiveAction(record.subscription_id) !== null ||
                                 record.status.toLowerCase() === "cancelled"
                               }
                               onClick={() =>
