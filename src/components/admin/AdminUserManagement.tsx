@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { subscriptionApi } from "@/app/api/subscription";
 import { toast } from "sonner";
-import { Users, Building, Plus, RefreshCw, Info, Building2, Database } from "lucide-react";
+import { Users, Building, Plus, RefreshCw } from "lucide-react";
 import type {
   OrganizationSignupRequest,
   SignupRequest,
@@ -89,16 +89,24 @@ export const AdminUserManagement = ({
 }: AdminUserManagementProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [showCreateForm, setShowCreateForm] = useState(true);
-  const [formData, setFormData] = useState<Partial<SignupRequest | OrganizationSignupRequest>>({
+  const [formData, setFormData] = useState<
+    Partial<SignupRequest | OrganizationSignupRequest>
+  >({
     entity_type: "organization",
     selected_plan: "basic",
   });
-  const [selectedPlans, setSelectedPlans] = useState<Record<string, "basic" | "professional" | "enterprise">>({});
-  const [actionLoading, setActionLoading] = useState<Record<string, string | null>>({});
+  const [selectedPlans, setSelectedPlans] = useState<
+    Record<string, "basic" | "professional" | "enterprise">
+  >({});
+  const [actionLoading, setActionLoading] = useState<
+    Record<string, string | null>
+  >({});
 
-  const userRecords = recentOnboarding.filter((record) => record.entity_type === "user");
+  const userRecords = recentOnboarding.filter(
+    (record) => record.entity_type === "user",
+  );
   const organizationRecords = recentOnboarding.filter(
-    (record) => record.entity_type === "organization"
+    (record) => record.entity_type === "organization",
   );
 
   const resolveSelectedPlan = (record: RecentOnboardingRecord) =>
@@ -112,7 +120,7 @@ export const AdminUserManagement = ({
     subscriptionId: string,
     action: string,
     handler: () => Promise<unknown>,
-    successMessage: string
+    successMessage: string,
   ) => {
     setActionLoading((current) => ({ ...current, [subscriptionId]: action }));
     try {
@@ -136,7 +144,9 @@ export const AdminUserManagement = ({
 
     if (
       formData.entity_type === "organization" &&
-      !(formData as Partial<OrganizationSignupRequest>).organization_name?.trim()
+      !(
+        formData as Partial<OrganizationSignupRequest>
+      ).organization_name?.trim()
     ) {
       toast.error("Organization name is required for organization onboarding");
       return;
@@ -150,7 +160,7 @@ export const AdminUserManagement = ({
 
     if (!hasLowercase || !hasUppercase || !hasNumbers || password.length < 8) {
       toast.error(
-        "Password must be at least 8 characters and contain uppercase, lowercase, and numbers"
+        "Password must be at least 8 characters and contain uppercase, lowercase, and numbers",
       );
       return;
     }
@@ -167,7 +177,7 @@ export const AdminUserManagement = ({
     const emailDomain = formData.email!.split("@")[1]?.toLowerCase();
     if (invalidDomains.includes(emailDomain)) {
       toast.error(
-        "Please use a real email address (not example.com, test.com, etc.)"
+        "Please use a real email address (not example.com, test.com, etc.)",
       );
       return;
     }
@@ -211,7 +221,7 @@ export const AdminUserManagement = ({
       if (response.email_confirmation_required) {
         toast.success(
           `Successfully created ${formData.entity_type} account! A confirmation email has been sent to ${response.email_sent_to}. The user must confirm their email before they can login.`,
-          { duration: 8000 }
+          { duration: 8000 },
         );
       } else {
         toast.success(`Successfully created ${formData.entity_type} account!`);
@@ -279,32 +289,17 @@ export const AdminUserManagement = ({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-12">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Onboarding Operations</h1>
-          <p className="text-gray-600">
-            Create new accounts and review the most recent user, organization, and subscription records.
-          </p>
-          <div className="mt-3 flex flex-wrap gap-2">
-            <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-              <Info className="mr-1 h-3.5 w-3.5" />
-              Admin-only onboarding
-            </Badge>
-            <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">
-              <Building2 className="mr-1 h-3.5 w-3.5" />
-              Organization profile stored
-            </Badge>
-            <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
-              <Database className="mr-1 h-3.5 w-3.5" />
-              Feeds chatbot and dashboard data
-            </Badge>
-          </div>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={onRefresh} disabled={isRefreshing}>
-            <RefreshCw className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${isRefreshing ? "animate-spin" : ""}`}
+            />
             Refresh
           </Button>
           <Button
@@ -345,7 +340,8 @@ export const AdminUserManagement = ({
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-gray-500">
-                  Organization onboarding includes the business profile used across the dashboard and chatbot setup.
+                  Organization onboarding includes the business profile used
+                  across the dashboard and chatbot setup.
                 </p>
               </div>
 
@@ -424,7 +420,9 @@ export const AdminUserManagement = ({
             {formData.entity_type === "organization" && (
               <>
                 <div className="rounded-lg border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-                  Organization name, contact number, and business type are stored with the organization record and reused by downstream chatbot and dashboard views.
+                  Organization name, contact number, and business type are
+                  stored with the organization record and reused by downstream
+                  chatbot and dashboard views.
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -525,7 +523,8 @@ export const AdminUserManagement = ({
                 <div className="text-center py-8 text-gray-500">
                   <Users className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                   <p>
-                    No onboarding records yet. Create your first user or organization above.
+                    No onboarding records yet. Create your first user or
+                    organization above.
                   </p>
                 </div>
               ) : (
@@ -545,8 +544,12 @@ export const AdminUserManagement = ({
                     {recentOnboarding.map((record) => (
                       <TableRow key={record.subscription_id}>
                         <TableCell>
-                          <div className="font-medium">{record.display_name}</div>
-                          <div className="text-xs text-gray-500">{record.email}</div>
+                          <div className="font-medium">
+                            {record.display_name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {record.email}
+                          </div>
                           {record.organization_name ? (
                             <div className="text-xs text-gray-500">
                               Org: {record.organization_name}
@@ -561,11 +564,16 @@ export const AdminUserManagement = ({
                         <TableCell>
                           <div className="capitalize">{record.plan}</div>
                           {record.business_type ? (
-                            <div className="text-xs text-gray-500">{record.business_type}</div>
+                            <div className="text-xs text-gray-500">
+                              {record.business_type}
+                            </div>
                           ) : null}
                         </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                          <Badge
+                            variant="outline"
+                            className={statusVariantClass(record.status)}
+                          >
                             {record.status}
                           </Badge>
                         </TableCell>
@@ -605,14 +613,20 @@ export const AdminUserManagement = ({
                               </SelectTrigger>
                               <SelectContent>
                                 <SelectItem value="basic">Basic</SelectItem>
-                                <SelectItem value="professional">Professional</SelectItem>
-                                <SelectItem value="enterprise">Enterprise</SelectItem>
+                                <SelectItem value="professional">
+                                  Professional
+                                </SelectItem>
+                                <SelectItem value="enterprise">
+                                  Enterprise
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={getActiveAction(record.subscription_id) !== null}
+                              disabled={
+                                getActiveAction(record.subscription_id) !== null
+                              }
                               onClick={() =>
                                 runSubscriptionAction(
                                   record.subscription_id,
@@ -620,9 +634,9 @@ export const AdminUserManagement = ({
                                   () =>
                                     subscriptionApi.adminChangeSubscriptionPlan(
                                       record.subscription_id,
-                                      resolveSelectedPlan(record)
+                                      resolveSelectedPlan(record),
                                     ),
-                                  `Plan updated for ${record.display_name}.`
+                                  `Plan updated for ${record.display_name}.`,
                                 )
                               }
                             >
@@ -631,16 +645,18 @@ export const AdminUserManagement = ({
                             <Button
                               size="sm"
                               variant="outline"
-                              disabled={getActiveAction(record.subscription_id) !== null}
+                              disabled={
+                                getActiveAction(record.subscription_id) !== null
+                              }
                               onClick={() =>
                                 runSubscriptionAction(
                                   record.subscription_id,
                                   "reset",
                                   () =>
                                     subscriptionApi.adminResetSubscriptionCycle(
-                                      record.subscription_id
+                                      record.subscription_id,
                                     ),
-                                  `Billing cycle reset for ${record.display_name}.`
+                                  `Billing cycle reset for ${record.display_name}.`,
                                 )
                               }
                             >
@@ -650,7 +666,8 @@ export const AdminUserManagement = ({
                               size="sm"
                               variant="destructive"
                               disabled={
-                                getActiveAction(record.subscription_id) !== null ||
+                                getActiveAction(record.subscription_id) !==
+                                  null ||
                                 record.status.toLowerCase() === "cancelled"
                               }
                               onClick={() =>
@@ -659,9 +676,9 @@ export const AdminUserManagement = ({
                                   "cancel",
                                   () =>
                                     subscriptionApi.adminCancelSubscription(
-                                      record.subscription_id
+                                      record.subscription_id,
                                     ),
-                                  `Subscription cancelled for ${record.display_name}.`
+                                  `Subscription cancelled for ${record.display_name}.`,
                                 )
                               }
                             >
@@ -696,12 +713,21 @@ export const AdminUserManagement = ({
                     {userRecords.map((record) => (
                       <TableRow key={record.subscription_id}>
                         <TableCell>
-                          <div className="font-medium">{record.display_name}</div>
-                          <div className="text-xs text-gray-500">{record.email}</div>
+                          <div className="font-medium">
+                            {record.display_name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {record.email}
+                          </div>
                         </TableCell>
-                        <TableCell className="capitalize">{record.plan}</TableCell>
+                        <TableCell className="capitalize">
+                          {record.plan}
+                        </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                          <Badge
+                            variant="outline"
+                            className={statusVariantClass(record.status)}
+                          >
                             {record.status}
                           </Badge>
                         </TableCell>
@@ -733,8 +759,12 @@ export const AdminUserManagement = ({
                     {organizationRecords.map((record) => (
                       <TableRow key={record.subscription_id}>
                         <TableCell>
-                          <div className="font-medium">{record.display_name}</div>
-                          <div className="text-xs text-gray-500">{record.email}</div>
+                          <div className="font-medium">
+                            {record.display_name}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {record.email}
+                          </div>
                         </TableCell>
                         <TableCell>
                           <div>{record.contact_phone || "No phone"}</div>
@@ -742,9 +772,14 @@ export const AdminUserManagement = ({
                             {record.business_type || "No business type"}
                           </div>
                         </TableCell>
-                        <TableCell className="capitalize">{record.plan}</TableCell>
+                        <TableCell className="capitalize">
+                          {record.plan}
+                        </TableCell>
                         <TableCell>
-                          <Badge variant="outline" className={statusVariantClass(record.status)}>
+                          <Badge
+                            variant="outline"
+                            className={statusVariantClass(record.status)}
+                          >
                             {record.status}
                           </Badge>
                         </TableCell>

@@ -2,20 +2,12 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+// import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import AdminUserManagement from "@/components/admin/AdminUserManagement";
 import { getAdminStatus, fetchWithAuth } from "@/app/api/auth";
 import { toast } from "sonner";
-import {
-  Users,
-  Building,
-  BarChart3,
-  ShieldCheck,
-  RefreshCw,
-  UserPlus,
-} from "lucide-react";
+// import { RefreshCw } from "lucide-react";
 
 type AdminDashboardData = {
   overview: {
@@ -63,7 +55,9 @@ const AdminDashboardClient = () => {
       setDashboard(data as AdminDashboardData);
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Failed to load admin dashboard.";
+        error instanceof Error
+          ? error.message
+          : "Failed to load admin dashboard.";
       toast.error(message);
     } finally {
       setIsLoadingDashboard(false);
@@ -149,107 +143,113 @@ const AdminDashboardClient = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="mb-8 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
-            <p className="text-gray-600 mt-2">
-              Live onboarding operations, recent account creation, and subscription health.
-            </p>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Admin Dashboard
+            </h1>
           </div>
           <div className="flex items-center gap-3">
-            <Badge variant="outline" className="bg-white px-3 py-1 text-sm">
-              {overview?.active_admins ?? 0} active admins
-            </Badge>
-            <Button
+            <div className="flex items-center gap-3">
+              <p className="font-semibold">Subscriptions</p>
+              <Badge variant="default" className="py-1">
+                {statusEntries.length === 0 ? (
+                  <p className="text-sm text-white gap-3">
+                    No subscription activity yet.
+                  </p>
+                ) : (
+                  statusEntries.map(([statusName, count]) => (
+                    <div key={statusName} className="flex flex-wrap">
+                      <span className="min-w-0 px-3 text-sm font-medium gap-3 capitalize text-white">
+                        {statusName}
+                      </span>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  ))
+                )}
+              </Badge>
+            </div>
+            <div className="flex items-center gap-3">
+              <p className="font-semibold">Plan</p>
+              <Badge variant="default" className="py-1">
+                {planEntries.length === 0 ? (
+                  <p className="text-sm text-white">No plan data yet.</p>
+                ) : (
+                  planEntries.map(([planName, count]) => (
+                    <div key={planName} className="flex flex-wrap ">
+                      <span className="min-w-0 px-3 text-sm font-medium capitalize text-white ">
+                        {planName}
+                      </span>
+                      <Badge variant="secondary">{count}</Badge>
+                    </div>
+                  ))
+                )}
+              </Badge>
+            </div>
+            {/* <Button
               variant="outline"
               onClick={loadDashboard}
               disabled={isLoadingDashboard}
             >
-              <RefreshCw className={`mr-2 h-4 w-4 ${isLoadingDashboard ? "animate-spin" : ""}`} />
+              <RefreshCw
+                className={`mr-2 h-4 w-4 ${isLoadingDashboard ? "animate-spin" : ""}`}
+              />
               Refresh
-            </Button>
+            </Button> */}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-5 mb-8">
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <Users className="h-8 w-8 text-blue-600" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">
-                    Total Users
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {overview?.total_users ?? 0}
-                  </p>
-                </div>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4 mb-8">
+          <div>
+            <div className="p-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 hover:shadow-blue-200 shadow-sm">
+              <div className="flex flex-row gap-3 items-center justify-between px-3">
+                <p className="text-sm font-medium text-gray-600">Total Users</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {overview?.total_users ?? 0}
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <Building className="h-8 w-8 text-green-600" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">
-                    Organizations
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {overview?.total_organizations ?? 0}
-                  </p>
-                </div>
+          <div>
+            <div className="p-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 hover:shadow-blue-200 shadow-sm">
+              <div className="flex flex-row gap-3 items-center justify-between px-3">
+                <p className="text-sm font-medium text-gray-600">
+                  Organizations
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {overview?.total_organizations ?? 0}
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <BarChart3 className="h-8 w-8 text-purple-600" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">
-                    Active Subscriptions
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {overview?.active_subscriptions ?? 0}
-                  </p>
-                </div>
+          <div>
+            <div className="p-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 hover:shadow-blue-200 shadow-sm">
+              <div className="flex flex-row gap-3 items-center justify-between px-3">
+                <p className="text-sm font-medium text-gray-600">
+                  Active Subscriptions
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {overview?.active_subscriptions ?? 0}
+                </p>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
 
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <UserPlus className="h-8 w-8 text-orange-600" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">
-                    Onboarded This Month
-                  </p>
-                  <p className="text-2xl font-bold text-gray-900">
-                    {overview?.onboardings_this_month ?? 0}
-                  </p>
-                </div>
+          <div>
+            <div className="p-3 bg-white rounded-lg pointer hover:-translate-y-1 duration-500 hover:shadow-blue-200 shadow-sm">
+              <div className="flex flex-row gap-3 items-center justify-between px-3">
+                <p className="text-sm font-medium text-gray-600">
+                  Onboarded This Month
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {overview?.onboardings_this_month ?? 0}
+                </p>
               </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="p-6">
-              <div className="flex items-center">
-                <ShieldCheck className="h-8 w-8 text-emerald-600" />
-                <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">
-                    Dashboard Health
-                  </p>
-                  <p className="text-sm font-bold text-emerald-600">Live data connected</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        <div className="mb-8 grid gap-6 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <div className="mb-8 grid ">
           <div className="min-w-0">
             <AdminUserManagement
               recentOnboarding={dashboard?.recent_onboarding || []}
@@ -258,57 +258,7 @@ const AdminDashboardClient = () => {
             />
           </div>
 
-          <div className="min-w-0 space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="break-words text-lg leading-snug">
-                  Subscription Status Mix
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {statusEntries.length === 0 ? (
-                  <p className="text-sm text-gray-500">No subscription activity yet.</p>
-                ) : (
-                  statusEntries.map(([statusName, count]) => (
-                    <div
-                      key={statusName}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2"
-                    >
-                      <span className="min-w-0 text-sm font-medium capitalize text-gray-700">
-                        {statusName}
-                      </span>
-                      <Badge variant="outline">{count}</Badge>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="break-words text-lg leading-snug">
-                  Plan Distribution
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                {planEntries.length === 0 ? (
-                  <p className="text-sm text-gray-500">No plan data yet.</p>
-                ) : (
-                  planEntries.map(([planName, count]) => (
-                    <div
-                      key={planName}
-                      className="flex flex-wrap items-center justify-between gap-2 rounded-lg border bg-white px-3 py-2"
-                    >
-                      <span className="min-w-0 text-sm font-medium capitalize text-gray-700">
-                        {planName}
-                      </span>
-                      <Badge variant="secondary">{count}</Badge>
-                    </div>
-                  ))
-                )}
-              </CardContent>
-            </Card>
-          </div>
+          <div className="min-w-0 space-x-6"></div>
         </div>
       </div>
     </div>
