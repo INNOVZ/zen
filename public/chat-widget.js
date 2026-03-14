@@ -2320,6 +2320,56 @@
       date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
   }
 
+  function escapeHtml(text) {
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
+  function applyInlineMarkdown(text, boldStyle, italicStyle) {
+    return text
+      .replace(/\*\*([^*]+)\*\*/g, `<strong style="${boldStyle}">$1</strong>`)
+      .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, `<em style="${italicStyle}">$1</em>`);
+  }
+
+  function sanitizeMarkdownLinkUrl(rawUrl) {
+    if (!rawUrl) return null;
+
+    const trimmedUrl = String(rawUrl).trim();
+    if (!trimmedUrl) return null;
+
+    // Reject control characters and dangerous protocols before URL parsing.
+    const normalizedForProtocolCheck = trimmedUrl
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+      .replace(/\s+/g, '')
+      .toLowerCase();
+
+    if (
+      normalizedForProtocolCheck.startsWith('javascript:') ||
+      normalizedForProtocolCheck.startsWith('data:') ||
+      normalizedForProtocolCheck.startsWith('vbscript:') ||
+      normalizedForProtocolCheck.startsWith('file:')
+    ) {
+      return null;
+    }
+
+    try {
+      const parsedUrl = new URL(trimmedUrl, window.location.href);
+      const allowedProtocols = new Set(['http:', 'https:', 'mailto:', 'tel:']);
+
+      if (!allowedProtocols.has(parsedUrl.protocol)) {
+        return null;
+      }
+
+      return parsedUrl.href;
+    } catch {
+      return null;
+    }
+  }
+
   // Enhanced markdown parser with rich formatting support
   function parseMarkdown(text) {
     if (!text) return '';
@@ -2337,16 +2387,14 @@
     });
 
     // Escape HTML to prevent XSS (after extracting links)
-    processedText = processedText
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+    processedText = escapeHtml(processedText);
 
     // Parse bold **text** (must be before italic to handle ** correctly)
-    processedText = processedText.replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700; color: #1a1a1a;">$1</strong>');
-
-    // Parse italic *text* (single asterisks, but not part of **)
-    processedText = processedText.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic; opacity: 0.95;">$1</em>');
+    processedText = applyInlineMarkdown(
+      processedText,
+      'font-weight: 700; color: #1a1a1a;',
+      'font-style: italic; opacity: 0.95;'
+    );
 
     // Parse headings (## heading or ### heading) - convert to bold styled divs for chat context
     processedText = processedText.replace(/^#{3,}\s+(.+)$/gm, '<div style="font-weight: 600; font-size: 13px; margin: 6px 0 3px 0; color: #1a1a1a;">$1</div>');
@@ -2366,12 +2414,20 @@
     linkPlaceholders.forEach((link, index) => {
       const placeholder = `___LINK_${index}___`;
 
-      // Parse bold/italic within link text
-      let formattedLinkText = link.linkText
-        .replace(/\*\*([^*]+)\*\*/g, '<strong style="font-weight: 700;">$1</strong>')
-        .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em style="font-style: italic;">$1</em>');
+      const safeUrl = sanitizeMarkdownLinkUrl(link.url);
+      const escapedLinkText = escapeHtml(link.linkText);
+      const formattedLinkText = applyInlineMarkdown(
+        escapedLinkText,
+        'font-weight: 700;',
+        'font-style: italic;'
+      );
 
-      const linkHtml = `<a class="zaakiy-link" href="${link.url}" target="_blank" rel="noopener noreferrer" style="color: ${config.primaryColor} !important; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none !important; transition: all 0.2s;">${formattedLinkText}</a>`;
+      if (!safeUrl) {
+        processedText = processedText.replace(placeholder, formattedLinkText);
+        return;
+      }
+
+      const linkHtml = `<a class="zaakiy-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener noreferrer nofollow" style="color: ${config.primaryColor} !important; font-weight: 600; border-bottom: 1px solid ${config.primaryColor}; text-decoration: none !important; transition: all 0.2s;">${formattedLinkText}</a>`;
       processedText = processedText.replace(placeholder, linkHtml);
     });
 

@@ -4,6 +4,7 @@
 import { getAuthInfo, fetchWithAuth } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
+import { DETACHED_MODE } from "@/config/detached-mode";
 import type {
   SubscriptionPlans,
   SubscriptionStatus,
@@ -63,6 +64,123 @@ interface ChannelsResponse {
   };
 }
 
+const getMockSubscriptionPlans = (): SubscriptionPlans => ({
+  basic: {
+    name: "Basic Plan",
+    monthly_token_limit: 10000,
+    price_per_month: 29.99,
+    max_chatbots: 3,
+    max_documents_per_chatbot: 50,
+    priority_support: false,
+    custom_branding: false,
+    api_access: false,
+    analytics_retention_days: 30,
+  },
+  professional: {
+    name: "Professional Plan",
+    monthly_token_limit: 50000,
+    price_per_month: 99.99,
+    max_chatbots: 10,
+    max_documents_per_chatbot: 200,
+    priority_support: true,
+    custom_branding: true,
+    api_access: true,
+    analytics_retention_days: 90,
+  },
+  enterprise: {
+    name: "Enterprise Plan",
+    monthly_token_limit: 200000,
+    price_per_month: 299.99,
+    max_chatbots: 50,
+    max_documents_per_chatbot: 1000,
+    priority_support: true,
+    custom_branding: true,
+    api_access: true,
+    analytics_retention_days: 365,
+  },
+});
+
+const getMockSubscriptionStatus = (): SubscriptionStatus => ({
+  subscription_id: "",
+  tokens_used_this_month: 0,
+  tokens_remaining: 0,
+  monthly_limit: 0,
+  usage_percentage: 0,
+  reset_date: "",
+});
+
+const getMockTokenAvailability = (
+  requiredTokens: number
+): TokenAvailabilityCheck => ({
+  has_enough_tokens: true,
+  tokens_required: requiredTokens,
+  tokens_available: 7500,
+  monthly_limit: 10000,
+  reset_date: new Date(
+    Date.now() + 30 * 24 * 60 * 60 * 1000
+  ).toISOString(),
+});
+
+const getMockSupportedChannels = (): ChannelsResponse => ({
+  website: {
+    name: "Website Chat",
+    description: "Embedded chat widget on websites",
+    icon: "🌐",
+    typical_use_cases: ["Customer support", "Lead generation", "FAQ"],
+  },
+  whatsapp: {
+    name: "WhatsApp Business",
+    description: "WhatsApp Business API integration",
+    icon: "📱",
+    typical_use_cases: ["Customer service", "Order updates", "Marketing"],
+  },
+  messenger: {
+    name: "Facebook Messenger",
+    description: "Facebook Messenger integration",
+    icon: "💬",
+    typical_use_cases: ["Social commerce", "Customer support", "Engagement"],
+  },
+  instagram: {
+    name: "Instagram Direct",
+    description: "Instagram Direct Messages integration",
+    icon: "📸",
+    typical_use_cases: ["Brand engagement", "Product inquiries", "Support"],
+  },
+  api: {
+    name: "REST API",
+    description: "API integration for custom applications",
+    icon: "🔌",
+    typical_use_cases: ["Custom apps", "System integration", "Automation"],
+  },
+  mobile_app: {
+    name: "Mobile App",
+    description: "Mobile application integration",
+    icon: "📲",
+    typical_use_cases: ["In-app support", "User onboarding", "Feature guidance"],
+  },
+});
+
+function useDetachedModeFallback<T>(
+  label: string,
+  error: unknown,
+  fallbackFactory: () => T,
+  cacheKey?: string,
+  ttlMs?: number
+): T {
+  if (!DETACHED_MODE) {
+    throw error;
+  }
+
+  console.warn(`${label} failed, using detached mode fallback:`, error);
+
+  const fallback = fallbackFactory();
+  if (cacheKey && ttlMs) {
+    apiCache.set(cacheKey, fallback, ttlMs);
+  }
+
+  return fallback;
+}
+
 export const subscriptionApi = {
   // ==========================================
   // SUBSCRIPTION PLANS
@@ -87,47 +205,13 @@ export const subscriptionApi = {
       return plans;
     } catch (error) {
       console.error("Error fetching subscription plans:", error);
-
-      // Return mock plans for development
-      const mockPlans: SubscriptionPlans = {
-        basic: {
-          name: "Basic Plan",
-          monthly_token_limit: 10000,
-          price_per_month: 29.99,
-          max_chatbots: 3,
-          max_documents_per_chatbot: 50,
-          priority_support: false,
-          custom_branding: false,
-          api_access: false,
-          analytics_retention_days: 30,
-        },
-        professional: {
-          name: "Professional Plan",
-          monthly_token_limit: 50000,
-          price_per_month: 99.99,
-          max_chatbots: 10,
-          max_documents_per_chatbot: 200,
-          priority_support: true,
-          custom_branding: true,
-          api_access: true,
-          analytics_retention_days: 90,
-        },
-        enterprise: {
-          name: "Enterprise Plan",
-          monthly_token_limit: 200000,
-          price_per_month: 299.99,
-          max_chatbots: 50,
-          max_documents_per_chatbot: 1000,
-          priority_support: true,
-          custom_branding: true,
-          api_access: true,
-          analytics_retention_days: 365,
-        },
-      };
-
-      // Cache mock data for 5 minutes
-      apiCache.set(cacheKey, mockPlans, 5 * 60 * 1000);
-      return mockPlans;
+      return useDetachedModeFallback(
+        "Fetching subscription plans",
+        error,
+        getMockSubscriptionPlans,
+        cacheKey,
+        5 * 60 * 1000
+      );
     }
   },
 
@@ -205,20 +289,13 @@ export const subscriptionApi = {
       return data;
     } catch (error) {
       console.error("Error fetching subscription status:", error);
-
-      // Return mock status for development - indicating no subscription
-      const mockStatus: SubscriptionStatus = {
-        subscription_id: "",
-        tokens_used_this_month: 0,
-        tokens_remaining: 0,
-        monthly_limit: 0,
-        usage_percentage: 0,
-        reset_date: "",
-      };
-
-      // Cache mock data for 1 minute
-      apiCache.set(cacheKey, mockStatus, 60 * 1000);
-      return mockStatus;
+      return useDetachedModeFallback(
+        "Fetching subscription status",
+        error,
+        getMockSubscriptionStatus,
+        cacheKey,
+        60 * 1000
+      );
     }
   },
 
@@ -257,15 +334,11 @@ export const subscriptionApi = {
       return data;
     } catch (error) {
       console.error("Error checking token availability:", error);
-
-      // Return mock availability for development
-      return {
-        has_enough_tokens: true,
-        tokens_required: requiredTokens,
-        tokens_available: 7500,
-        monthly_limit: 10000,
-        reset_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30 days from now
-      };
+      return useDetachedModeFallback(
+        "Checking token availability",
+        error,
+        () => getMockTokenAvailability(requiredTokens)
+      );
     }
   },
 
@@ -298,66 +371,13 @@ export const subscriptionApi = {
       return channels;
     } catch (error) {
       console.error("Error fetching supported channels:", error);
-
-      // Return mock channels for development
-      const mockChannels: ChannelsResponse = {
-        website: {
-          name: "Website Chat",
-          description: "Embedded chat widget on websites",
-          icon: "🌐",
-          typical_use_cases: ["Customer support", "Lead generation", "FAQ"],
-        },
-        whatsapp: {
-          name: "WhatsApp Business",
-          description: "WhatsApp Business API integration",
-          icon: "📱",
-          typical_use_cases: ["Customer service", "Order updates", "Marketing"],
-        },
-        messenger: {
-          name: "Facebook Messenger",
-          description: "Facebook Messenger integration",
-          icon: "💬",
-          typical_use_cases: [
-            "Social commerce",
-            "Customer support",
-            "Engagement",
-          ],
-        },
-        instagram: {
-          name: "Instagram Direct",
-          description: "Instagram Direct Messages integration",
-          icon: "📸",
-          typical_use_cases: [
-            "Brand engagement",
-            "Product inquiries",
-            "Support",
-          ],
-        },
-        api: {
-          name: "REST API",
-          description: "API integration for custom applications",
-          icon: "🔌",
-          typical_use_cases: [
-            "Custom apps",
-            "System integration",
-            "Automation",
-          ],
-        },
-        mobile_app: {
-          name: "Mobile App",
-          description: "Mobile application integration",
-          icon: "📲",
-          typical_use_cases: [
-            "In-app support",
-            "User onboarding",
-            "Feature guidance",
-          ],
-        },
-      };
-
-      // Cache mock data for 1 hour
-      apiCache.set(cacheKey, mockChannels, 60 * 60 * 1000);
-      return mockChannels;
+      return useDetachedModeFallback(
+        "Fetching supported channels",
+        error,
+        getMockSupportedChannels,
+        cacheKey,
+        60 * 60 * 1000
+      );
     }
   },
 

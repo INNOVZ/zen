@@ -9,8 +9,44 @@ import {
 } from "./types";
 import { getApiBaseUrl } from "@/config/api";
 import { apiUtils } from "@/app/api/utils";
+import { DETACHED_MODE } from "@/config/detached-mode";
 
 const BASE_URL = getApiBaseUrl();
+
+const getMockOrganizationInfo = (): OrganizationResponse => ({
+  user: {
+    email: "user@example.com"
+  },
+  organization: {
+    id: "demo-org-id",
+    name: "Demo Organization",
+    email: "org@example.com",
+    plan_id: "free",
+    created_at: new Date().toISOString()
+  }
+});
+
+const getMockOrganizationUpdateResponse = (
+  request: UpdateOrganizationRequest
+): UpdateOrganizationResponse => ({
+  success: true,
+  message: "Organization updated successfully (detached mode)",
+  organization: {
+    id: "mock-org",
+    name: request.name || "Organization",
+    email: request.email,
+    created_at: new Date().toISOString()
+  }
+});
+
+function useDetachedModeFallback<T>(label: string, error: unknown, fallbackFactory: () => T): T {
+  if (!DETACHED_MODE) {
+    throw error;
+  }
+
+  console.warn(`${label} failed, using detached mode fallback:`, error);
+  return fallbackFactory();
+}
 
 export const organizationApi = {
   getOrganizationInfo: async (): Promise<OrganizationResponse> => {
@@ -28,32 +64,19 @@ export const organizationApi = {
         
         try {
           const data = await fetchWithAuth("/api/org/info");
-          
+
           // Cache for 5 minutes
           apiCache.set(cacheKey, data, 5 * 60 * 1000);
-          
+
           return data;
         } catch (error) {
-          // If organization endpoint doesn't exist, return mock data
-          console.warn("Organization endpoint not available, using mock data:", error);
-          
-          const mockData: OrganizationResponse = {
-            user: {
-              email: "user@example.com"
-            },
-            organization: {
-              id: "demo-org-id",
-              name: "Demo Organization",
-              email: "org@example.com",
-              plan_id: "free",
-              created_at: new Date().toISOString()
-            }
-          };
-          
-          // Cache mock data for 1 minute
-          apiCache.set(cacheKey, mockData, 1 * 60 * 1000);
-          
-          return mockData;
+          const fallback = useDetachedModeFallback(
+            "Fetching organization info",
+            error,
+            getMockOrganizationInfo
+          );
+          apiCache.set(cacheKey, fallback, 1 * 60 * 1000);
+          return fallback;
         }
       } catch (error) {
         console.error("Error fetching organization info:", error);
@@ -79,7 +102,6 @@ export const organizationApi = {
       // Debug: Log the full URL being called
       console.log("🔍 Calling organization update endpoint:", `${BASE_URL}/api/org/update`);
 
-      // Try the organization update endpoint
       try {
         const response = await fetchWithAuth("/api/org/update", {
           method: "PATCH",
@@ -88,95 +110,24 @@ export const organizationApi = {
 
         console.log("✅ Organization update response:", response);
 
-        // Handle different response formats
-        if (response && typeof response === 'object') {
-          // If response has success field, use it as is
-          if ('success' in response) {
-            // Invalidate organization cache after successful update
-            apiCache.deleteMatching("/api/org");
-            return response as UpdateOrganizationResponse;
-          }
-          
-          // If response has message field, format it properly
-          if ('message' in response) {
-            const formattedResponse: UpdateOrganizationResponse = {
-              success: true,
-              message: response.message as string,
-              organization: {
-                id: "updated-org",
-                name: request.name || "Organization",
-                email: request.email,
-                created_at: new Date().toISOString()
-              }
-            };
-            
-            // Invalidate organization cache after successful update
-            apiCache.deleteMatching("/api/org");
-            return formattedResponse;
-          }
+        if (
+          !response ||
+          typeof response !== "object" ||
+          !("success" in response) ||
+          response.success !== true
+        ) {
+          throw new Error("Organization update returned an unexpected response.");
         }
-
-        // If response doesn't match expected format, create a success response
-        console.log("⚠️ Unexpected response format, creating success response");
-        const successResponse: UpdateOrganizationResponse = {
-          success: true,
-          message: "Organization updated successfully",
-          organization: {
-            id: "updated-org",
-            name: request.name || "Organization",
-            email: request.email,
-            created_at: new Date().toISOString()
-          }
-        };
 
         // Invalidate organization cache after successful update
         apiCache.deleteMatching("/api/org");
-        return successResponse;
+        return response as UpdateOrganizationResponse;
       } catch (orgError) {
-        console.warn("Organization update endpoint failed, trying alternative paths...");
-        
-        // Try alternative endpoint paths that might exist
-        const alternativeEndpoints = [
-          "/api/user/organization/update", 
-          "/api/settings/org/update"
-        ];
-
-        for (const endpoint of alternativeEndpoints) {
-          try {
-            console.log(`🔄 Trying alternative endpoint: ${endpoint}`);
-            const response = await fetchWithAuth(endpoint, {
-              method: "PATCH",
-              body: JSON.stringify(request),
-            });
-            
-            console.log(`✅ Success with endpoint: ${endpoint}`);
-            apiCache.deleteMatching("/api/org");
-            return response;
-          } catch (altError) {
-            console.log(`❌ Failed with endpoint: ${endpoint}`, altError);
-            continue;
-          }
-        }
-        
-        // If all alternatives fail, return a mock success response for development
-        console.warn("All organization endpoints failed, returning mock success response");
-        console.warn("Original error:", orgError);
-        
-        const mockResponse: UpdateOrganizationResponse = {
-          success: true,
-          message: "Organization updated successfully (mock response - backend endpoint not available)",
-          organization: {
-            id: "mock-org",
-            name: request.name || "Organization",
-            email: request.email,
-            created_at: new Date().toISOString()
-          }
-        };
-        
-        // Invalidate cache anyway
-        apiCache.deleteMatching("/api/org");
-        
-        return mockResponse;
+        return useDetachedModeFallback(
+          "Updating organization",
+          orgError,
+          () => getMockOrganizationUpdateResponse(request)
+        );
       }
     } catch (error) {
       console.error("Error updating organization:", error);
