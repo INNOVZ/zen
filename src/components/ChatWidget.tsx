@@ -424,6 +424,13 @@ const ChatWidget = memo(
             buttons: response.buttons,
           });
 
+          if (response.language && response.language !== currentLanguage) {
+            setCurrentLanguage(response.language);
+            if (typeof window !== "undefined") {
+              localStorage.setItem("chatbot_language", response.language);
+            }
+          }
+
           setMessages((prev) => [...prev, botResponse]);
         } catch (error) {
           console.error("Error getting bot response:", error);
@@ -510,6 +517,7 @@ const ChatWidget = memo(
     return (
       <div
         className={`fixed ${positionClasses[position]} flex flex-col p-0 z-50`}
+        dir={currentLanguage === "ar" ? "rtl" : "ltr"}
       >
         <div
           className={`w-[25vw] flex flex-col shadow-2xl rounded-lg p-3 transition-all bg-white m-0 duration-300 ${isMinimized ? "h-14" : "h-[70vh]"
@@ -672,7 +680,7 @@ const ChatWidget = memo(
                 {/* Typing Indicator */}
                 {isTyping && (
                   <div className="flex justify-start">
-                    <div className="bg-gray-100 mr-2 p-2 rounded-lg max-w-[85%]">
+                    <div className="bg-gray-100 me-2 p-2 rounded-lg max-w-[85%]">
                       <div className="flex items-center gap-2">
                         <Bot className="h-3 w-3 text-blue-500" />
                         <div className="flex gap-1">
@@ -719,6 +727,10 @@ const ChatWidget = memo(
                     placeholder={
                       !isAuthenticated
                         ? "Please log in to chat..."
+                        : currentLanguage === "ar"
+                        ? `اسأل ${selectedChatbot?.name || "المساعد"}...`
+                        : currentLanguage === "es"
+                        ? `Pregunta a ${selectedChatbot?.name || "Asistente"}...`
                         : `Ask ${selectedChatbot?.name || "Assistant"}...`
                     }
                     className="flex-1 text-sm focus:ring-1 focus:ring-opacity-50 focus:border-transparent transition-all duration-200"

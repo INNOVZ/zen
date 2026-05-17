@@ -30,6 +30,7 @@ export interface ChatResponse {
   response: string;
   conversation_id: string;
   message_id?: string;
+  language?: string;
   sources?: Source[];
   buttons?: Array<{ text: string; value: string; type?: string }>;
   product_links?: ProductCard[];
