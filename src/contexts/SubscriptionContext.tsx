@@ -1,14 +1,19 @@
 "use client";
 
 import React, {
-  createContext,
-  useContext,
+  useCallback,
   useState,
   useEffect,
   ReactNode,
 } from "react";
 import { subscriptionApi } from "@/app/api/subscription";
-import { getAuthInfo } from "@/app/api/auth";
+import {
+  getCurrentUserContext,
+  isUnauthenticatedError,
+} from "@/app/api/auth";
+import { SubscriptionContext } from "@/contexts/subscription-context";
+import { useAuth } from "@/hooks/useAuthGuard";
+import type { SubscriptionContextType } from "@/contexts/subscription-context";
 import type {
   SubscriptionStatus,
   SubscriptionPlans,
@@ -17,28 +22,46 @@ import type {
   TokenConsumptionResponse,
 } from "@/types/subscription";
 
-// Define the context type interface
-interface SubscriptionContextType {
-  subscription: SubscriptionStatus | null;
-  plans: SubscriptionPlans | null;
-  isLoading: boolean;
-  error: string | null;
-  refreshSubscription: () => Promise<void>;
-  checkTokenAvailability: (requiredTokens: number) => Promise<TokenAvailabilityCheck>;
-  consumeTokens: (request: TokenConsumptionRequest) => Promise<TokenConsumptionResponse>;
-}
-
-const SubscriptionContext = createContext<SubscriptionContextType | undefined>(
-  undefined
-);
-
 interface SubscriptionProviderProps {
   children: ReactNode;
 }
 
+const normalizeSubscription = (
+  response: SubscriptionStatus
+): SubscriptionStatus => ({
+  subscription_id: response.subscription_id || "",
+  tokens_used_this_month: response.tokens_used_this_month || 0,
+  tokens_remaining: response.tokens_remaining || 0,
+  monthly_limit: response.monthly_limit || 0,
+  usage_percentage: response.usage_percentage || 0,
+  reset_date: response.reset_date || "",
+  plan_name: response.plan_name || "Basic Plan",
+});
+
+const loadCurrentSubscription = async (): Promise<SubscriptionStatus | null> => {
+  const { userId, orgId } = await getCurrentUserContext();
+
+  if (orgId) {
+    const organizationSubscription =
+      await subscriptionApi.getSubscriptionStatus("organization", orgId);
+    if (organizationSubscription.has_subscription !== false) {
+      return normalizeSubscription(organizationSubscription);
+    }
+  }
+
+  const userSubscription = await subscriptionApi.getSubscriptionStatus(
+    "user",
+    userId
+  );
+  return userSubscription.has_subscription === false
+    ? null
+    : normalizeSubscription(userSubscription);
+};
+
 export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
   children,
 }) => {
+  const { isAuthorized } = useAuth();
   const [subscription, setSubscription] = useState<SubscriptionStatus | null>(
     null
   );
@@ -46,8 +69,10 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load subscription plans on mount
+  // Subscription plans use an authenticated API, so wait for auth initialization.
   useEffect(() => {
+    if (!isAuthorized) return;
+
     let mounted = true;
 
     const loadPlans = async () => {
@@ -69,208 +94,93 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [isAuthorized]);
 
   // Load subscription status when user is authenticated
   useEffect(() => {
+    if (!isAuthorized) return;
+
     let mounted = true;
+    let requestInFlight = false;
 
     const loadSubscriptionStatus = async () => {
+      if (!mounted || requestInFlight) return;
+
+      requestInFlight = true;
       try {
-        if (!mounted) return;
         setIsLoading(true);
         setError(null);
 
-        const { userId, orgId } = await getAuthInfo();
+        const response = await loadCurrentSubscription();
         if (!mounted) return;
 
-        // FIXED: Try both user and organization subscriptions
-        // Priority: organization subscription first, then user subscription
-        let response: SubscriptionStatus | null = null;
-        let entityType = "";
-
-        // First try organization subscription if user has orgId
-        if (orgId) {
-          try {
-            response = await subscriptionApi.getSubscriptionStatus(
-              "organization",
-              orgId
-            );
-            if (!mounted) return;
-            entityType = "organization";
-            console.log("Found organization subscription:", response);
-          } catch {
-            if (!mounted) return;
-            console.log(
-              "No organization subscription found, trying user subscription"
-            );
-            response = null;
-          }
-        }
-
-        // If no organization subscription or no orgId, try user subscription
-        if (!response || response.has_subscription === false) {
-          try {
-            response = await subscriptionApi.getSubscriptionStatus(
-              "user",
-              userId
-            );
-            if (!mounted) return;
-            entityType = "user";
-            console.log("Found user subscription:", response);
-          } catch {
-            if (!mounted) return;
-            console.log("No user subscription found either");
-            response = null;
-          }
-        }
-
-        // Handle the response
-        if (!mounted) return;
-        if (!response || response.has_subscription === false) {
-          console.log("No subscription found for user or organization");
+        if (!response) {
           setSubscription(null);
           setError(
             "No subscription found. Please contact admin to set up your subscription."
           );
         } else {
-          // Convert response to SubscriptionStatus format
-          const status: SubscriptionStatus = {
-            subscription_id: response.subscription_id || "",
-            tokens_used_this_month: response.tokens_used_this_month || 0,
-            tokens_remaining: response.tokens_remaining || 0,
-            monthly_limit: response.monthly_limit || 0,
-            usage_percentage: response.usage_percentage || 0,
-            reset_date: response.reset_date || "",
-            plan_name: response.plan_name || "Basic Plan",
-          };
-          setSubscription(status);
-          console.log(
-            `Successfully loaded ${entityType} subscription:`,
-            status
-          );
+          setSubscription(response);
         }
       } catch (err) {
         if (!mounted) return;
-        console.error("Failed to load subscription status:", err);
 
-        // FIXED: Better error handling
-        if (err instanceof Error) {
-          if (err.message.includes("Not authenticated")) {
-            // User not logged in - this is normal
-            setSubscription(null);
-            setError(null);
-          } else if (
-            err.message.includes("Failed to fetch subscription status: 500")
-          ) {
-            // Server error - likely no subscription exists
-            setSubscription(null);
-            setError(
-              "No subscription found. Please contact admin to set up your subscription."
-            );
-          } else {
-            setError("Failed to load subscription status");
-          }
+        if (isUnauthenticatedError(err)) {
+          setSubscription(null);
+          setError(null);
         } else {
+          console.warn("Failed to load subscription status", err);
           setError("Failed to load subscription status");
         }
       } finally {
+        requestInFlight = false;
         if (mounted) {
           setIsLoading(false);
         }
       }
     };
 
-    loadSubscriptionStatus();
-
-    // Refresh subscription status every 30 seconds
-    const interval = setInterval(() => {
-      if (mounted) {
-        loadSubscriptionStatus();
-      }
-    }, 30000);
+    void loadSubscriptionStatus();
+    const refreshInterval = setInterval(
+      () => void loadSubscriptionStatus(),
+      5 * 60 * 1000
+    );
 
     return () => {
       mounted = false;
-      clearInterval(interval);
+      clearInterval(refreshInterval);
     };
-  }, []);
+  }, [isAuthorized]);
 
-  const refreshSubscription = async () => {
+  const refreshSubscription = useCallback(async () => {
     try {
       setError(null);
-      const { userId, orgId } = await getAuthInfo();
+      const response = await loadCurrentSubscription();
 
-      // FIXED: Try both user and organization subscriptions
-      // Priority: organization subscription first, then user subscription
-      let response: SubscriptionStatus | null = null;
-      let entityType = "";
-
-      // First try organization subscription if user has orgId
-      if (orgId) {
-        try {
-          response = await subscriptionApi.getSubscriptionStatus(
-            "organization",
-            orgId
-          );
-          entityType = "organization";
-          console.log("Refreshed organization subscription:", response);
-        } catch {
-          console.log(
-            "No organization subscription found, trying user subscription"
-          );
-          response = null;
-        }
-      }
-
-      // If no organization subscription or no orgId, try user subscription
-      if (!response || response.has_subscription === false) {
-        try {
-          response = await subscriptionApi.getSubscriptionStatus(
-            "user",
-            userId
-          );
-          entityType = "user";
-          console.log("Refreshed user subscription:", response);
-        } catch {
-          console.log("No user subscription found either");
-          response = null;
-        }
-      }
-
-      // Handle the response
-      if (!response || response.has_subscription === false) {
+      if (!response) {
         setSubscription(null);
         setError(
           "No subscription found. Please contact admin to set up your subscription."
         );
       } else {
-        const status: SubscriptionStatus = {
-          subscription_id: response.subscription_id || "",
-          tokens_used_this_month: response.tokens_used_this_month || 0,
-          tokens_remaining: response.tokens_remaining || 0,
-          monthly_limit: response.monthly_limit || 0,
-          usage_percentage: response.usage_percentage || 0,
-          reset_date: response.reset_date || "",
-          plan_name: response.plan_name || "Basic Plan",
-        };
-        setSubscription(status);
-        console.log(
-          `Successfully refreshed ${entityType} subscription:`,
-          status
-        );
+        setSubscription(response);
       }
     } catch (err) {
-      console.error("Failed to refresh subscription status:", err);
-      setError("Failed to refresh subscription status");
+      if (isUnauthenticatedError(err)) {
+        setSubscription(null);
+        setError(null);
+      } else {
+        console.warn("Failed to refresh subscription status", err);
+        setError("Failed to refresh subscription status");
+      }
     }
-  };
+  }, []);
 
   const checkTokenAvailability = async (
     requiredTokens: number
   ): Promise<TokenAvailabilityCheck> => {
     try {
-      const { userId, orgId } = await getAuthInfo();
+      const { userId, orgId } = await getCurrentUserContext();
 
       // FIXED: Try both user and organization subscriptions
       // Priority: organization subscription first, then user subscription
@@ -369,98 +279,4 @@ export const SubscriptionProvider: React.FC<SubscriptionProviderProps> = ({
       {children}
     </SubscriptionContext.Provider>
   );
-};
-
-export const useSubscription = (): SubscriptionContextType => {
-  const context = useContext(SubscriptionContext);
-  if (context === undefined) {
-    throw new Error(
-      "useSubscription must be used within a SubscriptionProvider"
-    );
-  }
-  return context;
-};
-
-// Hook for token estimation
-export const useTokenEstimation = () => {
-  const estimateTokens = (
-    operationType:
-      | "chat"
-      | "document_upload"
-      | "document_processing"
-      | "web_scraping"
-      | "embedding_generation",
-    messageLength?: number,
-    documentSize?: number
-  ): number => {
-    return subscriptionApi.estimateTokensForOperation(
-      operationType,
-      messageLength,
-      documentSize
-    );
-  };
-
-  return { estimateTokens };
-};
-
-// Hook for subscription limits
-export const useSubscriptionLimits = () => {
-  const { subscription, plans } = useSubscription();
-
-  const getCurrentPlan = () => {
-    if (!subscription || !plans) return null;
-
-    // Find plan by monthly limit
-    const planEntries = Object.entries(plans);
-    const currentPlan = planEntries.find(
-      ([, plan]) => plan.monthly_token_limit === subscription.monthly_limit
-    );
-
-    return currentPlan ? { key: currentPlan[0], plan: currentPlan[1] } : null;
-  };
-
-  const getUpgradeOptions = () => {
-    if (!plans) return [];
-
-    const currentPlan = getCurrentPlan();
-    if (!currentPlan) return Object.entries(plans);
-
-    const planEntries = Object.entries(plans);
-    return planEntries.filter(
-      ([, plan]) => plan.monthly_token_limit > subscription!.monthly_limit
-    );
-  };
-
-  const isNearLimit = (threshold: number = 0.9) => {
-    if (!subscription) return false;
-    return subscription.usage_percentage >= threshold * 100;
-  };
-
-  const canCreateChatbot = () => {
-    if (!subscription || !plans) return true;
-
-    const currentPlan = getCurrentPlan();
-    if (!currentPlan) return true;
-
-    // This would need to be tracked separately - for now return true
-    return true;
-  };
-
-  const canUploadDocument = () => {
-    if (!subscription || !plans) return true;
-
-    const currentPlan = getCurrentPlan();
-    if (!currentPlan) return true;
-
-    // This would need to be tracked separately - for now return true
-    return true;
-  };
-
-  return {
-    getCurrentPlan,
-    getUpgradeOptions,
-    isNearLimit,
-    canCreateChatbot,
-    canUploadDocument,
-  };
 };

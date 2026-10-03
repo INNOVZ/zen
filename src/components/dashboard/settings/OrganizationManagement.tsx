@@ -25,12 +25,10 @@ import {
   AlertCircle,
   CheckCircle2,
 } from "lucide-react";
-import { createClient } from "@/lib/supabase/client";
+import { getCurrentUserContext } from "@/app/api/auth";
 import {
   type OrganizationResponse,
 } from "@/app/api/routes";
-
-const supabase = createClient();
 
 export default function OrganizationManagement() {
   const [formData, setFormData] = useState<UpdateOrganizationRequest>({
@@ -78,7 +76,7 @@ export default function OrganizationManagement() {
     };
   }, []);
 
-  const loadOrganizationInfo = async () => {
+  async function loadOrganizationInfo() {
     try {
       setIsLoadingInfo(true);
       const info = await organizationApi.getOrganizationInfo();
@@ -97,30 +95,16 @@ export default function OrganizationManagement() {
     } finally {
       setIsLoadingInfo(false);
     }
-  };
+  }
 
   const testConnections = async () => {
     setIsRAGLoading(true);
     setError(null);
 
     try {
-      // Test 1: Authentication - Use Supabase token
-      const token = await getSupabaseToken();
-
-      if (!token) {
-        throw new Error("No authentication token found. Please log in again.");
-      }
-
-      console.log("Testing with token:", token.substring(0, 20) + "...");
-
-      const authTest = await fetch("http://localhost:8001/api/auth/me", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      const authStatus = authTest.ok;
+      // Test 1: ask the backend to validate the current principal and tenant.
+      await getCurrentUserContext();
+      const authStatus = true;
       console.log("Auth test result:", authStatus);
 
       // Test 2: Chatbots available
@@ -175,12 +159,6 @@ export default function OrganizationManagement() {
     } finally {
       setIsRAGLoading(false); // ✅ Fixed: This should be false
     }
-  };
-
-  // Helper function to get Supabase token
-  const getSupabaseToken = async (): Promise<string | null> => {
-    const { data } = await supabase.auth.getSession();
-    return data.session?.access_token || null;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

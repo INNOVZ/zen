@@ -86,11 +86,12 @@ export default function UserDashboard() {
     if (authUser) {
       setCurrentUser(authUser);
     }
-  }, [authUser, setCurrentUser]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, setCurrentUser]); // Depend on userId to avoid re-triggering on token refresh
 
   // Load dashboard data after user authentication with a small delay
   useEffect(() => {
-    if (authUser && !isAuthLoading) {
+    if (userId && !isAuthLoading) {
       // Add a small delay to ensure authentication is fully complete
       const timer = setTimeout(() => {
         loadDashboardData();
@@ -98,7 +99,8 @@ export default function UserDashboard() {
 
       return () => clearTimeout(timer);
     }
-  }, [authUser, isAuthLoading, loadDashboardData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, isAuthLoading]); // Depend on userId to avoid re-triggering on token refresh
 
   // Track conversation loading state for better UX
   useEffect(() => {
@@ -140,7 +142,7 @@ export default function UserDashboard() {
   return (
     <div
       className={DASHBOARD_CONFIG.CONTAINER_CLASSES}
-      role="main"
+       role="main"
       aria-label="User Dashboard"
     >
       {/* Development Mode Alert */}

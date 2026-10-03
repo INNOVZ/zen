@@ -16,6 +16,14 @@ export interface MCPTool {
   }>;
   category?: string;
   icon?: string;
+  rate_limit?: number;
+  requires_auth?: boolean;
+  provider?: string | null;
+  cost_estimate?: number;
+  risk_level: "unspecified" | "read" | "write" | "external_communication" | "destructive";
+  has_side_effects: boolean;
+  origin: "local" | "remote_mcp";
+  remote_server?: string | null;
 }
 
 /**

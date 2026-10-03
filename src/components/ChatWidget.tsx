@@ -9,6 +9,7 @@ import { conversationApi, chatbotApi } from "@/app/api/routes";
 import type { ChatbotInfo } from "@/types";
 import { useConnectionErrorHandler } from "@/hooks/useServerConnection";
 import { mcpApi } from "@/app/api/mcp";
+import { automationsApi } from "@/app/api/automations";
 import Image from "next/image";
 import { ChatMessage } from "@/components/ChatMessage";
 
@@ -22,6 +23,13 @@ interface CTAButton {
   id: string;
   label: string;
   message: string;
+  automation_entrypoint_key?: string;
+  input_schema_version?: number;
+  input_schema?: {
+    properties?: Record<string, unknown>;
+    additionalProperties?: boolean;
+  };
+  requires_confirmation?: boolean;
 }
 
 interface ProductCard {
@@ -77,7 +85,9 @@ const ChatWidget = memo(
     const [selectedChatbot, setSelectedChatbot] = useState<ChatbotInfo | null>(
       null,
     );
-    const [loadingChatbots, setLoadingChatbots] = useState(true);
+    // Chatbot data is loaded lazily after the launcher is opened. Starting this
+    // as `true` would disable the launcher before the loading effect can run.
+    const [loadingChatbots, setLoadingChatbots] = useState(false);
     const [showChatbotDropdown, setShowChatbotDropdown] = useState(false);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(
       null,
@@ -114,6 +124,10 @@ const ChatWidget = memo(
 
     // Load CTA buttons based on active integrations and current language
     useEffect(() => {
+      // The widget is global to every dashboard page. Avoid loading its data until
+      // the user actually opens it so it does not compete with page-critical APIs.
+      if (!isOpen) return;
+
       let mounted = true;
 
       const loadCTAButtons = async () => {
@@ -138,10 +152,12 @@ const ChatWidget = memo(
       return () => {
         mounted = false;
       };
-    }, [isAuthenticated, currentLanguage]);
+    }, [isAuthenticated, currentLanguage, isOpen]);
 
     // Load organization's chatbots
     useEffect(() => {
+      if (!isOpen) return;
+
       let mounted = true;
 
       const loadChatbots = async () => {
@@ -280,7 +296,7 @@ const ChatWidget = memo(
       return () => {
         mounted = false;
       };
-    }, [chatbotId, getErrorMessage]);
+    }, [chatbotId, getErrorMessage, isOpen]);
 
     // Handle chatbot selection change
     const handleChatbotChange = async (newChatbotId: string) => {
@@ -471,6 +487,7 @@ const ChatWidget = memo(
         selectedChatbot,
         chatbotId,
         conversationId,
+        currentLanguage,
         getErrorMessage,
       ],
     );
@@ -483,6 +500,63 @@ const ChatWidget = memo(
         }
       },
       [handleSendMessage],
+    );
+
+    const handleAutomationCTA = useCallback(
+      async (button: CTAButton) => {
+        if (!button.automation_entrypoint_key || isTyping || !isAuthenticated) return;
+        const userMessage: Message = {
+          id: crypto.randomUUID(),
+          type: "user",
+          content: button.message,
+          timestamp: new Date(),
+        };
+        setMessages((current) => [...current, userMessage]);
+        setIsTyping(true);
+        try {
+          const properties = button.input_schema?.properties ?? {};
+          const acceptsMessage = Object.prototype.hasOwnProperty.call(properties, "message");
+          const result = await automationsApi.invokeEntrypoint(
+            button.automation_entrypoint_key,
+            {
+              input_schema_version: button.input_schema_version ?? 1,
+              resource: {
+                type: "conversation",
+                id: conversationId ?? selectedChatbot?.id ?? crypto.randomUUID(),
+              },
+              payload: acceptsMessage ? { message: button.message } : {},
+              idempotency_key: `chat-cta:${crypto.randomUUID()}`,
+              confirmation_granted: true,
+              ...(conversationId && { conversation_id: conversationId }),
+            },
+          );
+          setMessages((current) => [
+            ...current,
+            {
+              id: crypto.randomUUID(),
+              type: "bot",
+              content:
+                result.status === "ACCEPTED"
+                  ? `${button.label} has started. You can monitor its progress in Automations.`
+                  : `${button.label} completed.`,
+              timestamp: new Date(),
+            },
+          ]);
+        } catch (error) {
+          setMessages((current) => [
+            ...current,
+            {
+              id: crypto.randomUUID(),
+              type: "bot",
+              content: `I couldn't start this automation: ${getErrorMessage(error)}`,
+              timestamp: new Date(),
+            },
+          ]);
+        } finally {
+          setIsTyping(false);
+        }
+      },
+      [conversationId, getErrorMessage, isAuthenticated, isTyping, selectedChatbot],
     );
 
     const positionClasses = {
@@ -502,13 +576,9 @@ const ChatWidget = memo(
             onClick={() => setIsOpen(true)}
             className="pointer rounded-full w-14 h-14 shadow-lg hover:shadow-xl transition-all duration-200"
             style={{ backgroundColor: selectedChatbot?.color_hex || "#3B82F6" }}
-            disabled={loadingChatbots}
+            aria-label="Open chatbot"
           >
-            {loadingChatbots ? (
-              <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin" />
-            ) : (
-              <MessageCircle className="h-6 w-6 text-white" />
-            )}
+            <MessageCircle className="h-6 w-6 text-white" />
           </Button>
         </div>
       );
@@ -645,6 +715,16 @@ const ChatWidget = memo(
             <div className="relative flex-1 flex flex-col overflow-scroll">
               {/* Messages Area */}
               <div className="flex-1 overflow-y-auto p-3 space-y-3">
+                {loadingChatbots && messages.length === 0 && (
+                  <div
+                    className="flex items-center justify-center gap-2 py-6 text-sm text-gray-500"
+                    role="status"
+                  >
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+                    <span>Loading chatbot...</span>
+                  </div>
+                )}
+
                 {/* Show login prompt if not authenticated */}
                 {isAuthenticated === false && (
                   <div className="text-center py-4">
@@ -708,8 +788,11 @@ const ChatWidget = memo(
                         variant="outline"
                         className="text-xs h-7 px-2 hover:bg-blue-50 hover:border-blue-300 transition-colors"
                         onClick={() => {
-                          // Send the CTA message
-                          handleSendMessage(button.message);
+                          if (button.automation_entrypoint_key) {
+                            void handleAutomationCTA(button);
+                          } else {
+                            handleSendMessage(button.message);
+                          }
                         }}
                         disabled={isTyping || !selectedChatbot}
                       >

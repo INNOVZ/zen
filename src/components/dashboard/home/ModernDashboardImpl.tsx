@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 // ModernHeroStats removed — moved stats into StatusGrid
-import { ModernQuickActions } from "./QuickActions";
 import { ModernIntentAnalytics } from "./IntentAnalytics";
 import { ModernPulseChart } from "./PulseChart";
 import { conversationApi } from "@/app/api/routes";
@@ -87,23 +86,17 @@ export function ModernDashboardImpl({
           </CardContent>
         </Card>
       ) : intentAnalytics ? (
-        <div className="space-y-6">
+          <div className="grid lg:grid-cols-3  gap-6">
+            <div className="col-span-2 lg:col-span-2">
           {intentAnalytics.intent_trends &&
             intentAnalytics.intent_trends.length > 0 && (
               <ModernPulseChart intentAnalytics={intentAnalytics} />
-            )}
+            )}</div>
           <ModernIntentAnalytics analytics={intentAnalytics} />
         </div>
       ) : null}
 
       {/* Recent Leads Section */}
-
-      {/* Quick Actions Section */}
-      <ModernQuickActions
-        onTrainClick={onTrainClick}
-        onCustomizeClick={onCustomizeClick}
-        onSettingsClick={onSettingsClick}
-      />
     </div>
   );
 }

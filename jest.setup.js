@@ -1,6 +1,17 @@
 // Learn more: https://github.com/testing-library/jest-dom
 import '@testing-library/jest-dom'
 
+// ESM-only Markdown packages are integration-tested separately. Unit tests use
+// a transparent renderer so component behavior can run in Jest's CJS runtime.
+jest.mock('react-markdown', () => ({
+  __esModule: true,
+  default: ({ children }) => children,
+}));
+jest.mock('remark-gfm', () => ({
+  __esModule: true,
+  default: () => undefined,
+}));
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -41,7 +52,6 @@ global.console = {
   error: jest.fn(),
   warn: jest.fn(),
 };
-
 
 
 

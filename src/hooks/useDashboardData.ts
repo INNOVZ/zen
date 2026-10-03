@@ -56,7 +56,7 @@ export const useDashboardData = () => {
         try {
           const conversationPromise = conversationApi.getConversations(10); // Only 10 for dashboard
           const timeoutPromise = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Conversation loading timeout')), 1500)
+            setTimeout(() => reject(new Error('Conversation loading timeout')), 5000)
           );
           
           const userConversations = await Promise.race([conversationPromise, timeoutPromise]);

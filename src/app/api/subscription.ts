@@ -1,7 +1,11 @@
 // Subscription API Client
 // Based on backend SUBSCRIPTION_SYSTEM_GUIDE.md
 
-import { getAuthInfo, fetchWithAuth } from "@/app/api/auth";
+import {
+  getAuthInfo,
+  fetchWithAuth,
+  getCurrentUserContext,
+} from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
 import { DETACHED_MODE } from "@/config/detached-mode";
@@ -160,7 +164,7 @@ const getMockSupportedChannels = (): ChannelsResponse => ({
   },
 });
 
-function useDetachedModeFallback<T>(
+function getDetachedModeFallback<T>(
   label: string,
   error: unknown,
   fallbackFactory: () => T,
@@ -205,7 +209,7 @@ export const subscriptionApi = {
       return plans;
     } catch (error) {
       console.error("Error fetching subscription plans:", error);
-      return useDetachedModeFallback(
+      return getDetachedModeFallback(
         "Fetching subscription plans",
         error,
         getMockSubscriptionPlans,
@@ -289,7 +293,7 @@ export const subscriptionApi = {
       return data;
     } catch (error) {
       console.error("Error fetching subscription status:", error);
-      return useDetachedModeFallback(
+      return getDetachedModeFallback(
         "Fetching subscription status",
         error,
         getMockSubscriptionStatus,
@@ -334,7 +338,7 @@ export const subscriptionApi = {
       return data;
     } catch (error) {
       console.error("Error checking token availability:", error);
-      return useDetachedModeFallback(
+      return getDetachedModeFallback(
         "Checking token availability",
         error,
         () => getMockTokenAvailability(requiredTokens)
@@ -371,7 +375,7 @@ export const subscriptionApi = {
       return channels;
     } catch (error) {
       console.error("Error fetching supported channels:", error);
-      return useDetachedModeFallback(
+      return getDetachedModeFallback(
         "Fetching supported channels",
         error,
         getMockSupportedChannels,
@@ -424,17 +428,12 @@ export const subscriptionApi = {
     request: ChannelConfigUpdateRequest
   ): Promise<ChannelConfigUpdateResponse> => {
     try {
-      const { token, userId, orgId } = await getAuthInfo();
+      const { token } = await getAuthInfo();
 
       const headers: Record<string, string> = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "X-User-ID": userId,
       };
-
-      if (orgId) {
-        headers["X-Org-ID"] = orgId;
-      }
 
       const response = await fetch(
         `${BASE_URL}/api/onboarding/subscription/${subscriptionId}/channels/${channel}/config`,
@@ -660,7 +659,7 @@ export const subscriptionApi = {
   // Debug function to test subscription endpoints
   debugSubscriptionEndpoints: async () => {
     try {
-      const { userId, orgId } = await getAuthInfo();
+      const { userId, orgId } = await getCurrentUserContext();
       console.log("🔍 Debug: Testing subscription endpoints", { userId: userId.substring(0, 8) + "...", orgId: orgId?.substring(0, 8) + "..." || "none" });
 
       const results: {

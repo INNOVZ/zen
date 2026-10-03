@@ -26,6 +26,24 @@ type I18nContextType = {
     dir: "ltr" | "rtl";
 };
 
+type TranslationNode = string | { [key: string]: TranslationNode };
+
+function resolveTranslation(
+    translation: unknown,
+    keys: string[]
+): TranslationNode | undefined {
+    let current = translation as TranslationNode;
+
+    for (const key of keys) {
+        if (typeof current !== "object" || current === null || !(key in current)) {
+            return undefined;
+        }
+        current = current[key];
+    }
+
+    return current;
+}
+
 const I18nContext = createContext<I18nContextType | undefined>(undefined);
 
 export function I18nProvider({ children }: { children: ReactNode }) {
@@ -70,25 +88,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
 
     const t = (key: string, params?: Record<string, string>): string => {
         const keys = key.split(".");
-        let value: any = LANGUAGES[language].translation;
-
-        for (const k of keys) {
-            if (value && typeof value === 'object' && k in value) {
-                value = value[k as keyof typeof value];
-            } else {
-                // Fallback to English if key missing
-                let fallbackValue: any = LANGUAGES["en"].translation;
-                for (const fk of keys) {
-                    if (fallbackValue && typeof fallbackValue === 'object' && fk in fallbackValue) {
-                        fallbackValue = fallbackValue[fk as keyof typeof fallbackValue];
-                    } else {
-                        return key; // Return key if not found in fallback either
-                    }
-                }
-                value = fallbackValue;
-                break; // Stop loop and use fallback found
-            }
-        }
+        const value =
+            resolveTranslation(LANGUAGES[language].translation, keys) ??
+            resolveTranslation(LANGUAGES.en.translation, keys);
 
         if (typeof value !== "string") return key;
 

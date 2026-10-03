@@ -39,7 +39,7 @@ const getMockOrganizationUpdateResponse = (
   }
 });
 
-function useDetachedModeFallback<T>(label: string, error: unknown, fallbackFactory: () => T): T {
+function getDetachedModeFallback<T>(label: string, error: unknown, fallbackFactory: () => T): T {
   if (!DETACHED_MODE) {
     throw error;
   }
@@ -70,7 +70,7 @@ export const organizationApi = {
 
           return data;
         } catch (error) {
-          const fallback = useDetachedModeFallback(
+          const fallback = getDetachedModeFallback(
             "Fetching organization info",
             error,
             getMockOrganizationInfo
@@ -123,7 +123,7 @@ export const organizationApi = {
         apiCache.deleteMatching("/api/org");
         return response as UpdateOrganizationResponse;
       } catch (orgError) {
-        return useDetachedModeFallback(
+        return getDetachedModeFallback(
           "Updating organization",
           orgError,
           () => getMockOrganizationUpdateResponse(request)

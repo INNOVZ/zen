@@ -89,7 +89,7 @@ export const DASHBOARD_CONFIG = {
   SKELETON_ITEMS_COUNT: 4,
   STATS_GRID_CLASSES: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6",
   QUICK_ACTIONS_GRID_CLASSES: "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4",
-  CONTAINER_CLASSES: "mx-auto p-3 ml-[5.3vw] bg-white/70 space-y-6 shadow-lg rounded-2xl",
+  CONTAINER_CLASSES: "lg:mx-auto lg:p-9 p-2 lg:ml-[5.3vw] bg-white/70 backdrop-blur-2xl bg-blend-multiply backdrop-sepia-20% space-y-6 rounded-2xl",
 } as const;
 
 // Dashboard Sections for better organization
@@ -106,6 +106,4 @@ export interface DashboardError {
   message: string;
   code?: string;
 }
-
-
 

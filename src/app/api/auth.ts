@@ -2,60 +2,105 @@
 import { createClient } from '@/lib/supabase/client'
 import { getApiBaseUrl } from '@/config/api';
 import { logger } from '@/utils/logger';
+import { isAuthSessionMissingError } from '@supabase/supabase-js';
+
+export class UnauthenticatedError extends Error {
+  constructor(message = "Not authenticated. Please log in again.") {
+    super(message);
+    this.name = "UnauthenticatedError";
+  }
+}
+
+export class AuthenticationUnavailableError extends Error {
+  constructor(message = "Authentication service is temporarily unavailable.") {
+    super(message);
+    this.name = "AuthenticationUnavailableError";
+  }
+}
+
+export const isUnauthenticatedError = (
+  error: unknown
+): error is UnauthenticatedError => error instanceof UnauthenticatedError;
 
 // Get token and user info from Supabase session
 export const getAuthInfo = async () => {
-  try {
-    const supabase = createClient();
+  const supabase = createClient();
+  const { data, error } = await supabase.auth.getSession();
 
-    const [
-      { data: userData, error: userError },
-      { data: sessionData, error: sessionError },
-    ] = await Promise.all([supabase.auth.getUser(), supabase.auth.getSession()]);
-
-    if (userError) {
-      console.warn("Auth user error:", userError);
-      throw new Error("Authentication error. Please log in again.");
+  if (error) {
+    if (isAuthSessionMissingError(error)) {
+      throw new UnauthenticatedError();
     }
-    if (sessionError) {
-      console.warn("Auth session error:", sessionError);
-    }
-
-    const token = sessionData.session?.access_token;
-    const userId = userData.user?.id;
-
-    if (!token || !userId) {
-      console.warn("No valid auth found - user not authenticated", {
-        hasToken: !!token,
-        hasUserId: !!userId,
-      });
-      throw new Error("Not authenticated. Please log in again.");
-    }
-    
-    // Fetch org_id from database instead of metadata
-    let orgId = null;
-    try {
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('org_id')
-        .eq('id', userId)
-        .single();
-      
-      if (userError) {
-        console.debug("Error fetching user org_id:", userError);
-      } else if (userData?.org_id) {
-        orgId = userData.org_id;
-        console.debug("Fetched org_id from database:", orgId);
-      }
-    } catch (error) {
-      console.debug("Failed to fetch org_id from database:", error);
-    }
-    
-    return { token, userId, orgId };
-  } catch (error) {
-    console.error("getAuthInfo failed:", error);
-    throw error;
+    throw new AuthenticationUnavailableError(error.message);
   }
+
+  const session = data.session;
+  if (!session?.access_token || !session.user?.id) {
+    throw new UnauthenticatedError();
+  }
+
+  return {
+    token: session.access_token,
+    userId: session.user.id,
+  };
+};
+
+export interface CurrentUserContext {
+  userId: string;
+  orgId?: string;
+}
+
+let cachedUserContext: CurrentUserContext | null = null;
+let userContextRequest: {
+  userId: string;
+  promise: Promise<CurrentUserContext>;
+} | null = null;
+let userContextGeneration = 0;
+
+export const clearCurrentUserContext = () => {
+  userContextGeneration += 1;
+  cachedUserContext = null;
+  userContextRequest = null;
+};
+
+export const getCurrentUserContext = async (): Promise<CurrentUserContext> => {
+  const { userId } = await getAuthInfo();
+
+  if (cachedUserContext?.userId === userId) {
+    return cachedUserContext;
+  }
+
+  if (userContextRequest?.userId === userId) {
+    return userContextRequest.promise;
+  }
+
+  const requestGeneration = userContextGeneration;
+  const requestPromise: Promise<CurrentUserContext> = fetchWithAuth("/api/auth/me")
+      .then((response) => {
+        const backendUser = response?.user;
+        const resolvedUserId = backendUser?.user_id;
+
+        if (!resolvedUserId || resolvedUserId !== userId) {
+          throw new Error("Backend authentication identity did not match the session");
+        }
+
+        const context = {
+          userId: resolvedUserId,
+          orgId: backendUser.user_data?.org_id || undefined,
+        };
+        if (requestGeneration === userContextGeneration) {
+          cachedUserContext = context;
+        }
+        return context;
+      })
+      .finally(() => {
+        if (userContextRequest?.promise === requestPromise) {
+          userContextRequest = null;
+        }
+      });
+  userContextRequest = { userId, promise: requestPromise };
+
+  return requestPromise;
 };
 
 
@@ -67,6 +112,30 @@ interface ApiError extends Error {
   url?: string;
   errorData?: unknown;
   errorText?: string;
+}
+
+export class ApiRequestError extends Error implements ApiError {
+  status: number;
+  statusText: string;
+  url: string;
+  errorData: unknown;
+  errorText: string;
+
+  constructor(
+    message: string,
+    response: Response,
+    url: string,
+    errorData: unknown,
+    errorText: string
+  ) {
+    super(message);
+    this.name = "ApiRequestError";
+    this.status = response.status;
+    this.statusText = response.statusText;
+    this.url = url;
+    this.errorData = errorData;
+    this.errorText = errorText;
+  }
 }
 
 /**
@@ -123,14 +192,12 @@ const extractErrorMessage = (value: unknown): string | null => {
 
 // Enhanced helper with better error handling and logging
 export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
-  const { token, userId, orgId } = await getAuthInfo();
+  const { token, userId } = await getAuthInfo();
 
   const headers = {
     "Content-Type": "application/json",
     "Authorization": `Bearer ${token}`,
-    "X-User-ID": userId,
     "X-Request-ID": `req-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-    ...(orgId && { "X-Org-ID": orgId }),
     ...options.headers,
   };
 
@@ -143,7 +210,6 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   }
   logger.apiRequest(requestId, options.method || "GET", fullUrl, { 
     userId: userId.substring(0, 8) + "...", 
-    orgId: orgId?.substring(0, 8) + "..." || "none",
   });
 
   const startTime = Date.now();
@@ -202,7 +268,12 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         method: errorInfo.method,
         status: errorInfo.status,
         statusText: errorInfo.statusText,
-        message: errorData?.message || errorText || errorInfo.statusText || 'Unknown error',
+        message:
+          extractErrorMessage(errorData?.detail) ||
+          extractErrorMessage(errorData?.message) ||
+          errorText ||
+          errorInfo.statusText ||
+          'Unknown error',
         timestamp: errorInfo.timestamp,
         fullErrorData: errorData,
         fullErrorText: errorText,
@@ -212,15 +283,21 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       // Reduce console noise for expected failures
       const isContextConfigEndpoint = url.includes('/context-config');
       const isOrganizationEndpoint = url.includes('/organization');
+      const isConversationEndpoint = url.includes('/chat/conversations/');
       const isIntegrationStatusEndpoint = url.includes('/integrations/status') || url.includes('/integrations/') && url.includes('/status');
       const isExpectedFailure = response.status === 404 && (isContextConfigEndpoint || isOrganizationEndpoint);
+      const isMissingConversation = response.status === 404 && isConversationEndpoint;
       const isIntegrationError = isIntegrationStatusEndpoint && (response.status === 404 || response.status === 500);
       
-      if (isExpectedFailure) {
-        console.debug(`📝 [${requestId}] Endpoint not available (expected in development):`, {
+      if (isExpectedFailure || isMissingConversation) {
+        console.debug(`📝 [${requestId}] API resource unavailable:`, {
           url: errorInfo.url,
           status: response.status,
-          endpoint: isContextConfigEndpoint ? 'context-config' : 'organization'
+          endpoint: isConversationEndpoint
+            ? 'conversation'
+            : isContextConfigEndpoint
+              ? 'context-config'
+              : 'organization'
         });
       } else if (isIntegrationError) {
         // Suppress integration status errors - they're handled gracefully by the frontend
@@ -230,46 +307,37 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
         });
       } else {
         console.error(`❌ [${requestId}] API Error:`, logError);
-        console.error(`💥 [${requestId}] Request failed:`, {
-          summary: `${errorInfo.method} ${errorInfo.url} -> ${errorInfo.status} ${errorInfo.statusText}`,
-          error: errorData?.message || errorText || 'No error details available',
-          responseHeaders: Object.fromEntries(response.headers.entries())
-        });
       }
       
+      const backendError =
+        extractErrorMessage(errorData?.detail) ||
+        extractErrorMessage(errorData?.message) ||
+        errorText;
+
+      let errorMessage =
+        backendError || response.statusText || `API error (${response.status})`;
+
       if (response.status === 401) {
-        throw new Error("Authentication expired. Please log in again.");
+        errorMessage = "Authentication expired. Please log in again.";
       } else if (response.status === 403) {
-        throw new Error("Access denied. Please check your permissions.");
-      } else if (response.status === 404) {
-        throw new Error(`API endpoint not found: ${url}`);
+        errorMessage = "Access denied. Please check your permissions.";
+      } else if (response.status === 404 && !backendError) {
+        errorMessage = `API endpoint not found: ${url}`;
       } else if (response.status === 429) {
-        throw new Error("Too many requests. Please try again later.");
-      } else if (response.status >= 500) {
-        // For 500 errors, try to extract the actual error message from the backend
-        const backendError = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText;
-        if (backendError && backendError !== 'No error text') {
-          throw new Error(backendError);
-        }
-        throw new Error("Server error. Please try again later.");
-      } else if (response.status === 400) {
-        // For 400 errors, show the detailed error message from backend
-        const backendError = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText;
-        if (backendError && backendError !== 'No error text') {
-          throw new Error(backendError);
-        }
-        throw new Error(`Bad request: ${errorText || response.statusText}`);
+        errorMessage = "Too many requests. Please try again later.";
+      } else if (response.status >= 500 && !backendError) {
+        errorMessage = "Server error. Please try again later.";
+      } else if (response.status === 400 && !backendError) {
+        errorMessage = `Bad request: ${response.statusText}`;
       }
-      
-      const errorMessage = extractErrorMessage(errorData?.detail) || extractErrorMessage(errorData?.message) || errorText || response.statusText || `API error (${response.status})`;
-      const enhancedError = new Error(errorMessage) as ApiError;
-      // Add additional context to the error
-      enhancedError.status = response.status;
-      enhancedError.statusText = response.statusText;
-      enhancedError.url = fullUrl;
-      enhancedError.errorData = errorData;
-      enhancedError.errorText = errorText;
-      throw enhancedError;
+
+      throw new ApiRequestError(
+        errorMessage,
+        response,
+        fullUrl,
+        errorData,
+        errorText
+      );
     }
 
     const responseText = await response.text();
@@ -313,6 +381,12 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
   } catch (error) {
     const responseTime = Date.now() - startTime;
     const isDevelopment = process.env.NODE_ENV === 'development';
+
+    // HTTP failures were already logged with their response metadata above.
+    // Preserve their status for callers and avoid classifying Error objects as empty.
+    if (error instanceof ApiRequestError) {
+      throw error;
+    }
     
     // Handle network errors with less verbose logging in development
     if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
@@ -357,8 +431,13 @@ export const fetchWithAuth = async (url: string, options: RequestInit = {}) => {
       responseTime: `${responseTime}ms`
     };
 
-    // Check if this is an empty error object (common issue)
-    if (error && typeof error === 'object' && Object.keys(error).length === 0) {
+    // A genuinely empty non-Error object can still indicate a malformed rejection.
+    if (
+      !(error instanceof Error) &&
+      error !== null &&
+      typeof error === 'object' &&
+      Object.keys(error).length === 0
+    ) {
       console.warn(`⚠️ [${requestId}] Empty error object detected - this might be a successful request with parsing issues`);
       console.warn(`⚠️ [${requestId}] Request details:`, {
         url: errorDetails.url,

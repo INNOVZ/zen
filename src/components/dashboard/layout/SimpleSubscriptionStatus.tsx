@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { useSubscription } from "@/contexts/SubscriptionContext";
+import { useSubscription } from "@/contexts/subscription-hooks";
 import { Zap, Calendar, AlertTriangle, Loader2, RefreshCw } from "lucide-react";
 import { useTranslation } from "@/contexts/I18nContext";
 
@@ -95,20 +95,7 @@ export const SimpleSubscriptionStatus: React.FC<
 
   return (
     <Card className={className}>
-      <CardHeader className="pb-3">
-        <CardTitle className="flex items-center justify-between text-lg">
-          <span className="flex items-center">
-            <Zap className="h-5 w-5 mr-2 text-blue-500" />
-            {t('subscription.status')}
-          </span>
-          {showRefreshButton && (
-            <RefreshCw
-              className="h-4 w-4 cursor-pointer hover:rotate-180 transition-transform text-gray-400"
-              onClick={refreshSubscription}
-            />
-          )}
-        </CardTitle>
-      </CardHeader>
+      
       <CardContent className="space-y-4">
         {/* Plan Information */}
         <div className="flex items-center justify-between">

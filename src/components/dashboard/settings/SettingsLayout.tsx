@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import Link from "next/link";
+import { useState, useCallback, useEffect } from "react";
 import { type UpdateOrganizationRequest } from "@/app/api/routes";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,25 +18,10 @@ import {
   Phone,
   Mail,
   Briefcase,
-  Calendar,
-  Database,
-  ShoppingCart,
-  Sheet,
-  MessageSquare,
+  ArrowRight,
+  Workflow,
 } from "lucide-react";
 import { useOrganizationInfo } from "@/hooks/useOrganizationInfo";
-import { useIntegrationStatuses } from "@/hooks/useIntegrationStatuses";
-import {
-  IntegrationCard,
-  type ConnectionStatus,
-} from "@/components/dashboard/integrations/IntegrationCard";
-import { INTEGRATION_IDS } from "@/constants/integrations";
-import GoogleCalendarIntegration from "@/components/dashboard/integrations/GoogleCalendarIntegration";
-import GoogleSheetsIntegration from "@/components/dashboard/integrations/GoogleSheetsIntegration";
-import CRMIntegration from "@/components/dashboard/integrations/CRMIntegration";
-import ShopifyIntegration from "@/components/dashboard/integrations/ShopifyIntegration";
-import LeadCaptureSettings from "@/components/dashboard/integrations/LeadCaptureSettings";
-import WhatsAppConfiguration from "@/components/dashboard/settings/WhatsAppConfiguration";
 import PasswordChange from "@/components/dashboard/settings/PasswordChange";
 import { useTranslation } from "@/contexts/I18nContext";
 
@@ -49,8 +35,6 @@ export default function SettingsLayout() {
     updateOrganization,
   } = useOrganizationInfo();
 
-  const { statuses: integrationStatuses } = useIntegrationStatuses();
-
   const [formData, setFormData] = useState<UpdateOrganizationRequest>({
     name: organizationInfo?.organization.name || "",
     email:
@@ -62,15 +46,8 @@ export default function SettingsLayout() {
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [openIntegrationModal, setOpenIntegrationModal] = useState<
-    string | null
-  >(null);
-  const [organizationPhone, setOrganizationPhone] = useState<string>(
-    organizationInfo?.organization.contact_phone || ""
-  );
-
   // Update form data when organization info loads
-  useMemo(() => {
+  useEffect(() => {
     if (organizationInfo) {
       setFormData({
         name: organizationInfo.organization.name || "",
@@ -81,7 +58,6 @@ export default function SettingsLayout() {
         contact_phone: organizationInfo.organization.contact_phone || "",
         business_type: organizationInfo.organization.business_type || "",
       });
-      setOrganizationPhone(organizationInfo.organization.contact_phone || "");
     }
   }, [organizationInfo]);
 
@@ -99,101 +75,6 @@ export default function SettingsLayout() {
       }
     },
     [formData, updateOrganization]
-  );
-
-  const handlePhoneNumberChange = useCallback((phone: string) => {
-    setOrganizationPhone(phone);
-  }, []);
-
-  const handleOpenIntegrationModal = useCallback(
-    (integrationId: string, open: boolean) => {
-      setOpenIntegrationModal(open ? integrationId : null);
-    },
-    []
-  );
-
-  // Define integrations configuration with connection status
-  const integrations = useMemo(
-    () => [
-      {
-        id: INTEGRATION_IDS.WHATSAPP,
-        title: "WhatsApp",
-        description: t("settings.whatsapp_desc"),
-        icon: MessageSquare,
-        iconColor: "text-green-600",
-        iconBgColor: "bg-green-100",
-        hoverBorderColor: "border-green-500",
-        connectionStatus:
-          integrationStatuses[INTEGRATION_IDS.WHATSAPP]?.status ||
-          ("not-configured" as ConnectionStatus),
-        component: (
-          <WhatsAppConfiguration
-            organizationPhone={organizationPhone}
-            onPhoneNumberChange={handlePhoneNumberChange}
-          />
-        ),
-      },
-      {
-        id: INTEGRATION_IDS.GOOGLE,
-        title: t("settings.google_services"),
-        description: t("settings.google_desc"),
-        icon: Calendar,
-        iconColor: "text-blue-600",
-        iconBgColor: "bg-blue-100",
-        hoverBorderColor: "border-blue-500",
-        connectionStatus:
-          integrationStatuses[INTEGRATION_IDS.GOOGLE]?.status ||
-          ("not-configured" as ConnectionStatus),
-        component: (
-          <div className="space-y-6">
-            <GoogleCalendarIntegration />
-            <div className="border-t pt-6">
-              <GoogleSheetsIntegration />
-            </div>
-          </div>
-        ),
-      },
-      {
-        id: INTEGRATION_IDS.CRM,
-        title: t("settings.crm"),
-        description: t("settings.crm_desc"),
-        icon: Database,
-        iconColor: "text-purple-600",
-        iconBgColor: "bg-purple-100",
-        hoverBorderColor: "border-purple-500",
-        connectionStatus:
-          integrationStatuses[INTEGRATION_IDS.CRM]?.status ||
-          ("not-configured" as ConnectionStatus),
-        component: <CRMIntegration />,
-      },
-      {
-        id: INTEGRATION_IDS.SHOPIFY,
-        title: t("settings.shopify"),
-        description: t("settings.shopify_desc"),
-        icon: ShoppingCart,
-        iconColor: "text-green-600",
-        iconBgColor: "bg-green-100",
-        hoverBorderColor: "border-green-500",
-        connectionStatus:
-          integrationStatuses[INTEGRATION_IDS.SHOPIFY]?.status ||
-          ("not-configured" as ConnectionStatus),
-        component: <ShopifyIntegration />,
-      },
-      {
-        id: INTEGRATION_IDS.LEAD_CAPTURE,
-        title: t("settings.lead_capture"),
-        description: t("settings.lead_capture_desc"),
-        icon: Sheet,
-        iconColor: "text-orange-600",
-        iconBgColor: "bg-orange-100",
-        hoverBorderColor: "border-orange-500",
-        connectionStatus:
-          integrationStatuses[INTEGRATION_IDS.LEAD_CAPTURE]?.status ||
-          ("not-configured" as ConnectionStatus),
-        component: <LeadCaptureSettings />,
-      },
-    ],
-    [organizationPhone, handlePhoneNumberChange, integrationStatuses, t]
   );
 
   if (!isMounted || isLoadingInfo) {
@@ -258,35 +139,24 @@ export default function SettingsLayout() {
       {/* Two Column Layout */}
       <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Left Column - Organization Management */}
+          {/* Agentic configuration lives in the unified Automations workspace. */}
           <div className="space-y-6">
             <Card className="border-0">
               <CardHeader>
-                <CardTitle>{t("settings.integrations")} </CardTitle>
+                <CardTitle className="flex items-center gap-2">
+                  <Workflow className="h-5 w-5 text-[#5d7dde]" />
+                  Automations & connections
+                </CardTitle>
                 <CardDescription>
-                  {t("settings.integrations_subtitle")}
+                  Integrations, MCP adapters, workflow routes and execution history now live in one governed workspace.
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {integrations.map((integration) => (
-                  <IntegrationCard
-                    key={integration.id}
-                    id={integration.id}
-                    title={integration.title}
-                    description={integration.description}
-                    icon={integration.icon}
-                    iconColor={integration.iconColor}
-                    iconBgColor={integration.iconBgColor}
-                    hoverBorderColor={integration.hoverBorderColor}
-                    connectionStatus={integration.connectionStatus}
-                    isOpen={openIntegrationModal === integration.id}
-                    onOpenChange={(open) =>
-                      handleOpenIntegrationModal(integration.id, open)
-                    }
-                  >
-                    {integration.component}
-                  </IntegrationCard>
-                ))}
+              <CardContent>
+                <Button asChild>
+                  <Link href="/dashboard/automations/connections">
+                    Open Automations <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
               </CardContent>
             </Card>
           </div>

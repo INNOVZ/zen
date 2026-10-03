@@ -1,16 +1,25 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTypeScript from "eslint-config-next/typescript";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
-
-const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
-];
-
-export default eslintConfig;
+export default defineConfig([
+  ...nextVitals,
+  ...nextTypeScript,
+  {
+    // React Hooks 7 enables compiler-oriented rules that expose existing
+    // refactor work. Keep them visible during the Next 16 migration without
+    // blocking the correctness/security gate until each flow is covered.
+    rules: {
+      "react-hooks/immutability": "warn",
+      "react-hooks/set-state-in-effect": "warn",
+      "react-hooks/set-state-in-render": "warn",
+    },
+  },
+  globalIgnores([
+    ".next/**",
+    "coverage/**",
+    "node_modules/**",
+    "playwright-report/**",
+    "test-results/**",
+  ]),
+]);

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { supabase } from "@/lib/supabase";
 import axios, { AxiosError } from "axios";
+import { getAuthInfo } from "@/app/api/auth";
 import { getApiBaseUrl } from "@/config/api";
 import {
   Upload,
@@ -11,6 +11,7 @@ import {
   AlertCircle,
   CheckCircle,
   Clock,
+  FolderUp,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,13 +47,8 @@ export default function IngestPage() {
   const [loadingMessage, setLoadingMessage] = useState(t("common.loading"));
 
   const getAuthHeaders = async () => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-    if (!session?.access_token) {
-      throw new Error("Not authenticated. Please log in again.");
-    }
-    return { Authorization: `Bearer ${session.access_token}` };
+    const { token } = await getAuthInfo();
+    return { Authorization: `Bearer ${token}` };
   };
 
   const handleSubmit = async () => {
@@ -300,13 +296,13 @@ export default function IngestPage() {
   }
 
   return (
-    <div className="mx-auto ml-[5.3vw] bg-white/80 rounded-xl p-8">
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2 space-y-6">
+    <div className="mx-auto ml-[5.3vw] rounded-xl p-8">
+      <div className="grid grid-cols-3 xl:grid-cols-3 gap-6">
+        <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Upload className="h-5 w-5" />
+                <FolderUp className="h-5 w-5" />
                 {t("train.data_ingestion")}
               </CardTitle>
             </CardHeader>
@@ -510,9 +506,32 @@ export default function IngestPage() {
                   {status}
                 </div>
               )}
+              <CardTitle className="text-lg flex items-center gap-2">
+                {t("train.upload_guidelines")}
+              </CardTitle>
+              <ul className="text-sm text-gray-600 space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-600">•</span>
+                  {t("train.pdf_size")}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-600">•</span>
+                  {t("train.json_structured")}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-600">•</span>
+                  {t("train.urls_scraping")}
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-cyan-600">•</span>
+                  {t("train.recursive_scraping")}
+                </li>
+              </ul>
             </CardContent>
           </Card>
+        </div>
 
+        <div className="grid col-span-2 space-y-6">
           <Card>
             <CardHeader>
               <div className="flex justify-between items-center">
@@ -623,36 +642,6 @@ export default function IngestPage() {
                   </table>
                 </div>
               )}
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-6">
-          <Card className="bg-linear-to-r/shorter from-indigo-100 to-blue-100 py-4">
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                {t("train.upload_guidelines")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="text-sm text-gray-600 space-y-2">
-                <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>
-                  {t("train.pdf_size")}
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>
-                  {t("train.json_structured")}
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>
-                  {t("train.urls_scraping")}
-                </li>
-                <li className="flex items-start gap-2">
-                  <span className="text-cyan-600">•</span>
-                  {t("train.recursive_scraping")}
-                </li>
-              </ul>
             </CardContent>
           </Card>
         </div>

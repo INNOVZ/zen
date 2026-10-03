@@ -1,6 +1,10 @@
 // Enhanced Chat & Conversations API
-import type { ConversationInfo } from "@/types";
-import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
+import type { ConversationInfo, ConversationWithMessages } from "@/types";
+import {
+  fetchWithAuth,
+  getAuthInfo,
+  getCurrentUserContext,
+} from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { getApiBaseUrl } from "@/config/api";
 import type {
@@ -118,6 +122,63 @@ export const conversationApi = {
     }
   },
 
+  /**
+   * Get conversations with pagination support
+   */
+  getConversationsPaginated: async (
+    page: number = 1,
+    pageSize: number = 20
+  ): Promise<{
+    conversations: ConversationInfo[];
+    total: number;
+    page: number;
+    pageSize: number;
+  }> => {
+    try {
+      const data = await fetchWithAuth(
+        `/api/chat/conversations?page=${page}&page_size=${pageSize}`
+      );
+      return {
+        conversations: data.conversations || data || [],
+        total: data.pagination?.total_items || (data.conversations || data || []).length,
+        page: data.pagination?.page || page,
+        pageSize: data.pagination?.page_size || pageSize,
+      };
+    } catch (error) {
+      console.error("Error fetching paginated conversations:", error);
+      throw error;
+    }
+  },
+
+  /**
+   * Get full details of a specific conversation including messages
+   */
+  getConversationDetails: async (
+    conversationId: string
+  ): Promise<ConversationWithMessages> => {
+    return fetchWithAuth(`/api/chat/conversations/${conversationId}`);
+  },
+
+  /**
+   * Delete a conversation by ID
+   */
+  deleteConversation: async (
+    conversationId: string
+  ): Promise<{ deleted: boolean }> => {
+    try {
+      const response = await fetchWithAuth(
+        `/api/chat/conversations/${conversationId}`,
+        {
+          method: "DELETE",
+        }
+      );
+      return response;
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
+      throw error;
+    }
+  },
+
   addFeedback: async (
     feedbackRequest: FeedbackRequest
   ): Promise<{ success: boolean; message?: string }> => {
@@ -140,13 +201,11 @@ export const conversationApi = {
   } | null> => {
     try {
       // Use a more targeted approach to avoid console noise
-      const { token, userId, orgId } = await getAuthInfo();
+      const { token } = await getAuthInfo();
 
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "X-User-ID": userId,
-        ...(orgId && { "X-Org-ID": orgId }),
       };
 
       const response = await fetch(
@@ -184,6 +243,11 @@ export const conversationApi = {
     // Additional validation to prevent server errors
     const sanitizedUpdates = Object.fromEntries(
       Object.entries(updates).filter(([key, value]) => {
+        // Tenant and user identity are derived from the validated bearer token.
+        if (key === "org_id" || key === "user_id") {
+          return false;
+        }
+
         // Remove undefined values that might cause server issues
         if (value === undefined) {
           console.debug(`⚠️ Removing undefined value for key: ${key}`);
@@ -207,13 +271,11 @@ export const conversationApi = {
       );
 
       // Use direct fetch to avoid excessive logging for expected failures
-      const { token, userId, orgId } = await getAuthInfo();
+      const { token } = await getAuthInfo();
 
       const headers = {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
-        "X-User-ID": userId,
-        ...(orgId && { "X-Org-ID": orgId }),
       };
 
       const response = await fetch(`${getApiBaseUrl()}/api/chat/context-config`, {
@@ -496,12 +558,10 @@ export const conversationApi = {
   // ==========================================
 
   getAuthHeaders: async (): Promise<Record<string, string>> => {
-    const { token, userId, orgId } = await getAuthInfo();
+    const { token } = await getAuthInfo();
     return {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
-      "X-User-ID": userId,
-      ...(orgId && { "X-Org-ID": orgId }),
     };
   },
 
@@ -532,7 +592,7 @@ export const conversationApi = {
     isAuthenticated: boolean;
   }> => {
     try {
-      const { userId, orgId } = await getAuthInfo();
+      const { userId, orgId } = await getCurrentUserContext();
       return {
         userId,
         orgId,

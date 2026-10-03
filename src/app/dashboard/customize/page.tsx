@@ -22,12 +22,13 @@ import {
   Wifi,
   RefreshCw,
   RotateCcw,
+  ChevronLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuthGuard";
 import { useCustomizeStore } from "@/stores/customizeStore";
 import { chatbotApi } from "@/app/api/routes";
-import type { ChatbotInfo } from "@/types";
+import { DASHBOARD_CONFIG, type ChatbotInfo } from "@/types";
 import ChatbotConfiguration from "@/components/dashboard/customize/ChatbotConfiguration";
 import { useTranslation } from "@/contexts/I18nContext";
 
@@ -38,10 +39,11 @@ export default function EnhancedCustomizePage() {
   const { t, language } = useTranslation();
 
   const { isLoading: authLoading, user: authUser } = useAuth();
+  const userId = authUser?.id;
 
   const [retryCount, setRetryCount] = useState(0);
   const [lastConnectionCheck, setLastConnectionCheck] = useState<Date | null>(
-    null
+    null,
   );
 
   const {
@@ -78,7 +80,7 @@ export default function EnhancedCustomizePage() {
         toast.error("Failed to load chatbot configuration");
       }
     },
-    [setSelectedChatbot]
+    [setSelectedChatbot],
   );
 
   const checkConnection = useCallback(async () => {
@@ -97,11 +99,15 @@ export default function EnhancedCustomizePage() {
     }
   }, [testConnection, retryCount, setError]);
 
+  // Keep user details current without reinitializing on token refresh.
+  useEffect(() => {
+    setCurrentUser(authUser);
+  }, [authUser, setCurrentUser]);
+
   const initializePage = useCallback(async () => {
-    if (!authUser) return;
+    if (!userId) return;
 
     try {
-      setCurrentUser(authUser);
       try {
         await initializeStore();
       } catch (storeError) {
@@ -115,13 +121,12 @@ export default function EnhancedCustomizePage() {
     } catch (error) {
       console.error("Error initializing page:", error);
       setError(
-        "Failed to initialize the application. Please refresh the page."
+        "Failed to initialize the application. Please refresh the page.",
       );
     }
   }, [
-    authUser,
+    userId,
     initializeStore,
-    setCurrentUser,
     setIsEditMode,
     chatbotId,
     loadSpecificChatbot,
@@ -129,9 +134,9 @@ export default function EnhancedCustomizePage() {
   ]);
 
   useEffect(() => {
-    if (authLoading || !authUser) return;
+    if (authLoading || !userId) return;
     initializePage();
-  }, [authLoading, authUser, initializePage]);
+  }, [authLoading, userId, initializePage]);
 
   useEffect(() => {
     if (connectionStatus === "disconnected") {
@@ -156,11 +161,11 @@ export default function EnhancedCustomizePage() {
 
   const handleDeleteChatbot = async (
     chatbotId: string,
-    chatbotName: string
+    chatbotName: string,
   ) => {
     if (
       !confirm(
-        `Are you sure you want to delete "${chatbotName}"? This action cannot be undone.`
+        `Are you sure you want to delete "${chatbotName}"? This action cannot be undone.`,
       )
     )
       return;
@@ -213,7 +218,7 @@ export default function EnhancedCustomizePage() {
 
   if (loading) {
     return (
-      <div className="container mx-auto w-full max-w-7xl px-4 py-8">
+      <div className={DASHBOARD_CONFIG.CONTAINER_CLASSES}>
         <div className="animate-pulse space-y-6">
           <div className="h-8 bg-gray-200 rounded w-1/3"></div>
           <div className="h-96 bg-gray-200 rounded"></div>
@@ -223,16 +228,18 @@ export default function EnhancedCustomizePage() {
   }
 
   return (
-    <div className="mx-auto ml-[5.3vw] overflow-y-scroll bg-white/80 rounded-xl p-4">
+    <div className={DASHBOARD_CONFIG.CONTAINER_CLASSES}>
       {connectionStatus === "disconnected" && (
         <Alert className="mb-6 border-red-200 bg-red-50">
           <WifiOff className="h-4 w-4 text-red-600" />
           <AlertDescription className="flex items-center justify-between">
             <div>
-              <strong>{t("dashboard.connection_lost")}:</strong> {t("dashboard.unable_connect")}
+              <strong>{t("dashboard.connection_lost")}:</strong>{" "}
+              {t("dashboard.unable_connect")}
               {lastConnectionCheck && (
                 <span className="text-sm text-red-600 ml-2">
-                  {t("dashboard.last_checked")} {lastConnectionCheck.toLocaleTimeString(language)}
+                  {t("dashboard.last_checked")}{" "}
+                  {lastConnectionCheck.toLocaleTimeString(language)}
                 </span>
               )}
             </div>
@@ -287,11 +294,13 @@ export default function EnhancedCustomizePage() {
         </Alert>
       )}
 
-      <div className="pb-3">
+      <div className="">
         <div className="flex pb-3 items-center justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <h1 className="font text-3xl font-bold">{t("dashboard.welcome_title")}</h1>
+              <h1 className="text-3xl text-black font-bold">
+                {t("dashboard.welcome_title")}
+              </h1>
               {connectionStatus === "connected" && (
                 <div className="flex items-center gap-1 text-green-600">
                   <Wifi className="w-4 h-4" />
@@ -299,9 +308,6 @@ export default function EnhancedCustomizePage() {
                 </div>
               )}
             </div>
-            <p className="text-gray-600 mt-1">
-              {t("dashboard.welcome_subtitle")}
-            </p>
           </div>
           <Button
             onClick={handleCreateNew}
@@ -314,26 +320,34 @@ export default function EnhancedCustomizePage() {
         </div>
 
         {orgChatbots.length > 0 && !showCreateForm && (
-          <Card className="mb-6 border-1 bg-white">
-            <CardHeader>
-              <CardTitle className="font text-lg flex items-center gap-2">
-                <Bot className="font w-5 h-5" />
-                {t("dashboard.your_chatbots")}
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <div className="mb-6">
+            <div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {orgChatbots.map((chatbot) => (
                   <div
                     key={chatbot.id}
-                    className={`p-4 border rounded-lg cursor-pointer transition-all hover:shadow-md ${selectedChatbot?.id === chatbot.id
+                    className={`p-4 border bg-white rounded-lg cursor-pointer transition-all hover:shadow-md ${
+                      selectedChatbot?.id === chatbot.id
                         ? "border-blue-500 bg-blue-50"
                         : "border-gray-200 hover:border-gray-300"
-                      }`}
+                    }`}
+                    style={{
+                      boxShadow:
+                        selectedChatbot?.id === chatbot.id
+                          ? `0 0 3px ${chatbot.color_hex || "#3B82F6"}`
+                          : "none",
+                    }}
                     onClick={() => handleChatbotSelect(chatbot)}
                   >
-                    <div className="flex items-start justify-between mb-2">
-                      <h3 className="font-medium truncate">{chatbot.name}</h3>
+                    <div className="flex items-start justify-between mb-2 ">
+                      <h3
+                        className="font-medium truncate"
+                        style={{
+                          color: chatbot.color_hex || "#3B82F6",
+                        }}
+                      >
+                        {chatbot.name}
+                      </h3>
                       <Badge
                         variant={
                           chatbot.status === "active" ? "default" : "secondary"
@@ -366,7 +380,7 @@ export default function EnhancedCustomizePage() {
                             e.stopPropagation();
                             window.open(
                               `/dashboard/chat?chatbot=${chatbot.id}`,
-                              "_blank"
+                              "_blank",
                             );
                           }}
                           title={t("dashboard.test_chat")}
@@ -395,18 +409,18 @@ export default function EnhancedCustomizePage() {
                   </div>
                 ))}
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         )}
 
         {orgChatbots.length === 0 && !loading && (
           <Card className="mb-6 border-dashed border-2">
             <CardContent className="text-center py-12">
               <Bot className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium mb-2">{t("dashboard.no_chatbots")}</h3>
-              <p className="font mb-4">
-                {t("dashboard.no_chatbots_desc")}
-              </p>
+              <h3 className="text-lg font-medium mb-2">
+                {t("dashboard.no_chatbots")}
+              </h3>
+              <p className="font mb-4">{t("dashboard.no_chatbots_desc")}</p>
               <Button
                 onClick={handleCreateNew}
                 className="flex items-center gap-2"
@@ -434,14 +448,16 @@ export default function EnhancedCustomizePage() {
                   }}
                   className="pointer flex items-center gap-2 hover:bg-[#5D7DDE] hover:text-white"
                 >
-                  <ArrowLeft className="w-4 h-4" />
+                  <ChevronLeft className="w-4 h-4" />
                   {t("dashboard.back_to_list")}
                 </Button>
               )}
               <h2 className="text-2xl font-bold">
                 {showCreateForm
                   ? t("dashboard.create_chatbot")
-                  : t("dashboard.edit_chatbot", { name: selectedChatbot?.name || "" })}
+                  : t("dashboard.edit_chatbot", {
+                      name: selectedChatbot?.name || "",
+                    })}
               </h2>
             </div>
 
@@ -452,7 +468,7 @@ export default function EnhancedCustomizePage() {
                   onClick={() =>
                     window.open(
                       `/dashboard/chat?chatbot=${selectedChatbot.id}`,
-                      "_blank"
+                      "_blank",
                     )
                   }
                   className="flex items-center gap-2"
@@ -465,7 +481,7 @@ export default function EnhancedCustomizePage() {
                   onClick={() =>
                     handleDeleteChatbot(
                       selectedChatbot.id,
-                      selectedChatbot.name
+                      selectedChatbot.name,
                     )
                   }
                   disabled={deletingChatbotId === selectedChatbot.id}
@@ -544,13 +560,17 @@ export default function EnhancedCustomizePage() {
                 <CardContent>
                   <div className="space-y-3">
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">{t("dashboard.model_tier")}</span>
+                      <span className="text-sm text-gray-600">
+                        {t("dashboard.model_tier")}
+                      </span>
                       <Badge variant="secondary" className="capitalize">
                         {contextConfig.model_tier}
                       </Badge>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-gray-600">{t("dashboard.strategy")}</span>
+                      <span className="text-sm text-gray-600">
+                        {t("dashboard.strategy")}
+                      </span>
                       <Badge variant="outline" className="capitalize">
                         {contextConfig.retrieval_strategy}
                       </Badge>
@@ -607,7 +627,9 @@ export default function EnhancedCustomizePage() {
       {showEmbedModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4">
-            <h3 className="text-lg font-semibold mb-4">{t("dashboard.embed_modal_title")}</h3>
+            <h3 className="text-lg font-semibold mb-4">
+              {t("dashboard.embed_modal_title")}
+            </h3>
             <p className="text-sm text-gray-600 mb-3">
               {t("dashboard.embed_modal_desc")}
             </p>

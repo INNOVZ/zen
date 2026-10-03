@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from 'react';
-import { useSubscription } from '@/contexts/SubscriptionContext';
+import { useSubscription } from '@/contexts/subscription-hooks';
 import { subscriptionApi } from '@/app/api/subscription';
 
 interface TokenError {

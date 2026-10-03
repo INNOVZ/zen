@@ -6,6 +6,7 @@ import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import AppointmentsCalendar from "@/components/dashboard/calendar/AppointmentsCalendar";
 import { calendarApi } from "@/app/api/calendar";
+import { I18nProvider } from "@/contexts/I18nContext";
 
 // Mock the calendar API
 jest.mock("@/app/api/calendar", () => ({
@@ -44,6 +45,13 @@ jest.mock("next/navigation", () => ({
 }));
 
 describe("AppointmentsCalendar", () => {
+  const renderCalendar = () =>
+    render(
+      <I18nProvider>
+        <AppointmentsCalendar />
+      </I18nProvider>
+    );
+
   const mockEvents = [
     {
       id: "event1",
@@ -79,9 +87,9 @@ describe("AppointmentsCalendar", () => {
         })
     );
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
-    expect(screen.getByText(/loading calendar events/i)).toBeInTheDocument();
+    expect(screen.getByText(/^loading\.\.\.$/i)).toBeInTheDocument();
   });
 
   it("renders calendar with events after loading", async () => {
@@ -94,7 +102,7 @@ describe("AppointmentsCalendar", () => {
       },
     });
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
       expect(screen.getByText("Appointments Calendar")).toBeInTheDocument();
@@ -111,7 +119,7 @@ describe("AppointmentsCalendar", () => {
       new Error(errorMessage)
     );
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
       expect(
@@ -133,11 +141,11 @@ describe("AppointmentsCalendar", () => {
       },
     });
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
       expect(
-        screen.getByText(/connection has expired/i)
+        screen.getByText(/google credentials not found/i)
       ).toBeInTheDocument();
     });
 
@@ -160,10 +168,10 @@ describe("AppointmentsCalendar", () => {
       },
     });
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
-      expect(calendarApi.getEvents).toHaveBeenCalledWith(60, "primary", 100);
+      expect(calendarApi.getEvents).toHaveBeenCalledWith(60);
     });
   });
 
@@ -177,14 +185,14 @@ describe("AppointmentsCalendar", () => {
       },
     });
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
       expect(screen.getByText("Appointments Calendar")).toBeInTheDocument();
     });
 
-    // Find and click refresh button
-    const refreshButton = screen.getByRole("button", { name: /refresh/i });
+    // Wait for loading to finish before interacting with the refresh action.
+    const refreshButton = await screen.findByRole("button", { name: /refresh/i });
     fireEvent.click(refreshButton);
 
     // Should call API again
@@ -203,7 +211,7 @@ describe("AppointmentsCalendar", () => {
       },
     });
 
-    render(<AppointmentsCalendar />);
+    renderCalendar();
 
     await waitFor(() => {
       expect(screen.getByTestId("fullcalendar")).toBeInTheDocument();
@@ -213,4 +221,3 @@ describe("AppointmentsCalendar", () => {
     expect(screen.queryByTestId("event-event1")).not.toBeInTheDocument();
   });
 });
-

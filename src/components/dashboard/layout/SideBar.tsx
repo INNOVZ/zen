@@ -1,89 +1,77 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home,
-  Settings,
-  Brain,
   ChevronLeft,
   ChevronRight,
   User,
-  Users,
-  Calendar,
+  Home,
+  Settings,
+  Brain,
+  Workflow,
 } from "lucide-react";
+import { RiRobot3Line } from "react-icons/ri";
 import { RiLogoutCircleLine } from "react-icons/ri";
 
-import { RiRobot3Line } from "react-icons/ri";
-import { supabase } from "@/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import type { User as SupabaseUser } from "@supabase/supabase-js";
 import { getUserDisplayName } from "@/utils/userUtils";
 import { SimpleSubscriptionStatus } from "@/components/dashboard/layout/SimpleSubscriptionStatus";
 import { useTranslation } from "@/contexts/I18nContext";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { useAuth } from "@/hooks/useAuthGuard";
 
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(true);
-  const [user, setUser] = useState<SupabaseUser | null>(null);
+  const { signOut, user } = useAuth();
   const pathname = usePathname() ?? "";
+  const automationsEnabled =
+    process.env.NEXT_PUBLIC_AUTOMATION_ADMIN_ENABLED === "true";
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data: userData } = await supabase.auth.getUser();
-      if (userData?.user) {
-        setUser(userData.user);
-      }
-    };
-    getUser();
-  }, []);
-
-  /* eslint-disable react-hooks/exhaustive-deps */
   const { t } = useTranslation();
 
-  // Menu items with simple paths - no userId needed
+  // Sidebar-only menu items (page nav items moved to FloatingDock)
   const menuItems = [
     {
       title: t("sidebar.dashboard"),
-      icon: <Home size={16} />,
+      icon: <Home size={20} strokeWidth={1.8} />,
       path: "/dashboard",
     },
     {
       title: t("sidebar.train"),
-      icon: <Brain size={16} />,
+      icon: <Brain size={20} strokeWidth={1.8} />,
       path: "/dashboard/train",
     },
     {
       title: t("sidebar.customize"),
-      icon: <RiRobot3Line size={16} />,
+      icon: <RiRobot3Line size={20} />,
       path: "/dashboard/customize",
     },
-    {
-      title: t("sidebar.leads"),
-      icon: <Users size={16} />,
-      path: "/dashboard/leads",
-    },
-    {
-      title: t("sidebar.calendar"),
-      icon: <Calendar size={16} />,
-      path: "/dashboard/calendar",
-    },
+    ...(automationsEnabled
+      ? [
+          {
+            title: "Automations",
+            icon: <Workflow size={20} strokeWidth={1.8} />,
+            path: "/dashboard/automations",
+          },
+        ]
+      : []),
     {
       title: t("sidebar.settings"),
-      icon: <Settings size={16} />,
+      icon: <Settings size={20} strokeWidth={1.8} />,
       path: "/dashboard/settings",
     },
+    
   ];
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error logging out");
-    } else {
+    try {
+      await signOut();
       toast.success("Logged out successfully");
-      window.location.href = "/auth/login";
+    } catch {
+      toast.error("Error logging out");
     }
   };
 
@@ -128,7 +116,9 @@ const Sidebar = () => {
             if (item.path === "/dashboard") {
               isActive = normalizedPathname === "/dashboard";
             } else {
-              isActive = normalizedPathname === normalizedItemPath;
+              isActive =
+                normalizedPathname === normalizedItemPath ||
+                normalizedPathname.startsWith(`${normalizedItemPath}/`);
             }
 
             return (
@@ -159,7 +149,7 @@ const Sidebar = () => {
       </nav>
 
       {!isCollapsed && (
-        <div className="p-4 border-t border-gray-700 space-y-4">
+        <div className="p-4  space-y-4">
           {/* Subscription Status Widget */}
           <SimpleSubscriptionStatus showRefreshButton={false} />
 

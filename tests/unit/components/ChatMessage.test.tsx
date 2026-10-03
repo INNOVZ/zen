@@ -30,7 +30,9 @@ describe('ChatMessage Component', () => {
   it('should display sources when provided', () => {
     render(<ChatMessage {...mockProps} sources={['doc1.pdf', 'doc2.pdf']} />);
 
-    expect(screen.getByText(/Sources: 2 document\(s\)/)).toBeInTheDocument();
+    expect(screen.getByText("Sources:")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "doc1.pdf" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "doc2.pdf" })).toBeInTheDocument();
   });
 
   it('should render buttons when provided', () => {
@@ -115,4 +117,3 @@ describe('ChatMessage Component', () => {
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });
-

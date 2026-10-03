@@ -114,6 +114,10 @@ export function useConnectionErrorHandler() {
         return "An unexpected error occurred";
       }
 
+      if (error.message.toLowerCase().includes("timeout")) {
+        return "The server is taking longer than expected. Please try again.";
+      }
+
       console.log("Processing error in getErrorMessage:", {
         message: error.message,
         name: error.name,
@@ -136,10 +140,6 @@ export function useConnectionErrorHandler() {
         error.message.includes("Unauthorized")
       ) {
         return "You don't have permission to perform this action.";
-      }
-
-      if (error.message.includes("timeout")) {
-        return "The request timed out. Please try again.";
       }
 
       if (error.message.includes("Invalid response format")) {

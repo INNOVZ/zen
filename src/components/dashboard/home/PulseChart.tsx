@@ -68,7 +68,7 @@ export function ModernPulseChart({ intentAnalytics }: ModernPulseChartProps) {
           </div>
         </div>
       </CardHeader>
-      <CardContent className="p-6">
+      <CardContent className="p-2">
         <div className="h-[350px] w-full">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart

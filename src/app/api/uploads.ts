@@ -56,19 +56,14 @@ export const uploadsApi = {
   },
 
   uploadFile: async (file: File, type: string): Promise<UploadFile> => {
-    const { token, userId, orgId } = await getAuthInfo();
+    const { token } = await getAuthInfo();
 
     const formData = new FormData();
     formData.append("file", file);
 
     const headers: Record<string, string> = {
       Authorization: `Bearer ${token}`,
-      "X-User-ID": userId,
     };
-
-    if (orgId) {
-      headers["X-Org-ID"] = orgId;
-    }
 
     console.log(
       `📤 Uploading file: ${file.name} (${file.size} bytes) as ${type}`

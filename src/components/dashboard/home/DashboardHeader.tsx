@@ -19,19 +19,18 @@ export function DashboardHeader({
   const { t } = useTranslation();
 
   return (
-    <header className="flex justify-between lg:flex-row flex-col items-center bg-[#5d7dde] p-8 rounded-2xl">
+    <header className="flex justify-between lg:flex-row flex-col items-center p-2">
       <div>
-        <h1 className="text-3xl text-white font-bold">
+        <h1 className="text-3xl text-black font-bold">
           {t("dashboard.welcome_user", { name: firstName })}
         </h1>
-        <p className="text-white mt-1">{t("dashboard.welcome_subtitle")}</p>
       </div>
       <div
         className="flex gap-2 mt-5 lg:mt-0"
         role="group"
         aria-label="Primary actions"
       >
-        <Button
+        {/* <Button
           onClick={onTrainClick}
           variant="outline"
           className="pointer flex items-center gap-2"
@@ -47,7 +46,7 @@ export function DashboardHeader({
         >
           <Plus className="h-4 w-4" aria-hidden="true" />
           {t("dashboard.create_chatbot")}
-        </Button>
+        </Button> */}
       </div>
     </header>
   );

@@ -9,7 +9,9 @@ interface PendingRequest {
   expiresAt: number;
 }
 const pendingRequests = new Map<string, PendingRequest>();
-const DEDUP_TIMEOUT = 5000; // 5 seconds
+// Keep one slow request shared for as long as the standard API timeout window.
+// A shorter window allowed a second request to start while the first was still pending.
+const DEDUP_TIMEOUT = 30_000;
 
 export const apiUtils = {
   formatError: (error: unknown): string => {

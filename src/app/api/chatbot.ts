@@ -1,8 +1,10 @@
 // Chatbot Management API
 import type { ChatbotInfo } from "./types/index";
-import { fetchWithAuth, getAuthInfo } from "@/app/api/auth";
+import { fetchWithAuth, getCurrentUserContext } from "@/app/api/auth";
 import { apiCache, createCacheKey } from "@/utils/cache";
 import { apiUtils } from "@/app/api/utils";
+
+const CHATBOT_REQUEST_TIMEOUT_MS = 30_000;
 
 export const chatbotApi = {
   // ==========================================
@@ -22,14 +24,18 @@ export const chatbotApi = {
       try {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => {
-          controller.abort(new Error("Request timeout after 10 seconds"));
-        }, 10000);
+          controller.abort(new Error("Request timeout after 30 seconds"));
+        }, CHATBOT_REQUEST_TIMEOUT_MS);
 
-        const data = await fetchWithAuth("/api/chat/chatbots", {
-          signal: controller.signal,
-        });
-
-        clearTimeout(timeoutId);
+        const data = await (async () => {
+          try {
+            return await fetchWithAuth("/api/chat/chatbots", {
+              signal: controller.signal,
+            });
+          } finally {
+            clearTimeout(timeoutId);
+          }
+        })();
         const result = data.chatbots || data || [];
 
         // Cache for 2 minutes
@@ -54,16 +60,17 @@ export const chatbotApi = {
   },
 
   createChatbot: async (config: ChatbotInfo): Promise<ChatbotInfo> => {
-    const { userId, orgId } = await getAuthInfo();
+    const { userId, orgId } = await getCurrentUserContext();
 
-    // Ensure org_id is always present - use a default if not set
-    const finalOrgId = orgId || `user_${userId}_org`;
+    if (!orgId) {
+      throw new Error("An organization membership is required to create a chatbot");
+    }
 
     // Map frontend ai_model_config to backend model_config format
     const backendConfig: Required<ChatbotInfo> = {
       ...config,
       user_id: userId,
-      org_id: finalOrgId,
+      org_id: orgId,
     } as Required<ChatbotInfo>;
 
     // Map ai_model_config to what backend expects
@@ -75,7 +82,7 @@ export const chatbotApi = {
     console.log("🤖 Creating chatbot with config:", {
       ...backendConfig,
       user_id: userId.substring(0, 8) + "...",
-      org_id: finalOrgId.substring(0, 12) + "...",
+      org_id: orgId.substring(0, 12) + "...",
     });
 
     const response = await fetchWithAuth("/api/chat/chatbots", {

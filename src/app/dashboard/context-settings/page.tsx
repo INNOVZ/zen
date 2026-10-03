@@ -18,6 +18,7 @@ import { useAuth } from "@/hooks/useAuthGuard";
 
 export default function AIConfigurationPage() {
   const { user: authUser, isLoading: isAuthLoading } = useAuth();
+  const userId = authUser?.id;
   const [loading, setLoading] = useState(true);
   const [retryCount, setRetryCount] = useState(0);
 
@@ -49,12 +50,16 @@ export default function AIConfigurationPage() {
     }
   }, [testConnection, retryCount, setError]);
 
+  // Keep user details current without reinitializing on token refresh.
+  useEffect(() => {
+    setCurrentUser(authUser);
+  }, [authUser, setCurrentUser]);
+
   const initializePage = useCallback(async () => {
-    if (!authUser) return;
+    if (!userId) return;
 
     try {
       setLoading(true);
-      setCurrentUser(authUser);
 
       try {
         await initializeStore();
@@ -74,10 +79,10 @@ export default function AIConfigurationPage() {
     } finally {
       setLoading(false);
     }
-  }, [authUser, initializeStore, setCurrentUser, setError, loadContextConfig]);
+  }, [userId, initializeStore, setError, loadContextConfig]);
 
   useEffect(() => {
-    if (isAuthLoading || !authUser) return;
+    if (isAuthLoading || !userId) return;
 
     let mounted = true;
 
@@ -96,7 +101,7 @@ export default function AIConfigurationPage() {
     return () => {
       mounted = false;
     };
-  }, [isAuthLoading, authUser, initializePage]);
+  }, [isAuthLoading, userId, initializePage]);
 
   useEffect(() => {
     if (connectionStatus === "disconnected") {

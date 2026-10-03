@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Settings, Brain, LogOut, Users, Menu, X } from "lucide-react";
+import { Home, Settings, Brain, LogOut, Users, Menu, X, Workflow, MessageSquare } from "lucide-react";
 import { RiRobot3Line } from "react-icons/ri";
-import { supabase } from "@/lib/supabase";
 import { toast } from "sonner";
+import { useAuth } from "@/hooks/useAuthGuard";
 
 const MobileBottomMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { signOut } = useAuth();
   const pathname = usePathname() ?? "";
+  const automationsEnabled = process.env.NEXT_PUBLIC_AUTOMATION_ADMIN_ENABLED === "true";
 
   // Menu items with simple paths - no userId needed
   const menuItems = [
@@ -30,10 +32,20 @@ const MobileBottomMenu = () => {
       path: "/dashboard/customize",
     },
     {
+      title: "Conversations",
+      icon: <MessageSquare size={20} />,
+      path: "/dashboard/conversations",
+    },
+    {
       title: "Leads",
       icon: <Users size={20} />,
       path: "/dashboard/leads",
     },
+    ...(automationsEnabled ? [{
+      title: "Automations",
+      icon: <Workflow size={20} />,
+      path: "/dashboard/automations",
+    }] : []),
     {
       title: "Settings",
       icon: <Settings size={20} />,
@@ -42,12 +54,11 @@ const MobileBottomMenu = () => {
   ];
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (error) {
-      toast.error("Error logging out");
-    } else {
+    try {
+      await signOut();
       toast.success("Logged out successfully");
-      window.location.href = "/auth/login";
+    } catch {
+      toast.error("Error logging out");
     }
   };
 
@@ -58,14 +69,12 @@ const MobileBottomMenu = () => {
     if (itemPath === "/dashboard") {
       return normalizedPathname === "/dashboard";
     } else {
-      return normalizedPathname === normalizedItemPath;
+      return (
+        normalizedPathname === normalizedItemPath ||
+        normalizedPathname.startsWith(`${normalizedItemPath}/`)
+      );
     }
   };
-
-  // Close menu when navigation occurs
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-[998]">
@@ -79,6 +88,7 @@ const MobileBottomMenu = () => {
               <Link
                 key={index}
                 href={item.path}
+                onClick={() => setIsOpen(false)}
                 className={`flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-colors whitespace-nowrap flex-shrink-0 ${
                   isActive
                     ? "bg-[#5d7dde] text-white"
@@ -112,6 +122,7 @@ const MobileBottomMenu = () => {
                 <Link
                   key={index}
                   href={item.path}
+                  onClick={() => setIsOpen(false)}
                   className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                     isActive
                       ? "bg-[#5d7dde] text-white"

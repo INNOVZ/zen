@@ -640,13 +640,7 @@ export const useCustomizeStore = create<CustomizeState>()(
             results[2].value &&
             results[2].value.success
           ) {
-            // Ensure loaded config has proper org_id
-            const loadedConfig = {
-              ...results[2].value.config,
-              org_id:
-                results[2].value.config.org_id || `user_${Date.now()}_org`,
-            };
-            set({ contextConfig: loadedConfig });
+            set({ contextConfig: results[2].value.config });
             console.debug("✅ Context config loaded successfully");
             hasAnySuccess = true;
           } else {
@@ -654,12 +648,7 @@ export const useCustomizeStore = create<CustomizeState>()(
             console.debug(
               "🔧 Context config not available, using built-in defaults"
             );
-            // Ensure default config has proper org_id
-            const defaultConfigWithOrgId = {
-              ...defaultContextConfig,
-              org_id: `user_${Date.now()}_org`,
-            };
-            set({ contextConfig: defaultConfigWithOrgId });
+            set({ contextConfig: defaultContextConfig });
           }
 
           // Determine if initialization was successful enough
